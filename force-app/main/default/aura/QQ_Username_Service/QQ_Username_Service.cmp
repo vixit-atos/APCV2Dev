@@ -1,0 +1,5 @@
+<aura:component controller="QQ_ListController">
+	<aura:method name="getusername">
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

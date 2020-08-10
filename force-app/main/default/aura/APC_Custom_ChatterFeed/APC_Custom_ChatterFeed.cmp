@@ -1,0 +1,81 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global"
+                controller="APC_Custom_ChatterRelated">	
+    <aura:attribute name="recordId" type="String"                                      description="to store recordid"/>
+    <aura:attribute name="feeds" type="List" default="[]"                              description="To store feeds of case"/>
+    <aura:attribute name="activesection" type="String"                                 description="to store state of accordian"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="slds-feed">        
+        <lightning:tabset selectedTabId="one">
+            <lightning:tab label="All Updates" id="one">
+                
+            </lightning:tab>
+        </lightning:tabset>
+        <lightning:card >
+            <aura:set attribute="actions">               
+            </aura:set>                 
+            <aura:iteration items="{!v.feeds}" var="feed">
+                <div class="slds-section slds-is-close" aura:id="{!feed.Id}" name="{!feed.Id}" id="{!feed.Id}">
+                    <!--section header-->
+                    <h3 class="slds-section__title">
+                        <button aria-controls="postList" class="slds-button">
+                            <span onclick="{!c.toggleSection}" data-auraId="{!feed.Id}">
+                                <lightning:icon iconName="utility:switch"
+                                                size="x-small"
+                                                class="slds-section__title-action-icon slds-button__icon_left"
+                                                alternativeText="button icon" 
+                                                />                                
+                            </span>
+                             <lightning:tile >  
+                                <p class="feedtitle" ><b>{!feed.CreatedBy.Name}</b></p>
+                                <p class="feedtitle"><lightning:formattedDateTime value="{!feed.CreatedDate}" year="numeric" month="short" day="2-digit" weekday="long"
+                                                                    hour="2-digit" minute="2-digit" hour12="true"/></p>
+                                 <p class="feedtitle"> <lightning:icon iconName="standard:post"
+                                                size="x-small"
+                                                class="slds-button__icon_left"
+                                                alternativeText="button icon" 
+                                                />    <lightning:formattedRichText value="{!feed.Body}" /></p>   
+                            </lightning:tile> 
+                        </button>                       
+                    </h3>
+                    <!--section body-->
+                    <div class="slds-section__content" id="postList">
+                        <div class="slds-var-p-around_medium">
+                             <lightning:formattedRichText class="slds-p-bottom_small" value="{!feed.Body}" />
+                        </div>
+                       
+                         <aura:if isTrue="{!feed.FeedComments}">
+                                    <div class="slds-feed__item-comments slds-p-left_small">
+                                        <aura:iteration items="{!feed.FeedComments}" var="comments">
+                                            <ul>
+                                                <li>
+                                                    <article class="slds-comment slds-media slds-hint-parent">                                                        
+                                                        <div class="slds-media__body">
+                                                            <header class="slds-media slds-media_center">
+                                                                <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+                                                                    <p class="slds-truncate" title="{!comments.CreatedBy.Name}">
+                                                                        <b><a href="javascript:void(0);">{!comments.CreatedBy.Name}</a></b>
+                                                                    </p>                   
+                                                                </div>
+                                                            </header>
+                                                            <div class="slds-comment__content slds-text-longform">
+                                                                <p><lightning:formattedDateTime value="{!comments.SystemModstamp}" year="numeric" month="short" day="2-digit" weekday="long"
+                                                                                                hour="2-digit" minute="2-digit" hour12="true"/></p>
+                                                                <lightning:formattedRichText value="{!comments.CommentBody}" />
+                                                            </div>                
+                                                        </div>
+                                                    </article>
+                                                </li>
+                                            </ul>
+                                        </aura:iteration>
+                                    </div> 
+                                </aura:if> 
+                                <c:APC_Custom_Comment FeedItemId="{!feed.Id}" feeds="{!v.feeds}" caseId="{!v.recordId}"/>
+                    </div>
+                </div>
+            </aura:iteration>
+            
+        </lightning:card>
+    </div>
+</aura:component>

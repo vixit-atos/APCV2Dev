@@ -1,0 +1,336 @@
+<aura:component controller="CFR_Form_Controller" implements="lightning:actionOverride,lightning:isUrlAddressable,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+
+    <lightning:navigation aura:id="navService"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initializeComponent}" />
+
+    <aura:attribute name="newOpp" type= "Opportunity" default="{
+                                            'SobjectType': 'Opportunity',
+                                            'RecordTypeId': '',
+                                            'StageName': '',
+                                            'Application__c':'',
+                                            'Body_Type__c':'',
+                                            'Trailer_Type__c':'',
+                                            'Estimated_Volume__c':'0',
+                                            'Priority__c':'',
+                                            'Construction_Impact__c':'FALSE',
+                                            'Multiple_Segments_Impacted__c':'FALSE',
+                                            'Published_Customer_Specific__c':'FALSE',
+                                            'High_Volume__c':'FALSE',
+                                            'Top_Customer_New_Customer__c':'FALSE',
+                                            'Top_5_Issue__c':'FALSE',
+                                            'Upfit_Fuel_Savings__c':'FALSE',
+                                            'Orders_in_Backlog_Urgent_Timing__c':'FALSE',
+                                            'Regulation_Blackout__c':'FALSE',
+                                            'Request_Review_Date__c': '',
+                                            'CloseDate': '',
+                                            'Currently_Paying__c': '',
+                                            'Willing_To_Pay__c': '',
+                                            }"/>
+
+    <aura:attribute name="RecordTypeId" type="ID"/>
+    <aura:attribute name="oppId" type="String" default=""/>
+    <aura:attribute name="oppName" type="String" default=""/>
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+    <aura:attribute name="cfrName" type="String" default=""/>
+    
+    <aura:attribute name="primCustList" type="List"/> <!-- List so multiSelectLookup can use it -->
+    <aura:handler name="change" value="{!v.primCustList}" action="{!c.setPrimaryCustomer}"/>
+    <aura:attribute name="primaryCustomer" type="String"/>
+    <aura:attribute name="additionalCustomers" type="List"/>
+    <aura:attribute name="oppAccByAccName" type="Object"/>
+
+    <aura:attribute name="allmodelsObj" type="Object" default="{}"/>
+    <aura:attribute name="allFLmodelsList" type="sObject[]" default="[]"/>
+    <aura:attribute name="allWSmodelsList" type="sObject[]" default="[]"/>
+    <aura:attribute name="selectedFLmodels" type="sObject[]" default="[]"/>
+    <aura:attribute name="selectedWSmodels" type="sObject[]" default="[]"/>
+
+    <aura:attribute name="matrixDataObj" type="Object" default="{}"/>
+    
+    <aura:attribute name="applicationList" type="sObject[]" default="[]"/>
+    <aura:attribute name="segmentList" type="sObject[]" default="[]"/>
+    <aura:attribute name="bodyTypeList" type="sObject[]" default="[]"/>
+    <aura:attribute name="trailerTypeList" type="sObject[]" default="[]"/>
+    
+    <aura:attribute name="highVolume" type="Boolean"/>
+    <aura:attribute name="constructionImpact" type="Boolean"/>
+    <aura:attribute name="multipleSegments" type="Boolean"/>
+    <aura:attribute name="topNewCustomer" type="Boolean"/>
+    
+    <aura:attribute name="attemptingToSolve" type="String"/>
+    <aura:attribute name="whyNotSuffice" type="String"/>
+    <aura:attribute name="otherOEMsOffering" type="String"/>
+    <aura:attribute name="whereInstalled" type="String"/>
+    <aura:attribute name="currentlyPaying" type="Integer"/>
+    <aura:attribute name="willingToPay" type="Integer"/>
+    <aura:attribute name="qSpecSerial" type="String"/>
+    <aura:attribute name="additionalInfo" type="String"/>
+    <aura:attribute name="notes" type="Object"/>
+
+    <aura:attribute name="isNew" type="Boolean" default="true"/>
+
+    <aura:attribute name="uploadedFiles" type="List" default="[]"/>
+    
+    <aura:attribute name="saving" type="Boolean" default="false"/>
+    <aura:attribute name="submitting" type="Boolean" default="false"/>
+
+    <aura:attribute name="top5Options" type="List" default="[
+                        {'label': '', 'value': ''},
+                        {'label': 'Yes', 'value': 'true'},
+                        {'label': 'No', 'value': 'false'}, ]"/>
+    <aura:attribute name="upfitFuelSavingsOptions" type="List" default="[
+                        {'label': '', 'value': ''},
+                        {'label': 'Yes', 'value': 'true'},
+                        {'label': 'No', 'value': 'false'}, ]"/>
+    <aura:attribute name="ordersInBacklogUrgentTimingOptions" type="List" default="[
+                        {'label': '', 'value': ''},
+                        {'label': 'Yes', 'value': 'true'},
+                        {'label': 'No', 'value': 'false'}, ]"/>
+    <aura:attribute name="regulationBlackoutOptions" type="List" default="[
+                        {'label': '', 'value': ''},
+                        {'label': 'Yes', 'value': 'true'},
+                        {'label': 'No', 'value': 'false'}, ]"/>
+    <aura:attribute name="whereInstalledOptions" type="List" default="[
+                        {'label': '', 'value': ''},
+                        {'label': 'Pre-Delivery Inspection', 'value': 'Pre-Delivery Inspection'},
+                        {'label': 'Dealer', 'value': 'Dealer'},
+                        {'label': 'Truck Equipment Manufacturing', 'value': 'Truck Equipment Manufacturing'}, ]"/>
+    <aura:attribute name="stageOptions" type="List" default="[
+                        {'label': 'New', 'value': 'New'},
+                        {'label': 'Submitted', 'value': 'Submitted'},
+                        {'label': 'Promoted', 'value': 'Promoted'},
+                        {'label': 'Approved', 'value': 'Approved'},
+                        {'label': 'On Hold', 'value': 'On Hold'},
+                        {'label': 'Pending', 'value': 'Pending'},                         
+                        {'label': 'Rejected', 'value': 'Rejected'},
+                        {'label': 'Cancelled', 'value': 'Cancelled'},
+                        {'label': 'Completed', 'value': 'Completed'} ]"/>
+    <aura:attribute name="substatusOptions" type="List"/>
+
+    <div class="Create Request">
+        <lightning:card iconName="action:new_opportunity" title="{!v.isNew ? 'CFR - New Request Form' : 'Edit CFR'}">
+            <aura:if isTrue="{!v.updating || v.submitting}">
+                <lightning:spinner alternativeText="Loading" />
+            </aura:if>
+            <div style="text-align: center">
+                <div style="{!$Browser.formFactor == 'PHONE' ? 'display: inline-block' : 'position: absolute; top:1rem; right:5rem'}">
+                    <aura:if isTrue="{!v.isNew}">
+                        <lightning:button 
+                            label="Submit" 
+                            variant="success"
+                            onclick="{!c.submit}"/>
+                    </aura:if>
+                    <lightning:button 
+                        label="Save" 
+                        variant="brand"
+                        onclick="{!c.save}"/>
+                    <lightning:button 
+                        label="Cancel" 
+                        variant="destructive"
+                        onclick="{!c.cancel}"/>
+                </div>
+            </div>
+
+            <br/>
+            <!-- <div class="slds-align_absolute-center">
+                <lightning:button 
+                    label="View Calculated Values in Console" 
+                    variant="brand"
+                    onclick="{!c.viewCalculatedValues}"/>
+            </div> -->
+            <br/>
+
+            <div class="slds-p-horizontal--small">
+                <div class="slds-grid slds-wrap slds-gutters slds-p-around--small">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning:input type="Text" value="{!v.cfrName}" label="Name of CFR:" required="true"/>
+                        <lightning:textarea value="{!v.attemptingToSolve}" label="What are you attempting to solve?" required="true"/>
+                        <lightning:textarea value="{!v.whyNotSuffice}" label="Why do our current offerings not suffice?"/>
+                        <lightning:textarea value="{!v.otherOEMsOffering}" label="What are other OEMs offering?  Please provide pricing, if known."/>
+
+                        <!-- <lightning:textarea value="{!v.whereInstalled}" label="Where is this currently being installed? (PDI / Dealer / TEM)"/> -->
+                        <lightning:select aura:id="whereInstalledSelector" label="Where is this currently being installed?">
+                            <aura:iteration items="{!v.whereInstalledOptions}" var="option">
+                                <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                            </aura:iteration>
+                        </lightning:select>
+
+                        <lightning:input type="Number" value="{!v.currentlyPaying}" label="What is the customer currently paying for the option?"/>
+                        <lightning:input type="Number" value="{!v.willingToPay}" label="What is the customer willing to pay for the new option?"/>
+                        <lightning:input type="date" name="whenNeeded" value="{!v.newOpp.CloseDate}" label="When is this option needed?"/>
+                        <lightning:textarea value="{!v.qSpecSerial}" label="Reference Q-Spec / Serial Numbers?"/>
+                        <lightning:textarea value="{!v.additionalInfo}" label="Additional Information"/>
+
+                        <div id="requiredStarWrapper" > <!-- Allows css to add a 'required' star-->
+                            <c:multiSelectLookup
+                                objectAPIName="Account"
+                                iconName="standard:account"
+                                selectedRecords="{!v.primCustList}"
+                                label="Primary Customer"
+                                singleValueOnly="true"
+                                queryFields="CreatedDate,Top_Customer__c"
+                                queryWhere="RecordTypeId in (SELECT Id from RecordType WHERE sobjectType = 'Account' AND Name IN ('Customer Account','Prospect/Customer'))"
+                                excluded="{!v.additionalCustomers}"
+                                aura:id="primCustListPicklist"/>
+                        </div>
+                        
+                        <c:multiSelectLookup
+                            objectAPIName="Account"
+                            iconName="standard:account"
+                            selectedRecords="{!v.additionalCustomers}"
+                            label="Additional Customers"
+                            queryFields="CreatedDate,Top_Customer__c"
+                            queryWhere="RecordTypeId in (SELECT Id from RecordType WHERE sobjectType = 'Account' AND Name IN ('Customer Account','Prospect/Customer'))"
+                            excluded="{!v.primCustList}"
+                            aura:id="additionalCustomersPicklist"/>
+
+                        <br/><br/>
+                        
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <aura:if isTrue="{!not(v.isNew)}">
+                            <lightning:select aura:id="stageSelector" label="Stage" required="true" onchange="{!c.stageChanged}">
+                                <aura:iteration items="{!v.stageOptions}" var="option">
+                                    <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </aura:if>
+                        <aura:if isTrue="{!not(empty(v.substatusOptions))}">
+                            <lightning:select aura:id="substatusSelector" label="Substatus" required="true">
+                                <aura:iteration items="{!v.substatusOptions}" var="option">
+                                    <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </aura:if>
+                        <aura:if isTrue="{!not(v.isNew)}">
+                            <lightning:input type="date" name="requestedReview" value="{!v.newOpp.Request_Review_Date__c}" label="Requested Review Date" required="true"/>
+                        </aura:if>
+                        <lightning:select aura:id="top5Selector" label="Top 5 Issue?" required="true">
+                            <aura:iteration items="{!v.top5Options}" var="option">
+                                <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:select aura:id="upfitFuelSavingsSelector" label="Upfit / Fuel Savings?" required="true">
+                            <aura:iteration items="{!v.upfitFuelSavingsOptions}" var="option">
+                                <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:select aura:id="ordersInBacklogUrgentTimingSelector" label="Orders in Backlog / Urgent Timing?" required="true">
+                            <aura:iteration items="{!v.ordersInBacklogUrgentTimingOptions}" var="option">
+                                <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <lightning:select aura:id="regulationBlackoutSelector" label="Regulation / Blackout?" required="true">
+                            <aura:iteration items="{!v.regulationBlackoutOptions}" var="option">
+                                <option value="{!option.value}" selected="{!option.selected}" text="{!option.label}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                        <br/>
+                        <div id="requiredStarWrapper" > <!-- Allows css to add a 'required' star-->
+                            <c:multiSelectLookup
+                                objectAPIName="Opportunity"
+                                fieldName="Segment__c"
+                                iconName="custom:custom98"
+                                selectedRecords="{!v.segmentList}"
+                                label="Segment"
+                                aura:id="segmentListPicklist"/>
+                        </div>
+                        <div id="requiredStarWrapper" > <!-- Allows css to add a 'required' star-->
+                            <c:multiSelectLookup
+                                objectAPIName="Opportunity"
+                                fieldName="Application__c"
+                                iconName="custom:custom98"
+                                selectedRecords="{!v.applicationList}"
+                                label="Application"
+                                aura:id="applicationListPicklist"/>
+                        </div>
+                        <c:multiSelectLookup
+                                objectAPIName="Opportunity"
+                                fieldName="Body_Type__c"
+                                iconName="custom:custom98"
+                                selectedRecords="{!v.bodyTypeList}"
+                                label="Body Type"
+                                aura:id="bodyTypeListPicklist"/>
+                        <c:multiSelectLookup
+                            objectAPIName="Opportunity"
+                            fieldName="Trailer_Type__c"
+                            iconName="custom:custom98"
+                            selectedRecords="{!v.trailerTypeList}"
+                            label="Trailer Type"
+                            aura:id="trailerTypeListPicklist"/>
+
+                        <div id="requiredStarWrapper" >
+                            <label style="color: rgb(62, 62, 60); font-size: .75rem;">Models Impacted</label>
+                        </div>
+                        <div class="modelsImpactedWrapper">
+                            <c:multiSelectLookup
+                                objectAPIName="Custom List"
+                                customList="{!v.allFLmodelsList}"
+                                iconName="custom:custom98"
+                                selectedRecords="{!v.selectedFLmodels}"
+                                label="Freightliner Models Impacted"
+                                aura:id="selectedFLmodelsPicklist"/>
+                            <c:multiSelectLookup
+                                objectAPIName="Custom List"
+                                customList="{!v.allWSmodelsList}"
+                                iconName="custom:custom98"
+                                selectedRecords="{!v.selectedWSmodels}"
+                                label="Western Star Models Impacted"
+                                aura:id="selectedWSmodelsPicklist"/>
+                        </div>
+                        <br/>
+                        <lightning:fileUpload label="Attach Files"
+                            name="fileUploader"
+                            multiple="true"
+                            recordId="{!v.oppId}"
+                            onuploadfinished="{!c.handleUploadFinished}" />
+                        <aura:if isTrue="{!v.oppId == ''}">
+                            <br/>
+                            To upload files please hit the save button first
+                        </aura:if>
+                        <br/>
+                        <aura:if isTrue="{!not(empty(v.uploadedFiles))}">
+                            <aura:iteration items="{!v.uploadedFiles}" var="file" indexVar="i">
+                                <lightning:pill label="{!file.name}" name="{!(file.documentId+';'+i)}" onremove="{!c.removeFile}"/>
+                            </aura:iteration>      
+                        </aura:if>
+                        <br/><br/>
+                    </div>
+                    
+                    <c:CFR_Models_Impacted
+                        aura:id="volumeMatrix"
+                        selectedFLmodels="{!v.selectedFLmodels}"
+                        selectedWSmodels="{!v.selectedWSmodels}"
+                        dataObj="{!v.matrixDataObj}"
+                        allmodelsObj="{!v.allmodelsObj}"
+                        onRecordPage="false"
+                        readonly="false"
+                        title="Models Impacted"
+                        recordId="{!v.oppId}"/>
+                    
+                </div>
+
+                <div style="text-align: center">
+                    <div style="{!$Browser.formFactor == 'PHONE' ? 'display: inline-block' : 'position: absolute; top: 97%; left: 50%; transform: translate(-50%, -50%);'}">
+                        <aura:if isTrue="{!v.isNew}">
+                            <lightning:button 
+                                label="Submit" 
+                                variant="success"
+                                onclick="{!c.submit}"/>
+                        </aura:if>
+                        <lightning:button 
+                            label="Save" 
+                            variant="brand"
+                            onclick="{!c.save}"/>
+                        <lightning:button 
+                            label="Cancel" 
+                            variant="destructive"
+                            onclick="{!c.cancel}"/>
+                    </div>
+                </div>
+            </div>
+       
+        </lightning:card>
+    </div>
+</aura:component>

@@ -1,0 +1,684 @@
+<apex:page standardController="Opportunity" extensions="TWSController" sidebar="false">
+
+  <apex:stylesheet value="{!URLFOR($Resource.SLDS203, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+  <apex:stylesheet value="{!$Resource.TWSDetailCSS}"/>
+
+  <apex:includeScript value="{!$Resource.jQuery310}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_FormattingJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_HeaderJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_PricingProposalJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_ContributionCalculationJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_OutgoingResidualsJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_IncomingUsedTruckJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetail_EngineWarrantyJS}"/>
+  <apex:includeScript value="{!$Resource.TWSDetailJS}"/>
+
+  <script>
+    $( document ).ready(function() {
+
+      console.log( "{!$CurrentPage.parameters.Id}" );
+      TWSDetail.init("{!$CurrentPage.parameters.Id}");
+    });
+  </script>
+
+  <div id="tws_mainContainer" class="tws">
+
+    <div id="tws_insideMainContainer" class="slds-grid slds-wrap slds-grid--pull-padded slds-p-around--small">
+
+      <!-- HEADER -->
+
+      <!-- PRICING PROPOSAL -->
+      <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomStrong tws_borderRightStrong tws_borderLeftStrong">
+        <div class="slds-grid slds-wrap slds-grid--pull-padded">
+            <div id="tws_pricingTitle" class="slds-col--padded slds-size--1-of-1 slds-m-top--small slds-m-bottom--x-small">
+              Pricing Proposal
+              <span style="display:none" class="tws_canadaSpecific">
+                (<span class="tws_canadianNote">NOTE: ALL CANADIAN TRANSACTION PRICING IS IN CANADIAN DOLLARS</span>)
+              </span>
+            </div>
+
+            <div class="slds-col--padded slds-size--2-of-12 ">
+              <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                <div class="slds-col--padded slds-size--1-of-1 slds-p-top--small tws_borderTopWhiteStrong tws_borderBottomWhiteStrong tws_heightToAdjust" data-name="columnDescription">
+                  Column Description
+                </div>
+                <div style="display:none" class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  FEX Rate
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="baseModel">
+                  Base Model
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_canadaSpecific tws_domesticSpecific tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="concessionNumber">
+                  Concession #
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Number of Units Column
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="concessionNumber">
+                  Concession #
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_canadaSpecific tws_domesticSpecific tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Number of Units Deal
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_canadaSpecific tws_domesticSpecific tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  DTR Residuals / Trades
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_canadaSpecific tws_domesticSpecific tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhiteStrong tws_2LineHeight">
+                  Reference Serial Number
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="sleeperType">
+                  Sleeper Type
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="engineMakeHP">
+                  Engine Make/HP
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="transmission">
+                  Transmission
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="axleMakeConfig">
+                  Axle Make / Config.
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Price Level
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Dealer Net
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_highlightedBlue tws_borderBottomWhite tws_2LineHeight">
+                  Standard Concession %
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_highlightedBlue tws_borderBottomWhite tws_2LineHeight">
+                  Daimler Latina Add'l %
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_highlightedBlue tws_borderBottomWhite tws_1LineHeight">
+                  DTNA RSM Add'l %
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_highlightedBlue tws_borderBottomWhite tws_1LineHeight">
+                  Requested Add'l %
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Total Retail
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Base Model Retail
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Total Dnet
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Base Model Dnet (85%)
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Base Model Discount
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Base Model Net Price
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Option Retail
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_3LineHeight">
+                  Option Discount @Retail
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Option Discount
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Option Dnet
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Net Price Before Adj
+                </div>
+                <div class=" tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Effective Conc
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Dealer Net
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Concession %
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Concession Dollars
+                </div>
+                <div id="tws_dummyDynamicProposalLabel">
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Freight
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_internationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Dealer Cost
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Dealer Profit
+                </div>
+                <div class="tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_strongText tws_borderTopWhiteStrong tws_borderBottomWhiteStrong tws_2LineHeight">
+                  FET Calculation
+                </div>
+                <div class="tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Selling Price
+                </div>
+                <div class="tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  FET Exempt
+                </div>
+                <div class="tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_strongText tws_borderBottomWhite tws_1LineHeight">
+                  FET Base
+                </div>
+                <div class="tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  FET Base x 12%
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Less Tire Credit
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  FET
+                </div>
+                <!--
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Domicile Fee
+                </div>
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Dealer PDI
+                </div>
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Flooring
+                </div>
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Other Charges
+                </div>
+              -->
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  CSD Warranty
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Engine Warranty
+                </div>
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Dealer Over Allowance
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_strongText tws_borderBottomWhiteStrong tws_2LineHeight">
+                  Total Selling Price <span class="tws_internationalSpecific">FOB</span>
+                </div>
+                <div id="tws_priceWalkTitle" class="tws_domesticSalesProposalSpecific tws_canadaSpecific tws_nationalSpecific tws_domesticSpecific slds-col--padded slds-size--2-of-12 tws_borderBottomWhiteStrong tws_borderTopWhiteStrong tws_heightToAdjust" data-name="priceWalk">
+                  Price Walk
+                  <div class="tws_canadaSpecific tws_canadianNote" style="margin-top:15px;">
+                    Note: Price Walk Done in USD
+                  </div>
+                </div>
+                <div id="tws_dealSummaryContainer" class="slds-col--padded slds-size--1-of-1 slds-m-top--x-small">
+                  <div id="tws_dealSummaryTitle" class="tws_borderTop">Deal Summary &amp; Pricing Strategy</div>
+                  <div id="tws_dealSummaryValue" class="tws_borderBottom"></div>
+                </div>
+                <div id="tws_escalatorsContainer" class="slds-col--padded slds-size--1-of-1 slds-m-top--x-small">
+                  <div id="tws_escalatorsTitle" class="tws_borderTop">Escalators</div>
+                  <div id="tws_escalatorsValue" class="tws_borderBottom"></div>
+                </div>
+                <div id="tws_contributionCalcTitleContainer" class="slds-col--padded slds-size--1-of-1">
+                  <div id="tws_contributionCalcTitle">
+                    Contribution Calculations
+                    <span style="display:none" class="tws_canadaSpecific">
+                      (<span class="tws_canadianNote">NOTE: ALL CONTRIBUTION CALCULATIONS ARE DONE IN US DOLLARS</span>)
+                    </span>
+                  </div>
+                </div>
+                <div id="tws_contribCalcMethod" class="slds-col--padded slds-size--1-of-1 tws_borderTopWhiteStrong tws_borderBottomWhite tws_2LineHeight">
+                  Contrib. Calc. Method
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Source
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="currentFormula">
+                  Current Formula?
+                </div>
+                <div class="tws_internationalSpecific tws_domesticSalesProposalSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Method of Calculation
+                </div>
+                <div class="tws_nationalSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Contrib Base Country
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_heightToAdjust" data-name="dealerNet">
+                  = Dealer Net
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_heightToAdjust" data-name="baseModelDnet">
+                  (-) Base Model Dnet
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_heightToAdjust" data-name="optionContent">
+                  (=) Option Content
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_heightToAdjust" data-name="optionMargin">
+                  (x) Option Margin
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_heightToAdjust" data-name="optionContrib">
+                  (=) Option Contrib
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_heightToAdjust" data-name="baseModelContrib">
+                  (+) Base Model Contrib
+                </div>
+                <div class="tws_canadaSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="grossContribution">
+                  (=) Gross Contribution
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="grossFormulaContrib">
+                  Gross Formula Contrib
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="dealerNet">
+                  Dealer Net
+                </div>
+                <div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="concessionAmount">
+                  Concession $
+                </div>
+                <div class="tws_domesticSpecific tws_domesticSalesProposalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="newTrucksTradeOA">
+                  New Trucks Trade O/A
+                </div>
+                <div class="tws_domesticSalesProposalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="rms">
+                  RMS
+                </div>
+                <div class="tws_domesticSalesProposalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="pCode">
+                  P-Code
+                </div>
+                <div class="tws_domesticSpecific tws_domesticSalesProposalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="residReserve">
+                  Resid Reserve
+                </div>
+                <div class="tws_domesticSpecific tws_domesticSalesProposalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="eWAdjustment">
+                  EW Adjustment
+                </div>
+                <div class="tws_domesticSpecific tws_domesticSalesProposalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="optionMargin">
+                  Option Margin
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_heightToAdjust" data-name="netPrice">
+                  Net Price
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="sumOfAddRevenueImpact">
+                  Sum of Add'l Revenue Impact
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_heightToAdjust" data-name="totalSellingPriceFOB">
+                  Total Selling Price FOB
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="totalEstimatedCost">
+                  Total Estimated Cost
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="contributionCal">
+                  Control Line Item
+                </div>
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="options">
+                  Options
+                </div>
+                <div id="tws_dummyDynamicContributionLabel">
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_darkHighlighted tws_borderTopWhiteStrong tws_borderBottomWhiteStrong tws_strongText tws_darkHighlighted tws_3LineHeight">
+                  B/N Contribution (Trucks)
+                </div>
+                <div class="tws_internationalSpecific slds-col--padded slds-size--1-of-1 tws_borderTopWhiteStrong tws_borderBottomWhiteStrong tws_strongText tws_3LineHeight">
+                  B/N Contribution (Trucks)
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_1LineHeight">
+                  &nbsp;
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_2LineHeight">
+                  Residuals Gain / Loss
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_2LineHeight">
+                  CSD Contribution
+                </div>
+                <div class="tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_3LineHeight">
+                  Chassis Warranty Cont.
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_3LineHeight">
+                  Engine Warranty Cont.
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_strongText tws_2LineHeight">
+                  ADJ Net Contribution
+                </div>
+                <div id="tws_ContributionAndCostCommentsContainer" class="slds-col--padded slds-size--1-of-1">
+                  <div id="tws_ContributionAndCostCommentsTitle" class="tws_borderTop">
+                    Contribution And Cost Comments
+                  </div>
+                  <div id="tws_ContributionAndCostCommentsValue">
+                  </div>
+                </div>
+                <div id="tws_commitmentsContainer" class="tws_domesticSalesProposalSpecific tws_internationalSpecific tws_nationalSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1">
+                  <div id="tws_commitmentsTitle" class="tws_borderTop">
+                   <!-- Any Verbal Or Written Commitment Outside Of Normal Dealer Sales Terms -->
+                  </div>
+                  <div id="tws_commitmentsValue">
+                  </div>
+                </div>
+
+                <div id="tws_OutgoingResidualsTitleContainer" class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 slds-m-top--x-small">
+                  <div id="tws_OutgoingResidualsTitle" class="tws_borderTopStrong">
+                    Outgoing Residuals Information
+                    <span style="display:none" class="tws_canadaSpecific">
+                      (<span class="tws_canadianNote">NOTE: ALL RESIDUAL VALUES ARE IN CANADIAN DOLLARS</span>)
+                    </span>
+                  </div>
+                </div>
+                <div id="tws_OutgoingResidualsQuestionContainer" class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 slds-m-top--x-small">
+                  <div id="tws_OutgoingResidualsQuestion">Has DTR Been Requested to Quote Residuals?<span id="tws_OutgoingResidualsAnswer" class="slds-text-align--center">&nbsp;</span></div>
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 slds-m-bottom--xx-small tws_heightToAdjust" data-name="columnDescription">
+                  Column Description
+                </div>
+                <div class="tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  FEX Rate
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="baseModel">
+                  Base Model
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Concession #
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Number of Units Column
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  DTR / Dealer Split
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Residual Type
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Residual Commit. #
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Term - Months/Mileage
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Show $
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Hard $
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  General Reserve
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Specific Reserve
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  Total Reserve
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_1LineHeight">
+                  PWV Value
+                </div>
+                <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_2LineHeight">
+                  Rollout/Mileage Penalty
+                </div>
+              </div>
+            </div>
+            <div class="slds-col--padded slds-size--10-of-12 tws_borderTopStrong slds-scrollable--x">
+              <!-- PRICING PROPOSAL -->
+              <div id="tws_pricingProposalContainer" class="slds-grid slds-grid--pull-padded tws_borderLeftStrong tws_borderBottomStrong">
+
+              </div>
+              <!-- PRICE WALK -->
+              <div id="tws_priceWalkContainer" class="slds-grid slds-grid--pull-padded tws_borderLeftStrong tws_borderTopStrong tws_borderBottomStrong tws_heightToAdjust" data-name="priceWalk">
+
+              </div>
+              <!-- CONTRIBUTION CALCULATION -->
+              <div id="tws_ContributionCalcContainer" class="slds-grid slds-grid--pull-padded tws_borderBottomStrong tws_borderLeftStrong tws_borderTopStrong">
+
+              </div>
+              <!-- OUTGOING RESIDUALS INFORMATION -->
+              <div id="tws_OutgoingResInfoContainer" class="slds-grid slds-grid--pull-padded slds-m-top--small  tws_borderLeftStrong tws_borderTopStrong">
+
+              </div>
+            </div>
+
+            <div id="tws_residualQuoteCommentsContainer" class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--2-of-12 tws_borderTop">
+              <div id="tws_residualQuoteCommentsTitle">
+                Residual Quote Comments
+              </div>
+              <div id="tws_residualQuoteCommentsValue">
+              </div>
+            </div>
+
+        </div>
+      </div>
+
+      <!-- INCOMING USED TRUCK -->
+      <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderRightStrong tws_borderLeftStrong tws_borderTopStrong tws_borderBottomStrong slds-m-top--small" id="tws_incomingUsedTruckInfoContainer">
+
+      </div>
+
+      <!-- EXTENDED WARRANTY - CHASSIS PRICING -->
+      <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderRightStrong tws_borderLeftStrong tws_borderTopStrong tws_borderBottomStrong slds-m-top--small">
+        <div class="slds-grid slds-wrap slds-grid--pull-padded">
+          <div id="tws_extendedWarrantyTitle" class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 slds-text-body--regular slds-m-top--xx-small tws_borderBottom">
+            Extended Warranty - Chassis Pricing
+            <span style="display:none" class="tws_canadaSpecific">
+              (<span class="tws_canadianNote">NOTE: ALL CSD PRICES AND COSTS ARE IN CANADIAN DOLLARS</span>)
+            </span>
+          </div>
+          <div id="tws_chassisWarrantyQuoteNumberContainer" class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 slds-m-top--x-small slds-m-bottom--small">
+            <div id="tws_chassisWarrantyQuoteNumberLabel">Quote Number<span id="tws_chassisWarrantyQuoteNumberValue" class="slds-text-align--center">&nbsp;</span></div>
+          </div>
+
+          <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-4" style="padding-left: 20px;margin-top: 8px;">
+            <div class="slds-grid slds-wrap slds-grid--pull-padded" id="tws_extendedWarrantyRowDescriptionContainer">
+              <div class="slds-col--padded slds-size--4-of-12 tws_borderTopWhiteStrong tws_borderBottomWhiteStrong tws_heightToAdjust" data-name="columnDescription">
+                &nbsp;
+              </div>
+              <div class="slds-col--padded slds-size--8-of-12 tws_borderTopWhiteStrong tws_borderBottomWhiteStrong tws_heightToAdjust" data-name="columnDescription">
+                &nbsp;
+              </div>
+              <div style="position: relative;" class="slds-col--padded slds-size--4-of-12 slds-m-top--x-small tws_borderBottomStrong tws_heightToAdjust" data-name="chassisWarrHeader">
+                <div style="position:absolute;bottom:0;">DB Code or Quote #</div>
+              </div>
+              <div style="position: relative;" class="slds-col--padded slds-size--8-of-12 slds-m-top--x-small tws_borderBottomStrong tws_heightToAdjust" data-name="chassisWarrHeader">
+                <div style="position:absolute;bottom:0;">Description</div>
+              </div>
+            </div>
+          </div>
+          <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--3-of-4 slds-m-top--x-small">
+            <div class="slds-grid slds-wrap slds-grid--pull-padded">
+              <div class="slds-col--padded slds-size--1-of-1 slds-m-top--x-small slds-scrollable--x">
+                <div class="slds-grid slds-wrap slds-grid--pull-padded slds-m-right--xxx-small" id="tws_extendedWarrantyColumnContainer">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tws_chassisWarrantyCommentsContainer" class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderTop">
+            <div id="tws_chassisWarrantyCommentsTitle">
+              Chassis Extended Warranty Comments
+            </div>
+            <div id="tws_chassisWarrantyCommentsValue">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DDC EXTENDED ENGINE WARRANTY PRICING -->
+      <div class="tws_domesticSalesProposalSpecific tws_nationalSpecific tws_domesticSpecific tws_canadaSpecific slds-col--padded slds-size--1-of-1 tws_borderRightStrong tws_borderLeftStrong tws_borderTopStrong tws_borderBottomStrong slds-m-top--small">
+        <div class="slds-grid slds-wrap slds-grid--pull-padded">
+          <div id="tws_engineWarrantyTitle" class="slds-col--padded slds-size--1-of-1 slds-text-body--regular slds-m-top--xx-small tws_borderBottom">
+            DDC Extended Engine Warranty Pricing
+            <span style="display:none" class="tws_canadaSpecific">
+              (<span class="tws_canadianNote">NOTE: ALL EW PRICES AND COSTS ARE EQUAL IN BOTH USD AND CANADIAN DOLLARS</span>)
+            </span>
+          </div>
+          <div id="tws_engineWarrantyQuoteNumberContainer" class="slds-col--padded slds-size--1-of-1 slds-m-top--x-small slds-m-bottom--small">
+            <div id="tws_engineWarrantyQuoteNumberLabel">Quote Number<span id="tws_engineWarrantyQuoteNumberValue" class="slds-text-align--center">&nbsp;</span></div>
+          </div>
+
+          <div class="slds-col slds-size--1-of-1 slds-scrollable--x">
+            <table class="tws_engineWarrantyTable" id="tws_engineWarrantyTable">
+              <tr>
+                <th colspan="6">&nbsp;</th>
+                <th colspan="3" class="tws_borderAllStrong">CSD Impact</th>
+                <th colspan="3" class="tws_borderBottomStrong tws_borderTopStrong tws_borderRightStrong">Truck Impact</th>
+                <th colspan="5">&nbsp;</th>
+              </tr>
+              <tr>
+                <th colspan="6">&nbsp;</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th colspan="3">&nbsp;</th>
+              </tr>
+            </table>
+          </div>
+
+          <!--
+          <div class="slds-col--padded slds-size--1-of-1 slds-scrollable--x">
+            <div class="slds-grid slds-wrap slds-grid--pull-padded" id="tws_engineWarrantyTableContainer">
+              <div class="slds-col--padded" style="width: 586px;">
+                <div class="slds-grid slds-wrap slds-grid--pull-padded" style="width: 586px;">
+                  <div class="slds-col--padded slds-text-align--center" style="width: 586px;">
+                    &nbsp;
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center" style="width: 586px;">
+                    &nbsp;
+                  </div>
+                </div>
+              </div>
+              <div class="slds-col--padded" style="width: 821px;">
+                <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                  <div class="slds-col--padded" style="width: 202px;">
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded" style="width: 202px;">
+                      <div class="slds-col--padded slds-text-align--center tws_borderTopStrong tws_borderLeftStrong tws_borderRightStrong tws_borderBottomStrong" style="width: 202px;">
+                        CSD Impact
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        1
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        2
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        3
+                      </div>
+                    </div>
+                  </div>
+                  <div class="slds-col--padded" style="width: 202px;">
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded" style="width: 202px;">
+                      <div class="slds-col--padded slds-text-align--center tws_borderTopStrong tws_borderRightStrong tws_borderBottomStrong" style="width: 202px;">
+                        Truck Impact
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        4
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        5
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        6
+                      </div>
+                    </div>
+                  </div>
+                  <div class="slds-col--padded" style="width: 416px;">
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded" style="width: 416px;">
+                      <div class="slds-col--padded slds-text-align--center tws_borderBottomWhiteStrong tws_borderTopWhiteStrong" style="width: 416px;">
+                        &nbsp;
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        7
+                      </div>
+                      <div class="slds-col--padded tws_engineWarrantyHeaderNumber slds-text-align--center">
+                        8
+                      </div>
+                      <div class="slds-col--padded slds-text-align--center" style="width: 256px;">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="slds-col--padded slds-size--1-of-1 slds-text-align--center">
+                <div class="slds-grid slds-grid--pull-padded tws_borderTopStrong" id="tws_engineWarrantyHeaderContainer">
+
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantyLargeColumn">
+                    Databook Code/Quote #
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantyLargeColumn">
+                    Coverage Description
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    Time / Mileage
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    Deduct.
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantyMediumColumn">
+                    Highway or Vocation
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    High Torque
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    FMV - Deferred Revenue
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    EW Cost
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    CSD  EW Margin (1-2)
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    P-Code Value
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    X-Fer Cost Adj.
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    Net Impact (4+5)
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    DTNA Margin (3+6)
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    Customer Price (1-4)
+                  </div>
+                  <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    Engine
+                  </div>
+                  <div class="tws_domesticSalesProposalSpecific tws_domesticSpecific slds-col--padded slds-text-align--center tws_engineWarrantySmallColumn">
+                    SPP? Y / N
+                  </div>
+                  <div class="slds-col--padded slds-text-align--center tws_engineWarrantyLargeColumn">
+                    &nbsp;
+                  </div>
+                  <div class="tws_nationalSpecific tws_canadaSpecific slds-col--padded slds-text-align--center tws_engineWarrantyLargeColumn" style="width:130px;">
+                    &nbsp;
+                  </div>
+                </div>
+              </div>
+
+              <div class="slds-col--padded slds-size--1-of-1 slds-text-align--center ">
+                <div class="slds-grid slds-grid--pull-padded slds-wrap tws_borderTopStrong" id="tws_engineWarrantyRowsContainer">
+
+                </div>
+              </div>
+            </div>
+          </div>-->
+
+          <div id="tws_engineWarrantyCommentsContainer" class="slds-col--padded slds-size--1-of-1 tws_borderTop">
+            <div id="tws_engineWarrantyCommentsTitle">
+              Engine Extended Warranty Comments
+            </div>
+            <div id="tws_engineWarrantyCommentsValue">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FOOTERS -->
+      <div class="slds-col--padded slds-size--1-of-1 tws_borderRightStrong tws_borderLeftStrong tws_borderTopStrong tws_borderBottomStrong slds-m-top--small">
+        <div class="slds-grid slds-wrap slds-grid--pull-padded" id="tws_footerContainer">
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</apex:page>

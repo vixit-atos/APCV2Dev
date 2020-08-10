@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <div id="outerContainer">
+        <div id="backgroundAboveComponent" />
+        <div id="container">
+            <div style="text-align:center;">
+                <img src="{!$Resource.ZibaGraphic_5}" />
+                <a href="mailto:dtnacx@daimler.com" id="mail-link">dtnacx@daimler.com</a>
+            </div>
+        </div>
+    </div>
+</aura:component>

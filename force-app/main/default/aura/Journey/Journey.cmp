@@ -1,0 +1,103 @@
+<aura:component controller="JourneyController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" >
+    <aura:attribute name="sobj" type="Object" default="{}"/>
+    <aura:attribute name="recordError" type="String"/>
+    <force:recordData aura:id="recordHandler"
+        recordId="{!v.recordId}"
+        mode="EDIT"
+        layoutType="FULL"
+        targetFields="{!v.sobj}"
+        targetError="{!v.recordError}"
+        recordUpdated="{!c.handleRecordUpdated}"
+    />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:attribute name="field" type="String"/>
+    <aura:attribute name="transitionGroup" type="String"/>
+    
+    <aura:attribute name="readOnly" type="Boolean" default="false"/>
+
+    <aura:attribute name="states" type="Object"/>
+    <aura:attribute name="pathObjs" type="List"/>
+    <aura:attribute name="lastHistoryObj" type="Object"/>
+    <aura:attribute name="currentUserName" type="String"/>
+    <aura:attribute name="currentTransitions" type="List"/>
+    <aura:attribute name="currentFields" type="List"/>
+    <aura:attribute name="saving" type="Boolean" default="false"/>
+    <aura:attribute name="initStatus" type="String" default="Running"/>
+    <aura:attribute name="randomNum" type="Double"/>
+    <aura:attribute name="currentState" type="Object"/>
+    <aura:attribute name="undoStack" type="List"/>
+    <aura:attribute name="selectedName" type="String"/>
+
+    <article class="slds-card">
+        <c:Tooltip aura:id="tooltip"/>
+        <div class="slds-path slds-scrollable_x" id="{!'scroller'+v.randomNum}"> 
+            <div class="slds-grid slds-path__track">
+                <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller" role="application">
+                        <div class="slds-path__scroller_inner">
+                            <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                                <aura:iteration items="{!v.pathObjs}" var="obj"> 
+                                    <li id="{!obj.index}" class="{!'slds-path__item grayJourneyPath journeyPathItem'+v.randomNum}" role="presentation" onmouseover="{!c.pathHover}" onmouseout="{!c.pathLeave}">
+                                        <a class="slds-path__link" href="javascript:void(0);" role="option">
+                                            <span class="slds-path__title" style="transform: none">
+                                                <strong>{!obj.val}</strong>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </aura:iteration>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <aura:if isTrue="{!v.saving}">
+                    <lightning:spinner alternativeText="Loading" />
+                </aura:if>
+                <aura:if isTrue="{!not(or(v.readOnly),empty(v.currentTransitions))}">
+                    <div id="wrapAllTransitions">
+                        <aura:iteration items="{!v.currentTransitions}" var="transition">
+                            <div class="wrapTransition">
+                                <button id="{!transition.name}" class="{!'journeyTransition slds-button slds-path__mark-complete journeyTransition'+v.randomNum}" type="button" onclick="{!c.transitionClicked}">
+                                    <span class="uiOutputText" data-aura-class="uiOutputText">
+                                        <strong>{!transition.name}</strong>
+                                    </span>
+                                </button>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{!not(empty(v.undoStack))}">
+                    <button class="slds-button slds-path__mark-complete" style="background: lightblue; min-width:5rem;" type="button" onclick="{!c.undoClicked}"><strong>Undo</strong></button>
+                </aura:if>
+            </div>
+            <aura:if isTrue="{!not(empty(v.currentFields))}">
+                <div style="position:absolute; top:50px; width:100%">
+                    <strong style="position:relative; top:10px; left:20px;">Required Fields</strong>
+                    <hr style="margin:10px 0px;"/>
+                    <aura:iteration items="{!v.currentFields}" var="field">
+                        <c:FieldInput
+                            label="{!field.label}"
+                            type="{!field.type}"
+                            possibleValues="{!field.values}"
+                            value="{!field.userInput}"
+                            style="width:33%; margin-left:20px;" />
+                    </aura:iteration>
+                    <br/>
+                    <div style="margin-left:20px;">
+                        <lightning:button 
+                            label="Cancel" 
+                            variant="destructive"
+                            onclick="{!c.cancelClicked}"/>
+                        <lightning:button
+                            label="Save" 
+                            variant="brand"
+                            onclick="{!c.saveClicked}"/>
+                    </div>
+                </div>
+                <!-- Make the lightning card bigger so you can see something behind the position absolute -->
+                <div style="{!'height:calc(100px + '+v.currentFields.length*60+'px);'}"/>
+            </aura:if>
+        </div>
+    </article>
+</aura:component>

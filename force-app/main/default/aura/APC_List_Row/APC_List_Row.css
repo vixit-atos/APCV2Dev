@@ -1,0 +1,38 @@
+.THIS {
+}
+.THIS .slds-form-element{
+    padding: 0rem !important;    
+}
+/*.THIS .APCtext {
+    color:black;
+    font-size:1rem !important;
+    background-color: blue;
+} */
+
+.THIS .myCheckbox{
+  display: inline-block;
+  float: left;
+}
+.THIS .slds-input[readonly] {
+    font-size: 1.35rem; 
+}
+.THIS .slds-modal__content{
+max-width: 40rem!important;    
+min-height: 10rem!important;    
+}
+.THIS .slds-modal__footer{
+    max-width: 40rem!important;
+}
+.THIS .slds-modal__container{
+    max-width: 40rem!important;
+}
+.THIS .slds-button_icon-border-filled, .THIS .slds-button--icon-border-filled {
+    background-color: rgb(62, 140, 182);
+    color: white;
+}
+.THIS .actionlabelwidth{
+    min-width: 5rem !important;
+}
+.THIS .slds-form_inline .slds-form-element__control, .THIS .slds-form_inline .slds-form-element__label{
+    display: block !important;
+}

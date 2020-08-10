@@ -1,0 +1,3 @@
+<apex:page controller="IspApproverNotification" showHeader="false" sidebar="false" action="{!approveOrReject}">
+ <br/><p>&nbsp;&nbsp;&nbsp;&nbsp;<b>Thank you for your feedback</b></p>
+</apex:page>

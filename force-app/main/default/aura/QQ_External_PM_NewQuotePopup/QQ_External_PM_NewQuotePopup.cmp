@@ -1,0 +1,128 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <c:QQ_PM_SubmitQuickQuote aura:id="SubmitQuickQuote" />
+    
+    <aura:attribute name="pkgexist"  type="boolean"  default="false"/>
+    <aura:attribute name="atsexist" type="boolean" default="false"/>
+    <aura:attribute name="transmissionexist" type="boolean"  default="false"/>    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c', 'Customer_Name__c':''}" />
+    <aura:attribute name="quoteitemlist"  type="ASP_PM_Line_Items__c[]" /> 
+    <aura:attribute name="quotecustomer" type="String" default=""/>
+    <aura:attribute name="addonitems" type="PM_Line_Item_AddOn__c[]"/>
+    <aura:attribute name="newquotenum" type="String" default=""/>
+    <aura:registerEvent name="QQ_NQ_Submit_Save" type="c:QQ_NQ_Submit_Save_event"/>
+    <aura:attribute name="qq_previewmode" type="boolean" default="false"/>    
+    <aura:attribute name="enablepreviewbtn" type="boolean" default="false"/>
+    <aura:attribute name="qq_submitted" type="boolean" default="false"/>
+    <aura:attribute name="quoteid" type="Id"/>
+    <aura:attribute name="openpopup" type="boolean" default="true"/>
+    <aura:handler name="change" value="{!v.quoteitemlist}" action="{!c.enablePreviewbtn}"/>
+    <aura:attribute name="closeform" type="boolean" default="false"/>
+    <aura:attribute name="confirmclose" type="boolean" default="false"/>
+    
+    <div>  
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_large slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="modalheader modal__header">
+                    <span>
+                        <button type="button"
+                                onclick="{!c.CancelQuote}" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                    </span>
+                    <div class="slds-media">
+                        <div class="slds-media__figure">                                
+                            <span class="slds-icon_container slds-avatar slds-avatar_medium" title="Description of icon when needed">
+                                <lightning:icon iconName="utility:edit_form" variant="inverse" alternativeText="" class="" />
+                            </span>
+                        </div>
+                        
+                        <div class="slds-media__body">
+                            <div class="fa slds-page-header__title slds-truncate slds-align-middle" title="Preventive Maintenance">Preventive Maintenance</div>
+                            <p class="{!$Browser.isTablet ? 'tabletheadingcolor slds-text-body_small slds-line-height_reset' :'headingcolor slds-text-body_small slds-line-height_reset'}">Quote Request</p>
+                        </div>
+                    </div>
+                </header>
+                
+                
+                <div class="slds-box slds-theme_default slds-modal__content slds-scrollable_y" style="height:100%" id="modal-content-id-1">
+                    <aura:if isTrue="{! not(v.confirmclose)}">
+                        
+                        <div class="{!v.qq_previewmode ? 'slds-show' :'slds-hide'}">                               
+                            <c:QQ_External_PM_Preview quote="{!v.quote}"
+                                                      quoteitemlist="{!v.quoteitemlist}" 
+                                                      addonitems ="{!v.addonitems}"
+                                                      newquotenum="{!v.newquotenum}"
+                                                      quotecustomer = "{!v.quotecustomer}"
+                                                      pkgexist="{!v.pkgexist}"
+                                                      atsexist="{!v.atsexist}"
+                                                      transmissionexist="{!v.transmissionexist}"
+                                                      quoteid="{!v.quoteid}"/>
+                        </div>
+                        <div class="{!v.qq_previewmode ? 'slds-hide' :'slds-show'}">
+                            <c:QQ_PM_External_Container quote="{!v.quote}"
+                                                        quoteitemlist="{!v.quoteitemlist}" 
+                                                        addonitems ="{!v.addonitems}"
+                                                        quotecustomer = "{!v.quotecustomer}"/>
+                            
+                        </div>
+                        
+                    </aura:if> 
+                    
+                </div>
+                <footer class="slds-modal__footer modal__footer">
+                    <span class="slds-float_right">
+                        <lightning:button class=""  
+                                          variant="brand" 
+                                          label="Close" 
+                                          iconName="utility:close"
+                                          title="CLOSE" 
+                                          onclick="{! c.CancelQuote }" /> 
+                        
+                        <aura:if isTrue="{!not(v.qq_previewmode)}">
+                            <lightning:button class=""  
+                                              variant="brand" 
+                                              label="Preview"
+                                              disabled="{!not(v.enablepreviewbtn)}"
+                                              iconName="utility:preview"
+                                              title="CLICK TO PREVIEW" 
+                                              onclick="{! c.PreviewQuote }" /> 
+                        </aura:if>
+                        <aura:if isTrue="{! and(v.qq_previewmode, not(v.qq_submitted))}">
+                            <lightning:button class=""
+                                              variant="brand" 
+                                              label="Back" 
+                                              iconName="utility:back"
+                                              title="CLICK TO SUBMIT" 
+                                              onclick="{! c.BackQuoteform }" />
+                            
+                            
+                            <lightning:button class=""
+                                              variant="brand" 
+                                              label="Submit" 
+                                              iconName="utility:send"
+                                              title="CLICK TO SUBMIT" 
+                                              onclick="{! c.SubmitQuote }" />
+                        </aura:if>
+                        <aura:if isTrue="{!v.newquotenum}">
+                            <lightning:button class=""  
+                                              variant="brand"
+                                              iconName="utility:download"
+                                              label="PDF" 
+                                              title="CLICK TO DOWNLOAD" 
+                                              onclick="{! c.downloadPDF }" />
+                        </aura:if>
+                    </span>
+                </footer>
+            </div> 
+        </section>
+        
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        <aura:if isTrue = "{!v.closeform}">    
+            <c:QQ_PopUp_Close_Prompt openpopup="{!v.openpopup}" closeform = "{!v.closeform}" 
+                                     qq_submitted="{!v.qq_submitted}" newquotenum="{!v.newquotenum}"/>
+        </aura:if>
+    </div>
+</aura:component>

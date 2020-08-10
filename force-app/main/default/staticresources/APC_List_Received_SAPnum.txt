@@ -1,0 +1,79 @@
+ [
+  {
+    "label": "Case",
+    "value": "Case",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "SAP Order",
+    "value": "SON",
+    "Field": "SalesOrderNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },   
+  {
+    "label": "Item",
+    "value": "lineitem",
+    "Field": "OrderLineNumber",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Part Number",
+    "value": "partnumber",
+    "Field": "Material",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "PO Number",
+    "value": "customerpo",
+    "Field": "PONumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Orginal Delivery",
+    "value": "Originaldelivery",
+    "Field": "OriginalDelivery",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Carrier",
+    "value": "carrier",
+    "Field": "ShippingCondition",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Tracking",
+    "value": "Tracking",
+    "Field": "TrackingNumber",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "PDC",
+    "value": "FACPDC",
+    "Field": "FacingPDC",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Invoice",
+    "value": "Invoice",
+    "Field": "Invoice",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Select",
+    "value": "isselected",
+    "Field": "isselected",
+    "Search": "",
+    "Sort": "ASC"
+  }  
+]

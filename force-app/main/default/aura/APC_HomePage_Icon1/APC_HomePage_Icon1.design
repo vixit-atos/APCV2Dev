@@ -1,0 +1,4 @@
+<design:component>
+    <design:attribute name="heading" label="Heading"/>
+    <design:attribute name="subtext" label="SubHeading"/>
+</design:component>

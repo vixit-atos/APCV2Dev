@@ -1,0 +1,173 @@
+<apex:page standardcontroller="Region_Report__c" extensions="RegionReviewNoteCreationController"  standardStylesheets="true" >
+    <apex:messages />
+    <style type="text/css">
+      .HeaderData
+        {
+            border:solid windowtext 1.0pt;
+            padding:0.02in 5.4pt 0.02in 5.4pt;
+            vertical-align:middle !important;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .boldinput
+        {
+            font-size: 14px;
+            font-weight: bold;
+            
+        }
+        .maxwidth
+        {
+            width:100%;
+        }
+        
+        .HeaderTitle
+        {
+            border:solid windowtext 1.0pt;
+            background:#007FCC;
+            padding:0in 5.4pt 0in 5.4pt;
+            vertical-align:middle !important;
+            width: 96px;
+            color: white !important;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+        
+        .HeaderSubTitle
+        {
+            border:solid windowtext 1.0pt;
+            background:#DDECF2;
+            padding:0in 5.4pt 0in 5.4pt;
+            vertical-align:middle !important;
+            width: 96px;
+            color: black !important;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+    </style>
+     <apex:form id="page">
+         
+            <apex:pageBlock title="Region Review Note Edit" mode="edit">
+                <apex:pageBlockButtons location="Top">
+                    <apex:commandButton action="{!save}" value="Save"/>
+                    <apex:commandButton action="{!saveAndNew}" value="Save & New"/>
+                    <apex:commandButton action="{!cancel}" value="Cancel"/>
+                </apex:pageBlockButtons>
+                 <apex:pageBlockSection title="Information" columns="1">
+                </apex:pageBlockSection>
+                 <table border="1" cellpadding="0" cellspacing="0" width="95%" align="center" min-width="1700px">
+                    <tbody>
+                        <tr>    
+                            <td class="HeaderTitle">Region</td>
+                            <td class="HeaderData" ><Apex:inputField style="width: 95%" styleclass="boldinput maxwidth" value="{!Region_Report__c.Region__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="HeaderTitle">Review Month</td>
+                            <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Region_Report__c.Review_Month__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="HeaderTitle">Review Year</td>
+                            <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Region_Report__c.Review_Year__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="HeaderTitle" style="width: 20%; height: 3rem">Summary of AOR</td>
+                            <td class="HeaderData"><Apex:inputField style="width: 100%; height: 3rem" styleclass="boldinput maxwidth" value="{!Region_Report__c.Update__c}"/></td>
+                        </tr>
+                    </tbody>
+            </table>
+                <br/>   
+                <table id="objectives" border="1" cellpadding="0" cellspacing="0" width="95%" align="center" min-width="1700px">
+                        <tr><td colspan ='5' class="HeaderTitle" title="Product Summary" >Product Summary
+                            <span style="float:right;"><apex:commandButton action="{!NewTopObjective}" value="+ Add" id="btnNewTopObjective"/></span>
+                          </td>
+                        </tr>
+                        <tr>
+                            <th class="HeaderSubTitle">Product Name</th>
+                            <th class="HeaderSubTitle">Up/Down</th>
+                            <th class="HeaderSubTitle">Percentage</th>
+                            <th class="HeaderSubTitle">Note</th>
+                            <td class="HeaderSubTitle"><b>Delete?</b></td>
+                        </tr> 
+                      <apex:repeat value="{!savedUpOrDown}" var="savedPUDObj">
+                            <tr>
+                                <td  class="HeaderData"><apex:inputText value="{!savedPUDObj.name}" /></td>
+                                <td  class="HeaderData"><apex:selectRadio value="{!savedPUDObj.Up_Or_Down__c}">
+                                    <apex:selectOption itemValue="Up" itemLabel="Up"/>
+                                    <apex:selectOption itemValue="Down" itemLabel="Down"/>
+                                    </apex:selectRadio>
+                                </td>
+                                <td  class="HeaderData"><apex:inputText style="width: 3rem;" value="{!savedPUDObj.Percentage__c}" />%</td>
+                                <td class="HeaderData" style="width: 100%;">
+                                    <apex:inputField style="width: 100%; height: 6rem; margin: 0px;"  value="{!savedPUDObj.Note__c}"/>
+                                </td>
+                                <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!savedPUDObj.Delete__c}"/></td>
+                            </tr>    
+                      </apex:repeat>
+                        <apex:repeat value="{!productUpOrDown}" var="varPUDObj">
+                            <tr>
+                                <td  class="HeaderData"><apex:inputText value="{!varPUDObj.name}" /></td>
+                                <td  class="HeaderData"><apex:selectRadio value="{!varPUDObj.Up_Or_Down__c}">
+                                    <apex:selectOption itemValue="Up" itemLabel="Up"/>
+                                    <apex:selectOption itemValue="Down" itemLabel="Down"/>
+                                    </apex:selectRadio>
+                                </td>
+                                <td  class="HeaderData"><apex:inputText style="width: 3rem;" value="{!varPUDObj.Percentage__c}" />%</td>
+                                <td class="HeaderData" style="width: 100%;">
+                                    <apex:inputField style="width: 100%; height: 6rem; margin: 0px;" value="{!varPUDObj.Note__c}"/>
+                                </td>
+                                <td class="HeaderData"><apex:inputField style="width:100%;" styleClass="almostboldinput maxwidth" value="{!varPUDObj.Delete__c}"/></td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                <br/>
+                 <table border="1" cellpadding="0" cellspacing="0" width="95%" align="center" min-width="1700px">
+                     <tr>
+                         <td class="HeaderTitle" style="width: 300px; height: 100px"> Biggest Challenges</td>
+                         <td class="HeaderData" style="width: 100%;"><apex:inputField style="width: 100%; height: 100px" value="{!Region_Report__c.Biggest_Challenges__c}"/></td>
+                     </tr>
+                </table>
+            </apex:pageBlock>
+         
+          <apex:pageBlock title="Big Sales Wins" mode="edit">
+                <apex:pageBlockButtons location="bottom">
+                        <apex:commandButton action="{!save}" value="Save"/>
+                        <apex:commandButton action="{!saveAndNew}" value="Save & New"/>
+                        <apex:commandButton action="{!cancel}" value="Cancel"/>
+                      <span style="float:right;"><apex:commandButton action="{!NewBigSale}" value="+ Add" id="btnNewBigSale"/></span>
+                </apex:pageBlockButtons>
+                <apex:repeat value="{!savedBigSales}" var="savedBswObj">
+                    <apex:pageBlockSection title="Information" columns="2">
+                        <apex:inputField value="{!savedBswObj.Name}"/>   
+                        <apex:inputField value="{!savedBswObj.Customer__c}"/>
+                        <apex:inputField value="{!savedBswObj.Dealer_Name__c}"/>
+                        <apex:inputField value="{!savedBswObj.Amount__c}"/>
+                    </apex:pageBlockSection>   
+                    <apex:pageBlockSection columns="1">
+                    	<apex:inputField style="width: 74%; height: 100px;" value="{!savedBswObj.Note__c}"/>
+               		</apex:pageBlockSection>
+                    <apex:pageBlockSection columns="2">
+                        <apex:inputField styleClass="almostboldinput maxwidth" value="{!savedBswObj.Delete__c}"/>
+                    </apex:pageBlockSection>
+                </apex:repeat>
+              <br/>
+                <apex:repeat value="{!bigSalesWins}" var="newBswObj">
+                    <apex:pageBlockSection columns="2">
+                        <apex:inputField value="{!newBswObj.Name}"/>   
+                        <apex:inputField value="{!newBswObj.Customer__c}"/>
+                        <apex:inputField value="{!newBswObj.Dealer_Name__c}"/>
+                        <apex:inputField value="{!newBswObj.Amount__c}"/>
+                    </apex:pageBlockSection>   
+                    <apex:pageBlockSection columns="1">
+                    	<apex:inputField style="width: 74%; height: 100px;" value="{!newBswObj.Note__c}"/>
+               		</apex:pageBlockSection>
+                    <apex:pageBlockSection columns="2">
+                        <apex:inputField styleClass="almostboldinput maxwidth" value="{!newBswObj.Delete__c}"/>
+                    </apex:pageBlockSection>
+                </apex:repeat>
+          </apex:pageBlock>
+        </apex:form>
+    
+    
+   <!--  <div id="lightning" />
+    <apex:includeLightning />-->
+</apex:page>

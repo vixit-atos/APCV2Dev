@@ -1,0 +1,60 @@
+<apex:page showHeader="true" sidebar="false" standardController="TCMeeting__c" extensions="TCMeetingController" tabStyle="This_Week_s_TC_Meeting__tab"  >
+    <!-- <apex:pageBlock rendered="{!IF(mysObject != null , true , false)}"  > -->
+    <apex:includeScript value="/soap/ajax/32.0/apex.js"/>  
+   
+    <head>  
+        <meta name="viewport" content="width=320; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    </head> 
+    <apex:form rendered="{!IF(mysObject != null , true , false)}" >
+        <apex:sectionHeader title="{!mysObject.Name}" subtitle="{!subject}"  />
+        <apex:pageBlock title="Deals" >
+            <apex:pageBlockTable var="Oppy" value="{!items_to_approve}" border="1" cellpadding="5" title="Deals" columnsWidth="8%,20%,40%,15%,15%">
+                <apex:column headerValue="Actions"  >
+                    <apex:commandLink value="Approve / Reject" action="{!ApproveNavigate}"  rendered="{!Oppy.approvalwaiting}" >
+                        <apex:param name="myParam" value="{!Oppy.id}"/>
+                    </apex:commandLink>
+                </apex:column>
+                
+                <apex:column headerValue="Deals" rendered="{! $User.UIThemeDisplayed == 'Theme4t' }"  >
+                    <!--<a href="javascript:sforce.one.navigateToURL('https://dtna--dev03.cs44.my.salesforce.com/p/process/ProcessInstanceWorkitemWizardStageManager?id=04i7A0000006WwfQAE&retURL=%2Fapex%2FTWC_ThisWeekTCMeeting');">Click to open page two.</a>-->
+                    <a id="s01" href="" role="option" onclick="Navigareworksheer('{!Oppy.Id}','{!Oppy.recordtype}')">
+                        {!Oppy.name} 
+                    </a>
+                </apex:column>
+                
+                <apex:column headerValue="Deals"  value="{!Oppy.opty.TWSdealLinktoWS__c}" rendered="{! $User.UIThemeDisplayed != 'Theme4t' }" />
+                <apex:column headerValue="TC Meeting Notes" value="{!Oppy.tcmeetingcomments}" />
+                <apex:column headerValue="Personal Approval Status" value="{!Oppy.PersonalApStatus}" />
+                <apex:column headerValue="Deal Approval Status" value="{!Oppy.DealApprovalStatus}"  />
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form> 
+     <apex:relatedList subject="{!mysObject}" list="AttachedContentDocuments" />
+    <apex:relatedList list="ProcessSteps" ></apex:relatedList>
+    <apex:form >
+        <apex:pageBlock rendered="{!IF(mysObject == null , true , false)}" >
+            <apex:sectionHeader title="Next TC Meeting"  />
+            <font size="4" style="float:center;" >       
+                There is no TC Meeting currently scheduled.</font>  
+            <br/>
+            <br/>        
+            <font size="4" align="left"> To return to previous page, click  </font>
+            <apex:commandLink action="{!cancel}" immediate="true" ><b> <font size="4"> Go Back   
+                </font>   </b>
+            </apex:commandLink>
+          </apex:pageBlock>  
+    </apex:form>  
+    <script>
+        function Navigareworksheer(oid, orname){
+               // Salesforce1 navigation                 
+               //sforce.one.navigateToSObject(oid, 'detail');
+               sforce.one.navigateToURL('/apex/TWS_OWSP?id='+oid);
+  
+        }
+        </script>
+        <script>
+        function ApproveRejects(aprid){
+            sforce.one.navigateToURL('/p/process/ProcessInstanceWorkitemWizardStageManager?id='+aprid);
+        }
+    </script>
+</apex:page>

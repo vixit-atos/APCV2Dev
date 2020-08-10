@@ -1,0 +1,30 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="heading" type="string" access="global"/>
+    <aura:attribute name="subtext" type="string" access="global"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="caseRecord" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <lightning:navigation aura:id="navService" />
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="CaseNumber"
+                      targetFields="{!v.caseRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+    
+    
+    
+    <div class="slds-theme_default">  
+        
+        <!--
+        <div class="slds-p-around_small">
+            <lightning:icon iconName="standard:case" alternativeText=""/>
+            <span class="slds-p-around_small" >Case <br/>                
+                    {!v.caseRecord.CaseNumber}               
+            </span>
+            
+        </div>
+        -->
+        <force:recordView recordId="{!v.recordId}" />
+    </div>
+</aura:component>

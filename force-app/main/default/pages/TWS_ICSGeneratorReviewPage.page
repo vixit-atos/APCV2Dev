@@ -1,0 +1,48 @@
+<apex:page title="event.ics"  cache="false" standardcontroller="TCMeeting__c" extensions="TWS_ICS_Generator_ControllerExtension">
+<apex:form >
+ <apex:pageBlock >
+        <apex:pageMessages ></apex:pageMessages>
+      <apex:pageBlockButtons >
+          <apex:commandButton title="Back" value="Back" action="{!doCancel}"/>
+      </apex:pageBlockButtons>
+     <apex:pageBlockSection >
+         
+         
+         
+         
+     <apex:pageBlockSectionItem >
+         Subject:<apex:outputText value="{!TCMeeting__c.Name}"/>
+
+         </apex:pageBlockSectionItem>
+         
+         <apex:pageBlockSectionItem labelTitle="Recipients" >
+             Invitees:<apex:outputText >
+                  <apex:repeat value="{!invitees}" var="u" >
+
+                               <apex:outputText >{!u.Email};</apex:outputText>
+
+                      <br/>
+ 	         </apex:repeat>
+               </apex:outputText>
+         </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+         Organizer:<apex:outputText >{!$User.FirstName} {!$User.LastName} Email:{!$User.Email}</apex:outputText>
+
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+             Body:<apex:outputText > Please find below TCMeeting Link<br/>
+             {!URLFOR("/apex/TWC_ThisWeekTCMeeting")}</apex:outputText>
+
+ 	
+         </apex:pageBlockSectionItem>
+         <apex:pageBlockSectionItem >
+             TC Meeting Date:<apex:outputField value="{!TCMeeting__c.TC_Meeting_Date__c}" />
+
+         </apex:pageBlockSectionItem>
+          
+
+     </apex:pageBlockSection>
+     
+    </apex:pageBlock> 
+    </apex:form>
+</apex:page>

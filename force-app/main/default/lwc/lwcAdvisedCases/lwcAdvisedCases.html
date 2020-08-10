@@ -1,0 +1,20 @@
+<!--
+  @File Name          : lwcAdvisedCases.html
+  @Description        : 
+  @Author             : VIXIT BHARDWAJ
+  @Group              : 
+  @Last Modified By   : VIXIT BHARDWAJ
+  @Last Modified On   : 6/17/2020, 7:56:51 AM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    6/17/2020   VIXIT BHARDWAJ     Initial Version
+-->
+<template>
+  <lightning-card>
+    <p class="slds-p-horizontal_large">Suggested Cases</p>
+    <div style="height: 200px;">
+      <lightning-datatable key-field="Id" data={records} columns={columns}>
+      </lightning-datatable>
+    </div>
+  </lightning-card>
+</template>

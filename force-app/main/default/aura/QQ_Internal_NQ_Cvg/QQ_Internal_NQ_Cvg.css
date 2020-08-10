@@ -1,0 +1,10 @@
+.THIS .stagingstyle{
+    font-weight:bold;
+    color:white;
+}
+.THIS .labelbold {
+    font-weight:bold;
+}
+.THIS .slds-form-element__label{
+    font-weight:bold !important;
+}

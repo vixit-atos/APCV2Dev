@@ -1,0 +1,82 @@
+.THIS .customButton{
+   background-color: #2574a9;
+   color: #fff; 
+}
+.THIS input.error, .THIS select.error {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(194, 57, 52);
+    box-shadow: rgb(194, 57, 52) 0 0 0 1px inset;
+    background-clip: padding-box;
+}
+
+.THIS span.required{
+    color:#c23934;
+}
+.THIS .boxdesign{
+    background-color: #f3f2f2;
+}
+.THIS.customRadioCls .slds-form-element__control .slds-radio{
+    display : inline-block !important;
+}
+
+.THIS .slds-input{
+ 
+}
+.THIS .slds-select_container .slds-select{
+ 
+}
+.THIS .uiInput--textarea.textarea{
+ 
+}
+.THIS .uiInput--input.input{
+  
+}
+/* Commenting to restore Salesforce styling.
+ 
+.THIS .slds-form-element{
+    font-family:Arial;
+}
+.THIS .slds-button_brand{
+background-color: #19B1ED;
+border-radius: 16px;
+font-family: arial;
+font-weight: 500;
+height: auto;
+width: 71px;
+text-align: center;
+border: 1px solid transparent;
+    
+}*/
+
+.THIS .slds-required{
+    color: rgb(255, 255, 255);
+}
+
+.THIS .slds-form-element__control.slds-grow{
+width: 172%;;
+margin-top: -1rem;
+}
+.THIS .slds-form-element__control1.slds-grow{
+width: 200%;
+}
+.THIS .uiInput--default.has-error.uiInputDefaultError {
+    margin: 0rem 0rem -1.8rem 0rem;
+}
+/*.THIS input[type=radio]:checked.radio-color{
+    border-color: rgb(0, 178, 0); Choose your color
+    box-shadow: 0 0 3px #006A00; Choose a darker color for the shadow
+    background:pink !important;
+}*/
+
+/*.THIS .slds-select_container .slds-select:focus{
+ background-color: rgb(255, 255, 255);
+border-color: rgb(194, 57, 52);
+box-shadow: rgb(194, 57, 52) 0 0 0 1px inset;
+background-clip: padding-box; 
+}
+.THIS .slds-select_container .slds-select:active {
+ background-color: rgb(255, 255, 255);
+border-color: rgb(194, 57, 52);
+box-shadow: rgb(194, 57, 52) 0 0 0 1px inset;
+background-clip: padding-box;
+}*/

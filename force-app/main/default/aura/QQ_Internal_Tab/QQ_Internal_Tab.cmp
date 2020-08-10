@@ -1,0 +1,69 @@
+<aura:component>
+    
+    <c:QQ_ListColumnService aura:id="ListColumnservice" />
+    <c:QQ_List_DataService aura:id="ListDataservice" />
+    
+    <aura:handler event="c:QQ_NQ_Submit_Save_event" action="{!c.doInit}"/>
+    
+    <aura:attribute name="Headertab" type="List" default="[
+                                                          {'tabname': 'Draft', 'stagefilter': 'Draft' , 'statusfilter': 'Draft'},
+                                                          {'tabname': 'Pending', 'stagefilter': 'Pending' , 'statusfilter': ''},
+                                                          {'tabname': 'Complete', 'stagefilter': 'Complete' , 'statusfilter': ''}                                                                                                         
+                                                          ]" />
+    
+    <aura:attribute name="Pendingtab" type="List" default="[
+                                                           {'tabname': 'All', 'stagefilter': 'Pending' , 'statusfilter': 'Pending'},
+                                                           {'tabname': 'Validation', 'stagefilter': 'Pending' , 'statusfilter': 'Validation'},
+                                                           {'tabname': 'Cost', 'stagefilter': 'Pending' , 'statusfilter': 'Cost'},
+                                                           {'tabname': 'Price','stagefilter': 'Pending' ,  'statusfilter': 'Price'},
+                                                           {'tabname': 'Control', 'stagefilter': 'Pending' , 'statusfilter': 'Control'},
+                                                           {'tabname': 'Management','stagefilter': 'Pending' ,  'statusfilter': 'Management'}                                                        
+                                                           ]" />
+    <aura:attribute name="InternalQQ" type="Boolean" default="true" />
+    <aura:attribute name="Static_resource_list" type="String" default="QQ_Internal_List"/>
+    <aura:attribute name="ListColumn" type="List"/>
+    <aura:attribute name="FieldNames" type="List"/>
+    
+    <aura:attribute name="Pendingtabwithcount" type="List"/>
+    <aura:attribute name="quotes" type="ASP_QQ__c[]"/>
+    <aura:attribute name="recordcount" type="integer" />
+    <aura:attribute name="domain" type="String" default="Extended Warranty" />
+    <aura:attribute name="source" type="String" default="Internal" />
+    
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    
+    
+    <div class="slds-theme_default">
+        <br></br>
+        <c:QQ_Internal_Header heading="Quote History" subheading="" icon="DTNA_TRUCK_ICON"/>
+        
+        <lightning:tabset selectedTabId="Pending" class="tabs">
+            <aura:iteration items = "{!v.Headertab}" var="item"> 
+                <lightning:tab label="{!item.tabname}" id="{!item.tabname}">
+                    <ui:scrollerWrapper>
+                        <aura:if isTrue="{!item.tabname == 'Pending'}">
+                            <lightning:tabset selectedTabId="All">
+                                <aura:iteration items = "{!v.Pendingtabwithcount}" var="item1">                     
+                                    <lightning:tab label="{!item1.tabname  + ' (' +  item1.count + ')'}" id="{!item1.tabname}">
+                                        <ui:scrollerWrapper>
+                                            <c:QQ_List_Header heading="Quotes" subheading="Extended Coverage" icon="DTNA_TRUCK_ICON"/>
+                                            <c:QQ_List Statuslist = "{!v.Pendingtab}" Stagefilter="{!item1.stagefilter}" Statusfilter="{!item1.statusfilter}"  Static_resource_list="QQ_Internal_List"
+                                                       FieldNames = "{#v.FieldNames}" ListColumn="{#v.ListColumn}"/>
+                                        </ui:scrollerWrapper>
+                                    </lightning:tab>
+                                </aura:iteration>
+                            </lightning:tabset>
+                            <aura:set attribute="else">
+                                <c:QQ_List_Header heading="Quotes" subheading="Extended Coverage" icon="DTNA_TRUCK_ICON" />
+                                <c:QQ_List Stagefilter="{#item.stagefilter}" Statusfilter="{#item.statusfilter}" Static_resource_list="QQ_Internal_List" domain="{#v.domain}" source="{#v.source}" />                                
+                            </aura:set>
+                        </aura:if>
+                    </ui:scrollerWrapper>
+                </lightning:tab> 
+            </aura:iteration>
+        </lightning:tabset> 
+    </div>
+</aura:component>

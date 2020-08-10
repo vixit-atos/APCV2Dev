@@ -1,0 +1,64 @@
+<aura:component >
+    <aura:attribute name="quoteid" type="Id"/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quoteitem" type="ASP_QQ_Line_Item__c" default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    <aura:attribute name="notelist" type="Note[]"/> 
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>
+    <aura:attribute name="quotestatus" type="String"/>
+    <aura:attribute name="quotecustomer" type="string"/>
+    
+    <c:QQ_Query_QuoteService aura:id="queryquoteservice" />
+    <aura:attribute name="saved" type="boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    
+    <c:QQ_Internal_NQ_Gen haseditaccess="{!v.quotestatus == 'Pending for Validation' ? v.haseditaccess : false}" 
+                          quote="{!v.quote}" 
+                          editmode="false"
+                          quotecustomer = "{!v.quotecustomer}"
+                          quotestatus = "{!v.quotestatus}"/>    
+    
+    <c:QQ_Internal_NQ_Odr haseditaccess="{!v.quotestatus == 'Pending for Validation' ? v.haseditaccess : false}" 
+                          quote="{!v.quote}" 
+                          editmode="false" 
+                          quotestatus = "{!v.quotestatus}"/>
+    
+    <c:QQ_Internal_NQ_Cvg haseditaccess="{!v.quotestatus == 'Pending for Validation' ? v.haseditaccess : false}" 
+                          quote="{!v.quote}" 
+                          quoteitem="{!v.quoteitem}" 
+                          editmode="false"
+                          quotestatus = "{!v.quotestatus}"/>
+    
+    <c:QQ_Internal_NQ_Notes haseditaccess="{!v.haseditaccess}" 
+                            noteslist = "{!v.notelist}" 
+                            editmode="false" />
+    
+    <aura:if isTrue="{!v.quotestatus == 'Pending for Cost'}">        
+        <c:QQ_Internal_NQ_Cost haseditaccess="{!v.haseditaccess}"
+                               quote="{!v.quote}"
+                               quoteitem="{!v.quoteitem}"
+                               saved="{!v.saved}"/>
+    </aura:if>
+    
+    <aura:if isTrue="{!and (v.quotestatus == 'Pending for Price' , v.haseditaccess)}">
+        <aura:if isTrue="{!v.quote.Quote_Type__c == 'Custom'}">                     
+            <c:QQ_Internal_NQ_CustomPrice haseditaccess="{!v.haseditaccess}"
+                                          quote="{!v.quote}"
+                                          quoteitem="{!v.quoteitem}"
+                                          quoteid ="{!v.quoteid}"
+                                          saved ="{!v.saved}"/>
+            
+            <aura:set attribute="else">
+                <c:QQ_Internal_NQ_StandardPrice haseditaccess="{!v.haseditaccess}"
+                                                quote="{!v.quote}"
+                                                quoteitem="{!v.quoteitem}"
+                                                quoteid ="{!v.quoteid}"
+                                                saved ="{!v.saved}"/>
+                
+            </aura:set>    
+        </aura:if>
+    </aura:if>
+    <aura:if isTrue="{!or(v.quotestatus == 'Pending for Control' , v.quotestatus == 'Pending for Management')}">
+        <c:QQ_Internal_Margin quote="{!v.quote}"  
+                              quoteitem="{!v.quoteitem}" />
+    </aura:if>
+</aura:component>

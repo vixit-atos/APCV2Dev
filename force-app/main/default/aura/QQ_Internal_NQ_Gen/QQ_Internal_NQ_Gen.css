@@ -1,0 +1,15 @@
+.THIS {
+}
+
+.THIS .labelbold {
+    font-weight:bold;
+    font-family:'Salesforce Sans',Arial,sans-serif;
+}
+.THIS .slds-form-element__label{
+    font-weight:bold !important;
+}
+.THIS .sldsbtn
+{
+  line-height: 1.7rem;
+  padding: 0.15rem 0.75rem;
+}

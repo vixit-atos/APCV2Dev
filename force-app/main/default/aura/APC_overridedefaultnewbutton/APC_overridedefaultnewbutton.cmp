@@ -1,0 +1,43 @@
+<aura:component controller="APC_MasterController" 
+                implements="lightning:actionOverride,lightning:hasPageReference,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" >
+    <lightning:workspaceAPI aura:id="RecordTypePage" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="recordTypeId" type="string"/>
+    <aura:attribute name="recordType" type="string" default=""/>
+    <aura:attribute name="defaultRecordTypeId" type="string"/>
+    <aura:attribute name="defaultRecordTypeName" type="string" default=""/>
+    <aura:attribute name="defaultRecordType" type="string[]" default=""/>
+    <aura:attribute name="ContactId" type="string" />
+    <aura:attribute name="AccountId" type="string" />
+    <aura:attribute name="defaultcontactID" type="string"/> 
+    <!--  <aura:if isTrue="{!(((((v.recordType == 'APC Core' || 
+                     v.recordType == 'APC Credit') ||
+                     v.recordType == 'APC Invoice') ||
+                     v.recordType == 'APC Order') || 
+                     v.recordType == 'APC Return') || 
+                     v.recordType == 'APC TBB')}">        
+        <c:APC_Internal_Casecreation />  
+    </aura:if>
+     <aura:if isTrue="{!(v.recordType == 'Service' ||
+                     v.recordType == 'Customer' ||
+                     v.recordType == 'Parts' ||
+                     v.recordType == 'Courtesy Engineering' ||
+                     v.recordType == 'Breakdown')}">
+        <c:CAC_HANA_CreateAsset 
+                                        recordType="{!v.recordType}"
+                                        recordTypeId="{!v.recordTypeId}"/>
+    </aura:if>
+    <aura:if isTrue="{!(v.defaultRecordTypeName == 'Service' || 
+                     v.defaultRecordTypeName == 'Customer' || 
+                     v.defaultRecordTypeName == 'Parts' ||
+                     v.defaultRecordTypeName == 'Courtesy Engineering' ||
+                     v.defaultRecordTypeName == 'Breakdown')}">
+     <c:CAC_HANA_CreateAsset 
+                                        defaultRecordTypeName="{!v.defaultRecordTypeName}"
+                                        defaultRecordTypeId="{!v.defaultRecordTypeId}"
+                                        defaultcontactID = "{!v.defaultcontactID}"/> 
+    </aura:if>-->
+	{!v.body }
+</aura:component>

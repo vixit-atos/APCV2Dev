@@ -1,0 +1,127 @@
+<apex:page controller="DTNA_Quote_Activity_List" tabStyle="Concession__c" sidebar="false" applyBodyTag="false" showHeader="false" id="page1"   renderAs="PDF">
+
+
+   
+
+
+   <head>
+   <style>
+   @page {
+    @top-right {
+      content: counter();
+      content: "Page " counter(page) " of " counter(pages);
+          font-weight: lighter;
+          font-size:8pt;
+        }
+    }
+   
+          @page{
+   
+           size: A4 landscape;   
+          }   
+  
+          td,th{
+            border: 0px solid black;
+            word-wrap: break-word;
+          }
+          table tr, table td{
+            page-break-inside: avoid;
+          }
+          table{
+            -fs-table-paginate: paginate;              
+          }
+          table thead{
+            display: table-header-group;
+          }       
+           
+   
+   </style>
+   </head>
+     <h4>Quote Activity:</h4>
+    <apex:pageblock >
+
+        <apex:outputPanel id="PdfBlock">
+            
+            <apex:outputPanel >
+                <table   style=" border: 1px solid black; font-size: 12px ;width : 100%;" align="justify">
+                    <thead > 
+                        <apex:repeat value="{!pdfTableHeaders}" var="key">
+                            
+                            
+                            <th align="center" bgcolor="#7fb2ac">{!key}</th>
+                            
+                        </apex:repeat>
+                    </thead > 
+                    <apex:repeat value="{!PDFRecs}" var="varQAObj">
+                        <tr>
+                            
+                            <apex:repeat value="{!PdfTableData}" var="key">
+                                
+                                <td bgcolor="#e5efee"> 
+                                
+                                 <apex:outputPanel rendered="{!if(AND(key != 'History',key != 'Date_Quoted__c',key != 'Create_Date__c',key != 'Approximate_Close_Date__c',key != 'EXPR_DATE__c',key != 'Miscellaneous_Comments__c') ,true,false)}">
+                                    {!varQAObj[key]}
+                                    </apex:outputPanel>
+                                    
+                                  
+                                  <apex:outputPanel rendered="{!if(OR(key == 'Date_Quoted__c',key == 'Create_Date__c',key == 'Approximate_Close_Date__c',key == 'EXPR_DATE__c') ,true,false)}">
+                                  <apex:outputText value="{0,date,short}">
+                                        <apex:param value="{!varQAObj[key]}" /> 
+                                    </apex:outputText>  
+                                    </apex:outputPanel> 
+                                    
+                                  <apex:outputPanel rendered="{!if(key == 'Miscellaneous_Comments__c',true,false)}">
+                                    
+                                    <apex:outputField value="{!varQAObj[key]}" />
+                                    </apex:outputPanel>
+                                   
+                                 <!--     <apex:outputPanel rendered="{!if(key == 'Miscellaneous_Comments__c',true,false)}">
+                                     
+                                       
+                                            
+                                        {!varQAObj[key]}<br/>
+                                                                                
+                                    
+                                    </apex:outputPanel>
+                                  
+                                  
+                                    <apex:outputPanel rendered="{!if(key == 'History',true,false)}" layout="none">
+                                     
+                                     <apex:variable var="count" value="{!0}"/>
+                                        <apex:repeat value="{!ConsMap[varQAObj.id]}" var="el">
+                                            <apex:variable var="count" value="{!count + 1}"/>
+                                            
+                                        </apex:repeat>
+                                     
+                                     
+                                        <apex:outputPanel rendered="{!count>0}"> 
+                                        <table id="test" class="historytable" style="width: 100%;"  >
+                                          <tr>  <td align="justify" style="font-weight:bold">Created By:</td><td align="justify" style="font-weight:bold" >Comment:</td> </tr>
+                                            <apex:repeat var="conc" value="{!ConsMap[varQAObj.id]}">
+                                                
+                                                <tr id="history">
+                                                 
+                                                    <td id="historydata"  class="tabledata" style="width: 30%;">
+                                                    <apex:outputField value="{!conc.CreatedBy.Name}"/>&nbsp; </td>
+                                                    <apex:outputPanel id="DOACommentsdata" rendered="{!CONTAINS(ProfileName,'DOA')}">
+                                                        <td id="historydata" class="tabledata" style="width: 50%;">{!conc.RecordType.Name}</td> 
+                                                    </apex:outputPanel>
+                                                    <td id="historydata" class="tabledata" style="width: 50%;" align="justify">{!conc.Comment__c}</td> 
+                                                    
+                                                </tr>
+                                                
+                                            </apex:repeat>
+                                            
+                                        </table>
+                                       </apex:outputPanel> 
+                                    </apex:outputPanel> --> </td>
+                            </apex:repeat> </tr></apex:repeat>
+                    
+                </table>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+    </apex:pageblock>
+   
+ 
+</apex:page>

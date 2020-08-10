@@ -1,0 +1,60 @@
+<aura:component controller="CFR_Models_Impacted_Controller" implements="flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="selectedFLmodels" type="List" default="[]"/>
+    <aura:attribute name="selectedWSmodels" type="List" default="[]"/>
+    <aura:attribute name="selectedOthers" type="List" default="[]"/>
+    <aura:attribute name="dataList" type="List" default="[]"/>
+    <aura:attribute name="dataObj" type="Object" default="{}"/>
+    <aura:attribute name="allmodelsObj" type="Object" default="{}"/>
+    <aura:attribute name="volume" type="Integer" default="0"/>
+
+    <aura:attribute name="onRecordPage" type="Boolean" default="true" description="Must be true on record page but not for CFR_Initial_Form"/>
+    <aura:attribute name="readonly" type="Boolean" default="true" description="Allows you to edit matrix if false"/>
+    <aura:attribute name="title" type="String" description="The title above the component"/>
+
+    <aura:method name="updateMatrix" action="{!c.updateMatrix}"/>
+    <aura:method name="initialize" action="{!c.initialize}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}" />
+
+    <aura:handler name="change" value="{!v.selectedFLmodels}" action="{!c.listChange}"/>
+    <aura:handler name="change" value="{!v.selectedWSmodels}" action="{!c.listChange}"/>
+    <aura:handler name="change" value="{!v.selectedOthers}" action="{!c.listChange}"/>
+
+    <div style="width:100%;">
+        <aura:if isTrue="{!not(empty(v.dataList))}">
+        <lightning:card class="slds-p-horizontal--medium" title="{!v.title}">
+                <table>
+                    <tr>
+                        <th style="text-align:center">Model</th>
+                        <th style="text-align:center">Day</th> 
+                        <th style="text-align:center">SPLR</th>
+                        <th style="text-align:center">XTND</th>
+                        <th style="text-align:center">Crew</th>
+                    </tr>
+                    <aura:iteration items="{!v.dataList}" var="entry" indexVar="x">
+                        <tr>
+                            <td>{!entry.Name}</td>
+                            <td><lightning:input disabled="{!(!entry.Day || v.readonly)}" type="Number" value="{!entry.types.Day}" name="{!entry.Name + ';Day'}" label="" onchange="{!c.numberChange}"/></td>
+                            <td><lightning:input disabled="{!(!entry.SPLR || v.readonly)}" type="Number" value="{!entry.types.SPLR}" name="{!entry.Name + ';SPLR'}" label="" onchange="{!c.numberChange}"/></td>
+                            <td><lightning:input disabled="{!(!entry.XTND || v.readonly)}" type="Number" value="{!entry.types.XTND}" name="{!entry.Name + ';XTND'}" label="" onchange="{!c.numberChange}"/></td>
+                            <td><lightning:input disabled="{!(!entry.Crew || v.readonly)}" type="Number" value="{!entry.types.Crew}" name="{!entry.Name + ';Crew'}" label="" onchange="{!c.numberChange}"/></td>
+                        </tr>
+                    </aura:iteration>
+                </table>
+                <br/><br/>
+                Estimated Volume: {!v.volume}
+
+                <aura:if isTrue="{!and(!v.readonly, v.onRecordPage)}">
+                    <lightning:button 
+                        label="Update Matrix"
+                        class="slds-float_right"
+                        variant="brand"
+                        onclick="{!c.updateMatrix}"/>
+                </aura:if>
+                
+                <br/><br/>
+            </lightning:card>
+        </aura:if>
+    </div>
+    
+</aura:component>

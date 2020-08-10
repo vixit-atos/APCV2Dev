@@ -1,0 +1,20 @@
+<!--
+  @File Name          : communityExample.html
+  @Description        : 
+  @Author             : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Group              : 
+  @Last Modified By   : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Last Modified On   : 4/10/2020, 4:59:32 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    4/10/2020   VIXIT BHARDWAJ - ATOS SYNTEL INC     Initial Version
+-->
+<template>
+    <lightning-card title={title} icon-name="standard:account">
+        <div class="slds-m-around_medium">
+            <lightning-input label="Case Subject" onchange={handleChange} class="slds-m-bottom_x-small"></lightning-input>
+            <lightning-input label="Case Description" onchange={handleChange} class="slds-m-bottom_x-small"></lightning-input>
+            <lightning-button label={buttonlabel} variant="brand" onclick={submitCase}></lightning-button>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,50 @@
+[
+  {
+    "label": "Case",
+    "value": "CaseNumber",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },{
+    "label": "Return Order",
+    "value": "LINEITEM",
+    "Field": "SalesOrderNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Item",
+    "value": "Lineitem",
+    "Field": "OrderLineNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Part Number",
+    "value": "partnumber",
+    "Field": "Material",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Facing PDC",
+    "value": "FACPDC",
+    "Field": "FacingPDC",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Status",
+    "value": "ReturnOrderStatus",
+    "Field": "ReturnOrderStatus",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Select All",
+    "value": "selectallthatapply",
+    "Field": "selectallthatapply",
+    "Search": "",
+    "Sort": "ASC"
+  }  
+]

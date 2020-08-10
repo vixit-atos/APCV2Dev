@@ -1,0 +1,213 @@
+<aura:component controller="QQ_Master_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    
+    <aura:attribute name="recordType" type="string" default=""/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="ExtendedCoverage" type="QQ_Master__c" default="{'sobjectType':'QQ_Master__c'}"/>
+    
+    <aura:attribute name="Groups" type="List" default="[]"/>
+    <aura:attribute name="selectedGroups" type="List" default="[]"/>
+    <aura:attribute name="Vocations" type="List" default="[]"/>
+    <aura:attribute name="selectedVocations" type="List" default="[]"/>
+    <aura:attribute name="Standalones" type="List" default="[]"/>
+    <aura:attribute name="Packages" type="List" default="[]"/>
+    <aura:attribute name="PricingTypes" type="List" default="[]"/>
+    <aura:attribute name="Publications" type="List" default="[]"/>
+    
+    <aura:attribute name="validFlag" type="boolean" default="false"/>
+        
+    <aura:method name="checkMandatory" action="{!c.checkMandatory}">
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+    
+    <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container" data-aura-rendered-by="145:1266;a">
+        <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate" data-aura-rendered-by="147:1266;a">
+            Information
+        </span>
+    </h3>    
+    <lightning:layout>        
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="string"
+                             aura:id="UID_dbCode"
+                             name="dbCode"
+                             required="true"
+                             label="Databook Code"
+                             value="{!v.ExtendedCoverage.Name}"
+                             width="10rem"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input name="lblRecordType"
+                             label="Record Type"
+                             value="{!v.recordType}"
+                             readonly="true"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    
+    <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container" >
+        <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate" >
+            Truck
+        </span>
+    </h3>
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:dualListbox aura:id="UID_Group"
+                                   name="Group"
+                                   label="Group"
+                                   size="4"
+                                   sourceLabel="Available"
+                                   selectedLabel="Selected"
+                                   options="{!v.Groups}"
+                                   required="true"
+                                   value="{!v.selectedGroups}"
+                                   onchange="{!c.groupChange}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:dualListbox aura:id="UID_Vocation"
+                                   name="Vocation"
+                                   label="Vocation Description / Level"
+                                   size="4"
+                                   sourceLabel="Available"
+                                   selectedLabel="Selected"
+                                   options="{!v.Vocations}"
+                                   required="true"
+                                   value="{!v.selectedVocations}"
+                                   onchange="{!c.vocationChange}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout>
+        <aura:if isTrue="{!v.recordType == 'Truck Chassis'}">
+            <lightning:layoutItem padding="around-small" size="6">
+                <lightning:combobox aura:id="UID_Package"
+                                    name="Package" 
+                                    label="Package" 
+                                    required="{!v.validFlag? true : false}"
+                                    options="{!v.Packages}"
+                                    value="{!v.ExtendedCoverage.Package__c}"
+                                    onchange="{!c.valueChange}" />
+                
+            </lightning:layoutItem>
+        </aura:if>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:combobox aura:id="UID_Standalone"
+                                name="Standalone" 
+                                label="Standalone" 
+                                required="{!v.validFlag? true : false}"
+                                options="{!v.Standalones}"
+                                value="{!v.ExtendedCoverage.Standalone__c}"
+                                onchange="{!c.valueChange}" />
+        </lightning:layoutItem>
+        <aura:if isTrue="{!v.recordType != 'Truck Chassis'}">
+            <lightning:layoutItem padding="around-small" size="6">
+            </lightning:layoutItem>
+        </aura:if>
+    </lightning:layout>
+    
+    <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container" >
+        <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate" >
+            Distance &amp; Duration
+        </span>
+    </h3>
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="number" 
+                             min="0"
+                             aura:id="UID_Months"
+                             name="txtMonths"
+                             required="true"
+                             label="Months"
+                             value="{!v.ExtendedCoverage.Months__c}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="number" 
+                             min="0"
+                             aura:id="UID_Miles"
+                             name="txtMiles"
+                             required="true"
+                             label="Miles"
+                             value="{!v.ExtendedCoverage.Miles__c}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    
+    <h3 class="slds-section__title slds-theme--shade primaryPaletteBorder test-id__section-header-container" >
+        <span class="test-id__section-header-title section-header-title slds-p-horizontal--small slds-truncate" >
+            Cost &amp; Price 
+        </span>
+    </h3>
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="date"
+                             aura:id="UID_FMVDate"
+                             name="FMVDate"
+                             required="true"
+                             label="FMV Date"
+                             value="{!v.ExtendedCoverage.FMV_Date__c}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="number" 
+                             min="0"
+                             step="1"
+                             formatter="currency"
+                             aura:id="UID_Deductible"
+                             name="txtDeductible"
+                             required="true"
+                             label="Deductible"
+                             value="{!v.ExtendedCoverage.Deductible__c}"/>
+        </lightning:layoutItem>
+    </lightning:layout> 
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:combobox aura:id="UID_PricingType"
+                                name="PricingType" 
+                                label="Pricing Types" 
+                                required="true"
+                                options="{!v.PricingTypes}"
+                                value="{!v.ExtendedCoverage.Pricing_Types__c}"
+                                onchange="" />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="number" 
+                             min="0"
+                             step="1"
+                             formatter="currency"
+                             aura:id="UID_Cost"
+                             name="txtCost"
+                             label="Cost"
+                             value="{!v.ExtendedCoverage.Cost__c}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:combobox aura:id="UID_Publication"
+                                name="Publication" 
+                                label="Publication Status" 
+                                required="true"
+                                options="{!v.Publications}"
+                                value="{!v.ExtendedCoverage.Publication_Status__c}"
+                                onchange="" />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:input type="number" 
+                             min="0"
+                             step="1"
+                             formatter="currency"
+                             aura:id="UID_Price"
+                             name="txtPrice"
+                             required="true"
+                             label="Price"
+                             value="{!v.ExtendedCoverage.Price__c}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <ui:inputCheckbox labelClass="slds-p-bottom_small" 
+                              aura:id="isActive" 
+                              label="Active" 
+                              class="slds-p-bottom_small slds-form_horizontal" 
+                              value="{!v.ExtendedCoverage.Active__c}"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

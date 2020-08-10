@@ -1,0 +1,56 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:handler event="c:QQ_rowcheckevent" action="{!c.handleCheck}"/>
+    <aura:registerEvent name="archiveclick" type="c:QQ_archiveclickevent"/>
+    <c:QQ_List_ArchiveService aura:id="ListArchiveService" />
+    
+    <aura:attribute name="heading" type="String" default="All"/>
+    <aura:attribute name="subheading" type="String" default="Quotes"/>
+    <aura:attribute name="icon" type="String"/>
+    <aura:attribute name="informationurl" type="String"/>
+    <aura:attribute name="QQCheckedlist" type="List"/>
+    <aura:attribute name="enableArchive" type="boolean" default="true"/>
+    <aura:attribute name="openpopup" type="boolean" default="false"/>
+    <br></br>
+    
+    <aura:if isTrue="{! and(v.openpopup , v.subheading == 'Extended Coverage')}">
+        <c:QQ_External_EW_NewQuotePopup openpopup = "{!v.openpopup}" />
+    </aura:if>
+    
+    <aura:if isTrue="{! and(v.openpopup , v.subheading == 'Preventive Maintenance')}">
+        <c:QQ_External_PM_NewQuotePopup openpopup = "{!v.openpopup}" /> 
+    </aura:if>
+    
+            <lightning:card title=''>
+        <lightning:navigation aura:id="navService" />
+    	<div class="slds-p-bottom_medium">
+            <div class="slds-float_right">
+                <lightning:button class="btn-primary slds-is-selected-clicked slds-is-selected" 
+                          label="New Quote" title="Click to Create New Quote" 
+                          iconName="action:new" 
+                          variant ="brand"  
+                          iconPosition="left"
+                          onclick ="{!c.newQuickQuote}"/>
+                <aura:if isTrue= "{!$Browser.formFactor == 'DESKTOP' || $Browser.formFactor == 'TABLET'}">
+                &nbsp;<lightning:button iconName="utility:archive" variant="brand" label="Archive" iconPosition="left" disabled="{!v.enableArchive}" onclick="{!c.archive}"/>
+            &nbsp; 
+                </aura:if>
+            </div>
+         </div>
+           </lightning:card>
+    
+    <div class="slds-media">
+        
+            <div class="slds-media__figure">                                
+                <span class="slds-icon_container slds-avatar slds-avatar_medium" title="Description of icon when needed">
+                    <img src="{!$Resource.DTNA_TRUCK_ICON}" /> 
+                </span>
+            </div>
+        
+        <div class="slds-media__body">
+            <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="{!v.heading}">{!v.heading}</h1>
+            <p class="slds-text-body_small slds-line-height_reset">{!v.subheading}</p>
+        </div>
+            
+    </div>
+</aura:component>

@@ -1,0 +1,107 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" 
+                access="global"
+                controller="APC_AgentAssignedControllers">
+    
+    <!-- Attribute Declaration -->
+    <aura:attribute name="isOpen" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="caserecord" type="Object"/>
+    <aura:attribute name="showspinner" type="Boolean" default="false"/>
+    <aura:attribute name="parturl" type="string" default=""/>
+    <aura:attribute name="CaseId" type="String" />
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="SelectedVal" type="String" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    
+    <lightning:quickActionAPI aura:id="quickActionAPI" />
+    
+    <div class="slds-hide">
+        <lightning:flow aura:id="flow" onstatuschange="{!c.handleflowfinish}"/>
+    </div>
+    
+    <aura:attribute name="disable_reprocess" type="Boolean" default="false"/>
+    <aura:attribute name="refpartno_split" type="Array"/>
+    <aura:attribute name="partno_split" type="Array"/>
+    <aura:attribute name="recordLoadError" type="string"/>
+    <aura:if isTrue="{!v.isOpen}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">                   
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Agent Assignment</h2>                   
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:select name="mySelect1" label="Select Agent:" aura:id="mySelect1" value="{!v.SelectedVal}">
+                        <option text="--None--" value="--None--" selected="--None--"/>
+                        <aura:iteration items="{!v.listOfSearchRecords}" var="item" >
+                            <option text="{!item.Name}" value="{!item.Id}" selected="{!item.selected}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                </div> 
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="Brand" label="Assign Agent" title="Assign Agent" onclick="{!c.SaveCaseAgent}"/>                    
+                    <button class="oval-button slds-button slds-button_neutral" onclick="{!c.closeRecord}">Close</button>                    
+                </footer>
+            </div>
+            
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+    
+    <c:APC_Template aura:id="showModal" />
+    
+    <aura:handler name="change" value="{!v.isOpen}" action="{!c.refresh}" />
+    <!--<aura:handler name="change" value="{!v.isTemplate}" action="{!c.refresh}" />-->
+    <aura:handler name="change" value="{!v.caserecord}" action="{!c.itemsChange}"/>
+    
+    <!-- Query Case Record -->
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="CaseNumber,Status"
+                      targetFields="{!v.caserecord}"
+                      targetError="{!v.recordLoadError}"
+                      recordUpdated="{!c.handleRecordUpdated}"
+                      mode="EDIT"
+                      />
+    
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning:icon iconName="standard:case" alternativeText=""/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span>Case</span>
+                                    <span class="slds-page-header__title slds-truncate" title="">{!v.caserecord.CaseNumber}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        
+                    </div>
+                    <div class="slds-page-header__control">
+                        <lightning:buttonGroup>
+                            <lightning:button label="Template" onclick="{! c.createTemplate  }" />
+                            <lightning:button label="Assign Agent" onclick="{! c.assignagent  }" />
+                            <lightning:button label="Close" onclick="{! c.closeRecord  }" />
+                            <lightning:button label="Refresh" onclick="{!c.refresh}" />
+                            <lightning:button label="Edit" onclick="{! c.editRecord  }" />
+                        </lightning:buttonGroup>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+    
+</aura:component>

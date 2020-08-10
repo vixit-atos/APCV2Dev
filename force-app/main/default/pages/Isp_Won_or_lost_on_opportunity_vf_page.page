@@ -1,0 +1,116 @@
+<apex:page standardController="opportunity" extensions="Isp_Won_or_lost_vf_page_cont_extn" tabStyle="Opportunity" standardStylesheets="true" id="pg">
+    <html>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <style type="text/css">
+            body {background: #F3F3EC; padding-top: 15px}
+        </style>
+        
+        
+        <script>
+        function EnableCnsn(){
+            var cnsk = document.getElementById("pg:pb:frm:pbs:stageId").value;
+            if(cnsk =='Won') {
+                document.getElementById("pg:pb:frm:pbs:resno").disabled = true;
+                
+            }
+            if(cnsk =='Cancelled') {
+                document.getElementById("pg:pb:frm:pbs:resno").disabled = true;
+                
+            }
+            if(cnsk =='Pending') {
+                document.getElementById("pg:pb:frm:pbs:resno").disabled = true;
+                
+            }
+            if(cnsk =='Lost'){
+                document.getElementById("pg:pb:frm:pbs:resno").disabled = false;
+                
+            }
+            
+        }
+        </script>
+        
+        <!--  <script>
+var stage='{!oppstage}';
+var oppid='{!oppId}'
+
+
+
+window.onload = function redirect(){
+    alert(oppid);
+    if((stage != 'Pending Approval') && (stage != 'ISP Approved')){
+        if( (typeof sforce != 'undefined') && (sforce != null) ) 
+            sforce.one.navigateToSObject(​oppid​,'edit');
+        else
+            window.location.href = '{!URLFOR($Action.Opportunity.Edit,oppid)}'  
+            }
+    
+}
+
+
+</script>-->
+        
+        <apex:pageBlock mode="maindetail" id="pb" title="DeaL Info">
+            <apex:form id="frm">
+                
+                
+                
+                <apex:pageBlockSection id="pbs" columns="1" >
+                    
+                    <apex:pageMessages ></apex:pageMessages>
+                    <apex:inputField value="{!opp.Won_Lost__c}" id="stageId" onchange="EnableCnsn()"/>
+                    <script type="text/javascript">
+                    (function(){
+                        var e = document.querySelectorAll('[id$="stageId"]')[0];
+                        if (e && !e[0].value) {e.remove(0);}
+                        
+                    })();
+                    </script>
+                    
+                    
+                    <apex:inputField value="{!opp.Lost_Reason_ISP__c}" id="resno" />
+                    <script type="text/javascript">
+                    
+                    (function(){
+                        var cnsk = document.getElementById("pg:pb:frm:pbs:stageId").value;
+                        if(cnsk =='Won') {
+                            document.getElementById("pg:pb:frm:pbs:resno").disabled = true;
+                            
+                        }
+                        if(cnsk =='Cancelled') {
+                            document.getElementById("pg:pb:frm:pbs:resno").disabled = true;
+                            
+                        }
+                        if(cnsk =='Pending') {
+                            document.getElementById("pg:pb:frm:pbs:resno").disabled = true;
+                            
+                        }
+                        if(cnsk =='Lost'){
+                            document.getElementById("pg:pb:frm:pbs:resno").disabled = false;
+                            
+                        }
+                       
+                    })();
+                    </script>
+                    <apex:inputField value="{!opp.Won_Lost_Comments__c}" style="width: 80%; height: 200px" />
+                    
+                </apex:pageBlockSection>
+                <br/><br/>
+                <div align="center" draggable="false" >
+                    <apex:commandButton id="btn" value="Update" action="{!Save1}" style=""/>
+                    <apex:commandButton id="btn1" value="Cancel" action="{!Cancel1}" style=""/>
+                </div>
+                <br/>
+            </apex:form>
+        </apex:pageBlock>
+        
+        
+        
+        
+        
+        
+        
+        
+    </html>
+    
+</apex:page>

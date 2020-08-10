@@ -1,0 +1,5 @@
+<design:component>
+	<design:attribute name="sObjectQuery" label="sObjectQuery" description="Enter a SOQL Query. Relational Objects need to use a WHERE clause with || to replace with the current page's recordId"/>
+	<design:attribute name="initialLoad" label="initialLoad" description="Enter the initial amount of records to display to the User. The higher the number, the longer the load"/>
+    <design:attribute name="loadMoreOffset" label="loadMoreOffset" description="Enter the onload amount for records to be added to the display. The higher the number, the longer the load."/>
+</design:component>

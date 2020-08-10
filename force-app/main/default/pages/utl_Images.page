@@ -1,0 +1,58 @@
+<apex:page standardController="Asset" sidebar="false" showHeader="false" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+function bigImg(x) 
+{
+    x.style.width = "160px";
+    x.style.height = "120px";
+}
+
+function normalImg() 
+{
+    var x = document.getElementsByClassName("UtlImg");
+    x[0].style.width = "80px";
+    x[1].style.width = "80px";
+    x[2].style.width = "80px";
+    x[0].style.height = "60px";
+    x[1].style.height = "60px";
+    x[2].style.height = "60px";
+    for (i = 0; i < x.length; i++) 
+    {
+        x[i].style.width = "80px";
+        x[i].style.height = "60px";
+    }
+}
+</script>
+<iframe style="visibility: visible;" height="0px" width="0px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=FPS_ANGLED">
+  <p>Your browser does not support iframes.</p>
+</iframe>
+<iframe style="visibility: hidden;" height="0px" width="0px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=F">
+  <p>Your browser does not support iframes.</p>
+</iframe>
+<div class="imgs" style="MARGIN-LEFT: 10%;">
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=FPS_ANGLED">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=FPS_ANGLED" onmouseover="normalImg();bigImg(this);" id="FPS_ANGLED"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=F">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=F" onmouseover="normalImg();bigImg(this);" id="F"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=FDS_ANGLED">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=FDS_ANGLED" onmouseover="normalImg();bigImg(this);" id="FDS_ANGLED"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=RPS_ANGLED">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=RPS_ANGLED" onmouseover="normalImg();bigImg(this);" id="RPS_ANGLED"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=R">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=R" onmouseover="normalImg();bigImg(this);" id="R"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=RDS_ANGLED">
+  <img class="UtlImg" height="120px" width="160px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=RDS_ANGLED" onmouseover="normalImg();bigImg(this);" id="RDS_ANGLED"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=PS_ENGINE">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=PS_ENGINE" onmouseover="normalImg();bigImg(this);" id="PS_ENGINE"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=DS_ENGINE">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=DS_ENGINE" onmouseover="normalImg();bigImg(this);" id="DS_ENGINE"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=PS_INTERIOR">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=PS_INTERIOR" onmouseover="normalImg();bigImg(this);" id="PS_INTERIOR"/></a>
+  <a target="_blank" href="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=DS_INTERIOR">
+  <img class="UtlImg" height="60px" width="80px" src="https://dtr-dtna.prd.freightliner.com/dtrconnect/QuickMatch/Unit/UnitImage?vin={!Asset.VIN_NO__c}&view=DS_INTERIOR" onmouseover="normalImg();bigImg(this);" id="DS_INTERIOR"/></a>
+
+</div>
+
+
+
+</apex:page>

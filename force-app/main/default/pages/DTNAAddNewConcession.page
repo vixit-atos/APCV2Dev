@@ -1,0 +1,273 @@
+<apex:page standardController="Concession__c" sidebar="false" extensions="DTNA_CUA_AddNewConcession">
+    
+    <apex:detail relatedList="false">
+        <apex:form id="concform">
+            <apex:actionStatus id="counterStatus">
+                <apex:facet name="start">
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                        &nbsp;
+                    </div>
+                    <div style="position: fixed; left: 50%; top: 200px; z-index: 1001;">
+                        <!--<img width="75" height="75"  src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Gray_circles_rotate.gif" />-->
+                        <img width="75" height="75"  src="{!URLFOR($Resource.SLDS103, '/assets/images/spinners/slds_spinner_brand.gif')}" />
+                    </div>
+                </apex:facet>
+            </apex:actionStatus>
+            <apex:actionFunction status="counterStatus" reRender="concform"  name="CalcOnChangedConcPerc" action="{!CalcOnChangedConcPct}"/>
+            <apex:actionFunction status="counterStatus" reRender="concform" name="CalcOnChangedConcAmt" action="{!CalcOnChangedConcAmt}"/>
+            <apex:actionFunction status="counterStatus" reRender="concform" name="CalcOnChangedAprConcPerc" action="{!CalcOnChangedAprConcPct}"/>
+            <apex:actionFunction status="counterStatus" reRender="concform" name="CalcOnChangedAprConcAmt" action="{!CalcOnChangedAprConcAmt}"/>
+            <apex:pageBlock title="New Concessions">
+                <apex:pageMessages ></apex:pageMessages>
+                <apex:pageBlockButtons location="top" >
+                    <apex:commandButton id="Save" value="Add" action="{!save}" />
+                    <apex:commandButton id="Cancel" value="Close" action="{!cancel}" />
+                </apex:pageBlockButtons>
+                
+                <apex:pageBlockSection >
+                    <apex:outputField value="{! obj_Conc.Name }"/>
+                    <apex:InputField value="{! obj_Conc.LEAD_CONC_NO__c }"/>
+                    <apex:InputField value="{! obj_Conc.Dealer_Code__c }"  required="true"/>
+                    <apex:InputField value="{! obj_Conc.CONC_STATUS_CD__c }"/>
+                    <apex:InputField value="{! obj_Conc.CONT_PRSN_NAME_42__c }" required="true"/>
+                    <apex:InputField value="{! obj_Conc.DIST_MGR_NAME__c }"/>
+                    <apex:InputField value="{! obj_Conc.BUS_TYPE__c }"/>
+                    <apex:InputField value="{! obj_Conc.VEH_MDL_NO__c }" required="true" />
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Model" />
+                        <apex:outputPanel >
+                            <div class="requiredInput">
+                                <div class="requiredBlock"></div>
+                                <apex:inputText value="{!obj_Conc.VEH_BASE_MDL_NO__c}" label="Model"                     
+                                                required="true"/>
+                            </div>
+                        </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+                    <apex:InputField value="{! obj_Conc.CMPTR_CD__c }" required="true" />
+                    <apex:InputField value="{! obj_Conc.TRUCKS_IN_BUS__c }"/>   
+                </apex:pageBlockSection>
+                
+                <apex:PageBlockSection collapsible="true" title="Detail" columns="{!If($User.UITheme=='Theme4t',1,3)}" >
+                    <apex:InputField value="{!obj_Conc.GLDR_INDC__c }"/>
+                    
+                    <apex:pageBlockSectionItem labelTitle="PM" helpText="Indicates the pricing method used. This field is maintained by internal DOA only, using the CSOCNCUA screen.">
+                        <apex:outputLabel value="PM" for="PRC_METH_TYPE_CD__c"/>
+                        <apex:Inputfield value="{!obj_Conc.PRC_METH_TYPE_CD__c}" Id="PRC_METH_TYPE_CD__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem labelTitle="TP" helpText="Indicates the Top Customer.">
+                        <apex:outputLabel value="TP" for="TOP_CUST_INDC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.TOP_CUST_INDC__c}" Id="TOP_CUST_INDC__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem labelTitle="CP" helpText="Indicates whether a Dealer Requested corporate trade is involved.">
+                        <apex:outputLabel value="CP" for="DCTRADE_INDC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.DCTRADE_INDC__c}" Id="DCTRADE_INDC__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem labelTitle="RV" helpText="Indicates whether a Residual Value is involved.">
+                        <apex:outputLabel value="RV" for="RV_INDC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.RV_INDC__c}" Id="RV_INDC__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem labelTitle="CT" helpText="Indicates whether a Corporate Trade is involved.">
+                        <apex:outputLabel value="CT" for="CTRADE_INDC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.CTRADE_INDC__c}" Id="CTRADE_INDC__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem labelTitle="TW" helpText="Indicates whether a Transaction Worksheet is required.">
+                        <apex:outputLabel value="TW" for="TXNWRKS_INDC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.TXNWRKS_INDC__c}" Id="TXNWRKS_INDC__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem labelTitle="TC" helpText="Indicates whether the Transaction Council is required to review the Deal.">
+                        <apex:outputLabel value="TC" for="TXNCOUN_INDC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.TXNCOUN_INDC__c}" Id="TXNCOUN_INDC__c"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:PageBlockSection collapsible="true" title="Customer" columns="{!If($User.UITheme=='Theme4t',1,2)}">
+                    <apex:Inputfield value="{!obj_Conc.CUST_ACCT_NO__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CUST_NAME_50__c}" required="true"/>
+                    <apex:inputField value="{!obj_Conc.CUST_ADDR1__c}"/>
+                    <apex:inputField value="{!obj_Conc.CUST_ADDR2__c}"/>
+                    <apex:inputField value="{!obj_Conc.CITY__c}"/>
+                    <apex:inputField value="{!obj_Conc.ST_CD__c}"/>
+                </apex:PageBlockSection>
+                <apex:PageBlockSection collapsible="true" title="Request/Approval Information" columns="{!If($User.UITheme=='Theme4t',1,2)}" >
+                    <apex:inputField value="{!obj_Conc.RQST_MIN_UNITS__c}" required="true" />
+                    <apex:inputField value="{!obj_Conc.RQST_MAX_UNITS__c}" required="true" />
+                    
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Total Minimum" style="font-weight: bolder;"  for="TOT_MIN__c_inp"/>
+                        <apex:inputField value="{!obj_Conc.TOT_MIN__c}" Id="TOT_MIN__c_inp" required="true" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Total Maximum" style="font-weight: bolder;"  for="TOT_MAX__c_inp"/>
+                        <apex:inputField value="{!obj_Conc.TOT_MAX__c}" Id="TOT_MIN__c_inp" required="true"/>
+                     </apex:pageBlockSectionItem>
+                    <apex:inputField value="{!obj_Conc.APPR_MIN_UNITS__c}"/>
+                    <apex:inputField value="{!obj_Conc.APPR_MAX_UNITS__c}"/>
+                    <apex:inputField label="Requested Concession Percentage {!obj_Conc.REQ_FLAG1__c}" value="{!obj_Conc.RQST_CONC_PCT__c}" id="REQ_CONC_PCT" onchange="CalcOnChangedConcPerc()" required="true" />
+                    <apex:inputField label="Requested Concession Amount {!obj_Conc.REQ_FLAG2__c}" value="{!obj_Conc.RQST_CONC_AMT__c}" id="REQ_CONC_AMT" onchange="CalcOnChangedConcAmt()" />
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Approved Concession Percentage {!obj_Conc.APR_FLAG1__c}" style="font-weight: bolder;"  for="APPR_CONC_PCT__c_inp" />
+                        <apex:inputField value="{!obj_Conc.APPR_CONC_PCT__c}" Id="APPR_CONC_PCT__c_inp"  onchange="CalcOnChangedAprConcPerc()" />
+                    </apex:pageBlockSectionItem>
+                    <apex:inputField label="Approved Concession Amount {!obj_Conc.APR_FLAG2__c}" value="{!obj_Conc.APPR_CONC_AMT__c}" id="APR_CONC_AMT" onchange="CalcOnChangedAprConcAmt()"/>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Approved Initial {!obj_Conc.APR_FLAG1__c}" style="font-weight: bolder;"  for="APPR_INITS__c" />
+                        <apex:inputField value="{!obj_Conc.APPR_INITS__c}" Id="APPR_INITS__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:inputfield value="{!obj_Conc.DATE_APPR__c}"/>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Requested Delivery From Date" style="font-weight: bolder;"  for="DATE_DELV_RQST__c_inp"/>
+                        <apex:inputField value="{!obj_Conc.DATE_DELV_RQST__c}" Id="DATE_DELV_RQST__c_inp" required="true"/>
+                    </apex:pageBlockSectionItem> 
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Requested Delivery To Date" style="font-weight: bolder;"  for="DATE_LATEST_ACCEPT__c_inp"/>
+                        <apex:inputField value="{!obj_Conc.DATE_LATEST_ACCEPT__c}" Id="DATE_LATEST_ACCEPT__c_inp" required="true"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Requested Price Level" style="font-weight: bolder;"  for="REQ_PRICELVL__c"/>
+                        <apex:inputField value="{!obj_Conc.REQ_PRICELVL__c}" Id="REQ_PRICELVL__c" required="true"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:inputField value="{!obj_Conc.APR_PRICELVL__c}" rendered="{!IF((obj_Conc.CONC_STATUS_CD__c=='PNC') && (isFcc),true,false)}" /> 
+                    <apex:outputField value="{!obj_Conc.APR_PRICELVL__c}" rendered="{!IF((obj_Conc.CONC_STATUS_CD__c=='PNC') && (isFcc),false,true)}" />
+                    
+                    <apex:inputField label="Price Protect" value="{!obj_Conc.REQ_PRCP_INDC__c}"/>   
+                    
+                    <apex:inputField value="{!obj_Conc.APR_PRCP_INDC__c}"/>
+                    <apex:inputField value="{!obj_Conc.REQ_PRICELVL_DESC__c}"/>
+                    <apex:inputField value="{!obj_Conc.APR_PRICELVL_DESC__c}"/>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Concession Expiration" style="font-weight: bolder;"  for="EXPR_DATE__c"/>
+                        <apex:inputField value="{!obj_Conc.EXPR_DATE__c}" Id="EXPR_DATE__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:inputField value="{!obj_Conc.DATE_TSO_RECV__c}"/>
+                    <apex:inputField value="{!obj_Conc.DATE_TSO_RECV_TO__c}"/>
+                    <apex:inputField value="{!obj_Conc.CONCMCDB_MARKET_SEG__c}"/>
+                    <apex:inputField value="{!obj_Conc.MKTDESC__c}"/>
+                    <apex:inputField value="{!obj_Conc.ACCTTYPE__c}"/>
+                    
+                    <apex:inputField value="{!obj_Conc.SEGTYPE__c}"/>
+                    <apex:inputField value="{!obj_Conc.SEGDESC__c}"/>
+                    <apex:inputField value="{!obj_Conc.GDLNPCT__c}"/>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Guideline Discretion" style="font-weight: bolder;"  for="CONC_DISCR_PCT_TOT__c"/>
+                        <apex:inputField value="{!obj_Conc.CONC_DISCR_PCT_TOT__c}" Id="CONC_DISCR_PCT_TOT__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:inputField value="{!obj_Conc.ESC_STAT__c}"/>
+                    <apex:inputField value="{!obj_Conc.ESC_ACTL__c}"/>
+                    
+                    <!-- <apex:outputText label="Serials"  value="{!strOrderSerials}"></apex:outputText>  -->
+                    
+                </apex:PageBlockSection>   
+                
+                <!-- <apex:PageBlockSection collapsible="true" title="Concession Notes" columns="{!If($User.UITheme=='Theme4t',1,2)}" rendered="{!IF((obj_Conc.CONC_STATUS_CD__c=='PNR') || (obj_Conc.CONC_STATUS_CD__c=='PNC') ||(obj_Conc.CONC_STATUS_CD__c=='RPR'),true,false)}">
+<apex:inputText label="Concession Note 1" title="Concession Notes" maxlength="40" size="32" value="{!strApprComments1}" />
+<apex:inputText label="Concession Note 2" title="Concession Notes" maxlength="40" size="32" value="{!strApprComments2}" />
+<apex:inputText label="Concession Note 3" title="Concession Notes" maxlength="40" size="32" value="{!strApprComments3}" />
+<apex:inputText label="Concession Note 4" title="Concession Notes" maxlength="40" size="32" value="{!strApprComments4}" />
+<apex:inputText label="Concession Note 5" title="Concession Notes" maxlength="40" size="32" value="{!strApprComments5}" />  
+<div style="color:red;text-align:center;">Maximum of Upto 40 characters allowed per Approval Comment</div>
+</apex:PageBlockSection>     -->
+                
+                
+                
+                
+                <apex:PageBlockSection collapsible="true" title="Transaction Information" columns="{!If($User.UITheme=='Theme4t',1,2)}">
+                    <apex:Inputfield value="{!obj_Conc.PREV_DLR_NET__c}"/>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Current Dealer Net Price" style="font-weight: bolder;"  for="DLR_NET_PRC__C"/>
+                        <apex:Inputfield value="{!obj_Conc.DLR_NET_PRC__c}" Id="DLR_NET_PRC__C" required="true"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.PREV_CONC_AMT__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_CONC_AMT__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_ADDL_CONC__c}"/>
+                    <!--<apex:outputField value="{!obj_Conc.CURR_ADDL_CONC__c}"/>-->
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Current Additional Amount" style="font-weight: bolder;"  for="CURR_ADDL_CONC__c"/>
+                        <apex:Inputfield value="{!obj_Conc.CURR_ADDL_CONC__c}" Id="CURR_ADDL_CONC__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.PREV_DN_COST__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_DN_COST__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_FREIGHT__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_FREIGHT__c}" required="true"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_MISC_ADD_ONS__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_MISC_ADD_ONS__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_CST_N_CRDS__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_CST_N_CRDS__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_DLR_PROFIT__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.EST_DLR_PROF__c}" required="true"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_SELL_PRC__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_SELL_PRC__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.PREV_TOT_SELL_PRC__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.CURR_TOT_SELL_PRC__c}"/>
+                    
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem> 
+                    <apex:Inputfield value="{!obj_Conc.WS_GROSS_CONT__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.Concession_Amount__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.WS_ADDL_CONC__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.WS_RESERVE__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.WS_EXTRAS__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.WS_CONT_AMT__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.WS_VEND_AMT__c}"/>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <!--<apex:outputField value="{!obj_Conc.APPR_NET_CNTRB__c}"/>-->
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="Approved Net Contribution" style="font-weight: bolder;"  for="APPR_NET_CNTRB__c"/>
+                        <apex:Inputfield value="{!obj_Conc.APPR_NET_CNTRB__c}" Id="APPR_NET_CNTRB__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:PageBlockSectionItem ></apex:PageBlockSectionItem>
+                    <apex:Inputfield value="{!obj_Conc.WS_OPT_MRGN__c}"/>
+                </apex:PageBlockSection>
+                
+                <apex:PageBlockSection collapsible="true" title="Other Information" columns="{!If($User.UITheme=='Theme4t',1,2)}" >
+                    
+                    <apex:Inputfield value="{!obj_Conc.RMS_RECALC__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.RMS_START__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.TRIG_PCT__c}"/>
+                    <apex:Inputfield value="{!obj_Conc.DELT_PCT__c}"/>
+                    
+                    
+                    <apex:Inputfield value="{!obj_Conc.Escalator_DB_Code__c}"/>
+                    
+                    <!--   <apex:outputField value="{!obj_Conc.Escalator_Percentage__c}" rendered="{!obj_Conc.Escalator_Percentage__c <> null}"/>
+<apex:outputField value="{!obj_Conc.Escalator_Amount__c}" rendered="{!obj_Conc.Escalator_Amount__c <> null}"/> -->
+                    
+                    <apex:pageBlockSectionItem rendered="{!obj_Conc.Escalator_Amount__c <> null}" >
+                        <apex:outputLabel value="Escalator Amount" style="font-weight: bolder;"  for="Escalator_Amount__c"/>
+                        <apex:Inputfield value="{!obj_Conc.Escalator_Amount__c}" Id="Escalator_Amount__c"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!obj_Conc.Escalator_Percentage__c <> null}" >
+                        <apex:outputLabel value="Escalator Percentage" style="font-weight: bolder;"  for="Escalator_Percentage__c"/>
+                        <apex:Inputfield value="{!obj_Conc.Escalator_Percentage__c}" Id="Escalator_Percentage__c"/>
+                    </apex:pageBlockSectionItem>
+                    
+                </apex:PageBlockSection>
+                
+                <!--    <apex:pageBlockSection title="Exception Approval" collapsible="true"  columns="{!If($User.UITheme=='Theme4t',1,2)}"> -->
+                
+                <!--   <apex:commandButton value="Save" action="{!saveRecord}" style="background: #d7e9e6;float:right;" /> 
+<apex:commandButton value="Submit for Approval" style="background: #d7e9e6;" action="{!Submitforapproval}" id="for_Approval" rendered="{!isSubmitForApproval}"/>
+<apex:commandButton value="Recall Approval Request" style="background: #d7e9e6;" action="{!Recallapprovalrequest}" id="RC" rendered="{!isApprovalrecall}"/> -->
+                
+                <!--  
+<apex:repeat value="{!fields}" var="f">
+<apex:outputField value="{!obj_Conc[f.fieldPath]}" />
+</apex:repeat>
+<apex:inputField value="{!obj_Conc.WS_Only__c}" />
+<apex:inputField value="{!obj_Conc.Deal_Comments__c}" /> 
+
+</apex:pageBlockSection> -->
+                
+            </apex:pageBlock>
+        </apex:form>
+    </apex:detail>
+</apex:page>

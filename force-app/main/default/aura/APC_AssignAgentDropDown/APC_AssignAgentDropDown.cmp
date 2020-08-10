@@ -1,0 +1,17 @@
+<aura:component controller="APC_AgentAssignedControllers" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="CaseId" type="String" />
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="SelectedVal" type="String" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <lightning:select name="mySelect1" label="Select Agent:" aura:id="mySelect1" value="{!v.SelectedVal}">
+        		<option text="--None--" value="--None--" selected="--None--"/>
+                <aura:iteration items="{!v.listOfSearchRecords}" var="item" >
+            		<option text="{!item.Name}" value="{!item.Id}" selected="{!item.selected}"/>
+         		</aura:iteration>
+    </lightning:select>
+    <br/>
+    <lightning:button variant="Brand" label="Assign Agent" title="Assign Agent" onclick="{!c.SaveCaseAgent}"/>
+    <lightning:button variant="Brand" label="Cancel" title="Assign Agent" onclick="{!c.Cancel}"/>
+    <!--lightning:button label="Cancle" onclick="{!c.Cancle}"/ -->
+    
+</aura:component>

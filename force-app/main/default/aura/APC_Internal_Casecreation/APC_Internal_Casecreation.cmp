@@ -1,0 +1,525 @@
+<!--
+  @File Name          : APC_Internal_Casecreation.cmp
+  @Description        : 
+  @Author             : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Group              : 
+  @Last Modified By   : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Last Modified On   : 4/23/2020, 3:50:58 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    4/23/2020   VIXIT BHARDWAJ - ATOS SYNTEL INC     Initial Version
+-->
+<aura:component implements= "lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="APC_MasterController">
+
+    <!-- Added By Sumit to close Tab --> 
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:attribute name="isOpen" type="boolean" default="false" access="public" description="Boolean value for modal box open"/>
+    <aura:attribute name="plannercode" type="string" description="To set the value of Planner code field" />
+    <aura:attribute name="vendorcode" type="string" description="To set the value of Vendor code field" />
+    <aura:attribute name="recTypId" type="string" description="To set the record type id"/>
+    <aura:attribute name="value" type="String" access="global" />
+    <aura:attribute name="dealerCode" type="string" access="global" description="To store dealer code"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object" access="global" description="To set the picklist values for dealer code field"/> 
+    <aura:attribute name="recordtypename" type="String" default="My Sub Text" description="To tore the record the value of record type"/>
+    <aura:attribute name="APCreasonselected" type="string"  access="global" description="To set Record type selected value"/>
+    <aura:attribute name="priorityselected" type="string"  access="global" description="To set case priority"/>
+    <aura:attribute name="originselected" type="string"  access="global" description="To set selected case origin field value"/>
+    <aura:attribute name="selectedDealerCode" type="string" access="global" description="To store selected Dealer code"/>
+    <aura:attribute name="additionaldealercontactsselected" type="String" default="" description="To store selected additional contacts picklist value" />    
+    
+    <aura:attribute name="isPartFound" type="boolean" access="global" default="false" description="To identify if part is found at paragon"/>
+    <aura:attribute name="APCreasonchanged" type="boolean" access="global" default="false"/>
+    <aura:attribute name="isgoclicked" type="Boolean" default="false" description="To identify submit button clicked for 3rd bucket request types "/>
+   
+    <aura:attribute name="caseobj" type="Case" access="global" default="{'sobjectType': 'Case',
+                                                                        'RecordTypeId':'',
+                                                                        'Planner_Code__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Part_No__c':'',
+                                                                        'VIN__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Reason__c':'',                                                                        
+                                                                        'Description':'',
+                                                                        'Additional_Contacts__c':'',
+                                                                        'Request_Type__c':'',
+                                                                        'Origin':'Phone',
+                                                                        'Status':'New',
+                                                                        'Priority':'Medium',
+                                                                        'ContactId':'003L0000011lowTIAQ',
+                                                                        'AccountId':'',
+                                                                        'APC_Source__c':'',
+                                                                        'NSN_Number__c':'',
+                                                                        'Quantity__c':'',
+                                                                        'Lead_Time_Reason__c':'',
+                                                                        'PDC_Location__c':'',
+                                                                        'Multiple_Parts__c':'',
+                                                                        'Disputing_Price__c':'',
+                                                                        'Type_of_Request__c':'',
+                                                                        'Invoice_Needed_For__c':'',
+                                                                        'Date_Received__c':'',
+                                                                        'Ship_Method__c':'',
+                                                                        'Problem_Description__c':'',
+                                                                        'Requested_Change__c':'',
+                                                                        'Shipped_From__c':'',
+                                                                        'Current_Location_of_Part__c':'',
+                                                                        'Packaged_By__c':'',
+                                                                        'Is_Part_Damaged__c':'',
+                                                                        'Is_Part_Packaged__c':'',
+                                                                        'Core_Invoice__c':'',
+                                                                        'Core_Group__c':'',
+                                                                        'Core_Program__c':'',
+                                                                        'RPA__c':'',
+                                                                        'Core_Part_Num__c':'',
+                                                                        'Type_of_Return__c':'',
+                                                                        'Ship_Date__c':'',
+                                                                        'Credit_Type__c':'',
+                                                                        'Return_Reason__c':'',
+                                                                        'Weight__c':'',
+                                                                        'Number_of_Pallets__c':'',
+                                                                        'Body_Number__c':'',
+                                                                        'Supplier__c':'',
+                                                                        'Model_Year__c':'',
+                                                                        'TBB_Part_Inquiry__c':'',
+                                                                        'Part_Description__c':'',                                                                        
+                                                                        'Return_Status__c':'',
+                                                                        'Action__c':'',
+                                                                        'Order_Status__c':'',
+                                                                        'Part_Received_date__c':'',
+                                                                        'SAP_Order_Number__c':'',
+                                                                        'APC_Delivery__c':'',
+                                                                        'APC_Original_Delivery__c':'',
+                                                                        'APC_PO_Number__c':'',
+                                                                        'APC_Shipping_Condition__c':'',
+                                                                        'APC_DTNA_PO':'',
+                                                                        'APC_Tracking_Number__c':'',
+                                                                        'APC_Invoice_Number__c':'',
+                                                                        'APC_DTNA_PO__c':'',
+                                                                        'APC_Line_Number__c':''
+                                                                        }"/>
+   
+    
+    <aura:attribute name="contact" type="list" description="To store contact field value"/>
+    <!--<aura:attribute name="listOfSearchRecords" type="List" />-->
+    <aura:attribute name="apcreasonlist" type="list" default="[]" description="To store Request type value list"/>
+    <aura:attribute name="prioritylist" type="list" default="[]" description="To store case priority picklist values"/>
+    <aura:attribute name="originlist" type="List" description="To store case origin picklist values"/>
+    <aura:attribute name="caseobjlist" type="Case[]" access="global" default="[]" description="To create list of Case object records"/>
+    
+    <aura:attribute name="cases" type="List" description="To store records received from paragon"/>
+    <aura:attribute name="statusPLVals" type="List" default="[]" description="To store Case status Picklist values" />
+    <aura:attribute name="additionaldealercontactslist" type="list" description="To store additional contacts picklist value" />
+    <aura:attribute name="additionalRecipientList2" type="list" access="global" description="To store additional recipient values"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]" description="To maintain pills of files uploaded" />
+    <aura:attribute name="contactNameslist" type="list" default="[]" description="To store contact picklist values"/>
+    <aura:attribute name="files" type="ContentDocument[]" description="To maintain files uploaded"/>
+    
+    <aura:attribute name="issubmitactive" type="boolean" default="false" access="global" description="To maintain submit button state"/>
+    <aura:attribute name="IsSpinner" type="Boolean" description="To Maintain state of Spinner"/>
+    <aura:attribute name="errorfound" type="boolean" default="false" description="To maintain state of error found"/>
+    <aura:attribute name="errormessage" type="string" default="" description="To store error messages texts" />
+    <aura:attribute name="isIARC" type="boolean" access="global" default="false" description="To set additional information section boolean"/>
+    <aura:attribute name="itsbucket1" type="boolean" default="false" description=""/>
+    <aura:attribute name="weightsorpacksizeorreactivation" type="boolean" default="false" description=""/> 
+    <aura:attribute name="bucket3sap" type="boolean" default="false" description=""/>
+    <aura:attribute name="bucket3return" type="boolean" default="false" description=""/>
+    <aura:attribute name="bucket3returnadditional" type="boolean" default="false" description=""/> 
+    <aura:attribute name="ispartnumbersearchdisabled" type="boolean" access="global" default="true"  description="To maintain part number search button state"/>   
+
+    <aura:handler name="oSelectedAccountEvent" event="c:APC_Lookupevent" action="{!c.handleaccountlookupevent}"/>
+    <aura:handler name="contactsListEvnt" event="c:APC_ContactsEvent" action="{!c.handleContactsListEvent}"/>
+    <aura:handler name="ClearCaseForm" event="c:APC_Internal_CaseForm_Clear_Event" action="{!c.handleCaseClearEvent}"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" access="global"/>
+    
+    <aura:attribute name="picklistValues" type="Object" />
+
+    <lightning:navigation aura:id="navService" />
+    
+    <aura:if isTrue="{!v.isOpen}">
+        <!--MODAL BOX Start--> 
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                
+                <!-- MODAL BOX HEADER -->
+                <header class="slds-modal__header">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutitem size="4">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">                                
+                                    <span class="slds-icon_container slds-avatar_profile-image-large" 
+                                          title="Description of icon when needed">
+                                        <img src ="{!$Resource.APCLogo}" onclick="{!c.closeModal}"/> 
+                                    </span>
+                                </div>  
+                            </div>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="4">
+                            <!-- <div class="slds-media__body">-->
+                            <div class="slds-p-bottom_large slds-p-left_xx-large"></div>
+                            <h2 id="modal-heading-01" class="slds-text-heading--large slds-align_left">Case Creation</h2>
+                            <!-- </div>-->
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="4"> </lightning:layoutitem>
+                    </lightning:layout>
+                </header>
+                
+                <!-- MODAL BOX Content -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">   
+                    <aura:if isTrue="{!v.IsSpinner}">
+                        <lightning:spinner aura:id="spinner" 
+                                           class="spins" />
+                    </aura:if>
+                    
+                    <!-- UI starts here-->
+                    <lightning:layout multipleRows="true" class="slds-p-bottom_medium">
+                        <lightning:layoutitem size="6" class="slds-p-right_xx-small">
+                            <div class="slds-box">
+                                <br> </br>
+                                <lightning:layout multipleRows="true"> 
+                                    <lightning:layoutitem size="12" class="slds-form-element_horizontal">
+                                        <c:APC_Customlookup /> 
+                                    </lightning:layoutitem> 
+                                    
+                                    <lightning:layoutitem size="12" class="slds-form-element_horizontal">
+                                        <lightning:select aura:id="contact" 
+                                                          required="true"
+                                                          name="selectContact"  
+                                                          label="Contact"                                            
+                                                          messageWhenValueMissing ="Please select a contact" 
+                                                          value="{!v.caseobj.ContactId}">
+                                            <aura:iteration items="{!v.contactNameslist}" var="item">
+                                                <option value="{!item.value}">{!item.label}</option>                                
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </lightning:layoutitem> 
+                                    
+                                </lightning:layout>
+                                <br></br>
+                            </div>
+                        </lightning:layoutitem>
+                        
+                        <lightning:layoutitem size="6" >
+                            <div class="slds-box">
+                                <br></br>
+                                <lightning:layout multipleRows="true">
+                                    <lightning:layoutitem size="12"></lightning:layoutitem>
+                                    
+                                    <lightning:layoutitem size="12" class="slds-form-element_horizontal">
+                                        <lightning:select aura:id="selectcaseorigin"  
+                                                          name="CaseOrigin" 
+                                                          label="Origin" 
+                                                          value="{!v.caseobj.Origin}" >
+                                            <aura:iteration items="{!v.originlist}" var="item">
+                                                <option value="{!item.value}">{!item.label}</option>
+                                            </aura:iteration>
+                                        </lightning:select>    	
+                                    </lightning:layoutitem> 
+                                    
+                                    <lightning:layoutitem size="12" class="slds-form-element_horizontal">
+                                        <lightning:select aura:id="selectcasepriority"  
+                                                          name="Priority" 
+                                                          label="Priority" 
+                                                          value="{!v.caseobj.Priority}" >
+                                           <!-- <option value="">Medium</option> -->
+                                            <aura:iteration items="{!v.prioritylist}" var="item">
+                                               <!-- <option value="{!item.value}" selected="{!item.value== test}" > </option> -->
+                                               <option value="{!item.value}">{!item.label}</option> 
+                                            </aura:iteration>
+                                        </lightning:select>    
+                                    </lightning:layoutitem>                                     
+                                </lightning:layout>   
+                                <br></br>
+                            </div>
+                        </lightning:layoutitem>
+                    </lightning:layout>
+                    
+                    <div class="slds-box">
+                        <br></br>
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutitem size="6" class="slds-text-title_bold slds-p-bottom_small slds-form-element_horizontal">
+                                <lightning:select aura:id="APCreason"  
+                                                  name="Action Requested"
+                                                  label="Request Type" 
+                                                  value="{!v.APCreasonselected}" 
+                                                  onchange="{!c.onapcreasonchange}" >
+                                    <option value="">--select--</option>
+                                    <aura:iteration items="{! v.apcreasonlist }" var="item">
+                                        <option value="{!item.value}">{!item.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>  
+                            </lightning:layoutitem>
+                            <lightning:layoutItem size="1"></lightning:layoutItem>
+                            <lightning:layoutItem size="5"></lightning:layoutItem>
+                        </lightning:layout> 
+                        
+                        <!-- Logic on selection of each "Request type" -->
+                        <aura:if isTrue="{!v.itsbucket1}" >
+                            <lightning:layout multipleRows="true">  
+                                <lightning:layoutItem size="6" class="slds-form-element_horizontal" >
+                                    <label class="slds-form-element__label">Part Number</label>
+                                    <span onkeypress="{!c.keyPressLogic}" >
+                                        <lightning:input aura:id="partnum"
+                                                         value="{!v.caseobj.Part_No__c}" 
+                                                         placeholder="Enter Part Number"
+                                                         variant= "label-hidden"
+                                                         label=""
+                                                         required="true"
+                                                         maxlength="40"
+                                                         minlength="2"    
+                                                         pattern= "[0-9A-Z_\s\-]*"
+                                                         messageWhenPatternMismatch="No special characters allowed"
+                                                         messageWhenValueMissing ="Part Number cannot be blank"
+                                                         message-when-value-missing = "Part number cannot be blank"
+                                                         autocomplete="off"
+                                                         onchange ="{!c.keyPressLogic}"/>
+                                    </span>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6">
+                                    <div class="slds-p-left_x-small slds-p-top_xx-small">
+                                        <lightning:buttonIcon iconName="utility:send" 
+                                                              type="submit" 
+                                                              alternativeText="Submit" 
+                                                              disabled="{!v.ispartnumbersearchdisabled}"
+                                                              variant="brand" 
+                                                              onclick="{!c.getInput}" /> 
+                                    </div>
+                                </lightning:layoutItem>
+                            </lightning:layout> 
+                            
+                            <lightning:layout multipleRows="true">  
+                                <lightning:layoutItem size="2"> </lightning:layoutItem>
+                                <lightning:layoutItem size="4">
+                                    <aura:if isTrue="{!v.errorfound}">
+                                        <div class="slds-text-color_error slds-p-right_small">{!v.errormessage}
+                                        </div>
+                                    </aura:if>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6"> </lightning:layoutItem>
+                            </lightning:layout>
+                            
+                            <aura:if isTrue="{!v.isPartFound}">
+                                <aura:if isTrue="{!v.APCreasonselected == 'Price Request'}">
+                                    <c:APC_Forms2 aura:id="formpricerequest"
+                                                  recordId = "{!v.recId}" 
+                                                  isbucket1="true"
+                                                  ispricingrequest="true" 
+                                                  isIRC="true" 
+                                                  caseobj="{!v.caseobj}" 
+                                                  issubmitactive="{!v.issubmitactive}"
+                                                  cases="{!v.cases}"
+                                                  files="{!v.files}"
+                                                  additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                                  additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                                  additionalRecipientList2="{!v.additionalRecipientList2}"
+                                                  pillsoffiles="{!v.pillsoffiles}"/> 
+                              </aura:if>
+                                
+                                <aura:if isTrue="{!or(v.APCreasonselected == 'Lead Time', v.APCreasonselected == 'PDC Stock Check')}">
+                                    <c:APC_Forms2 recordId = "{!v.recId}" 
+                                                  dealerCode="{!v.selectedDealerCode}"
+                                                  isinternalcasecreation="true" 
+                                                  internalcasecreationadditional="{!v.APCreasonselected}" 
+                                                  cases="{!v.cases}" 
+                                                  selectedDealerCode="{!v.selectedDealerCode}" 
+                                                  aura:id="formbucket1" 
+                                                  caseobj="{!v.caseobj}" 
+                                                  issubmitactive="{!v.issubmitactive}"
+                                                  files="{!v.files}"
+                                                  additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                                  additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                                  additionalRecipientList2="{!v.additionalRecipientList2}"
+                                                  pillsoffiles="{!v.pillsoffiles}"/>  
+                                </aura:if>
+                                
+                                <aura:if isTrue="{!v.weightsorpacksizeorreactivation}">
+                                    <c:APC_Forms2 recordId = "{!v.recId}"
+                                                  isIARC="true" 
+                                                  isinternalcasecreation="true" 
+                                                  internalcasecreationadditional="{!v.APCreasonselected}"  
+                                                  cases="{!v.cases}"
+                                                  selectedDealerCode="{!v.selectedDealerCode}" 
+                                                  aura:id="formbucket1" 
+                                                  caseobj="{!v.caseobj}" 
+                                                  issubmitactive="{!v.issubmitactive}"
+                                                  files="{!v.files}"
+                                                  additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                                  additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                                  additionalRecipientList2="{!v.additionalRecipientList2}"
+                                                  pillsoffiles="{!v.pillsoffiles}"/>  
+                                </aura:if>
+                            </aura:if>
+                        </aura:if>
+                        
+                        <!-- On selection of Material Load- bucket1 with IRC  -->
+                        <aura:if isTrue="{!if( v.APCreasonselected == 'Material Load', true)}">
+                            <c:APC_Forms2 aura:id="formmaterialload"
+                                          recordId = "{!v.recId}" 
+                                          isbucket1="true"  
+                                          isIRC="true" 
+                                          caseobj="{!v.caseobj}" 
+                                          cases="{!v.cases}" 
+                                          issubmitactive="{!v.issubmitactive}"
+                                          files="{!v.files}"
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"
+                                          pillsoffiles="{!v.pillsoffiles}"/>
+                        </aura:if>
+                        
+                        <!-- On selection of Bucket-2 "order status" -->
+                        <aura:if isTrue="{!  v.APCreasonselected == 'Order Status'}">
+                            <c:APC_Forms2 APCreasonselected= "{!v.APCreasonselected}" 
+                                          isIRC1="true"  
+                                          selectedDealerCode="{!v.selectedDealerCode}"
+                                          issubmitactive="{!v.issubmitactive}" 
+                                          caseobj="{!v.caseobj}"
+                                          cases="{!v.cases}"
+                                          files="{!v.files}"
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"
+                                          errorfound="{!v.errorfound}"
+                                          errormessage="{!v.errormessage}"
+                                          pillsoffiles="{!v.pillsoffiles}"/>
+                        </aura:if>
+                        
+                        <!-- "Core Inquiry" (w.r.t) 3rd bucket  -->
+                        <aura:if isTrue="{!if( v.APCreasonselected == 'Core Inquiry', true)}">
+                            <c:APC_Forms2 aura:id="formbucket3coreinquiry" 
+                                          recordId = "{!v.recId}" 
+                                          dealerCode="{!v.selectedDealerCode}" 
+                                          bucket3additional='4' 
+                                          isIARC="True" 
+                                          caseobj="{!v.caseobj}"
+                                          cases="{!v.cases}"
+                                          issubmitactive="{!v.issubmitactive}"
+                                          APCreasonChanged="{! v.APCreasonchanged}"
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          files="{!v.files}"
+                                          pillsoffiles="{!v.pillsoffiles}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"/>
+                        </aura:if>
+                        
+                        <!--SAP order number (w.r.t) 3rd bucket-->
+                            <aura:if isTrue="{!v.bucket3sap}">
+                            <c:APC_Forms2 aura:id="formbucket3firstthreeoptions" 
+                                          APCreasonselected= "{!v.APCreasonselected}" 
+                                          isIRC1="true"  
+                                          selectedDealerCode="{!v.selectedDealerCode}"
+                                          caseobj="{!v.caseobj}" 
+                                          cases="{!v.cases}"
+                                          issubmitactive="{!v.issubmitactive}"
+                                          isgoclicked="false"
+                                          APCreasonChanged="{! v.APCreasonchanged}"
+                                          isbucket3="true"
+                                          files="{!v.files}"
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"
+                                          errorfound="{!v.errorfound}"
+                                          errormessage="{!v.errormessage}"
+                                          ispartnumbersearchdisabled="{!v.ispartnumbersearchdisabled}"
+                                          pillsoffiles="{!v.pillsoffiles}"/>
+                        </aura:if>
+                        
+                        <!--  Return order number (w.r.t) 3rd bucket-->
+                        <aura:if isTrue="{!v.bucket3return}">
+                            <c:APC_Forms2 APCreasonselected= "{!v.APCreasonselected}" 
+                                          isIRC1="true"
+                                          dealerCode="{!v.selectedDealerCode}" 
+                                          selectedDealerCode="{!v.selectedDealerCode}"
+                                          issubmitactive="{!v.issubmitactive}"
+                                          caseobj="{!v.caseobj}"
+                                          cases="{!v.cases}"
+                                          APCreasonChanged="{! v.APCreasonchanged}"
+                                          isbucket3="true" 
+                                          files="{!v.files}"
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"
+                                          errorfound="{!v.errorfound}"
+                                          errormessage="{!v.errormessage}"
+                                          pillsoffiles="{!v.pillsoffiles}"
+                                          ispartnumbersearchdisabled="{!v.ispartnumbersearchdisabled}"
+                                          isgoclicked="false"/>
+                        </aura:if>
+                        
+                        <!-- With Return type button/return order -->
+                        <aura:if isTrue="{!v.bucket3returnadditional}">
+                            <c:APC_Forms2 aura:id="formbucket3firstthreeoptions" 
+                                          APCreasonselected= "{!v.APCreasonselected}" 
+                                          isIRC1="false"
+                                          dealerCode="{!v.selectedDealerCode}" 
+                                          selectedDealerCode="{!v.selectedDealerCode}"
+                                          issubmitactive="{!v.issubmitactive}"
+                                          caseobj="{!v.caseobj}"
+                                          cases="{!v.cases}"
+                                          APCreasonChanged="{! v.APCreasonchanged}"
+                                          isbucket3="true" 
+                                          files="{!v.files}"
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"
+                                          errorfound="{!v.errorfound}"
+                                          errormessage="{!v.errormessage}"
+                                          pillsoffiles="{!v.pillsoffiles}"
+                                          ispartnumbersearchdisabled="{!v.ispartnumbersearchdisabled}"
+                                          isgoclicked="false"/>
+                        </aura:if>
+                        
+                        <!--Credit/Debit order number (w.r.t) 3rd bucket-->
+                        <aura:if isTrue="{! v.APCreasonselected == 'Credit/Debit Request'}">
+                            <c:APC_Forms2 APCreasonselected= "{!v.APCreasonselected}" 
+                                          APCreasonChanged="{! v.APCreasonchanged}"  
+                                          selectedDealerCode="{!v.selectedDealerCode}" 
+                                          caseobj="{!v.caseobj}" 
+                                          cases="{!v.cases}" 
+                                          isbucket3="true" 
+                                          issubmitactive="{!v.issubmitactive}" 
+                                          files="{!v.files}"
+                                          isIRC1="false"  
+                                          additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                          additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                          additionalRecipientList2="{!v.additionalRecipientList2}"
+                                          errorfound="{!v.errorfound}"
+                                          isgoclicked="false"
+                                          errormessage="{!v.errormessage}"
+                                          pillsoffiles="{!v.pillsoffiles}"/>
+                        </aura:if>
+                        
+                        <!-- TBB-->
+                        <aura:if isTrue="{!if( v.APCreasonselected == 'TBB', true)}">
+                            <c:APC_TBB2 aura:id="tbbvalidity"
+                                        selectedDealerCode="{!v.selectedDealerCode}"
+                                        additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                        additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                        additionalRecipientList2="{!v.additionalRecipientList2}"
+                                        isinternalcasecreation="true" 
+                                        issubmitactive="{!v.issubmitactive}" 
+                                        caseobj="{!v.caseobj}" 
+                                        files="{!v.files}"
+                                        pillsoffiles="{!v.pillsoffiles}"
+                                        ispartnumbersearchdisabled="{!v.ispartnumbersearchdisabled}"
+                                        />
+                        </aura:if>
+                        
+                    </div>
+                </div>
+                
+                <!-- MODAL BOX FOOTER-->
+                <div class= "slds-theme_default">
+                    <footer class="slds-modal__footer slds-align_absolute-center">
+                        <button class="oval-button slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>                        
+                        <button class="oval-button slds-button slds-button_brand" disabled="{! !v.issubmitactive}" onclick="{!c.submitclicked}">Submit</button>  
+                    </footer>
+                </div>
+                
+            </div>
+        </section>
+        
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <div aura:id="overlay" class="slds-backdrop slds-backdrop--open"></div>
+</aura:component>

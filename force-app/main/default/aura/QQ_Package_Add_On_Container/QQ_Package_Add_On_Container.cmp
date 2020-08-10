@@ -1,0 +1,22 @@
+<aura:component >
+    <aura:attribute name="quoteitem" type="ASP_PM_Line_Items__c" 
+                    default="{'sobjectType': 'ASP_PM_Line_Items__c'}"/> 
+    
+    <aura:attribute name="addonitems" type="PM_Line_Item_AddOn__c[]"/>
+    <aura:attribute name="offermasterid"  type="String"/>
+    <aura:attribute name="showaddon"  type="boolean" default="false"/>
+    
+    <div class="slds-p-around_small">
+    <lightning:button label="{!v.showaddon ? 'Hide Add-On' : 'Show Add-On'}" 
+                      name = "{!v.offermasterid}"
+                      iconName="{!v.showaddon ? 'utility:chevrondown' : 'utility:chevronright'}" 
+                      variant="{!v.showaddon ? 'neutral' : 'brand'}" 
+                      iconPosition="left"
+                      onclick="{!v.showaddon ? c.hideaddonmethod : c.showaddonmethod }"  />
+    </div>
+    <div class="{!v.showaddon ? 'slds-is-expanded' : 'slds-is-collapsed'}">
+       <c:QQ_External_PCKG_AddOn quoteitem = "{!v.quoteitem}"
+                                  offermasterid = "{!v.offermasterid}" 
+                                  addonitems="{!v.addonitems}"/>
+    </div>
+</aura:component>

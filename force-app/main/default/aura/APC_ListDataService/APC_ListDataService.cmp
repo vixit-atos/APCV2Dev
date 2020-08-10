@@ -1,0 +1,27 @@
+<!-- APC_ListDataService  -->
+
+<aura:component controller="APC_ListController">
+    <aura:attribute name="errormessage" type="String"   />
+    <aura:attribute name="IsSpinner" type="boolean" />
+    <aura:attribute name="errorfound" type="boolean" default="false"/>
+     <aura:attribute name="issubmitrequestclicked" type="Boolean" default="false"/>
+	<aura:method name="getListData">
+      <aura:attribute name="Stagefilter" type="String" />
+      <aura:attribute name="Statusfilter" type="String" />
+      <aura:attribute name="domain" type="String" />
+      <aura:attribute name="source" type="String" />
+      <aura:attribute name="methodname" type="String" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+    <aura:method name="getAllDataExistingOrder">
+      <aura:attribute name="RequestNumber" type="String" />
+      <aura:attribute name="RequestType" type="String" />
+      <aura:attribute name="APC_Source" type="String" />
+      <aura:attribute name="soldToParty" type="String" />
+      <aura:attribute name="methodname" type="String" />
+      <aura:attribute name="isexternal" type="boolean" />
+      <aura:attribute name="callback" type="Function" />
+      
+    </aura:method>
+    
+</aura:component>

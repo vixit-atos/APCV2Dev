@@ -1,0 +1,7 @@
+.THIS ::placeholder {
+    color: rgb(200, 200, 200);
+}
+
+.THIS option:first-child {
+    color: rgb(200, 200, 200);
+}

@@ -1,0 +1,29 @@
+<apex:page StandardController="TCMeeting__c" tabStyle="TCMeeting__c" extensions="TWS_ApprovalNotificationEmailRequest">
+  <!-- Begin Default Content REMOVE THIS -->
+  <apex:form >
+  <apex:pageBlock >
+      <apex:pageMessages ></apex:pageMessages>
+      <apex:pageBlockButtons >
+          <apex:commandButton title="Takes Back to the TC Meeting Detail Page" value="Back" action="{!doCancel}"/>
+          <apex:commandButton title="Sends an Approval Template to your Email which can be used to send the request" value="Send Approval Email" action="{!SendApprovalEmail}"/>
+      </apex:pageBlockButtons>
+      <h1 style="line-height: 2.5;">Following is the preview of the Approval Notification Email:</h1><br/>
+      <!-- End Default Content REMOVE THIS -->
+      <h3 >Subject: </h3>This Week’s Transaction Council Meeting on {!sObjTCM.TC_Meeting_Date__c}– Submissions for Approval<br/>
+      <h3 >To: </h3>{!$User.Email} <br/><br/>
+    <div style="border-style: ridge;font-family:verdana;">
+        <div style="margin-left:10px;">
+            <div style="font-size:110%;">
+                <p>Hello,</p><br/>
+                This following deals were submitted for approval at this week's Transaction Council Meeting on <apex:outputText value=" {!sObjTCM.TC_Meeting_Date__c}" /> <br/><br/>
+                (To view the worksheet for each deal, click on the link under Deal Name)
+            </div>
+        <c:TWS_AgendaFinalized_DealList TC_Meeting_Id="{!Id}"/>
+        <br/>
+        <a href="{!$Setup.EventInviteURLPrefix__c.Value__c}">Click here</a> to go to the Items to Approve section on your Home page to approve all deals.
+        <br/>
+        </div>
+     </div>
+   </apex:pageBlock>
+   </apex:form>
+</apex:page>

@@ -1,0 +1,20 @@
+<aura:component >
+    <aura:attribute name="heading" type="String" default="All"/>
+    <aura:attribute name="subheading" type="String" default="Quotes"/>
+    <aura:attribute name="icon" type="String" default="DTNA_TRUCK_ICON"/>   
+    <!-- PAGE HEADER -->
+    <div class="">
+        <!-- LAYOUT GRID -->
+        <div class="slds-media slds-no-space slds-grow">
+            <!-- GRID COL -->
+            
+            <div class="slds-media__body">
+                <!-- HEADING AREA -->
+                <p class="slds-page-header__title slds-truncate">{!v.heading}</p>
+                <p class="">{!v.subheading}</p>
+            </div>
+        </div>
+        
+    </div>
+   
+</aura:component>

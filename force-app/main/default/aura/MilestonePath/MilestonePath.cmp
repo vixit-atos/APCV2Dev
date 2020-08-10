@@ -1,0 +1,31 @@
+<aura:component controller="MilestonePathController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="milestones" type="List"/>
+    
+    <aura:if isTrue="{!not(empty(v.milestones))}">
+        <article class="slds-card">
+            <div class="slds-grid slds-path__track">
+                <div class="slds-path__scroller" role="application">
+                    <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                        <aura:iteration items="{!v.milestones}" var="m">
+                            <li class="{!m.cls+' slds-path__item'}" role="presentation">
+                                <a class="slds-path__link" role="option">
+                                    <span class="slds-path__title" style="transform:none"><strong>{!m.name}</strong></span>
+                                </a>
+                            </li>
+                        </aura:iteration>
+                    </ul>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap" style="margin:0 12px 12px 12px;">
+                
+                <aura:iteration items="{!v.milestones}" var="m">
+                    <div class="slds-col">
+                        <c:MilestoneProgressBar milestone="{!m}"/>
+                    </div>
+                </aura:iteration>
+
+            </div>
+        </article>
+    </aura:if>
+</aura:component>

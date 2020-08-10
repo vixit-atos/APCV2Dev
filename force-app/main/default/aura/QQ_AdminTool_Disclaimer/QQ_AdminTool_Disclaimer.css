@@ -1,0 +1,10 @@
+.THIS .right-align {
+    text-align: right;
+}
+.THIS .left-align {
+    text-align: left;
+}
+.THIS .valign-bottom {
+    vertical-align: text-bottom;
+    vertical-align: bottom;
+}

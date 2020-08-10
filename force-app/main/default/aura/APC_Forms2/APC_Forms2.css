@@ -1,0 +1,32 @@
+.THIS .leadtimebutton .slds-radio_faux{
+    padding-left: 2.24rem !important;
+    padding-right: 2.3rem !important;
+}
+
+.THIS .orderstatusbutton .slds-radio_faux{
+    padding-left: 2rem !important;
+    padding-right: 1.4rem !important;
+}
+
+.THIS .returntypebutton .slds-radio_faux{
+    padding-left: 3rem !important;
+    padding-right: 2.96rem !important;
+}
+.THIS .slds-form-element__legend {
+    font-weight: 400;
+}
+.THIS .datepicker svg {
+    vertical-align: super!important;
+}
+/*.THIS [lightning-dualListbox_dualListbox-host] {
+    display: block;
+    min-width: 35rem !important;
+} */
+.THIS .slds-pill_container {
+    display: flex;
+    min-height: calc(var(--lwc-heightInput,1.875rem) + 2px);
+    padding: var(--lwc-spacingXxxSmall,0.125rem);
+    border: none !important;
+    border-radius: var(--lwc-borderRadiusMedium,0.25rem);
+    background-color: var(--lwc-colorBackgroundInput,rgb(255, 255, 255));
+}

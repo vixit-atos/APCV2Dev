@@ -1,0 +1,29 @@
+<aura:component>
+    
+    <aura:attribute name="quoteitem" type="ASP_PM_Line_Items__c" 
+                    default="{'sobjectType': 'ASP_PM_Line_Items__c'}"/> 
+    
+    <aura:attribute name="addonitems" type="PM_Line_Item_AddOn__c[]"/>
+    <aura:attribute name="offermasterid" type="String"/>
+    <aura:attribute name="addonlist" type="list" />
+    <aura:attribute name="uniqueaddon" type="list"/>
+    <aura:attribute name="servicelist" type="list"/>
+    <aura:attribute name="addremove" type="boolean" default="true"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/> 
+    
+    <c:QQ_Pm_LineItem_DataService aura:id="Lineitemservice" />
+    
+    
+    
+    
+    
+    <lightning:layout multipleRows="true"> 
+        <aura:if isTrue="{! !empty(v.servicelist)}">
+            <aura:iteration items="{!v.uniqueaddon}" var="item">
+                <c:QQ_External_Addon_tile airfilter="{!v.quoteitem.Air_Filter__c}" offermasterid="{!v.offermasterid}" addonitems="{!v.addonitems}" addonname="{!item.label}"  servicelist="{!v.servicelist}"/>
+            </aura:iteration>
+         </aura:if>
+    </lightning:layout>
+    
+    
+</aura:component>

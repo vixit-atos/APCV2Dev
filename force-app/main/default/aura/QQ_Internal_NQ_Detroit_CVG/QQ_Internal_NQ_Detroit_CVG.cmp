@@ -1,0 +1,229 @@
+<aura:component>
+    <!--<aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quoteitem" type="ASP_QQ_Line_Item__c" default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/>
+    <aura:registerEvent name="appEvent" type="c:QQ_App_Event"/>
+    
+    <aura:handler   name="init" value="{!this}" action="{!c.doinit}"/>    
+    <aura:attribute name="masterlineitems" type="List"/>
+    <aura:attribute name="usagelineitems" type="List"/>
+    <aura:attribute name="complineitems" type="List"/>
+    <aura:attribute name="cvrgtypelineitems" type="List"/>
+    <aura:attribute name="optionslineitems" type="List"/>
+    <aura:attribute name="deductiblelineitems" type="List"/>
+    <aura:attribute name="durationlineitems" type="List"/>    
+    <aura:attribute name="finallineitem" type="String"/>
+    <aura:attribute name="grouplineitems" type="List"/>
+    <aura:attribute name="levellineitems" type="List"/>
+    <aura:attribute name="packagelineitems" type="List"/>
+    <aura:attribute name="standalonelineitems" type="List"/>
+    <aura:attribute name="usageoptions" type="List"/>
+    <aura:attribute name="componentoptions" type="List"/>
+    <aura:attribute name="CoverageOptions" type="List"/>
+    <aura:attribute name="Coveragetypeoptions" type="List"/>
+    <aura:attribute name="optionslist" type="List"/>
+    <aura:attribute name="deductiblelist" type="List"/>
+    <aura:attribute name="durationlist" type="List"/>
+    <aura:attribute name="modellist" type="List"/>
+    <aura:attribute name="levellist" type="List"/>
+    
+    <aura:attribute name="truckpackagetypelist" type="List" default="[
+                                                                     {'label': 'PACKAGE', 'value': 'PACKAGE'},
+                                                                     {'label': 'STANDALONE', 'value': 'STANDALONE'}
+                                                                     ]" />    
+    <aura:attribute name="FCCCpackagetypelist" type="List" default="[
+                                                                    {'label': 'STANDALONE', 'value': 'STANDALONE'}
+                                                                    ]" />  
+    <aura:attribute name="fieldorder" type="List" default="[ {'name': 'EngineComponent','setfieldname':'Coverage_Type_1__c', 'filterdlineitems': 'v.complineitems' , 
+                                                           'options' : 'v.componentoptions'},
+                                                           {'name': 'CoverageType','setfieldname':'Coverage_Type_1__c', 'filterdlineitems': 'v.cvrgtypelineitems' , 
+                                                           'options' : 'v.Coveragetypeoptions'},
+                                                           {'name': 'Option','setfieldname':'Option_1__c', 'filterdlineitems': 'v.optionslineitems' , 
+                                                           'options' : 'v.optionslist'},
+                                                           {'name': 'Deductible', 'setfieldname':'Deductible_1__c','filterdlineitems': 'v.deductiblelineitems' , 
+                                                           'options' : 'v.deductiblelist'},
+                                                           {'name': 'Duration', 'setfieldname':'Duration_Final__c','filterdlineitems': 'v.durationlineitems' , 
+                                                           'options' : 'v.durationlist'}]" />
+    <aura:attribute name="packagelist" type="List"/>
+    <aura:attribute name="custommonth" type="integer"/>
+    <aura:attribute name="custommiles" type="integer"/>    
+    <aura:attribute name="Coverageval" type="string"/>
+    <aura:attribute name="customduration" type="boolean" default="false"/>
+    <aura:attribute name="createdduration" type="boolean" default="false"/>
+    <aura:attribute name="packagetype" type="string"/>
+    <aura:attribute name="A85_codeOptions" type="List"/>    
+    <aura:attribute name="standalonelist" type="List"/>
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="A85_Code__c" 
+                                  picklistValues="{!v.A85_codeOptions}" />
+    <c:QQ_LineItem_DataService aura:id="Lineitemservice" />
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    
+    <form class="">        
+        
+        <lightning:layout>
+            <aura:if isTrue="{!v.quoteitem.Coverage__c}">                  
+                
+                <lightning:layoutItem size="4" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="4" padding="around-small">
+                    <aura:if isTrue="{! !empty(v.usageoptions)}">
+                        <lightning:radioGroup
+                                              aura:id="quoteform"
+                                              name="Usage"
+                                              label="Application"
+                                              options="{! v.usageoptions }"
+                                              value="{! v.quoteitem.Usage__c}"
+                                              onchange="{! c.handleChange }"
+                                              required="" 
+                                              type="button"/>
+                        
+                        
+                        <aura:set attribute="else">
+                            <lightning:input name="Usage" 
+                                             disabled="true" 
+                                             value="{!v.quoteitem.Usage__c}"
+                                             label="Application" 
+                                             onchange="" />                            
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem> 
+                
+                <lightning:layoutItem size="3" padding="around-small">
+                    <aura:if isTrue="{!v.quoteitem.Usage__c}">
+                        <lightning:combobox 
+                                            name="EngineComponent"
+                                            aura:id="quoteform"
+                                            label="Component" 
+                                            class="submenu"
+                                            value="{!v.quoteitem.Engine_Component_1__c}" 
+                                            placeholder="None" 
+                                            options="{! v.componentoptions }"
+                                            onchange="{! c.handleChange }"/>
+                    </aura:if>
+                </lightning:layoutItem>
+            </aura:if>
+        </lightning:layout> 
+        
+        <lightning:layout>
+            <lightning:layoutItem size="12" >
+                <aura:if isTrue="{!v.errorMessage}">
+                    <div class="slds-text-color_success slds-text-heading_medium">{!v.errorMessage}</div>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <lightning:layout>
+            <lightning:layoutItem size="3" padding="around-small">
+                <aura:if isTrue="{!not(empty(v.Coveragetypeoptions))}">
+                    <lightning:radioGroup
+                                          aura:id="quoteform"
+                                          name="CoverageType"
+                                          label="Coverage Type"
+                                          options="{! v.Coveragetypeoptions }"
+                                          value="{! v.quoteitem.Coverage_Type_1__c}"
+                                          onchange="{! c.handleChange }"
+                                          required="" 
+                                          />
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" padding="around-small">
+                <aura:if isTrue="{!not(empty(v.optionslist))}">
+                    <lightning:radioGroup
+                                          aura:id="quoteform"
+                                          name="Option"
+                                          label="Options"
+                                          options="{! v.optionslist }"
+                                          value="{! v.quoteitem.Option_1__c}"
+                                          onchange="{! c.handleChange }"
+                                          required="" 
+                                          />
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" padding="around-small">
+                <aura:if isTrue="{!not(empty(v.deductiblelist))}">
+                    <lightning:radioGroup
+                                          aura:id="quoteform"
+                                          name="Deductible"
+                                          label="Deductible"
+                                          options="{! v.deductiblelist }"
+                                          value="{! v.quoteitem.Deductible_1__c}"
+                                          onchange="{! c.handleChange }"
+                                          required="" 
+                                          />
+                </aura:if>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" padding="around-small">
+                <aura:if isTrue="{!not(empty(v.durationlist))}">
+                    <lightning:radioGroup aura:id="quoteform"
+                                          name="Duration"
+                                          label="Duration"
+                                          options="{! v.durationlist }"
+                                          value="{! v.quoteitem.Duration_Final__c}"
+                                          onchange="{! c.handleChange }"
+                                          required="{!v.quoteitem.Duration_Final__c ? false : true}"/>  
+                    
+                    <Hr></Hr>
+                    <lightning:input aura:id="quoteform"
+                                     type="radio"
+                                     name="Duration" 
+                                     label="Custom" 
+                                     checked="{!v.customduration}" 
+                                     value="{!v.customduration}" 
+                                     onchange=""
+                                     required="{!v.quoteitem.Duration_Final__c ? false : true}"/>
+                    
+                    <aura:if isTrue="{!v.customduration}">                            
+                        <aura:if isTrue="{!not(v.createdduration)}">                    
+                            <lightning:input aura:id="quoteform" 
+                                             type="number"
+                                             min="1" 
+                                             max="999"
+                                             name="Month"
+                                             label="Months"
+                                             value="{! v.quoteitem.Months__c}"
+                                             required="{!v.customduration ? true : false}"
+                                             onchange="{!c.createduration}"/>                    
+                            
+                            <lightning:input aura:id="quoteform"
+                                             type="number"
+                                             maxlength="25"
+                                             min="1"
+                                             max="99999999"
+                                             name="Miles"
+                                             label="Miles" 
+                                             value="{!v.quoteitem.Miles__c}" 
+                                             required="{!v.customduration? true : false}"
+                                             onchange="{!c.createduration}" />
+                            <br></br>
+                        </aura:if> 
+                    </aura:if>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <div class="slds-box slds-box_x-small slds-theme_shade">            
+            <div class="slds-text-title_bold slds-float_left">Detroit Coverage</div>            
+            <lightning:layout>
+                <lightning:layoutItem size="" padding="around-small">
+                    
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">
+                    {!v.quoteitem.Engine_Component_1__c}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">
+                    {!v.quoteitem.Coverage_Type_1__c}
+                </lightning:layoutItem >
+                <lightning:layoutItem size="2" padding="around-small">
+                    {!v.quoteitem.Option_1__c}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">
+                    {!v.quoteitem.Deductible_1__c}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">
+                    {!v.quoteitem.Duration_Final__c} 
+                </lightning:layoutItem>
+            </lightning:layout>
+            <hr></hr>
+        </div>   
+        
+    </form>-->
+</aura:component>

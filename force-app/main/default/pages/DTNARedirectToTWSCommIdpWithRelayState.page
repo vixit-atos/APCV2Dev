@@ -1,0 +1,3 @@
+<apex:page controller="DTNARedirectToIdpWithRelayStateCtrler" sidebar="false" standardStylesheets="false" showHeader="false">
+<script>window.location='{!IdpTWSCommUrlWithRelayState}';</script>
+</apex:page>

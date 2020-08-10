@@ -1,0 +1,7 @@
+<apex:page standardController="Account">
+
+<apex:iframe src="http://stnaicvdw001.us164.corpintra.net/views/PartSalesReporting/TotalNetSalesYOY?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no&:toolbar=no&:tabs=no&Primary Dealer Name={!Account.Legal_Name__c}"
+
+height="1110px" width="1160px" scrolling="true"/>
+    
+</apex:page>

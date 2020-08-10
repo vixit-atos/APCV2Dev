@@ -1,0 +1,105 @@
+<!--	QQ_ADMINISTRATIVE_TOOLS_TAB -->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    <aura:attribute name="policyFlag" type="Boolean" default="false"/>
+    <aura:attribute name="recordType" type="string" default="PDF Policy Management"/>
+    
+    <lightning:tabset selectedTabId="admin_Panel_value_id" variant="vertical">
+
+        <lightning:tab label="Admin Panel Value" id="admin_Panel_value_id">
+            <div class="slds-card__header slds-grid">
+                <lightning:listView aura:id="Admin_Panel_Value_id"
+                                    objectApiName="Administrative_Tool__c"
+                                    listName="Admin_Panel_Value"
+                                    rows="50"
+                                    showSearchBar="true"
+                                    showActionBar="true"
+                                    enableInlineEdit="true"
+                                    showRowLevelActions="false"/>
+            </div>
+        </lightning:tab>
+		
+	
+
+        <lightning:tab label="Extended Coverage - Expiration Date" id="ec_expiration_date_id">
+            <div class="slds-card__header slds-grid slds-m-top_xx-large">
+                <lightning:listView aura:id="EC_Expiration_Date_id"
+                                    objectApiName="Administrative_Tool__c"
+                                    listName="Extended_Coverage_Expiration_Date"
+                                    rows="2"
+                                    showSearchBar="false"
+                                    showActionBar="false"
+                                    enableInlineEdit="true"
+                                    showRowLevelActions="false"/>
+            </div>
+        </lightning:tab>
+
+
+        <lightning:tab label="FMV Date " id="fmv_date_id">
+            <div class="slds-card__header slds-grid slds-m-top_xx-large">
+                <lightning:listView aura:id="FMV_Date_id"
+                                    objectApiName="Administrative_Tool__c"
+                                    listName="FMV_Date"
+                                    rows="2"
+                                    showSearchBar="false"
+                                    showActionBar="false"
+                                    enableInlineEdit="true"
+                                    showRowLevelActions="false"/>
+            </div>
+        </lightning:tab>
+
+		
+        <!--
+        <lightning:tab label="Preventive Maintenance - Expiration Date" id="pm_expiration_date_id">
+            <div class="slds-card__header slds-grid slds-m-top_xx-large">
+                <lightning:listView aura:id="PM_Expiration_Date_id"
+                                    objectApiName="Administrative_Tool__c"
+                                    listName="Preventive_Maintenance_Expiration_Date"
+                                    rows="2"
+                                    showSearchBar="false"
+                                    showActionBar="false"
+                                    enableInlineEdit="true"
+                                    showRowLevelActions="false"/>
+            </div>
+        </lightning:tab>
+		-->        
+
+        <lightning:tab label="Model Relationship" id="model_relationship_id">
+            <div class="slds-card__header slds-grid">
+                <lightning:listView aura:id="Model_Relationship_id"
+                                    objectApiName="Administrative_Tool__c"
+                                    listName="Model_Relationship"
+                                    rows="50"
+                                    showSearchBar="true"
+                                    showActionBar="true"
+                                    enableInlineEdit="true"
+                                    showRowLevelActions="false"/>
+            </div>
+        </lightning:tab>       
+        <lightning:tab label="PDF Disclaimer Management" id="pdf_disclaimer_management_id">
+            <div style="text-align:right; padding-right:1em;">
+                <lightning:button variant = "brand"
+                                  label = "Policy Manual"
+                                  iconName = "utility:edit_form"
+                                  title = "Policy Manual"
+                                  onclick = "{!c.openPolicyEditer}" />
+            </div>
+            <div>
+                <aura:if isTrue="{!v.policyFlag}">
+                    <c:QQ_AdminTool_Panel aura:id="Panel"
+                                          recordType="{!v.recordType}"
+                                          policyFlag="{!v.policyFlag}"/>
+                </aura:if>
+            </div>
+            <div class="slds-card__header slds-grid">
+                <lightning:listView aura:id="PDF_Disclaimer_Management_id"
+                                    objectApiName="Administrative_Tool__c"
+                                    listName="PDF_Disclaimer_Management"
+                                    rows="50"
+                                    showSearchBar="false"
+                                    showActionBar="true"
+                                    enableInlineEdit="true"
+                                    showRowLevelActions="false"/>
+            </div>
+        </lightning:tab>
+    </lightning:tabset>
+</aura:component>

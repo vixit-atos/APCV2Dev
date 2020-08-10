@@ -1,0 +1,277 @@
+<aura:component controller="fetchInfoController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.hideComponents}"/>
+    <aura:attribute name="userProfile" type="Profile"/>
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - FTL Sales',v.userProfile.Name=='System Administrator',v.userProfile.Name=='DTNA - FTL DOA')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="FTL Links">FTL Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaDash}">DTNA DASH</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.concessionInquiry}">ConcessionInquiry</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.quoteActivity}">Quote Activity</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.newTruckTools}">New Truck Tools</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.repairTrackerCustomer}">Repair Tracker Customer</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.repairTrackerDealer}">Repair Tracker Dealer</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.uptimeService}">Uptime Service Performance</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.newTruckInvoice}">New Truck Invoice</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.safer}">SAFER</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.salesMarketingSharePoint}">Sales and Marketing SharePoint</a><br/></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - ASP',v.userProfile.Name=='System Administrator')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="ASP Links">ASP Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - DND',v.userProfile.Name=='System Administrator')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="DND Links">DND Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - DTR',v.userProfile.Name=='System Administrator')}">
+    <lightning:layout >
+		<lightning:layoutItem flexibility="auto"  >
+    		<div aura:id="custom">
+    			<article class="slds-tile">
+            		<h3 class="slds-text-color_weak slds-truncate title" title="DTR Links">DTR Links</h3>
+        		</article>
+    		</div>
+    		<div aura:id="custom">
+    			<article class="slds-tile">
+        			<div class="slds-tile__detail">
+            			<dl class="slds-list_vertical slds-wrap list">
+                            
+                            <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+            			</dl>
+        			</div>
+        		</article>
+    		</div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - Field Service',v.userProfile.Name=='System Administrator')}">
+    <lightning:layout >
+		<lightning:layoutItem flexibility="auto"  >
+    		<div aura:id="custom">
+    			<article class="slds-tile">
+            		<h3 class="slds-text-color_weak slds-truncate title" title="FieldService Links">Field Service Links</h3>
+        		</article>
+    		</div>
+    		<div aura:id="custom">
+    			<article class="slds-tile">
+        			<div class="slds-tile__detail">
+            			<dl class="slds-list_vertical slds-wrap list">
+                            
+                            <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+                            <dt class="slds-item_label slds-truncate"><a onclick="{!c.oeConnect}">OE Connect</a></dt>
+                            <dt class="slds-item_label slds-truncate"><a onclick="{!c.dntaArc}">DTNA ARC</a></dt>
+                            <dt class="slds-item_label slds-truncate"><a onclick="{!c.viewCad}">Viewcad</a></dt>
+                            <dt class="slds-item_label slds-truncate"><a onclick="{!c.fieldServiceReporting}">Field Service Reporting</a></dt>
+            			    <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaSyncronize}">DTNA Synchronize</a></dt>
+							<dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a></dt>
+							<dt class="slds-item_label slds-truncate"><a onclick="{!c.fieldServiceSharepoint}">Field Service SharePoint</a></dt>
+                        	<dt class="slds-item_label slds-truncate"><a onclick="{!c.aftermarketServiceProducts}">Aftermarket Service Products</a></dt>
+                        	<dt class="slds-item_label slds-truncate"><a onclick="{!c.repairTrackerCustomer}">Repair Tracker Customer</a></dt>
+                        	<dt class="slds-item_label slds-truncate"><a onclick="{!c.repairTrackerDealer}">Repair Tracker Dealer</a></dt>
+                        	<dt class="slds-item_label slds-truncate"><a onclick="{!c.uptimeServicePerformance}">Uptime Service Performance</a></dt>
+                        </dl>
+        			</div>
+        		</article>
+    		</div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - Parts',v.userProfile.Name=='System Administrator')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="Parts Links">Parts Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.westPartsMasterCalendar}">West Parts Master Calendar</a><br/></dt>
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}"></a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaMacKayReports}">DTNA MacKay Reports</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.itAccessForm}">IT Access Form</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.oeConnect}">OE Connect</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.otcLumiraReporting}">OtC Lumira Reporting</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.pView}">P View</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.paragonSapMainPage}">Paragon SAP Main Page</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.paragonSapPartInquiry}">Paragon SAP Part Inquiry</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.paragonSapQuoteInquiry}">Paragon SAP Quote Inquiry</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.paragonSapPartOrderStatus}">Paragon SAP Part Order Status</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.paragonManagementSummary}">Parts Management Summary</a></dt>                            
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.partsPro}">Parts Pro</a></dt>              
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.pinnacleTruckParts}">Pinnacle Truck Parts</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.servicePro}">ServicePro</a></dt>  
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.tableauSalesReporting}">Tableau Sales Reporting</a></dt>  
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.warrantyLit}">Warranty Lit</a></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - FTL DOA',v.userProfile.Name=='System Administrator',v.userProfile.Name=='DTNA - FTL Sales',v.userProfile.Name=='TWS/TC - Read Only', v.userProfile.Name=='TWS - Read Only - Partners', v.userProfile.Name=='TWS/TC - Sales',v.userProfile.Name=='TWS/TC - Sales Contract User',v.userProfile.Name=='TWS/TC - Super User',v.userProfile.Name=='DTNA - WST DOA',v.userProfile.Name=='DTNA - WST Sales')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="TCSharepoint Links">TCSharepoint Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaSalesContracts}">DTNA Sales Contracts</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaSalesProposal}">DTNA Sales Proposal</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaTransactionCouncil}">DTNA Transaction Council</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaTwsPreparation}">DTNA TWS Preparation</a><br/></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - Uptime Pro',v.userProfile.Name=='System Administrator')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="UptimePro Links">UptimePro Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='Contract Manager',v.userProfile.Name=='System Administrator',v.userProfile.Name=='CRM API Admin',v.userProfile.Name=='DTNA - Call Centers',v.userProfile.Name=='DTNA - National Accounts',v.userProfile.Name=='DTNA - STC Charlotte',v.userProfile.Name=='DTNA - STC Cleveland',v.userProfile.Name=='DTNA - STC Kansas City',v.userProfile.Name=='DTNA - STC Louisville',v.userProfile.Name=='DTNA - STC New England',v.userProfile.Name=='DTNA - STC Tampa',v.userProfile.Name=='DTNA - STC Toronto',v.userProfile.Name=='Marketing User',v.userProfile.Name=='Read Only',v.userProfile.Name=='Solution Manager',v.userProfile.Name=='Standard User',v.userProfile.Name=='International - Sales',v.userProfile.Name=='International - Super User',v.userProfile.Name=='TWS/TC - Read Only', v.userProfile.Name=='TWS - Read Only - Partners', v.userProfile.Name=='TWS/TC - Sales',v.userProfile.Name=='TWS/TC - Sales Contract User',v.userProfile.Name=='TWS/TC - Super User')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="Custom Links">Custom Links</h3>
+                    </article>
+                </div>
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!or(v.userProfile.Name=='DTNA - WST Sales',v.userProfile.Name.contains=='DTNA - WST DOA', v.userProfile.Name=='System Administrator')}">
+        <lightning:layout >
+            <lightning:layoutItem flexibility="auto"  >
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <h3 class="slds-text-color_weak slds-truncate title" title="WST Links">WST Links</h3>
+                        
+                    </article>
+                </div>
+                
+                <div aura:id="custom">
+                    <article class="slds-tile">
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_vertical slds-wrap list">
+                                
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.concessionInquiry}">ConcessionInquiry</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.dtnaConnect}">DTNA Connect</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.ssiPortal}">SSI Portal</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.newTruckTools}">New Truck Tools</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.repairTrackerCustomer}">Repair Tracker Customer</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.repairTrackerDealer}">Repair Tracker Dealer</a><br/></dt>
+                                <dt class="slds-item_label slds-truncate"><a onclick="{!c.uptimeService}">Uptime Service Performance</a><br/></dt>
+                            </dl>
+                        </div>
+                    </article>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </aura:if>
+</aura:component>

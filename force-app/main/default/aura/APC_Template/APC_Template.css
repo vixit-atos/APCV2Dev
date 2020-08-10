@@ -1,0 +1,21 @@
+.THIS.barlowFont{
+    font-style: barlow;
+}
+
+.THIS .slds-text-heading_large{
+    font-size: 1.4rem;
+}
+.THIS .modal__footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+.THIS .modal__content {
+    bottom: 100px;
+    top: 100px;
+    overflow-y: auto;
+}
+
+.THIS .modal__footer {
+    
+}

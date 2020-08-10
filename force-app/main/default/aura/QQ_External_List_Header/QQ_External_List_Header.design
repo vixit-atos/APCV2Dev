@@ -1,0 +1,6 @@
+<design:component>
+	<design:attribute name="heading" label="Heading" description="" />
+	<design:attribute name="subheading" label="Sub Heading"/>
+    <design:attribute name="icon" label="Icon" />
+    <design:attribute name="informationurl" label="Information link" />
+</design:component>

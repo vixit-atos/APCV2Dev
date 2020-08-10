@@ -1,0 +1,180 @@
+<apex:page controller="Calendarsalesforce1vfpage_Controller" action="{!pageLoad}">
+    <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            
+            <script type="application/javascript">
+            <apex:includeScript value="{!$Resource.jQ_eventCalendar_mi}"/>
+                <apex:includeScript value="{!$Resource.jq_eventCalendar}"/>
+                    <apex:includeScript value="{!$Resource.JqueryMin}"/>
+                        <apex:includeScript value="{!$Resource.JqueryUi}"/>
+                            <apex:includeScript value="{!$Resource.moment_min_js}"/>
+                                <apex:includeScript value="{!$Resource.fullCalendarMinJS}"/> 
+                                    </script>
+            <apex:stylesheet value="{!$Resource.fullCalendarCSS}" />
+            
+            
+            <script>
+            
+            //We need to wrap everything in a doc.ready function so that the code fires after the DOM is loaded
+            
+            var initialize_Calendar;
+            
+            initialize_Calendar = function(){
+                $('#calendar').each(function(){
+                    var s = new Date();
+                    var e = new Date();
+                    var CalId = '{!CalId}';
+                    var CalName = '{!CalName}';
+                    var smon = s.getMonth()+1;
+                    var emon = e.getMonth()+1;
+                    var sDat = s.getDate();
+                    var eDat = e.getDate();
+                    var PaStartDate = s.getFullYear()+'-'+smon+'-'+sDat+' '+s.getHours()+':'+s.getMinutes()+':'+s.getSeconds()+':'+s.getMilliseconds();
+                    var PaEndDate = e.getFullYear()+'-'+emon+'-'+eDat+' '+e.getHours()+':'+e.getMinutes()+':'+e.getSeconds()+':'+e.getMilliseconds();
+                    var calendar= $(this);
+                    calendar.fullCalendar({
+                        
+                        customButtons: {
+                            myCustomButton: {
+                                text: 'New Event',
+                                click: function() {
+                                    if( (typeof sforce != 'undefined') && (sforce != null) ) 
+                                        sforce.one.navigateToURL('/apex/EventEditPage?CalId='+CalId+'&CalName='+CalName+'&StartDate='+PaStartDate +'&EndDate='+PaEndDate +'&retURL=/apex/calendar_salesforce1?Cal='+CalName+'&CalId='+CalId);
+                                    else
+                                        window.location.href= '/apex/EventEditPage?CalId='+CalId+'&CalName='+CalName+'&StartDate='+PaStartDate+'&EndDate='+PaEndDate +'&retURL=/apex/calendar_salesforce1?Cal='+CalName+'&CalId='+CalId;
+                                }
+                            }
+                             ,
+                          
+                            mybackButton: {
+                                text: 'Back',
+                                click: function() {
+                                    if( (typeof sforce != 'undefined') && (sforce != null) ) 
+                                        sforce.one.navigateToURL('/apex/Customlinks_Salesforce1displaypage');
+                                    else
+                                        window.location.href= '/apex/Customlinks_Salesforce1displaypage';
+                                }
+                            }
+                        },
+                        
+                        header: {
+                            left: 'prev,next today myCustomButton mybackButton',
+                            center: 'title',
+                            right: 'month,agendaWeek,agendaDay'
+                        },
+                        buttonText: {
+                        today: 'Today',
+                        title: 'Title',
+                        month: 'Month',
+                        agendaWeek: 'Week',
+                        agendaDay: 'Day'
+                        },
+                        selectable: true,
+                        selectHelper: true,
+                        eventLimit: true,
+                        disableResizing:true,
+                        timezone: 'America/New_York',
+                        events:
+                        [
+                            //At run time, this APEX Repeat will reneder the array elements for the events array
+                            <apex:repeat value="{!events}" var="e">
+                            {
+                            title: "{!e.title}",
+                            start: '{!e.startString}',
+                            end: '{!e.endString}',
+                            url: '{!e.url}',
+                            allDay: {!e.allDay},
+                            className: '{!e.className}'
+                            
+                            },
+                            </apex:repeat>
+                           
+                        ],
+
+                        select: function(start,end){
+                            
+                            s = new Date(start);
+                            e = new Date(end);
+                            var n= s.getTimezoneOffset();
+                            
+                            var smon = s.getMonth()+1;
+                            var emon = e.getMonth()+1;
+                            var sDat = s.getDate();
+                            var eDat = e.getDate();
+                            sHor= s.getHours();
+                            eHor= e.getHours();
+                            sMin= s.getMinutes() + n;
+                            eMin= e.getMinutes() + n;
+                            var PaStartDate = s.getFullYear()+'-'+smon+'-'+sDat+' '+sHor+':'+sMin+':'+s.getSeconds()+':'+s.getMilliseconds();
+                            var PaEndDate = e.getFullYear()+'-'+emon+'-'+eDat+' '+eHor+':'+eMin+':'+e.getSeconds()+':'+e.getMilliseconds();
+                            
+                            if( (typeof sforce != 'undefined') && (sforce != null) ) 
+                                sforce.one.navigateToURL('/apex/EventEditPage?CalId='+CalId+'&CalName='+CalName+'&StartDate='+PaStartDate +'&EndDate='+PaEndDate +'&retURL=/apex/calendar_salesforce1?Cal='+CalName+'&CalId='+CalId);
+                            else
+                                window.location.href= '/apex/EventEditPage?CalId='+CalId+'&CalName='+CalName+'&StartDate='+PaStartDate+'&EndDate='+PaEndDate +'&retURL=/apex/calendar_salesforce1?Cal='+CalName+'&CalId='+CalId;
+                            calendar.fullCalendar('unselect');
+                            
+                        }
+                    });
+                }
+                                   )};
+            
+            $(document).ready(initialize_Calendar);
+            
+            </script>
+            
+            
+            
+            <!--some styling. Modify this to fit your needs-->
+            
+            <style>
+                
+                #cal-options {float:left;}
+                
+                #cal-legend { float:right;}
+                
+                #cal-legend ul {margin:0;padding:0;list-style:none;}
+                
+                #cal-legend ul li {margin:0;padding:5px;float:left;}
+                
+                #cal-legend ul li span {display:block; height:16px; width:16px; margin-right:4px; float:left; border-radius:4px;}
+                
+                #calendar {margin-top:20px;}
+                
+                #calendar a:hover {color:#fff !important;}
+                
+                
+                
+                .fc-event-inner {padding:3px;}
+                
+                .event-birthday {background:#56458c;border-color:#56458c;}
+                
+                .event-campaign {background:#cc9933;border-color:#cc9933;}
+                
+                .event-personal {background:#1797c0;border-color:#1797c0;}
+                
+            </style>
+        </head>
+        <body>
+            
+            
+            <apex:sectionHeader title="{!CalName1}"/>
+            
+            <apex:outputPanel id="calPanel">
+                
+                <apex:form >
+                    
+                    
+                    
+                    <div style="clear:both;"><!--fix floats--></div>
+                    
+                    <div id="calendar"></div>
+                    
+                </apex:form>
+                
+            </apex:outputPanel>
+        </body>
+    </html>
+    
+</apex:page>

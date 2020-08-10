@@ -1,0 +1,53 @@
+<aura:component controller="QQ_Master_Controller" implements="lightning:hasPageReference,force:hasRecordId,lightning:actionOverride" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="recordURL" type="String" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="recordTypeId" type="string"/>
+    <aura:attribute name="isOpen" type="boolean" default="true"/>
+    <aura:attribute name="recordType" type="string" default=""/>
+    <aura:attribute name="closeForm" type="boolean" default="false"/>
+    <aura:attribute name="ExtendedCoverage" type="QQ_Master__c" default="{'sobjectType': 'QQ_Master__c'}"/>
+    <aura:attribute name="selectedGroups" type="List" default="[]"/>
+    <aura:attribute name="selectedVocations" type="List" default="[]"/>
+    
+    <c:QQ_Admin_EW_Submit aura:id="SubmitQQMaster" />
+    
+    <div class="DESKTOP uiModal--medium uiModal forceModal open active" style="display: block; z-index: 2;">
+        <div role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="title slds-text-heading--medium">New Extended Coverage: {!v.recordType}</h2>
+                    <lightning:buttonIcon class="slds-button slds-modal__close slds-button--icon-inverse" 
+                                          iconName="utility:close"
+                                          variant ="brand"
+                                          size="large"
+                                          title="Close this window"
+                                          onclick="{!c.closePanel}"/>
+                </header>
+                <div class="modal-body scrollable slds-modal__content slds-p-around--medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!v.recordType == 'Detroit Coverage'}">
+                        <c:QQ_Admin_EW_Detroit aura:id="Detroit"
+                                               recordType="{!v.recordType}"
+                                               ExtendedCoverage="{!v.ExtendedCoverage}"/>
+                        <aura:set attribute="else">
+                            <c:QQ_Admin_EW_Truck aura:id="Truck"
+                                                 recordType="{!v.recordType}"
+                                                 ExtendedCoverage="{!v.ExtendedCoverage}"
+                                                 selectedGroups = "{!v.selectedGroups}"
+                                                 selectedVocations = "{!v.selectedVocations}"/>
+                        </aura:set>
+                    </aura:if> 
+                </div>
+                <footer class="slds-modal__footer">
+                    <span class="slds-float_right">
+                        <lightning:button class="" variant="brand" label="Cancel" iconName="utility:close" title="Cancel Panel" onclick="{!c.closePanel}" />
+                        <lightning:button class=""  variant="brand" label="Save" iconName="utility:save" title="Save Record" onclick="{!c.submitRecord}" />
+                    </span>
+                </footer>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+    
+</aura:component>

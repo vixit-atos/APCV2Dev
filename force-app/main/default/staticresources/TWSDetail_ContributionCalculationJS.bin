@@ -1,0 +1,740 @@
+var TWSContributionCalculation = {};
+
+TWSContributionCalculation.populateContributionCalcColumns = function(dealType, data){
+
+  if (data){
+
+    switch(dealType) {
+
+      case 'National':
+        TWSContributionCalculation.populateContributionCalculations(data, TWSContributionCalculation.getContributionCalcColumnNational);
+        break;
+      case 'International':
+        TWSContributionCalculation.populateContributionCalculations(data, TWSContributionCalculation.getContributionCalcColumnInternational);
+        break;
+      case 'Canadian':
+        TWSContributionCalculation.populateContributionCalculations(data, TWSContributionCalculation.getContributionCalcColumnCanadian);
+        break;
+      case 'Domestic':
+        TWSContributionCalculation.populateContributionCalculations(data, TWSContributionCalculation.getContributionCalcColumnDomestic);
+        break;
+      case 'Sales Proposal':
+        TWSContributionCalculation.populateContributionCalculations(data, TWSContributionCalculation.getContributionCalcColumnDomesticSalesProposal);
+        break;
+    }
+  }
+}
+
+TWSContributionCalculation.populateContributionCalculations = function(data, dealSpecificFunction){
+
+  TWSContributionCalculation.addDynamicContributionCalculationLabels(data.contributionCalcDynamicItemsKeySet);
+
+  for(i=0; i< data.pricingProposalList.length; i++){
+
+    var proposal = data.pricingProposalList[i].pricingProposal;
+    var actual = data.pricingProposalList[i].pricingProposalReference;
+
+    if(proposal.contributionCalc){
+      $('#tws_ContributionCalcContainer').append(dealSpecificFunction(proposal.contributionCalc, 'tws_proposalContribCalcColumn', data.contributionCalcDynamicItemsKeySet));
+    }
+    if(actual && actual.contributionCalc){
+      $('#tws_ContributionCalcContainer').append(dealSpecificFunction(actual.contributionCalc, 'tws_referenceContribCalcColumn', data.contributionCalcDynamicItemsKeySet));
+    }
+  }
+
+  $('#tws_ContributionCalcContainer').css('width', (TWSDetail.proposalListSize)*290+'px');
+
+  if (data.contributionAndCostComments){
+    var contributionAndCostComments = data.contributionAndCostComments.replace(/\n/g, "<br/><br/>");
+    $('#tws_ContributionAndCostCommentsValue').html(contributionAndCostComments);
+  }
+
+  if (data.commitmentOutsideSalesTerms){
+    $('#tws_commitmentsValue').text(data.commitmentOutsideSalesTerms);
+  }
+}
+
+TWSContributionCalculation.getContributionCalcColumnInternational =  function(contributionCalc, headerCSSClass, contributionCalcLabelSet){
+
+  contributionCalcColumnHTML = '<div class="slds-col--padded slds-text-heading--smal tws_ContributionCalcColumnContainer">'
+                             +    '<div class="slds-grid slds-wrap slds-grid--pull-padded tws_borderRightStrong">'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'contribCalcMethod')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded '+headerCSSClass+' tws_borderRight slds-text-align--center tws_borderBottom tws_darkHighlighted slds-text-align--center tws_heightToAdjust" data-name="currentFormula">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'currentFormula')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Blended Normal'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'methodofCalculation')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderTop tws_heightToAdjust" data-name="dealerNet">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.dealerNet, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderTop tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="dealerNet">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="concessionAmount">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.concessionAmount, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_controllingCell tws_darkHighlighted tws_heightToAdjust" data-name="concessionAmount">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderTop tws_strongText tws_heightToAdjust" data-name="netPrice">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.netPrice, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_controllingCell tws_darkHighlighted tws_heightToAdjust" data-name="netPrice">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="sumOfAddRevenueImpact">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.sumOfAddRevenueImpact, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_controllingCell tws_darkHighlighted tws_heightToAdjust" data-name="sumOfAddRevenueImpact">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderTop tws_strongText tws_heightToAdjust" data-name="totalSellingPriceFOB">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.totalSellingPriceFOB, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_controllingCell tws_darkHighlighted tws_heightToAdjust" data-name="totalSellingPriceFOB">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_highlightedRed tws_borderRight tws_heightToAdjust" data-name="totalEstimatedCost">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.totalEstimatedCost, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_controllingCell tws_darkHighlighted tws_heightToAdjust" data-name="totalEstimatedCost">'
+                             +        '&nbsp;'
+							 +      '</div>'
+							 +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_highlightedRed tws_borderRight tws_heightToAdjust" data-name="contributionCal">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.contributionCal, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_controllingCell tws_darkHighlighted tws_heightToAdjust" data-name="contributionCal">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      TWSContributionCalculation.addDynamicContributionCalculationRows(contributionCalc, contributionCalcLabelSet)
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_3LineHeight">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.stdNetContribTruck, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_highlightedGreen tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatPercentValue(contributionCalc.stdNetContribTruckPer)
+                             +      '</div>'
+                             +    '</div>'
+                             + '</div>';
+
+  return contributionCalcColumnHTML;
+}
+
+TWSContributionCalculation.getContributionCalcColumnCanadian =  function(contributionCalc, headerCSSClass, contributionCalcLabelSet){
+
+  contributionCalcColumnHTML = '<div class="slds-col--padded slds-text-heading--smal tws_ContributionCalcColumnContainer">'
+                             +    '<div class="slds-grid slds-wrap slds-grid--pull-padded tws_borderRightStrong">'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Formula'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'contribCalcMethod')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_1LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_1LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'source')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded '+headerCSSClass+' tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +         '&nbsp'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'currentFormula')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'methodofCalculation')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="dealerNet">'
+                             +        TWSDetail_Formatting.formatCurrencyValue( contributionCalc.dealerNet, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="dealerNet">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="baseModelDnet">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.baseModelDnet, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="baseModelDnet">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="optionContent">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.optionContent, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionContent">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_underlinedText tws_heightToAdjust" data-name="optionMargin">'
+                             +         TWSDetail_Formatting.formatPercentValue(contributionCalc.xOptionMargin)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionMargin">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="optionContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.optionContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_underlinedText tws_heightToAdjust" data-name="baseModelContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.baseModelContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="baseModelContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_highlightedGreen tws_heightToAdjust" data-name="grossContribution">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.grossContribution, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="grossContribution">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="grossFormulaContrib"">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.grossFormulaContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="grossFormulaContrib"">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="concessionAmount">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.concessionAmount, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="concessionAmount">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="options">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.options, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="options">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      TWSContributionCalculation.addDynamicContributionCalculationRows(contributionCalc, contributionCalcLabelSet)
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.stdNetContribTruck, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-1 slds-col--padded slds-text-align--right tws_borderRight tws_strongText tws_borderTopStrong tws_borderBottomStrong tws_1LineHeight">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.csdContribution, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.engineWarrantyCont, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.adjNetContribution, 0)
+                             +      '</div>'
+                             +    '</div>'
+                             + '</div>';
+
+   if (contributionCalc.controllingLineItems){
+    contributionCalcColumnHTML = TWSContributionCalculation.setControllingValues(contributionCalc, contributionCalc.controllingLineItems, contributionCalcColumnHTML);
+   }
+
+  return contributionCalcColumnHTML;
+}
+
+TWSContributionCalculation.getContributionCalcColumnNational =  function(contributionCalc, headerCSSClass, contributionCalcLabelSet){
+
+  contributionCalcColumnHTML = '<div class="slds-col--padded slds-text-heading--smal tws_ContributionCalcColumnContainer">'
+                             +    '<div class="slds-grid slds-wrap slds-grid--pull-padded tws_borderRightStrong">'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Formula'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'contribCalcMethod')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded '+headerCSSClass+' tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +         '&nbsp'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom  tws_heightToAdjust" data-name="currentFormula">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'currentFormula')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Blended Normal'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'methodofCalculation')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="grossFormulaContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.grossFormulaContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="grossFormulaContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="concessionAmount">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.concessionAmount, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_heightToAdjust" data-name="concessionAmount">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      TWSContributionCalculation.addDynamicContributionCalculationRows(contributionCalc, contributionCalcLabelSet)
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_darkHighlighted tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.stdNetContribTruck, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-1 slds-col--padded slds-text-align--right tws_borderRight tws_strongText tws_borderTopStrong tws_borderBottomStrong tws_1LineHeight">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.residualsGainLoss, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.csdContribution, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.engineWarrantyCont, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.adjNetContribution, 0)
+                             +      '</div>'
+                             +    '</div>'
+                             + '</div>';
+
+  if (contributionCalc.controllingLineItems){
+    contributionCalcColumnHTML = TWSContributionCalculation.setControllingValues(contributionCalc, contributionCalc.controllingLineItems, contributionCalcColumnHTML);
+  }
+
+  return contributionCalcColumnHTML;
+}
+
+TWSContributionCalculation.getContributionCalcColumnDomestic =  function(contributionCalc, headerCSSClass, contributionCalcLabelSet){
+
+  contributionCalcColumnHTML = '<div class="slds-col--padded slds-text-heading--smal tws_ContributionCalcColumnContainer">'
+                             +    '<div class="slds-grid slds-wrap slds-grid--pull-padded tws_borderRightStrong">'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Formula'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'contribCalcMethod')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_1LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_1LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'source')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded '+headerCSSClass+' tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +         '&nbsp'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'currentFormula')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Blended Normal'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'methodofCalculation')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="dealerNet">'
+                             +        TWSDetail_Formatting.formatCurrencyValue( contributionCalc.dealerNet, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="dealerNet">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="baseModelDnet">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.baseModelDnet, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="baseModelDnet">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="optionContent">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.optionContent, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionContent">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_underlinedText tws_heightToAdjust" data-name="optionMargin">'
+                             +         TWSDetail_Formatting.formatPercentValue(contributionCalc.optionMargin)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionMargin">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_heightToAdjust" data-name="optionContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.optionContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_highlightedGreen tws_underlinedText tws_heightToAdjust" data-name="baseModelContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.baseModelContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="baseModelContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_highlightedGreen tws_heightToAdjust" data-name="grossContribution">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.grossContribution, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_strongText tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="grossContribution">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="grossFormulaContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.grossFormulaContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="grossFormulaContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="concessionAmount">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.concessionAmount, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="concessionAmount">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="newTrucksTradeOA">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.newTrucksTradeOA, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="newTrucksTradeOA">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="residReserve">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.residReserve, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="residReserve">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="eWAdjustment">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.eWAdjustment, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="eWAdjustment">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="optionMargin">'
+                             +         TWSDetail_Formatting.formatPercentValue(contributionCalc.optionMargin)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionMargin">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      TWSContributionCalculation.addDynamicContributionCalculationRows(contributionCalc, contributionCalcLabelSet)
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.stdNetContribTruck, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-1 slds-col--padded slds-text-align--right tws_borderRight tws_strongText tws_borderTopStrong tws_borderBottomStrong tws_1LineHeight">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.chassisWarrantyCont, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.engineWarrantyCont, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.adjNetContribution, 0)
+                             +      '</div>'
+                             +    '</div>'
+                             + '</div>';
+
+  if (contributionCalc.controllingLineItems){
+   contributionCalcColumnHTML = TWSContributionCalculation.setControllingValues(contributionCalc, contributionCalc.controllingLineItems, contributionCalcColumnHTML);
+  }
+
+  return contributionCalcColumnHTML;
+}
+
+TWSContributionCalculation.getContributionCalcColumnDomesticSalesProposal =  function(contributionCalc, headerCSSClass, contributionCalcLabelSet){
+
+  contributionCalcColumnHTML = '<div class="slds-col--padded slds-text-heading--smal tws_ContributionCalcColumnContainer">'
+                             +    '<div class="slds-grid slds-wrap slds-grid--pull-padded tws_borderRightStrong">'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Formula'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'contribCalcMethod')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_1LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_1LineHeight">'
+                             +         TWSDetail_Formatting.getProperty(contributionCalc,'source')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded '+headerCSSClass+' tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +         '&nbsp'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="currentFormula">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'currentFormula')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +         'Blended Normal'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--center tws_strongText tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.getProperty(contributionCalc,'methodofCalculation')
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="grossFormulaContrib">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.grossFormulaContrib, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="grossFormulaContrib">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="concessionAmount">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.concessionAmount, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="concessionAmount">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="newTrucksTradeOA">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.newTrucksTradeOA, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="newTrucksTradeOA">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="rms">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.rms, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="rms">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="pCode">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.pCode, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="pCode">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="residReserve">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.residReserve, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="residReserve">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="eWAdjustment">'
+                             +         TWSDetail_Formatting.formatCurrencyValue(contributionCalc.eWAdjustment, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="eWAdjustment">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="optionMargin">'
+                             +         TWSDetail_Formatting.formatPercentValue(contributionCalc.optionMargin)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_controllingCell tws_heightToAdjust" data-name="optionMargin">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      TWSContributionCalculation.addDynamicContributionCalculationRows(contributionCalc, contributionCalcLabelSet)
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_darkHighlighted tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_borderTopStrong tws_strongText tws_darkHighlighted tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.stdNetContribTruck, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-1 slds-col--padded slds-text-align--right tws_borderRight tws_strongText tws_borderTopStrong tws_borderBottomStrong tws_1LineHeight">'
+                             +        '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.residualsGainLoss, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.csdContribution, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_3LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_3LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.engineWarrantyCont, 0)
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_strongText tws_2LineHeight">'
+                             +         '&nbsp;'
+                             +      '</div>'
+                             +      '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_2LineHeight">'
+                             +        TWSDetail_Formatting.formatCurrencyValue(contributionCalc.adjNetContribution, 0)
+                             +      '</div>'
+                             +    '</div>'
+                             + '</div>';
+
+  if (contributionCalc.controllingLineItems){
+    TWSContributionCalculation.setControllingValues(contributionCalc, contributionCalc.controllingLineItems, contributionCalcColumnHTML);
+  }
+
+  return contributionCalcColumnHTML;
+}
+
+
+TWSContributionCalculation.addDynamicContributionCalculationRows = function(contributionCalc, labels){
+
+  contributionRowsHTML = '';
+
+  for (var j=0; j<labels.length; j++){
+
+    value = 0;
+
+    if (contributionCalc.dynamicLineItems){
+      if (contributionCalc.dynamicLineItems[labels[j]]){
+        value = contributionCalc.dynamicLineItems[labels[j]].amount;
+      }
+    }
+
+    contributionRowsHTML += '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="contrCalcItem'+j+'">'
+                         +      TWSDetail_Formatting.formatCurrencyValue(value)
+                         +   '</div>'
+                         +   '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="contrCalcItem'+j+'">'
+                         +      '&nbsp;'
+                         +   '</div>'
+  }
+
+  return contributionRowsHTML;
+}
+
+
+
+TWSContributionCalculation.setControllingValues = function(contributionCalc, controllingValues, contributionCalcColumnHTML){
+
+  var result = $(contributionCalcColumnHTML);
+
+  var controllingSlots = result.find(".tws_controllingCell");
+
+  //set fixed values
+  rowName = controllingSlots.eq(controllingSlots.length-1).data('name');
+
+  controllingCellHtml = '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     'B/N CM'
+                      + '</div>'
+                      + '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     TWSDetail_Formatting.formatCurrencyValue(contributionCalc.bnCM, 0)
+                      + '</div>'
+
+  controllingSlots.eq(controllingSlots.length-1).replaceWith(controllingCellHtml);
+  //
+  rowName = controllingSlots.eq(controllingSlots.length-2).data('name');
+
+  controllingCellHtml = '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     'B/N Adj'
+                      + '</div>'
+                      + '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     TWSDetail_Formatting.formatCurrencyValue(contributionCalc.bnAdj, 0)
+                      + '</div>'
+
+  controllingSlots.eq(controllingSlots.length-2).replaceWith(controllingCellHtml);
+  //
+  rowName = controllingSlots.eq(controllingSlots.length-3).data('name');
+
+  controllingCellHtml = '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     'Adj CM'
+                      + '</div>'
+                      + '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     TWSDetail_Formatting.formatCurrencyValue(contributionCalc.adjCM, 0)
+                      + '</div>'
+
+  controllingSlots.eq(controllingSlots.length-3).replaceWith(controllingCellHtml)
+  //
+
+  var iter = 4;
+
+  //set dynamic values
+  for (var i=0; i<controllingValues.length && i<controllingSlots.length; i++){
+
+    rowName = controllingSlots.eq(controllingSlots.length-iter).data('name');
+
+    controllingCellHtml = '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                        +     controllingValues[i].name
+                        + '</div>'
+                        + '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                        +     TWSDetail_Formatting.formatCurrencyValue(controllingValues[i].amount, 0)
+                        + '</div>'
+
+    controllingSlots.eq(controllingSlots.length-iter).replaceWith(controllingCellHtml);
+    iter++;
+  }
+  //
+  rowName = controllingSlots.eq(controllingSlots.length-iter).data('name');
+
+  controllingCellHtml = '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     'Std CM'
+                      + '</div>'
+                      + '<div class="slds-size--1-of-4 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_controllingCell tws_heightToAdjust" data-name="'+rowName+'">'
+                      +     TWSDetail_Formatting.formatCurrencyValue(contributionCalc.stdCM, 0)
+                      + '</div>'
+
+  controllingSlots.eq(controllingSlots.length-iter).replaceWith(controllingCellHtml);
+
+  return result;
+}
+
+TWSContributionCalculation.addDynamicContributionCalculationLabels = function(labels){
+
+  contributionCalcLabelsHTML ='';
+
+  for (i=0; i<labels.length; i++){
+
+    contributionCalcLabelsHTML += '<div class="slds-col--padded slds-size--1-of-1 tws_borderBottomWhite tws_heightToAdjust" data-name="contrCalcItem'+i+'">'
+                                +   labels[i]
+                                + '</div>'
+  }
+
+  $('#tws_dummyDynamicContributionLabel').replaceWith(contributionCalcLabelsHTML);
+}
+
+TWSContributionCalculation.addDynamicContributionCalculationRows = function(contributionCalc, labels){
+
+  contributionRowsHTML = '';
+
+  for (var j=0; j<labels.length; j++){
+
+    value = 0;
+
+    if (contributionCalc.dynamicLineItems){
+      if (contributionCalc.dynamicLineItems[labels[j]]){
+        value = contributionCalc.dynamicLineItems[labels[j]].amount;
+      }
+    }
+
+    contributionRowsHTML += '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_heightToAdjust" data-name="contrCalcItem'+j+'">'
+                         +      TWSDetail_Formatting.formatCurrencyValue(value, 0)
+                         +   '</div>'
+                         +   '<div class="slds-size--1-of-2 slds-col--padded slds-text-align--right tws_borderRight tws_borderBottom tws_darkHighlighted tws_controllingCell tws_heightToAdjust" data-name="contrCalcItem'+j+'">'
+                         +      '&nbsp;'
+                         +   '</div>'
+  }
+
+  return contributionRowsHTML;
+}

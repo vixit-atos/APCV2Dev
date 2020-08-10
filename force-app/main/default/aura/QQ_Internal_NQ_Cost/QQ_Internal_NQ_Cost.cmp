@@ -1,0 +1,77 @@
+<aura:component >
+    <aura:attribute name="quoteid" type="Id"/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quoteitem" type="ASP_QQ_Line_Item__c" default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    <aura:attribute name="notelist" type="Note[]"/>
+    <aura:attribute name="editcostmode" type="boolean"/>
+    <aura:attribute name="oldcost" type="integer"/>
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>
+    <aura:attribute name="saved" type="boolean" default="false"/> 
+        
+    <div class="slds-box slds-theme_shade">
+        
+        <div class="slds-text-heading_small slds-float_left labelbold">Cost</div><br></br>
+        
+        <aura:if isTrue="{!v.quote.Quote_Type__c == 'Standard'}">
+            <div class="slds-m-top_xx-small slds-text-align_left">The creator of this quote has selected a line item with a standard cost.<br></br> If there is an error in the number below, you may revise the quote and let the validator know that a different line item is required.</div>
+            <aura:set attribute="else">
+                <div class="slds-m-top_xx-small slds-text-align_left">Databook Code: <ui:outputText value="{!v.quoteitem.Databook_Code__c}"/>  </div>
+                
+            </aura:set>
+        </aura:if>
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="12" 
+                                  smallDeviceSize="12" 
+                                  mediumDeviceSize="4" 
+                                  largeDeviceSize="4" 
+                                  padding="around-small"> 
+                <aura:if isTrue="{!v.editcostmode}">
+                    
+                    <lightning:input class="slds-text-align_left"
+                                     aura:id="Cost"
+                                     label="Cost" 
+                                     type="number"
+                                     name="COST__c"
+                                     step="0.01"
+                                     formatter="currency"
+                                     required="true"
+                                     value="{!v.quoteitem.Cost__c}" />
+                    <aura:set attribute="else">
+                        <div class="slds-text-align_left">Cost: <ui:outputCurrency value="{!v.quoteitem.Cost__c}"/> USD </div>
+                        
+                    </aura:set>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <aura:if isTrue="{!v.haseditaccess}">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" 
+                                      smallDeviceSize="12" 
+                                      mediumDeviceSize="4" 
+                                      largeDeviceSize="4" 
+                                      padding="around-small"> 
+                    <div class="slds-float_left">
+                        <lightning:button iconName="{!v.editcostmode ? 'utility:save' : 'utility:edit'}" 
+                                          variant="{!v.editcostmode ? 'brand' : 'brand'}"
+                                          label="{!v.editcostmode ? 'Save Cost' : 'Edit Cost'}"
+                                          onclick="{!v.editcostmode ? c.savecost : c.editcost}"
+                                          name="Edit"/>
+                        
+                        <aura:if isTrue="{!v.editcostmode}"> 
+                            <lightning:button iconPosition="left"
+                                              iconName="utility:close" 
+                                              variant="neutral"
+                                              label="Cancel"
+                                              onclick="{! c.cancelcost}"
+                                              name="Cancel"/>
+                            
+                        </aura:if> 
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:if>
+        
+        
+        <br></br>
+    </div>
+</aura:component>

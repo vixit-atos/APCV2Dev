@@ -1,0 +1,84 @@
+<apex:page controller="MyTasksHomeComponentController" id="full" showHeader="true" >
+ <style>
+  .customnotabBlock .brandSecondaryBrd {
+  border-top:3px solid #236fbd!important;
+  margin-left: 0cm;
+  }
+  .hasMotif
+{
+margin-right : 0px;
+margin-left: 0px;
+
+}
+  
+  </style> 
+ 
+    
+  
+ 
+  <apex:pageBlock >
+      
+    
+
+      
+       
+      <apex:pageBlockSection columns="1">
+           
+           <apex:form >
+                       
+           <h1 style="font-size:1.30em;font-weight:510;margin-left: -0.3cm;">My Tasks</h1>
+           <apex:selectList value="{!selectedOption}" multiselect="false" size="1" style="float: right;" >
+                              <apex:selectOptions value="{!Values}"/>
+                             <apex:actionsupport event="onchange" action="{!Onchange}"  />
+                            </apex:selectList>
+            
+            
+            <apex:commandButton id="btn" value="New" onclick="window.open('../setup/ui/recordtypeselect.jsp?ent=Task&retURL=%2Fhome%2Fhome.jsp&save_new_url=%2F00T%2Fe%3FretURL%3D%252Fhome%252Fhome.jsp','_parent');" style="display: block; margin: -20px auto;"/>
+           <br/><br/>
+           <apex:outputText rendered="{!Message}" > You have no open tasks scheduled for this period. </apex:outputText>
+           <!--<apex:outputText rendered="{!Message1}" > {!exceptionmessage} </apex:outputText> -->
+          <apex:pageMessages />  
+     <!--      <div style="height: 330px;margin-left:-10px"> -->
+           <apex:pageBlockTable id="pgBlk" value="{!TaskList}" var="P" style=" margin-left: 0px; " columnsWidth="5%,10%,20%,15%,15%,10%,25%" rendered="{!RenderTable}" >
+            
+              <apex:column headerValue="Complete" >
+              <apex:outputLink value="/{!P.SubjectId}/e?close=1&retURL=%2Fhome%2Fhome.jsp" target="_parent" style="text-decoration:none; color:#2F5CA0;">X</apex:outputLink>   
+              </apex:column>
+              <apex:column headerValue="Date" ><apex:outputText value="{0,date,MM-dd-yyyy}" style="color:brown;" rendered="{!IF(AND(NOT(ISBLANK(P.DueDate)),(P.DueDate < TODAY())),true,false)}" >
+                   <apex:param value="{!P.DueDate}" />
+                     </apex:outputText>
+               <apex:outputText value="{0,date,MM-dd-yyyy}" rendered="{!IF(AND(NOT(ISBLANK(P.DueDate)),(P.DueDate >= TODAY())),true,false)}" >
+                   <apex:param value="{!P.DueDate}" />
+                     </apex:outputText>      
+               </apex:column>
+              <apex:column headerValue="Status" > {!P.Status} </apex:column>
+              <apex:column headerValue="Subject" >
+             <!-- <a href="/{!P.SubjectId}" target="_blank" id="{!P.SubjectId}"
+              onblur="LookupHoverDetail.getHover('{!P.SubjectId}').hide();" 
+              onfocus="LookupHoverDetail.getHover('{!P.SubjectId}', '/{!P.SubjectId}/m?retURL=%2F{!P.SubjectId}&isAjaxRequest=1').show();"
+  onmouseover="LookupHoverDetail.getHover('{!P.SubjectId}', '/{!P.SubjectId}/m?retURL=%2F{!P.SubjectId}').show();" onmouseout="LookupHoverDetail.getHover('{!P.SubjectId}').hide();"> 
+    <apex:outputtext value="{!P.subject}"/>
+       </a> -->
+               <apex:outputLink value="/{!P.SubjectId}" target="_parent" >{!P.subject}</apex:outputLink>
+              </apex:column>
+              <apex:column headerValue="Name" >
+              <apex:outputLink value="/{!P.NameId}" target="_parent">{!P.Name}</apex:outputLink>     
+              </apex:column>
+              <apex:column headerValue="Related To" >
+              <apex:outputLink value="/{!P.RelatedToId}" target="_parent" >{!P.RelatedTo}</apex:outputLink>   
+              </apex:column>
+              <apex:column headerValue="Account">
+              <apex:outputLink value="/{!P.AccountId}" target="_parent" >{!P.AccountName}</apex:outputLink>   
+              </apex:column>
+              
+              
+              </apex:pageBlockTable>
+         <!-- <apex:outputLink value="/apex/My_Task_Home_Component_Vfpage?viewmore=false" rendered="{!viewFlag}">viewmore >></apex:outputlink> -->
+          </apex:form>
+          
+      </apex:pageBlockSection>
+  
+  </apex:pageBlock>  
+  
+  
+</apex:page>

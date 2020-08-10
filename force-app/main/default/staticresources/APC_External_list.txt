@@ -1,0 +1,60 @@
+## Static Resource for APC_List (Home page) to map the columns
+
+[
+  {
+    "label": "CASE NUMBER ",
+    "value": "CASENUMBER",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "PART NUMBER",
+    "value": "PARTNUMBER",
+    "Field": "partnumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "SAP ORDER #",
+    "value": "SAPOrder#",
+    "Field": "saporder",
+    "Search": "",
+    "Sort": "ASC"
+  },
+   {
+    "label": "CUSTOMER PO #",
+    "value": "CUSTOMERPO#",
+    "Field": "customerpo#",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "ACTION REQUESTED",
+    "value": "ACTIONREQUESTED",
+    "Field": "actionrequested",
+    "Search": "",
+    "Sort": "ASC"
+  },
+   {
+    "label": "STATUS",
+    "value": "STATUS#",
+    "Field": "status",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "CREATED DATE",
+    "value": "CREATEDDATE",
+    "Field": "CreatedDate",
+    "Search": "",
+    "Sort": "ASC"
+  },
+   {
+    "label": "LAST RESPONSE",
+    "value": "LASTRESPONSE#",
+    "Field": "lastresponse",
+    "Search": "",
+    "Sort": "ASC"
+  }
+]

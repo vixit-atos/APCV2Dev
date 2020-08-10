@@ -1,0 +1,103 @@
+<aura:component controller="DVS_ScoreCardController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+ <aura:attribute name="record" type="Object" 
+      description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" 
+      description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" 
+      description="An error message bound to force:recordData"/>
+   
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        mode="VIEW"
+        recordUpdated="{!c.doInit}"/>
+    <aura:attribute name="scorebar" type="DVS_Scouting__c" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   	<lightning:card title="Evaluation Score">
+      <table class="slds-table slds-table_bordered slds-table_fixed-layout slds-no-cell-focus slds-table_cell-buffer " align="center" role="grid" style="width: 100%;">
+      <thead>
+        <!--<tr class="slds-text-title_caps">--><tr>
+          <th scope="col">
+            <div class="slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Business Model">Business Model</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Team Dynamic">Team Dynamic</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Financial Framework">Financial Framework</span>
+            </div>
+          </th>  
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center tableHeaderFontSize">
+                <span class="slds-truncate tableHeaderFontSize" title="DTNA Revenue Potential">DTNA Revenue Potential</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Technology">Technology</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Global">Global</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Strategic Alignment">Strategic Alignment</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Strategic Alignment">Significant Impact</span>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="slds-truncate slds-align_absolute-center">
+                <span class="slds-truncate tableHeaderFontSize" title="Executive Engagement">Executive Engagement</span>
+            </div>
+          </th>   
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Business Model">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Business_Model_Score__c == 3, 'G', if (v.scorebar.Business_Model_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+          </td>
+          <td data-label="Team Dynamic">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Team_Dynamic_Score__c == 3, 'G', if (v.scorebar.Team_Dynamic_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+          </td>
+          <td data-label="Financial Framework">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Financial_Framework_Score__c == 3, 'G', if (v.scorebar.Financial_Framework_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+          </td>
+          <td data-label="DTNA Revenue Potential">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.DTNA_Revenue_Potential_Score__c == 3, 'G', if (v.scorebar.DTNA_Revenue_Potential_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+          </td>
+          <td data-label="Technology">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Technology_Score__c == 3, 'G', if (v.scorebar.Technology_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+            </td>
+                <td data-label="Global">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Global_Score__c == 3, 'G', if (v.scorebar.Global_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+            </td>
+             <td data-label="Strategic Alignment">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Strategic_Alignment_Score__c == 3, 'G', if (v.scorebar.Strategic_Alignment_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+            </td>
+            <td data-label="Significant Impact">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Significant_Impact_Score__c == 3, 'G', if (v.scorebar.Significant_Impact_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+            </td>
+             <td data-label="Executive Engagement">
+             <img class="centralizeImage" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorebar.Executive_Engagement_Score__c == 3, 'G', if (v.scorebar.Executive_Engagement_Score__c == 2, 'Y',  'R')) + '.jpg'}"/>           
+            </td>
+       </tr>
+      </tbody>
+    </table>      
+  </lightning:card>  
+</aura:component>

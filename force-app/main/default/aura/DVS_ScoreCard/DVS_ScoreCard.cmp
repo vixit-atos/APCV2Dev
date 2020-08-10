@@ -1,0 +1,361 @@
+<aura:component  controller="DVS_ScoreCardController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId" access="global" >
+    <aura:attribute name="record" type="Object" 
+      description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" 
+      description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" 
+      description="An error message bound to force:recordData"/>
+   
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        mode="VIEW"
+        recordUpdated="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+  	<aura:attribute name="scorecard" type="DVS_Scouting__c" />
+    <aura:attribute name="changed" type="boolean" default="false" />
+    <lightning:card  title="Evalution Score Card" >
+    <div class="slds-table_edit_container slds-is-relative">
+       <!-- <lightning:button class="slds-align_absolute-center" label="Save" onclick="{!c.save}"/><br/>-->
+        <aura:if isTrue="{!v.changed}" >
+            <lightning:button class="slds-align_absolute-center" label="Save" onclick="{!c.savebtn}"/>
+        	<h5 align="right" style="padding-right: 5%;  color: red ">Please save after the changes.</h5>
+        </aura:if>     
+        <table  align="center" class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout slds-no-cell-focus slds-table_edit" role="grid" style="width: 90%;">
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Name" scope="col" style="width: 25%;">
+              <div class="slds-th__action"  tabindex="-1">
+                <span class="slds-truncate" title="Name">Evalution Criteria</span>
+              </div>
+            </th>
+            <!--<th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Account Name" scope="col" style="width: 20%;">
+              <div class="slds-th__action" tabindex="-1">
+                <span class="slds-truncate" title="Account Name">Assessment</span>
+              </div>
+              <span class="slds-assistive-text" aria-live="assertive" aria-atomic="true">Sorted none</span>
+            </th>-->
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Close Date" scope="col" style="width: 25%;">
+              <div class="slds-th__action" tabindex="-1">
+                <span class="slds-truncate" title="Close Date">Risk</span>
+              </div>
+            </th>
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Stage" scope="col" style="width: 25%;">
+              <div class="slds-th__action" tabindex="-1">
+                <span class="slds-truncate" title="Stage">Percentage %</span>                
+              </div>
+            </th>
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Confidence" scope="col" style="width: 25%;">
+              <div class="slds-th__action" tabindex="-1">
+              	<span class="slds-truncate" title="Confidence">Justification</span>
+              </div>
+              <span class="slds-assistive-text" aria-live="assertive" aria-atomic="true">Sorted none</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+            <!--Business Model-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Business Model</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate" >
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Business_Model_Score__c == 3, 'G', if (v.scorecard.Business_Model_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Business_Model_Score__c == 3, 'High (3)', if (v.scorecard.Business_Model_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate"> {!v.scorecard.Business_Model_Score__c*15}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Business_Model_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+            <!--Team Dynamic-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Team Dynamic</span>
+                  </span>
+                </td>
+               <!-- <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Team_Dynamic_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Team_Dynamic_Score__c == 3, 'G', if (v.scorecard.Team_Dynamic_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Team_Dynamic_Score__c == 3, 'High (3)', if (v.scorecard.Team_Dynamic_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate">{!v.scorecard.Team_Dynamic_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Team_Dynamic_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+			<!--Financial Framework-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Financial Framework</span>
+                  </span>
+                </td>
+              <!--  <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Financial_Framework_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Financial_Framework_Score__c == 3, 'G', if (v.scorecard.Financial_Framework_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Financial_Framework_Score__c == 3, 'High (3)', if (v.scorecard.Financial_Framework_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate">{!v.scorecard.Financial_Framework_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Financial_Framework_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+			<!--DTNA Revenue Potential-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >DTNA Revenue Potential</span>
+                  </span>
+                </td>
+              <!--  <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.DTNA_Revenue_Potential_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.DTNA_Revenue_Potential_Score__c == 3, 'G', if (v.scorecard.DTNA_Revenue_Potential_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.DTNA_Revenue_Potential_Score__c == 3, 'High (3)', if (v.scorecard.DTNA_Revenue_Potential_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate">{!v.scorecard.DTNA_Revenue_Potential_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.DTNA_Revenue_Potential_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+			<!--Technology-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Technology</span>
+                  </span>
+                </td>
+              <!--  <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Technology_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Technology_Score__c == 3, 'G', if (v.scorecard.Technology_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Technology_Score__c == 3, 'High (3)', if (v.scorecard.Technology_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate"> {!v.scorecard.Technology_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Technology_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+            <!--Global-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Global</span>
+                  </span>
+                </td>
+             <!--   <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Global_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Global_Score__c == 3, 'G', if (v.scorecard.Global_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Global_Score__c == 3, 'High (3)', if (v.scorecard.Global_Score__c == 2, 'Medium (2)','Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate"> {!v.scorecard.Global_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Global_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+            <!--Strategic Alignment-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Strategic Alignment</span>
+                  </span>
+                </td>
+              <!--  <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Strategic_Alignment_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Strategic_Alignment_Score__c == 3, 'G', if (v.scorecard.Strategic_Alignment_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Strategic_Alignment_Score__c == 3, 'High (3)', if (v.scorecard.Strategic_Alignment_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate"> {!v.scorecard.Strategic_Alignment_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Strategic_Alignment_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+			<!--Significant Impact-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Significant Impact</span>
+                  </span>
+                </td>
+               <!-- <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Significant_Impact_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Significant_Impact_Score__c == 3, 'G', if (v.scorecard.Significant_Impact_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Significant_Impact_Score__c == 3, 'High (3)', if (v.scorecard.Significant_Impact_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate"> {!v.scorecard.Significant_Impact_Score__c*15}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Significant_Impact_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>
+			<!--Executive Engagement-->
+            <tr>
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate" >Executive Engagement</span>
+                  </span>
+                </td>
+           <!--     <td class="slds-cell-edit" role="gridcell">
+                	<ui:inputCheckbox change="{!c.save}" aura:id="output" value="{!v.scorecard.Executive_Engagement_Assessment__c}"/>
+                </td>-->
+                <td class="slds-cell-edit" role="gridcell">
+                    <span class="slds-grid slds-grid_align-spread">     
+                        <span class="slds-truncate">
+                            <div class="inner" style="margin: 0 auto;width: 100%;">
+                                <img style="padding-right: 15px; width: 30px;" align="left" src="{!$Resource.SSIStatusIcon + '/StatusIcon' + if(v.scorecard.Executive_Engagement_Score__c == 3, 'G', if (v.scorecard.Executive_Engagement_Score__c == 2, 'Y',  'R')) + '.jpg'}"/> 
+                                {!if (v.scorecard.Executive_Engagement_Score__c == 3, 'High (3)', if (v.scorecard.Significant_Impact_Score__c == 2, 'Medium (2)', 'Low (1)'))}
+                            </div>
+                        </span>
+                  	</span>
+                </td>            
+                <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                  <span class="slds-grid slds-grid_align-spread">
+                    <span class="slds-truncate"> {!v.scorecard.Executive_Engagement_Score__c*10}%</span>
+                  </span>
+                </td>
+                <td class="slds-cell-edit" role="gridcell">
+               		<span class="slds-grid slds-grid_align-spread">  
+                   		<ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Executive_Engagement_Justification__c}" rows="1"/>                              
+                	</span>
+                </td>
+            </tr>            
+        </tbody>
+        </table>
+        <br/><br/>
+	  	<table  align="center" class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout slds-no-cell-focus slds-table_edit" role="grid" style="width: 90%;">
+          <thead>
+              <tr class="slds-line-height_reset">
+                <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Name" scope="col" style="width: 20%;">
+                  <div class="slds-th__action"  tabindex="-1">
+                    <span class="slds-truncate" title="Recommendation">Recommendation</span>
+                  </div>
+                </th>
+                </tr>
+          </thead>
+          <tbody>
+          		<tr>
+                    <td class="slds-cell-edit" role="gridcell">
+                        <span class="slds-grid slds-grid_align-spread">  
+                            <ui:inputTextArea change="{!c.save}" aura:id="comments" value="{!v.scorecard.Recommendation__c}" rows="5"/>                              
+                        </span>
+                    </td>
+                </tr>
+           </tbody> 
+        </table>
+		</div>
+    </lightning:card>
+</aura:component>

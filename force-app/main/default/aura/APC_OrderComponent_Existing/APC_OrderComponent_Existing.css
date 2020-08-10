@@ -1,0 +1,77 @@
+.THIS .apc-table-header_label{
+    font-weight:Thin;
+    width:8rem;
+    height:0px !important;
+}
+.THIS .apc-header-item{
+    width:8rem;
+    border-right: 1px white solid;
+}
+.THIS .slds-cell-fixed, .THIS .slds-table_header-fixed_container{
+    background-color: #265C79;
+    color:white;
+    padding-top:0.6rem;
+    z-index: 10;
+}
+.THIS .apc-table-note {
+    color: red;
+    font-size: 0.5rem;
+}
+
+.THIS .table-container{
+    overflow: auto hidden;
+    height: 20rem;
+    color:#265C79;
+    border: 1px solid grey;
+}
+.THIS .table-container>div{
+    height:20rem;
+    background-color: white;
+}
+.THIS .action-column{
+    width: 5rem;
+}
+.THIS .disabledPaginationButton{
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.THIS .spins::after {
+    position: absolute;
+    content: 'Processing...';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 1.5rem );
+    font-style: barlow;
+    font-size: 1.2rem;
+    
+}
+.THIS .slds-button_icon{
+    line-height: 1;
+    vertical-align: inherit !important;
+    justify-content: center;
+    color: none;
+    flex-shrink: 0;
+}
+.THIS .uiInput--input.input, .THIS .slds-select_container .slds-select{
+    
+}
+.THIS .slds-form-element__label{
+   font-size: 1.4rem !important;
+}
+.THIS .uiInput--input.input{
+    margin: 5px 0px 0px 0px;
+}
+
+.THIS .forceCommunityToastManager.forceToastManager .forceVisualMessageQueue {
+    
+    top: 34rem;
+    margin-left: 14rem;
+}
+.THIS .apc-validation-error {
+    border: 2px solid FireBrick !important;
+}
+.THIS .slds-radio_button .slds-radio_faux{
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
+    font-size: 1.34rem !important;
+}

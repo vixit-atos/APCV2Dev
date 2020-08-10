@@ -1,0 +1,654 @@
+<apex:page controller="DTNA_Quote_Activity_List" tabStyle="Concession__c" sidebar="false" showHeader="false"  docType="html-5.0" standardStylesheets="true">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() 
+                          {
+                              function setHeight() 
+                              {
+                                  windowHeight = $(window).innerHeight()-94;
+                                  windowWidth = $(window).innerWidth()-20;
+                                  var x = document.getElementsByClassName("container");
+                                  // x[1].style.overflow= "auto";
+                                  var y = document.getElementsByClassName("FloatingHeader");
+                                  if (windowHeight < 300)
+                                  {
+                                      windowHeight = 300;
+                                  }
+                                  x[0].style.height= windowHeight+ "px";
+                                  x[0].style.width= windowWidth+ "px";
+                                  y[0].style.top= (windowHeight * -1) + "px";
+                              };
+                              setHeight();
+                              document.getElementById("qaQ1").innerHTML = quarter_of_the_year(1);
+                              document.getElementById("qaQ2").innerHTML = quarter_of_the_year(2);
+                              document.getElementById("qaQ3").innerHTML = quarter_of_the_year(3);
+                              document.getElementById("qaQ4").innerHTML = quarter_of_the_year(4);
+                              document.getElementById("qaQ5").innerHTML = quarter_of_the_year(5);
+                              
+                              $(window).resize(function()
+                                               {
+                                                   //setHeightAll();
+                                                   setHeight(); 
+                                               });
+                          });
+    </script>
+    
+    <script>
+    $(function ()
+      {
+          'use strict';
+          var container = document.querySelector('.container');
+          var table = document.querySelector('table');
+          let el = document.querySelector('#qaContainer');
+          var leftHeaders = [].concat.apply([], document.querySelectorAll('tbody th'));
+          var topHeaders = [].concat.apply([], el.querySelectorAll('thead th'));
+          var computed = window.getComputedStyle(topHeaders[0]);
+          
+          let el1 = document.querySelector('#FloatingHeader');
+          var floatingHeader = [].concat.apply([], el1.querySelectorAll('th'));
+          
+          var iloop=0;
+          var vWidth='';
+          var icheck=0;
+          while(iloop < 7)
+          {
+              computed = window.getComputedStyle(topHeaders[iloop]);
+              // console.log(floatingHeader[iloop]);
+              // console.log(computed.width);
+              floatingHeader[iloop].width = computed.width;
+              if((!!window.chrome && !!window.chrome.webstore) || (typeof InstallTrigger !== 'undefined'))
+              {
+                  floatingHeader[iloop].style.boxSizing = "border-box";
+              }
+              floatingHeader[iloop].height = computed.height;
+              // console.log(floatingHeader[iloop]);
+              iloop++;
+          }
+          
+          container.addEventListener('scroll', function (e) 
+                                     {
+                                         var x = container.scrollLeft;
+                                         var y = container.scrollTop;
+                                         
+                                         //document.getElementById("qaOutputDisp").innerHTML = 'Hi' + x + y + '{!$User.UITheme}';
+                                         
+                                         topHeaders.forEach(function (topHeader, i) {
+                                             if (i < 7) {
+                                                 topHeader.style.transform = translate(x, y);
+                                             } else {
+                                                 topHeader.style.transform = translate(0, y);
+                                             }
+                                         });
+                                         leftHeaders.forEach(function (leftHeader) {
+                                             leftHeader.style.transform = translate(x, 0);
+                                         });
+                                         // topLeft.style.transform = translate(x, y);
+                                     });
+          
+          
+          function translate(x, y) 
+          {
+              return 'translate(' + x + 'px, ' + y + 'px)';
+          }
+      })();
+    
+    function quarter_of_the_year(count) 
+    {
+        var today = new Date();
+        today.setMonth(today.getMonth() + (count-1) * 3);
+        var month = today.getMonth() + 1;
+        return ('Q' + String(Math.ceil(month / 3)) + '-' + String(today.getFullYear()).substring(2, 4));
+    }
+    </script>
+    
+    <!-- <script>
+
+
+var txtSelectedValuesObj = document.getElementById('txtSelectedValues');
+var res = txtSelectedValuesObj.replace(new RegExp(';', 'g'), '<br/>');
+document.getElementById("qaSelectList").innerHTML =res; 
+
+
+</script>-->
+
+      
+    
+    <script>
+    function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                     
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+        function UnselectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                     
+                    inputCheckBox[i].checked = false;
+                }
+            }
+        }
+    function submitListener(e)
+    {
+        var keynum = 0;
+        if (window.event)
+        {
+            keynum = window.event.keyCode;
+        }
+        else if (e.which)
+        {
+            keynum = e.which;
+        }
+        // Here we check whether the Enter button was pressed
+        if (keynum == 13)
+        {
+            GotoPage();;
+        }
+    }
+    
+    </script>
+    
+    
+    
+    <style>
+        body 
+        {
+        background: #ccc;
+        
+        }
+        .qadataheader
+        {
+        background: #cce0de !important;
+        }
+        .container 
+        {
+        border:0px solid #d0dddf;
+        overflow: scroll;
+        position: relative;
+        }
+        .QAtest table
+        {
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0px;
+        position: absolute;
+        }
+        .QAtest th, .QAtest td 
+        {
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        padding: 5px 5px;
+        width: 100px;
+        box-sizing: border-box;
+        margin: 0;
+        }
+        .QAtest td 
+        {
+        background: #e5efee;
+        }
+        .QAtest th,.top-left 
+        {
+        transition-duration: 0s;
+        background: #7fb2ac;
+        white-space: normal;
+        }
+        .top-left
+        {
+        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-right: 0px solid #ccc;
+        border-bottom: 0px solid #ccc;
+        }
+        .top-left td
+        {
+        box-sizing: border-box;
+        position: absolute;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        padding: 5px 5px;
+        width: 100px;
+        box-sizing: border-box;
+        margin: 0;
+        }
+        .FloatingHeader th
+        {    
+        background: #7fb2ac;
+        white-space: normal;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        padding: 0px 0px;
+        box-sizing: border-box;
+        margin: 0;
+        border-spacing: 0px;
+        }
+        
+       
+        
+        .FloatingHeader
+        {
+        display: block;
+        top: -382px;
+        position: relative;
+        height: 0px;
+        }
+        #qaControls
+        {
+        
+        }
+        .qaButtons
+        {
+        font-size: 12px !Important;
+        }
+        .disabled 
+        {
+        pointer-events: none;
+        cursor: default;
+        color: lightgray !Important; 
+        }
+        .QAPageNumber
+        {
+        width: 35px;
+        text-align: right;
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        }
+        .FilterHead
+        {
+        font-weight: bold;
+        }
+        .FilterTitle
+        {
+        font-weight: bolder;
+        background: #8BABB1;
+        padding-left: 3px;
+        font-size: 14px;
+        }
+        .FilterSection
+        {
+        border:1px solid #d0dddf;
+        border-bottom-width: 3px;
+        }
+        .ExcelHead
+        {
+        font-weight: bold;
+        }
+        .ExcelTitle
+        {
+        
+        font-weight: bolder;
+        background: #8BABB1;
+        padding-left: 3px;
+        font-size: 14px;
+        }
+        .ExcelSection
+        {
+          
+        border:1px solid #d0dddf;
+        border-bottom-width: 1px; 
+        overflow: auto;
+        }
+        
+        
+        .SelectionBox{
+        float:left;
+        padding-top: 1%;
+        padding-left: 2%;
+        padding-Bottom: 1%;
+        }
+        
+        .CountExcel{ 
+ 
+        float: right;
+        position: absolute;
+        left: 19%;
+        color:#003300;
+        }
+        
+        .pbBody
+        {
+        margin: 0px 0px 0px 0px !important;
+        }
+        
+        .classStage select
+        {
+        width:79px !important;
+        }
+        .brandSecondaryBrd
+        {
+        margin: 0px 0px 0px 0px !important;
+        }
+        
+    </style>
+    
+    <apex:form id="qaSearchForm" >
+        <apex:pageBlock id="qaBlock" title="Quote Activity">
+            <apex:actionFunction name="GotoPage" action="{!GotoPage}"/>
+            <!-- {!devlog}
+{!lstFilters} -->
+            <div id="qaOutputDisp"></div>
+            <apex:panelGrid id="qaControls" columns="15" cellspacing="0px" width="100px">
+                <apex:commandButton action="{!first}" value="First" styleClass="qaButtons"/>
+                <apex:commandButton action="{!previous}" value="Previous" styleClass="qaButtons {!hasPrevious}"/>
+                <apex:inputText styleClass="QAPageNumber"  maxlength="4" onchange="GotoPage();" value="{!QApageNumber}" /> 
+                <apex:outputText styleclass="QALastPageNumber" style="white-space: nowrap;vertical-align: bottom;padding-top: 2.5px;font-size: 14px;" value="/ {!QALastPageNumber}"/ >
+                    <apex:commandButton action="{!next}" value="Next" styleClass="{!hasNext} qaButtons"/>
+                    <apex:commandButton action="{!last}" value="Last" styleClass="qaButtons"/>
+                    <div style="margin-right: 2.5em">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <apex:commandButton action="{!Filter}" value="Filter" style="background: palegoldenrod;" styleClass="qaButtons"/>
+                    <apex:commandButton action="{!openPage}" value="Reload" styleClass="qaButtons"/>
+                    <apex:commandButton action="{!Save}" value="Save" style="background: palegreen;" styleClass="qaButtons"/>
+                    <!--   <apex:commandButton value="Print" immediate="true" onclick="window.print();" styleClass="qaButtons" /> -->
+                    <apex:commandButton value="Back" immediate="true" style="background: paleturquoise;" action="{!doCancel}"  styleClass="qaButtons"  />
+                    <apex:commandButton action="{!ExcelSelectionListDisplay}" value="Excel" style="background: palegoldenrod;" styleClass="qaButtons" /> 
+                     <!--  <apex:commandButton action="{!Export}" value="Excel Export All" style="background: paleturquoise;width: 50px; word-wrap: break-word;" />
+                   <apex:commandButton action="{!Export}" value="Excel"  styleClass="qaButtons" /> -->
+                </apex:panelGrid>
+                
+                <apex:pageMessages id="Message" />
+                
+                <div class="FilterSection" style="display:{!If(displayFilter,'block','none')};">
+                    <div class="FilterTitle">Filter:</div>
+                    <apex:outputPanel id="filterPanel">
+                        <table class="QAFilterTable">
+                            <tr style="display:{!If(displayFilterHeader,'','none')};">
+                                <td/>
+                                <td class="FilterHead">Field</td>
+                                <td class="FilterHead">Operator</td>
+                                <td class="FilterHead">Value</td>
+                            </tr>
+                            
+                            <apex:repeat id="filterTable" value="{!lstFilters}" var="varFilterObj">
+                                <tr>
+                                    <td>  
+                                        <apex:commandButton action="{!FilterRemove}" style="font-size:10px;" value="X" reRender="filterPanel">
+                                            <apex:param assignTo="{!intDelFilter}" value="{!varFilterObj.id}" name="intDelFilter" />
+                                        </apex:commandButton>
+                                    </td>
+                                    <td class="FilterRow">
+                                        <apex:selectList id="qaSelectList" value="{!varFilterObj.FieldName}"  size="1">
+                                            <apex:selectOption itemLabel="CONC NO" itemValue="Name" />
+                                            <apex:selectOption itemValue="LEAD_CONC_NO__c" itemLabel="LEAD NO" />
+                                            <apex:selectOption itemValue="DIST_MGR_NAME__c" itemLabel="DM" />
+                                            <apex:selectOption itemValue="Region_Desc__c" itemLabel="REGION" />
+                                            <apex:selectOption itemValue="SLS_DIST_CD__c" itemLabel="DIST" />
+                                            <apex:selectOption itemValue="CONC_STATUS_CD__c" itemLabel="CONC STATUS" />
+                                            <apex:selectOption itemValue="Stage__c" itemLabel="STAGE"/>
+                                            <apex:selectOption itemValue="CUST_NAME_50__c" itemLabel="CUSTOMER" />
+                                            <apex:selectOption itemValue="Dealer_Code__c" itemLabel="SO CD" />
+                                            <apex:selectOption itemValue="RQST_MIN_UNITS__c" itemLabel="DEAL MIN" />
+                                            <apex:selectOption itemValue="CONT_PRSN_NAME_42__c" itemLabel="SALES PERSON" />
+                                            <apex:selectOption itemValue="Create_Date__c" itemLabel="CREATED DATE" />
+                                            <apex:selectOption itemValue="Probability__c" itemLabel="PROBABILITY" />
+                                            
+                                            <!-- <apex:selectOption itemValue="Name" itemLabel="CONC NO" />
+<apex:selectOption itemValue="LEAD_CONC_NO__c" itemLabel="LEAD NO" />
+<apex:selectOption itemValue="Conc_Repls__c" itemLabel="CONC REPLS" />
+<apex:selectOption itemValue="DIST_MGR_NAME__c" itemLabel="DM" />
+<apex:selectOption itemValue="Region_Desc__c" itemLabel="REGION" />
+<apex:selectOption itemValue="SLS_DIST_CD__c" itemLabel="DIST" />
+<apex:selectOption itemValue="Stage__c" itemLabel="Stage" />
+<apex:selectOption itemValue="CUST_NAME_50__c" itemLabel="CUSTOMER" />
+<apex:selectOption itemValue="Customer_Fleet_Size__c" itemLabel="CURRENT FLEET SIZE" />
+<apex:selectOption itemValue="Dealer_Code__c" itemLabel="SO CD" />
+<apex:selectOption itemValue="Account__r" itemLabel="DEALER NAME" />
+<apex:selectOption itemValue="Class__c" itemLabel="CLASS" />
+<apex:selectOption itemValue="VEH_BASE_MDL_NO__c" itemLabel="MODEL" />
+<apex:selectOption itemValue="Engine_Mfr__c" itemLabel="ENGINE" />
+<apex:selectOption itemValue="CONC_STATUS_CD__c" itemLabel="CONC STATUS" />
+<apex:selectOption itemValue="RQST_MIN_UNITS__c" itemLabel="DEAL MIN" />
+<apex:selectOption itemValue="APPR_MIN_UNITS__c" itemLabel="APPROVED MIN QTY" />
+<apex:selectOption itemValue="Order_Count__c" itemLabel="ORDER COUNT" />
+<apex:selectOption id="qaQ1opt" itemValue="Q1__c" itemLabel="Q1" />
+<apex:selectOption id="qaQ2opt" itemValue="Q2__c" itemLabel="Q2" />
+<apex:selectOption id="qaQ3opt" itemValue="Q3__c" itemLabel="Q3" />
+<apex:selectOption id="qaQ4opt" itemValue="Q4__c" itemLabel="Q4" />
+<apex:selectOption id="qaQ5opt" itemValue="Q5__c" itemLabel="Q5" />
+<apex:selectOption itemValue="DEAL_QUOTE_COUNT__c" itemLabel="DEAL QUOTE/COUNT" />
+<apex:selectOption itemValue="Target__c" itemLabel="TARGET" />
+<apex:selectOption itemValue="Probability__c" itemLabel="PROBABILITY" />
+<apex:selectOption itemValue="CONT_PRSN_NAME_42__c" itemLabel="SALES PERSON" />
+<apex:selectOption itemValue="APPR_CONC_PCT__c" itemLabel="CONC %" />
+<apex:selectOption itemValue="RQST_CONC_PCT__c" itemLabel="RQ CONC %" />
+<apex:selectOption itemValue="APPR_NET_CNTRB__c" itemLabel="NET CONT" />
+<apex:selectOption itemValue="CMPTR_CD__c" itemLabel="COMPETITION" />
+<apex:selectOption itemValue="Account__r" itemLabel="DEALER CITY" />
+<apex:selectOption itemValue="CITY__c" itemLabel="CUSTOMER CITY" />
+<apex:selectOption itemValue="Date_Quoted__c" itemLabel="DATE QUOTED" />
+<apex:selectOption itemValue="Approximate_Close_Date__c" itemLabel="APPROXIMATE CLOSE DATE" />
+<apex:selectOption itemValue="Miscellaneous_Comments__c" itemLabel="COMMENTS ABOUT THE DEAL" />
+<apex:selectOption itemValue="CONCMCDB_MARKET_SEG__c" itemLabel="MARKET SEGMENT" />
+<apex:selectOption itemValue="Create_Date__c" itemLabel="CREATED DATE" />
+<apex:selectOption itemValue="Lost_to_OEM__c" itemLabel="LOST TO OEM" />
+<apex:selectOption itemValue="Lost_Reason_Code__c" itemLabel="LOST REASON CODE" />
+<apex:selectOption itemValue="Per_Unit_Margin__c" itemLabel="PER UNIT MARGIN" />
+<apex:selectOption itemValue="APV__c" itemLabel="APV" />
+<apex:selectOption itemValue="TXNCOUN_INDC__c" itemLabel="TC" />-->
+                                            <!--   <apex:selectOption itemValue="Archived" itemLabel="Include Archives" /> -->
+                                        </apex:selectList>
+                                    </td>
+                                    <td class="FilterRow">
+                                        <apex:selectList value="{!varFilterObj.Operator}"  size="1">                  
+                                            <apex:selectOption itemValue=" = " itemLabel="Equals" />
+                                            <apex:selectOption itemValue=" <> " itemLabel="Not Equals "/>
+                                            <apex:selectOption itemValue=" like " itemLabel="Contains" />
+                                            <apex:selectOption itemValue=" > " itemLabel="Greater Than"/>
+                                            <apex:selectOption itemValue=" < " itemLabel="Less Than"/>
+                                        </apex:selectList>
+                                    </td>
+                                    <td class="FilterRow">
+                                        <apex:inputText styleClass="FilterClass" value="{!varFilterObj.Value}"/>
+                                    </td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                        <apex:commandButton action="{!NewFilter}" value="New"/>
+                        <apex:commandButton action="{!FilterClear}" value="Clear"/>
+                        <apex:commandButton action="{!Query}" style="background: palegreen;" value="Query Active"  />
+                        <apex:commandButton action="{!QueryAll}" value="Query Archives" />
+                        <apex:commandButton action="{!SetDefaultFilter}" value="Set Default Filter" />
+                    </apex:outputPanel>
+                </div>
+                
+                
+                <!-- @Generating Excel --> 
+                <apex:outputPanel id="ExcelPanel">
+                    <div class="ExcelSection" id="test" style="display:{!If(displayExcelCols ,'block','none')}; width: 25%; overflow: auto;" >
+                        <div class="ExcelTitle">Field Selection:</div>
+                        <div class="SelectionBox">
+                                <apex:outputPanel rendered="{!displayExcelCols }" id="SelectPanel"  layout="block" style="overflow:auto;width:250px;height:150px;background:white;vertical-align:2.75px; border-style: groove; border-width: 1px; " onclick="loopSelected(this.checked);">
+                                    <apex:selectCheckboxes id="inputId" value="{!SelectedValues}" layout="pageDirection"  >
+                                        <div style="vertical-align:2.75px;">                                            
+                                            <apex:selectOptions value="{!items}"/> </div>                                        
+                                    </apex:selectCheckboxes>                                                                   
+                                </apex:outputPanel>
+                            <br/>                            
+                            <h1>Select All Fields::</h1><apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')" style="vertical-align: -2.61px;"/>
+                            <span style="padding-left: 35px;">  <apex:commandButton value="Export Details" style="background: paleturquoise;" action="{!ColSelectedExcel}" />&nbsp;</span>
+                            <!-- <apex:commandButton action="{!Export}" value="Export All" style="background: paleturquoise;"  onclick="selectall()"/>&nbsp; -->
+                            <apex:commandButton action="{!ExcelCancel}" value="Close" onclick="UnselectAllCheckboxes(this,'inputId')" style="background: palegoldenrod;" reRender="ExcelPanel"/>
+                        </div>                                               
+                    </div>   
+                </apex:outputPanel>             
+                <!--End of @GenerateExcel -->
+                         
+                            <!--   <apex:outputPanel style="white-space: pre-line;">
+<apex:commandButton value="Export Details" action="{!pdf}" />
+<apex:commandButton action="{!Export}" value="Excel"  styleClass="qaButtons" /> 
+</apex:outputPanel> -->
+                           <br/>
+                <div class="container" id="qaContainer">
+                    <table class="QAtest" style="border-spacing: 0px;">
+                        
+                        <thead class="QAtest">                            
+                            <th>CONC NO</th>
+                            <th>REGION</th>
+                            <th>DIST</th>
+                            <th>STAGE</th>
+                            <th>CUSTOMER</th>
+                            <th>CURRENT FLEET SIZE</th>
+                            <th>SO CD</th>
+                            <th>DEALER NAME</th>
+                            <th>CLASS</th>
+                            <th>MODEL</th>
+                            <th>ENGINE</th>
+                            <th>ENGINE MODEL</th>
+                            <th>MDEG RZZ Code </th>
+                            <th>CONC STATUS</th>
+                            <th>COMMENTS ABOUT THE DEAL</th>
+                            <apex:outputPanel id="DOACommentsHeader" rendered="{!CONTAINS(ProfileName,'DOA')}">
+                                <th>DOA COMMENTS 1</th>
+                                <th>DOA COMMENTS 2</th>
+                            </apex:outputPanel>
+                            <th>Comments History</th> <!-- @History of comments @satish-->
+                            <th>CONC EXP DATE</th>
+                            <th>MANUAL ARCHIVE</th>
+                            <th>TOTAL MIN</th>
+                            <th>DEAL MIN</th>
+                            <th>APPROVED MIN QTY</th>
+                            <th>ORDER COUNT</th>
+                            <th id="qaQ1" >Q1</th>
+                            <th id="qaQ2" >Q2</th>
+                            <th id="qaQ3" >Q3</th>
+                            <th id="qaQ4" >Q4</th>
+                            <th id="qaQ5" >Q5</th>
+                            <th>DEAL QUOTE/ COUNT</th>
+                            <th>TARGET</th>
+                            <th>PROBABILITY</th>
+                            <th>SALES PERSON</th>
+                            <th>CONC %</th>
+                            <th>RQ CONC %</th>
+                            <th>NET CONT</th>
+                            <th>COMPETITION</th>
+                            <th>DEALER CITY</th>
+                            <th>CUSTOMER CITY</th>
+                            <th>DATE QUOTED</th>
+                            <th>APPROXIMATE CLOSE DATE</th>
+
+                            
+                            <th>LEAD NO</th>
+                            <th>CONC REPLS</th>
+                            <th>DM</th>
+                            
+                            <th>MARKET SEGMENT</th>
+                            <th>CREATED DATE</th>
+                            <th>LOST TO OEM</th>
+                            <th>LOST REASON CODE</th>
+                            <th>PER UNIT MARGIN</th>
+                            <th>APV</th>
+                            <th>TC</th>
+                            <th>ACTIVITY STAGE DATE</th>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!Concessions}" var="varQAObj">
+                                <tr>
+                                    <th class="qadataheader"><apex:outputLink value="/{!varQAObj.sObjConc.Id}">{!varQAObj.sObjConc.Name}</apex:outputLink></th>
+                                    <th class="qadataheader">{!varQAObj.sObjConc.Region_Desc__c}</th>
+                                    <th class="qadataheader">{!varQAObj.sObjConc.SLS_DIST_CD__c}</th>
+                                    <th class="qadataheader classStage"><apex:inputField value="{!varQAObj.sObjConc.Stage__c}" /></th>
+                                    <th class="qadataheader" width="30px">{!varQAObj.sObjConc.CUST_NAME_50__c}</th>
+                                    <th class="qadataheader" width="20px"><apex:inputField style="width:50px;" value="{!varQAObj.sObjConc.Customer_Fleet_Size__c}"/></th>
+                                    <th class="qadataheader">{!varQAObj.sObjConc.Dealer_Code__c}</th>
+                                    <td>{!varQAObj.sObjConc.Account__r.Name}</td>
+                                    <td>{!varQAObj.sObjConc.Class__c}</td>
+                                    <td>{!varQAObj.sObjConc.VEH_BASE_MDL_NO__c}</td>
+                                    <td>{!varQAObj.sObjConc.Engine_Mfr__c}</td>
+                                    <td>{!varQAObj.sObjConc.CONCMCDB_ENGINE__c}</td>
+                                     <td>{!IF(varQAObj.sObjConc.MDEG_Flag__c == 'Y','Y','N')}</td>
+                                    <td>{!varQAObj.sObjConc.CONC_STATUS_CD__c}</td>
+                                                                        <!--Deepak change to select the contents of the comments -->
+                                    <td><apex:inputTextarea onfocus="select()" rows="4" value="{!varQAObj.str_DealComment}"/></td>
+                                    <apex:outputPanel id="DOACommentsdata" rendered="{!CONTAINS(ProfileName,'DOA')}">
+                                        <td><apex:inputTextarea rows="4" onfocus="select()" value="{!varQAObj.str_DOAComment1}"/></td>
+                                        <td><apex:inputTextarea rows="4" onfocus="select()" value="{!varQAObj.str_DOAComment2}"/></td>
+                                    </apex:outputPanel>
+                                    <!-- @History of comments @satish-->
+                                    <td>
+                                        <apex:outputPanel id="QAcommentsHistory" >
+                                            <a href="/apex/QACommentsHistoryMiniPage?ConcessionId={!varQAObj.sObjConc.Id}&retURL=/apex/QuoteActivityConc&isAjaxRequest=1" 
+                                               id="{!varQAObj.sObjConc.Id}" 
+                                               onmouseover="LookupHoverDetail.getHover('{!varQAObj.sObjConc.Id}','/apex/QACommentsHistoryMiniPage?ConcessionId={!varQAObj.sObjConc.Id}&button=true&retURL=/apex/QuoteActivityConc&isAjaxRequest=1').show();"
+                                               onmouseout="LookupHoverDetail.getHover('{!varQAObj.sObjConc.Id}','/apex/QACommentsHistoryMiniPage?ConcessionId={!varQAObj.sObjConc.Id}&button=true&retURL=/apex/QuoteActivityConc&isAjaxRequest=1').hide();"
+                                               onClick="window.location.replace('/apex/QACommentsHistoryMiniPage?ConcessionId={!varQAObj.sObjConc.Id}&retURL=/apex/QuoteActivityConc')"
+                                               ><img src="/s.gif" alt="" class="infoIcon" title="" />History
+                                            </a>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <!-- @History of comments @satish-->
+                                    <td><apex:outputField value="{!varQAObj.sObjConc.EXPR_DATE__c}"/></td>
+                                    <td ><apex:outputField rendered="{!IF(varQAObj.sObjConc.Auto_Archived__c == True,True,False)}" value="{!varQAObj.sObjConc.Manual_Archival__c}"/>
+                                        <apex:inputField rendered="{!IF(varQAObj.sObjConc.Auto_Archived__c == False,True,False)}" value="{!varQAObj.sObjConc.Manual_Archival__c}"/></td>
+                                    <td><apex:inputField style="width:35px;" value="{!varQAObj.sObjConc.TOT_MIN__c}"/></td>
+                                    <td>{!varQAObj.sObjConc.RQST_MIN_UNITS__c}</td>
+                                    <td>{!varQAObj.sObjConc.APPR_MIN_UNITS__c}</td>
+                                    <td>{!varQAObj.sObjConc.Order_Count__c}</td>
+                                    <td><apex:inputField style="width:20px;" value="{!varQAObj.sObjConc.Q1__c}"/></td>
+                                    <td><apex:inputField style="width:20px;" value="{!varQAObj.sObjConc.Q2__c}"/></td>
+                                    <td><apex:inputField style="width:20px;" value="{!varQAObj.sObjConc.Q3__c}"/></td>
+                                    <td><apex:inputField style="width:20px;" value="{!varQAObj.sObjConc.Q4__c}"/></td>
+                                    <td><apex:inputField style="width:20px;" value="{!varQAObj.sObjConc.Q5__c}"/></td>
+                                    <td>{!varQAObj.sObjConc.DEAL_QUOTE_COUNT__c}</td>
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Target__c}" /></td>
+                                    <td>
+                                    <apex:selectList value="{!varQAObj.sObjConc.Probability__c}"  size="1">
+                                            <apex:selectOption rendered="{!IF(varQAObj.sObjConc.Probability__c <> 0 && varQAObj.sObjConc.Probability__c <> 25 && varQAObj.sObjConc.Probability__c <> 50 && varQAObj.sObjConc.Probability__c <> 75 && varQAObj.sObjConc.Probability__c <> 100 && varQAObj.sObjConc.Probability__c <> null,true,false)}" itemLabel="{!varQAObj.sObjConc.Probability__c}%" itemValue="!varQAObj.sObjConc.Probability__c" />
+                                            <apex:selectOption itemLabel="{!varQAObj.sObjConc.Probability__c}%" itemValue="{!varQAObj.sObjConc.Probability__c}" />
+                                            <apex:selectOption itemLabel="0%" itemValue="0" />
+                                            <apex:selectOption itemLabel="25%" itemValue="25" />
+                                            <apex:selectOption itemLabel="50%" itemValue="50" />
+                                            <apex:selectOption itemLabel="75%" itemValue="75" />
+                                            <apex:selectOption itemLabel="100%" itemValue="100" />
+                                    </apex:selectList>
+                                    </td>
+                                    <td>{!varQAObj.sObjConc.CONT_PRSN_NAME_42__c}</td>
+                                    <td>{!varQAObj.sObjConc.APPR_CONC_PCT__c}</td>
+                                    <td>{!varQAObj.sObjConc.RQST_CONC_PCT__c}</td>
+                                    <td>{!varQAObj.sObjConc.APPR_NET_CNTRB__c}</td>
+                                    <!--<td>{!varQAObj.sObjConc.CMPTR_CD__c}</td>-->
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Competition_QA__c}"/></td>
+                                    <td>{!varQAObj.sObjConc.Account__r.BillingCity}</td>
+                                    <td>{!varQAObj.sObjConc.CITY__c}</td>
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Date_Quoted__c}"/></td>
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Approximate_Close_Date__c}"/></td>
+                                    <td>{!varQAObj.sObjConc.LEAD_CONC_NO__c}</td>
+                                    <td>{!varQAObj.sObjConc.Conc_Repls__c}</td>
+                                    <td>{!varQAObj.sObjConc.DIST_MGR_NAME__c}</td>
+                                   
+                                    <td>{!varQAObj.sObjConc.CONCMCDB_MARKET_SEG__c}</td>
+                                    
+                                    <td><apex:outputField value="{!varQAObj.sObjConc.Create_Date__c}"/></td>
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Lost_to_OEM__c}"/></td>
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Lost_Reason_Code__c}"/></td>
+                                    <td><apex:inputField value="{!varQAObj.sObjConc.Per_Unit_Margin__c}"/></td>
+                                    <td>{!varQAObj.sObjConc.APV__c}</td>
+                                    <td >{!varQAObj.sObjConc.TXNCOUN_INDC__c}</td>
+                                    <td style="display:none;"><apex:inputField value="{!varQAObj.sObjConc.CONC_STATUS_CD__c}" /></td>
+                                    <td><apex:outputField value="{!varQAObj.sObjConc.Stage_Activity_Date__c}"/></td> <!--Added to map Stage Activity Date @Rahul Agg-->                                    
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="FloatingHeader" id="FloatingHeader" height="0px">
+                    <table class="Floatingtable" style="border-spacing: 0px;">
+                        <thead class="Floating">
+                            <tr><th>CONC NO</th>
+                                <th>REGION</th>
+                                <th>DIST</th>
+                                <th width="90px">STAGE</th>
+                                <th>CUSTOMER</th>
+                                <th>CURRENT FLEET SIZE</th>
+                                <th>SO CD</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </apex:pageBlock>
+        </apex:form> 
+    </apex:page>

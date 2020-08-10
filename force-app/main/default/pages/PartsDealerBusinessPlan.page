@@ -1,0 +1,418 @@
+<!--
+* ─────────────────────────────────────────────────────────────────────────────────────────────────┐
+* Purpose:
+* This page is used to provide Dealer Business Plan for the parts users
+* ──────────────────────────────────────────────────────────────────────────────────────────────────
+* @author         Anto  
+* @modifiedBy          
+* @version        1.3
+* @created        
+* @modified       04-20-2018
+* ──────────────────────────────────────────────────────────────────────────────────────────────────
+* @changes 1.3
+* modifiedBy      Anto      
+* 04-10-2017      Label Changes and added Save and Refresh Button
+* 
+* ─────────────────────────────────────────────────────────────────────────────────────────────────┘
+*-->
+
+<apex:page standardcontroller="Business_Plan__c" extensions="DTNA_Parts_Business_Plan" tabStyle="Business_Plan__c">
+    <style>
+        .HeaderTitle
+        {
+            border:solid windowtext 1.0pt;
+            background:#2E74B5;
+            padding:0in 5.4pt 0in 5.4pt;
+            vertical-align:middle !important;
+            width: 96px;
+            color: white !important;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+        .pageDescription
+        {
+            color: white !important;
+        }
+        .pageType
+        {
+            color: antiquewhite !important;
+        }
+        .SubsectionHeader
+        {
+            border:solid windowtext 1.0pt;
+            background:#DEEAF6;
+            padding::0.02in 5.4pt 0.02in 5.4pt;
+            vertical-align:middle !important;
+            font-size: 14px;
+            font-weight: bolder;
+            padding-left: 7px;
+        }
+        .HeaderData
+        {
+            border:solid windowtext 1.0pt;
+            padding:0.02in 5.4pt 0.02in 5.4pt;
+            vertical-align:middle !important;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .boldinput
+        {
+            font-size: 14px;
+            font-weight: bold;
+            
+        }
+        .maxwidth
+        {
+            width:100%;
+        }
+        .maxwidthwithlkp
+        {
+            width:90%;
+        }
+        .almostboldinput
+        {
+            font-size: 14px;
+            font-weight: 600;
+            
+        }
+        .listSectionHeader
+        {
+            border:solid windowtext 1.0pt;
+            background:#BDD6EE;
+            padding:0in 5.4pt 0in 5.4pt;
+            vertical-align:top;
+            font-size: 14px !important;
+            font-weight: bold;
+        }
+        .txtdefinition
+        {
+            font-size: 14px;
+            padding-left: 5px;
+        }
+
+    </style>
+    
+  <apex:form id="BPForm" >
+    <apex:pageBlock id="BPBlock" title="Please save {!Obj_BusPlan.Name} before exit">
+        <apex:actionFunction action="{!saveDealerPerfRecord}" name="saveDealerPerfRecord" rerender="DealerPerformanceStuff">
+            <apex:param name="selectedDealerPerfId" value="" assignTo="{!selectedDealerPerfId}" />
+        </apex:actionFunction>
+        <apex:pageMessages />
+        {!str_NewEditRead}
+        <apex:actionStatus id="processStatus">
+            <apex:facet name="start">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color:Black;">
+                    &nbsp;
+                </div>
+                <div style="position: fixed; left: 50%; top: 200px; z-index: 1001;">
+                    <img width="75" height="75"  src="{!URLFOR($Resource.SLDS103, '/assets/images/spinners/slds_spinner_brand.gif')}" />
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:pageBlockButtons >
+          <!--  <apex:commandButton status="processStatus" rendered="{!IF(BPID==null,false,true)}" action="{!ReloadPage}" value="Reload"/> -->
+            <apex:commandButton status="processStatus" action="{!goBack}" value="Back"/>
+         <!--   <apex:commandButton status="processStatus" rendered="{!IF(BPID==null,false,true)}" action="{!QuickSavePage}" value="Quick Save"/> -->
+            <apex:commandButton status="processStatus" rendered="{!IF(BPID==null,false,true)}" action="{!SavePage}" value="Save and Refresh"/>
+        </apex:pageBlockButtons>
+        
+        <apex:sectionHeader title="{!Obj_BusPlan.Account__r.Name}" subtitle="{!Obj_BusPlan.Name}"/>
+        <table border="1" cellpadding="0" cellspacing="0" >
+            <tbody>
+               <!-- <tr>
+                    <td class="HeaderTitle">Name</td>
+                    <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Obj_BusPlan.Name}"/></td>
+                </tr> -->
+                <tr>    
+                    <td class="HeaderTitle">Dealership Name:</td>
+                    <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Obj_BusPlan.Account__c}"/></td>
+                </tr>
+                <tr>
+                    <td class="HeaderTitle">Dealer code:</td>
+                    <td class="HeaderData">{!Obj_BusPlan.Account__r.Dealer_Code__c}</td>
+                </tr>
+                <tr>
+                    <td class="HeaderTitle">DPM:</td>
+                    <td class="HeaderData">{!Obj_BusPlan.Account__r.Regional_Parts_Manager__c}</td>
+                </tr>
+                <tr>
+                    <td class="HeaderTitle">Location:</td>
+                    <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Obj_BusPlan.Location__c}"/></td>
+                </tr>
+                <tr>
+                    <td class="HeaderTitle">Dealer Contact:</td>
+                    <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Obj_BusPlan.Parts_Contact__c}"/></td>
+                </tr>
+                <tr>
+                    <td class="HeaderTitle">Year:</td>
+                    <td class="HeaderData"><Apex:inputField styleclass="boldinput maxwidth" value="{!Obj_BusPlan.Year__c}"/></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <br/>
+        
+        <Apex:outputPanel id="DealerPerformanceStuff">
+            <table border="1" cellspacing="0" cellpadding="2" >
+                <tbody>
+                    <tr>
+                        <td class="SubsectionHeader" colspan="6">
+                            <b><span style="font-size:13.0pt">Peformance Category</span></b>
+                            <span style="float:right;"><apex:commandButton rendered="{!IF(BPID==null,false,true)}" rerender="DealerPerformanceStuff" action="{!NewDealerPerformanceCategory}" value="+ New" id="btnNewDealerPerf"/></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            <span class="txtdefinition">To track all growth targets for currently purchased products. Not for earnback opportunities, use the earnback section below for those growth targets.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="HeaderData">Performance Category</td>
+                        <td class="HeaderData">Previous Year</td>
+                        <td class="HeaderData">Target Growth %</td>
+                        <td class="HeaderData">Objective $’s</td>
+                        <td class="HeaderData">Total YTD Purchases</td>
+                        <td class="HeaderData">YTD %</td>
+                    </tr>
+                    <apex:repeat value="{!Lst_Dealer_Performance_Category}" var="varDPCObj">
+                        <tr>
+                            <td class="HeaderData">
+                                <Apex:inputField onchange="saveDealerPerfRecord('{!varDPCObj.Id}');" styleclass="boldinput" value="{!varDPCObj.Name}"/>
+                            </td>
+                            <td class="HeaderData">
+                                <Apex:inputField onchange="saveDealerPerfRecord('{!varDPCObj.Id}');" styleclass="boldinput" value="{!varDPCObj.Previous_Year_Purchases__c}"/>
+                            </td>
+                            <td class="HeaderData">
+                                <Apex:inputField onchange="saveDealerPerfRecord('{!varDPCObj.Id}');" styleclass="boldinput" value="{!varDPCObj.Target_Growth__c}"/>
+                            </td>
+                            <td class="HeaderData">{!varDPCObj.Objective_s__c}</td>
+                            <td class="HeaderData">
+                                <Apex:inputField onchange="saveDealerPerfRecord('{!varDPCObj.Id}');" styleclass="boldinput" value="{!varDPCObj.Total_YTD_Purchases__c}"/>
+                            </td>
+                            <td class="HeaderData" style="background:{!IF(varDPCObj.YTD__c == null,"",IF(varDPCObj.YTD__c<50,"red",IF(varDPCObj.YTD__c<75,"orange",IF(varDPCObj.YTD__c<100,"yellow","lightgreen"))))};">{!varDPCObj.YTD__c}</td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </Apex:outputPanel>
+
+        <br/>
+        
+        <Apex:outputPanel id="TopObjstuff">
+        <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+            <tbody>
+                <tr>
+                    <td colspan="6" class="listSectionHeader tooltip">
+                        <b><span style="font-size:13.0pt">Top Objectives (3 to 5, Details Below)</span></b>
+                        <span style="float:right;"><apex:commandButton rendered="{!IF(BPID==null,false,true)}" rerender="TopObjstuff" action="{!NewTopObjective}" value="+ New" id="btnNewTopObjective"/></span>
+                    </td>
+                </tr>
+                <tr>
+                        <td colspan="6">
+                            <span class="txtdefinition">Used to identify top 3 to 5 objectives that the Dealer can accomplish success and growth for their location or family.</span>
+                        </td>
+                </tr>
+                <tr>
+                    <td class="HeaderData"><b><span style="color:Black">Top Objectives</span></b></td>
+                    <td class="HeaderData"><b>DTNA Person Responsible</b></td>
+                    <td class="HeaderData"><b>Due Date</b></td>
+                    <td class="HeaderData"><b>Dlr. Person Responsible</b></td>
+                    <td class="HeaderData"><b>Complete?</b></td>
+                    <td class="HeaderData"><b>Delete?</b></td>
+                </tr>
+                <apex:repeat value="{!Lst_TOP_Objectives}" var="varTOObj">
+                    <tr>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidthwithlkp" value="{!varTOObj.Subject}" /></td>
+                        <td class="HeaderData">
+                            <apex:inputField styleClass="almostboldinput" value="{!varTOObj.Owner.Name}" />
+                            <apex:outputPanel rendered="{!IF(varTOObj.Id==null,false,true)}"><span><a href="/{!varTOObj.id}/e?retURL=/apex/PartsDealerBusinessPlan?id={!Obj_BusPlan.id}" style="padding-left: 10px;">[Change]</a></span></apex:outputPanel>
+                            <apex:outputPanel rendered="{!IF(varTOObj.Id==null,true,false)}"><span>{!$User.FirstName} {!$User.LastName}</span></apex:outputPanel>
+                        </td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput" value="{!varTOObj.ActivityDate}" /></td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!varTOObj.CallObject}" /></td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!varTOObj.Action_Required__c}" /></td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!varTOObj.Delete__c}" /></td>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+        </Apex:outputPanel>
+        
+        <br/>
+
+        <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+            <tbody>
+                <tr>
+                    <td class="listSectionHeader">
+                        <b><span style="font-size:13.0pt">Top Objectives Action Plan Notes</span></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <apex:inputTextArea styleclass="rchTxtArea" id="Top_Objectives_Action_Plan" value="{!Obj_BusPlan.Top_Objectives_Action_Plan__c}" richText="true"/>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
+        
+        <br/>
+        
+        <Apex:outputPanel id="TopImpPlanstuff">
+        <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+            <tbody>
+                <tr>
+                    <td colspan="5" class="listSectionHeader">
+                        <b><span style="font-size:13.0pt">DTNA Improvement Plan</span></b>
+                        <span style="float:right;"><apex:commandButton rendered="{!IF(BPID==null,false,true)}" reRender="TopImpPlanstuff" action="{!NewImpItems}" value="+ New" id="btnNewImpItems"/></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <span class="txtdefinition">Suggestions from Dealer on the tools, programs or training that DTNA can improve which will help success and growth for their location or family.</span>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="HeaderData"><b><span style="color:Black">Improvement Plan</span></b></td>
+                    <td class="HeaderData"><b>Person/Dept. Responsible</b></td>
+                    <td class="HeaderData"><b>Due Date</b></td>
+                    <td class="HeaderData"><b>Completed?</b></td>
+                    <td class="HeaderData"><b>Delete?</b></td>
+                </tr>
+                <apex:repeat value="{!Lst_TOP_ImpPlan}" var="varTOObj">
+                    <tr>
+                        <td class="HeaderData">
+                            <apex:inputField styleClass="maxwidthwithlkp almostboldinput" value="{!varTOObj.Subject}" />
+                        </td>
+                        <td class="HeaderData">
+                            <apex:inputField styleClass="almostboldinput" value="{!varTOObj.Owner.Name}" />
+                            <apex:outputPanel rendered="{!IF(varTOObj.Id==null,false,true)}"><span><a href="/{!varTOObj.id}/e?retURL=/apex/PartsDealerBusinessPlan?id={!Obj_BusPlan.id}" style="padding-left: 10px;">[Change]</a></span></apex:outputPanel>
+                            <apex:outputPanel rendered="{!IF(varTOObj.Id==null,true,false)}"><span>{!$User.FirstName} {!$User.LastName}</span></apex:outputPanel>
+                        </td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput" value="{!varTOObj.ActivityDate}" /></td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!varTOObj.Action_Required__c}" /></td>
+                        <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!varTOObj.Delete__c}" /></td>
+                    </tr>
+                </apex:repeat>
+            </tbody>
+        </table>
+        </Apex:outputPanel>
+        
+        <br/>
+
+        <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+            <tbody>
+                <tr>
+                    <td class="listSectionHeader">
+                        <b><span style="font-size:13.0pt">Top DTNA Improvements Action Plan Notes</span></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <apex:inputTextArea styleclass="rchTxtArea" id="Top_DTNA_Improvements_Action_Plan" value="{!Obj_BusPlan.Top_DTNA_Improvements_Action_Plan__c}" richText="true"/>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
+        
+        <br/>
+        
+        <Apex:outputPanel id="EarnbackOpptystuff1">
+            <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+                <tbody>
+                    <tr>
+                        <td colspan="7" class="listSectionHeader">
+                           <b><span style="font-size:13.0pt">Earnback Opportunities by Product</span></b>
+                            <span style="float:right;"><apex:commandButton rendered="{!IF(BPID==null,false,true)}" reRender="EarnbackOpptystuff1" action="{!NewEarnbackOppt}" value="+ New" id="btnNewEarnbackOppt"/></span>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td colspan="7">
+                            <span class="txtdefinition">Use for opportunities where our dealers buy outside of our channel.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="HeaderData"><b>Product(s)</b></td>
+                        <td class="HeaderData"><b>Opportunity ($)</b></td>
+                        <td class="HeaderData"><b>YTD Opportunity ($)</b></td>
+                        <td class="HeaderData"><b>Remaining Opportunity ($)</b></td>
+                        <td class="HeaderData"><b>Target Date</b></td>
+                        <td class="HeaderData"><b>Completed?</b></td>
+                        <td class="HeaderData"><b>Delete?</b></td>
+                    </tr>
+                    <apex:repeat value="{!Lst_BPD_EarnbackOpportunities}" var="varEOObj">
+                        <tr>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Products__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Opportunity__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.YTD_Opportunity__c}" /></td>
+                            <td class="HeaderData"><apex:outputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Remaining_Opportunity__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="almostboldinput" value="{!varEOObj.Target_Date__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="almostboldinput" value="{!varEOObj.Completed__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="almostboldinput maxwidth" value="{!varEOObj.Delete__c}" /></td>
+
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </Apex:outputPanel>
+        
+        <br/>
+        
+        <Apex:outputPanel id="regionalfleetstuff">
+            <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+                <tbody>
+                    <tr>
+                        <td colspan="7" class="listSectionHeader">
+                            <b><span style="font-size:13.0pt">Regional Fleet Conquests</span></b>
+                            <span style="float:right;"><apex:commandButton rendered="{!IF(BPID==null,false,true)}" immediate="true" action="{!NewRegFleetConq}" reRender="regionalfleetstuff" value="+ New" id="btnNewRegFleetConq"/></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <span class="txtdefinition">Use specific product opportunities to capture New or Retain current Fleet customers.</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="HeaderData"><b>Fleet</b></td>
+                        <td class="HeaderData"><b>Product(s)</b></td>
+                        <td class="HeaderData"><b>Opportunity ($)</b></td>
+                        <td class="HeaderData"><b>YTD Opportunity ($)</b></td>
+                        <td class="HeaderData"><b>Remaining Opportunity ($)</b></td>
+                        <td class="HeaderData"><b>Target Date</b></td>
+                        <td class="HeaderData"><b>Completed?</b></td>
+                    </tr>
+                    <apex:repeat value="{!Lst_BPD_RegFleetConquests}" var="varEOObj">
+                        <tr>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Fleet__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Products__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Opportunity__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="maxwidth almostboldinput" value="{!varEOObj.YTD_Opportunity__c}" /></td>
+                            <td class="HeaderData"><apex:outputField styleClass="maxwidth almostboldinput" value="{!varEOObj.Remaining_Opportunity__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="almostboldinput" value="{!varEOObj.Target_Date__c}" /></td>
+                            <td class="HeaderData"><apex:inputField styleClass="almostboldinput" value="{!varEOObj.Completed__c}" /></td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+        </Apex:outputPanel>
+        <br/>
+
+        
+        <table border="1" cellspacing="0" cellpadding="2" style="width: 70%;min-width: 500px;">
+            <tbody>
+                <tr>
+                    <td class="listSectionHeader">
+                        <b><span style="font-size:13.0pt">Additional Notes</span></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <apex:inputTextArea styleclass="rchTxtArea" id="Additional_Notes" value="{!Obj_BusPlan.Additional_Notes__c}" richText="true"/>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
+        
+     </apex:pageBlock>
+  </apex:form>
+</apex:page>

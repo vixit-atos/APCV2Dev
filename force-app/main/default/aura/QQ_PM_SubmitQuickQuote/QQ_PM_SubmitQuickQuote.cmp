@@ -1,0 +1,8 @@
+<aura:component controller="QQ_PM_Controller">
+	<aura:method name="submitquickquote">
+      <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+      <aura:attribute name="quoteitemlst" type="ASP_PM_Line_Items__c[]"/>
+      <aura:attribute name="addonlst" type="PM_Line_Item_AddOn__c[]"/>
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

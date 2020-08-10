@@ -1,0 +1,2 @@
+<apex:page standardController="Private_Activity__c" extensions="Private_Activity_Redirector" action="{!redirect}">
+</apex:page>

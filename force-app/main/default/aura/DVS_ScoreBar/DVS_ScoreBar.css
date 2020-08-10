@@ -1,0 +1,10 @@
+.THIS .centralizeImage{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width : 15px;
+}
+
+.THIS .tableHeaderFontSize{
+    font-size:12px;
+}

@@ -1,0 +1,187 @@
+<aura:component controller="QQ_Approval_Controller" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+    
+    <c:QQ_ApprovalService aura:id="ApprovalService" />
+    <c:QQ_Approval_Mail_Service aura:id="emailService"/>
+    <c:QQ_ListColumnService aura:id="listservice"/>
+    
+    
+    <aura:attribute name="quoteid" type="Id"/>
+    
+    <aura:attribute name="quotenum" type="String"/>
+    <aura:attribute name="quotestatus" type="String"/>
+    <aura:attribute name="queuelist" type="List"/>
+    <aura:attribute name="startDate" type="Date" />
+    
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>    
+    
+    <aura:attribute name="saved" type="boolean" default="false"/>
+    
+    <aura:registerEvent name="QQ_NQ_Submit_Save" type="c:QQ_NQ_Submit_Save_event"/>
+    
+    <aura:attribute name="qq_gen_completed" type="boolean" default="false"/>
+    <aura:attribute name="qq_odr_completed" type="boolean" default="false"/>
+    <aura:attribute name="qq_cvg_completed" type="boolean" default="false"/>
+    
+    
+    <aura:attribute name="openpopup" type="boolean" default="true"/>
+        
+    <aura:attribute name="showapprovalbtn" type="boolean" default="false"/>
+    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c' }" />
+    
+    <aura:attribute name="quoteitem" 
+                    type="ASP_QQ_Line_Item__c" 
+                    default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <!--<aura:attribute name="quoteitem1" 
+                    type="ASP_QQ_Duration_Master__c" 
+                    default="{'sobjectType': 'ASP_QQ_Duration_Master__c',
+                             'Name':'tesr'}"/> -->
+    
+    
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_QQ_Line_Item__c[]" /> 
+    
+    <aura:attribute name="noteslist" type="note[]"/>
+    
+    <aura:attribute name="closeform" type="boolean" default="false"/>
+    
+    <aura:attribute name="confirmclose" type="boolean" default="false"/>
+    
+    <aura:attribute name="showrevise" type="boolean" default="false"/>
+    
+    <aura:attribute name="showreject" type="boolean" default="false"/>
+    
+    <aura:attribute name="groupooptions" type="list"/>
+    
+    <!-- ##################################################################### -->
+    <div>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-modal_large slds-fade-in-open">
+            <div class="slds-modal__container" >
+                <header class="modalheader slds-box">
+                    <span>
+                        <button type="button"
+                                onclick="{!c.CancelQuote}" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        
+                        <lightning:icon iconName="utility:edit_form" variant="inverse" alternativeText="Approved" class="fa" />
+                        <div>
+                            <H1 class="fa" >Extended Warranty</H1>
+                            <br></br>
+                            <p class="fa">Quote Request</p>
+                        </div>
+                    </span>                    
+                </header>
+                <div class="modal-body" >
+                    <div class="slds-box slds-theme_default slds-modal__content" id="modal-content-id-1">
+                        <div class="slds-float_left slds-text-heading_medium">
+                            <span class="labelbold">Quote #: </span>{!v.quotenum} 
+                        </div>
+                        &nbsp; &nbsp; &nbsp; 
+                        <span class=" slds-text-heading_medium labelbold"> Date Created: </span>                        
+                        <span class=" slds-text-heading_medium">
+                            <lightning:formattedDateTime value="{!v.quote.CreatedDate}" year="numeric" month="2-digit" day="2-digit"/> 
+                        </span>
+                        <div class="slds-float_right slds-text-heading_medium">
+                            
+                            <span class="labelbold">Status: </span>{!v.quotestatus}  
+                        </div>
+                        <br></br>	
+                        <br></br>
+                        <aura:if isTrue="{!v.showreject}">
+                            <c:QQ_Internal_NQ_Reject quote="{!v.quote}" 
+                                                     groupooptions="{!v.groupooptions}"
+                                                     showreject="{!v.showreject}"
+                                                     quoteitem="{!v.quoteitem}"
+                                                     noteslist="{!v.noteslist}"
+                                                     openpopup="{!v.openpopup}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!v.showrevise}">                            
+                            <c:QQ_Internal_NQ_Revise quote="{!v.quote}" 
+                                                     groupooptions="{!v.groupooptions}"
+                                                     showrevise="{!v.showrevise}"
+                                                     quoteitem="{!v.quoteitem}"
+                                                     noteslist="{!v.noteslist}"
+                                                     openpopup="{!v.openpopup}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!and(not(v.confirmclose), not(v.quotestatus == 'Draft'))}">
+                        <!--<aura:if isTrue="{!not(v.confirmclose)}">-->
+                            <div class="slds-form slds-form_stacked">
+                                <div class="slds-form-element">
+                                    <c:QQ_Internal_Approval quoteid="{!v.quoteid}" 
+                                                            quoteitem="{!v.quoteitem}"
+                                                            quote="{!v.quote}" 
+                                                            notelist="{!v.noteslist}" 
+                                                            haseditaccess="{!v.haseditaccess}"
+                                                            saved = "{!v.saved}"
+                                                            quotestatus ="{!v.quotestatus}"/>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <!-- ############################ EDIT DRAFT QUOTE ##################################### -->
+                        <aura:if isTrue="{!and(not(v.confirmclose), v.quotestatus == 'Draft')}">
+                            <c:QQ_Internal_EditQuote quoteid="{!v.quoteid}" 
+                                                     quoteitem="{!v.quoteitem}"
+                                                     quote="{!v.quote}" 
+                                                     notelist="{!v.noteslist}" 
+                                                     haseditaccess="{!v.haseditaccess}"
+                                                     saved = "{!v.saved}"
+                                                     quotestatus ="{!v.quotestatus}"
+                                                     QuoteNum="{!v.quotenum}"
+                                                     openpopup = "{!v.openpopup}"/>
+                            
+                        </aura:if>
+                    </div>
+                </div>
+                
+                <footer class="slds-modal__footer modal__footer slds-box">
+                    <span class="slds-float_right">
+                        <aura:if isTrue="{!v.showapprovalbtn}">
+                            <aura:if isTrue = "{!not(v.quotestatus == 'Pending for Validation')}">
+                                <lightning:button class=""  
+                                                  variant="brand"
+                                                  disabled = "{!or(not(v.haseditaccess) , v.showrevise)}"
+                                                  label="Revise" 
+                                                  title="CLICK TO REVISE" 
+                                                  onclick="{! c.ReviseQuote }" />
+                            </aura:if>
+                            <aura:if isTrue = "{!not(v.quotestatus == 'Pending for Cost')}">
+                                <lightning:button class=""  
+                                                  variant="brand"
+                                                  disabled = "{!or(not(v.haseditaccess) , v.showrevise)}"
+                                                  label="Reject" 
+                                                  title="CLICK TO CANCEL" 
+                                                  onclick="{! c.RejectQuote }" />
+                            </aura:if>
+                            <lightning:button class=""  
+                                              variant="brand" 
+                                              disabled = "{!or(not(and(v.haseditaccess , v.saved)), v.showrevise)}"
+                                              label="Accept" 
+                                              title="Accept" 
+                                              onclick="{! c.AcceptQuote }" />
+                            
+                        </aura:if>
+                        <aura:if isTrue="{! v.quotestatus == 'Approved'}">
+                            <lightning:button class=""  
+                                              variant="brand"
+                                              iconName="utility:download"
+                                              label="PDF" 
+                                              title="CLICK TO DOWNLOAD" 
+                                              onclick="{! c.downloadPDF }" />
+                        </aura:if>
+                        
+                    </span>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop"></div>
+    </div>
+    <aura:if isTrue = "{!v.closeform}">    
+        <c:QQ_PopUp_Close_Prompt openpopup="{!v.openpopup}" closeform = "{!v.closeform}"/>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,14 @@
+<apex:page controller="DTNA_UserMainFramIDdisplaycontroller"  tabStyle="Concession__c">
+<apex:sectionHeader title="User MainframeID Update" />
+
+    <apeX:form >
+        <apex:pageBlock title="Please select Mainframe id to Update ">
+            <apex:pageMessages />
+            <apex:selectRadio value="{!selectedValue}"  layout="pageDirection"  >
+                <apex:selectOptions value="{!mainframids}" />
+            </apex:selectRadio><br/>
+            <apex:commandButton value="Update MainframeID" action="{!SaveselectedMainframeid}" />
+        </apex:pageBlock>
+        
+    </apeX:form>
+</apex:page>

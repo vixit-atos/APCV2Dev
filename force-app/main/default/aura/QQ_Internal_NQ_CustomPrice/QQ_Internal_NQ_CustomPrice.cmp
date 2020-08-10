@@ -1,0 +1,347 @@
+<aura:component >
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+    
+    <c:QQ_PricePillar_DataService aura:id="pillarservice" />
+    
+    <c:QQ_PriceHistory_DataService aura:id="pricehistoryservice" />
+    <!--<c:QQ_getpillar aura:id="masterupdatesrvc" />-->
+    
+    
+    <aura:attribute name="quoteid" type="Id"/>
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c' }" />
+    
+    <aura:attribute name="quoteitem" 
+                    type="ASP_QQ_Line_Item__c" 
+                    default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_QQ_Line_Item__c[]" /> 
+    
+    <aura:attribute name="noteslist" 
+                    type="note[]"/>
+    
+    <aura:attribute name="pillarpricelist" type="list"/>
+    <aura:attribute name="pillarpricelist1" type="list"/>
+    <aura:attribute name="pillaroptions" type="list"/>
+    <aura:attribute name="AMF_Options" type="list"/>
+    <aura:attribute name="RF_Options" type="list"/>
+    <aura:attribute name="SP_Options" type="list"/>
+    <aura:attribute name="qqpricehistorylist" type="list"/>
+    
+    <aura:attribute name="pillar1" type="String"/>
+    <aura:attribute name="pillar2" type="String"/>
+    <aura:attribute name="pillarprice" type="integer"/>
+    <aura:attribute name="AMFprice" type="integer" default="0"/>
+    <aura:attribute name="RFprice" type="integer" default="0"/>
+    <aura:attribute name="SPprice" type="integer" default="0"/>
+    
+    <aura:attribute name="editpricemode" type="boolean" default="true"/>
+    
+    <aura:attribute name="saved" type="boolean" default="false"/>
+    
+    
+    
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="Accelerated_Mileage_Factor__c" 
+                                  picklistValues="{!v.AMF_Options}" />
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="Risk_Factor__c" 
+                                  picklistValues="{!v.RF_Options}" />
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="Second_Price_Point__c" 
+                                  picklistValues="{!v.SP_Options}" />
+    
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />    
+    <form class="slds-theme_shade slds-form--stacked slds-box">
+        
+        <div class="slds-text-heading_small slds-float_left labelbold">Custom Price</div>
+        <br></br>
+        
+        <div class="{!v.editpricemode ?'slds-show': 'slds-hide'}">
+            <br></br>
+            <lightning:layout>
+                <lightning:layoutItem size="12" padding="around-small">
+                    
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="1">
+                    
+                    
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4">
+                    <lightning:combobox class="labelbold slds-text-align_left"
+                                        name="progress" 
+                                        label="Pillar 1" 
+                                        value="{!v.pillar1}" 
+                                        placeholder="None" 
+                                        options="{! v.pillaroptions }"
+                                        onchange = "{!c.calcprice}"/>
+                    
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2">
+                    
+                    
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4">
+                    <lightning:combobox class="labelbold slds-text-align_left"
+                                        name="progress" 
+                                        label="Pillar 2" 
+                                        value="{!v.pillar2}" 
+                                        placeholder="None" 
+                                        options="{! v.pillaroptions }"
+                                        onchange = "{!c.calcprice}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="1">
+                    
+                    
+                </lightning:layoutItem>
+            </lightning:layout>
+            <div class="{!v.pillarprice ?'slds-hide': 'slds-show slds-text-align_center slds-p-bottom_large'}">            
+               Please select two pillars to base this price on.
+               
+            </div>
+            <div class="{!v.pillarprice ?'slds-show': 'slds-hide'}">
+                <div aura:id="svg_content" >
+                    <![CDATA[  
+        <svg class="custom-price__merge-graphic">
+            <line x1="20%" y1="5%" x2="20%" y2="50%"></line>
+            <line x1="80%" y1="5%" x2="80%" y2="50%"></line>
+            <line x1="20%" y1="50%" x2="80%" y2="50%"></line>
+            <line x1="50%" y1="50%" x2="50%" y2="95%"></line>
+</svg>
+]]>
+                </div>
+                <div class="custom-price__pillar-total">   <ui:outputCurrency value="{!v.pillarprice}"/> USD 
+                </div>          
+                
+            </div>
+            
+               <table class="">
+                   <thead>
+                    <tr>
+                        <th class="td1 labelbold">Duration</th>
+                        <th class="td1 labelbold">Pillar I</th>
+                        <th class="td1 labelbold">Pillar II</th>
+                        <th class="td1 labelbold">Mileage Adj.(%)</th>
+                        <th class="td1 labelbold">Risk Factor Value</th>
+                        <th class="td1 labelbold">Eye Adj.</th>
+                        <th class="td1 labelbold">2PP(%)</th>
+                        <th class="td1 labelbold">Cost</th>
+                        <th class="td1 labelbold">Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <aura:iteration items="{!v.qqpricehistorylist}" var="item">
+                        <aura:if isTrue="{!item.ASP_QQ__c != v.quoteid}">
+                            <tr>
+                                <td class="td1">{!item.Duration_Final__c }
+                                </td>
+                                <td class="td1">{!item.Lower_Pillar__c }<!--{!item.Lower_Pillar_Months__c==null?'':item.Lower_Pillar_Months__c +' mo/ '}{!item.Lower_Pillar_Miles__c==null?'':item.lowerpillar__c +' mi/ '}{!item.Lower_Pillar_Price__c==null?'':''}<aura:if isTrue="{!item.Lower_Pillar_Price__c}"><ui:outputCurrency value="{!item.Lower_Pillar_Price__c}"/> USD </aura:if>-->
+                                </td>
+                                <td class="td1">{!item.Upper_Pillar__c }<!--{!item.Upper_Pillar_Months__c==null?'':item.Upper_Pillar_Months__c +''+' mo/ '}{!item.Upper_Pillar_Miles__c==null?'':item.upperpillar__c +' mi/ '}{!item.Upper_Pillar_Price__c==null?'':''}<aura:if isTrue="{!item.Upper_Pillar_Price__c}"><ui:outputCurrency value="{!item.Upper_Pillar_Price__c}"/> USD</aura:if>-->
+                                </td>
+                                <td class="td1"> {!item.Accelerated_Mileage_Factor__c}</td>
+                                <td class="td1">
+                                    <aura:if isTrue="{!item.Risk_Factor_Value__c}">
+                                        <ui:outputCurrency value="{!item.Risk_Factor_Value__c}"/>
+                                        <aura:set attribute="else">
+                                            <ui:outputCurrency value="0"/> 
+                                        </aura:set> </aura:if> </td>
+                                <td class="td1"><aura:if isTrue="{!item.Eye_Test_Adjustment__c}">
+                                        <ui:outputCurrency value="{!item.Eye_Test_Adjustment__c}"/> 
+                                        <aura:set attribute="else">
+                                            <ui:outputCurrency value="0"/> 
+                                        </aura:set> </aura:if>
+                                    </td>
+                                <td class="td1">{!item.Second_Price_Point__c}</td>
+                                <td class="td1"><aura:if isTrue="{!item.Cost__c}">
+                                    <ui:outputCurrency value="{!item.Cost__c}"/> </aura:if></td>
+                                <td class="td1"><aura:if isTrue="{!item.Price__c}">
+                                    <!-- <ui:outputCurrency value="{!item.Price__c}"/> -->${!item.Price__c}
+                                    <aura:set attribute="else">
+                                        <ui:outputCurrency value=""/>
+                                    </aura:set> </aura:if> </td>    
+                            </tr>
+                            
+                        </aura:if>
+                    </aura:iteration>
+                        </tbody>
+                </table>
+            
+            <div class="slds-theme_shade">
+                <lightning:layout>
+                    <lightning:layoutItem size="8" padding="around-small">
+                        
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <lightning:combobox class="labelbold slds-text-align_left"
+                                            name="Accelerated_Mileage_Factor__c" 
+                                            label="Accelerated Mileage Factor (%)" 
+                                            value="{!v.quoteitem.Accelerated_Mileage_Factor__c}" 
+                                            placeholder="None" 
+                                            disabled = "{!not(v.pillarprice)}"
+                                            options="{! v.AMF_Options }"
+                                            onchange = "{!c.handlechange}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <br></br>
+                        <ui:outputCurrency value="{!v.AMFprice}"/> USD 
+                        
+                    </lightning:layoutItem>
+                </lightning:layout> 
+                <lightning:layout>
+                    <lightning:layoutItem size="8" padding="around-small">
+                        
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <lightning:combobox class="labelbold slds-text-align_left"
+                                            name="Risk_Factor__c" 
+                                            label="Risk Factor" 
+                                            value="{!v.quoteitem.Risk_Factor__c}" 
+                                            placeholder="None" 
+                                            disabled = "{!not(v.pillarprice)}"
+                                            options="{! v.RF_Options }"
+                                            onchange = "{!c.handlechange}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <br></br>
+                          <ui:outputCurrency value="{!v.RFprice}"/> 
+                    </lightning:layoutItem>
+                </lightning:layout> 
+                 <lightning:layout>
+                    
+                    <lightning:layoutItem size="8">
+                        
+                    </lightning:layoutItem>
+                     <lightning:layoutItem size="1" >
+                        <div class="slds-p-left_small labelbold">Eye Adjustment</div>
+                    </lightning:layoutItem>
+                     </lightning:layout>
+                <lightning:layout>
+                    
+                    <lightning:layoutItem size="8" padding="around-small">
+                        
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="1" padding="around-small">
+                        <lightning:button variant="brand" 
+                                          label="-$5" 
+                                          name = "subtracteyeadj"
+                                          disabled = "{!not(v.pillarprice)}"
+                                          iconName = "utility:moneybag"
+                                          title="Brand action"
+                                          onclick="{! c.handlechange }" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="1" padding="around-small">
+                        <lightning:button variant="brand"
+                                          name = "addeyeadj"
+                                          disabled = "{!not(v.pillarprice)}"
+                                          label="+$5" 
+                                          title="Brand action"
+                                          iconName = "utility:moneybag"
+                                          onclick="{! c.handlechange }" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <ui:outputCurrency value="{!v.quoteitem.Eye_Test_Adjustment__c}"/> 
+                    </lightning:layoutItem>
+                </lightning:layout> 
+                <lightning:layout>
+                    <lightning:layoutItem size="8" padding="around-small">
+                        
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <lightning:combobox class="labelbold slds-text-align_left"
+                                            name="Second_Price_Point__c" 
+                                            disabled = "{!not(v.pillarprice)}"
+                                            label="Second Price Point(%)" 
+                                            value="{!v.quoteitem.Second_Price_Point__c}" 
+                                            placeholder="None" 
+                                            options="{! v.SP_Options }"
+                                            onchange = "{!c.handlechange}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="2" padding="around-small">
+                        <br></br>
+                       <ui:outputCurrency value="{!v.SPprice}"/> 
+                    </lightning:layoutItem>
+                </lightning:layout> 
+            </div>
+        </div>
+        <br></br>
+        <div class="slds-float_right slds-p-right_xx-large">
+            
+            <lightning:button
+                              iconName="{!v.editpricemode ? 'utility:save' : 'utility:edit'}" 
+                              variant="{!v.editpricemode ? 'brand' : 'brand'}"
+                              label="{!v.editpricemode ? 'Save' : 'Edit'}"
+                              disabled = "{!v.editpricemode ? not(and(v.quoteitem.Accelerated_Mileage_Factor__c , v.quoteitem.Risk_Factor__c)) : false}"
+                              onclick="{!v.editpricemode ? c.saveprice : c.editprice}"
+                              name="EDIT PRICE"/>  
+            <br></br>           
+        </div>
+        
+        <br></br>
+        <lightning:layout>
+            <lightning:layoutItem size="12" padding="around-small">
+                
+            </lightning:layoutItem>
+        </lightning:layout>
+        <aura:if isTrue="{!not(v.editpricemode)}">
+            <lightning:layout>
+                <lightning:layoutItem size="8" padding="around-small">
+                    
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">
+                    <div class="">
+                        Cost:
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="2" padding="around-small">
+                    <div class="">
+                        ${!v.quoteitem.Cost__c}
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:if>
+        <lightning:layout>
+            <lightning:layoutItem size="8" padding="around-small">
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="">
+                    Total
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="">
+                     <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> 
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout> 
+        <lightning:layout>
+            <lightning:layoutItem size="8" padding="around-small">
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="">
+                    Margin(%)
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="">
+                    {!v.quoteitem.Margin__c}%
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout> 
+        
+    </form> 
+</aura:component>

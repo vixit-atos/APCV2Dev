@@ -1,0 +1,9 @@
+.THIS {
+}
+.THIS .dynamicOverflow{
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    max-height: 5em !important;
+    border: 1px black solid;
+    max-width: 30rem !important;
+}

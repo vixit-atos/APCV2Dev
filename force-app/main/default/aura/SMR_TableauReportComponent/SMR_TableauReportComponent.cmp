@@ -1,0 +1,39 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+	
+    <div class="slds-card__header slds-grid" data-aura-rendered-by="2269:0">
+        <header class="slds-media slds-media--center slds-has-flexi-truncate" data-aura-rendered-by="2271:0">
+            <div class="slds-media__body" data-aura-rendered-by="2276:0">
+                <h3 class="header-title-container" id="header_337:0" >
+                    <span class="slds-card__header-title slds-truncate black" title="Supplier Management Dashboard" >
+                        Supplier Management Dashboard
+                    </span>
+                </h3>
+            </div>
+        </header>
+    </div>
+    <div>
+        <iframe  width="100%" height="600px" id="tblutopSupl" 
+                 src="{!'https://tableau-dtna.app.corpintra.net/views/SMTop20forSupplier360app/TODAY-TOPSUPPLIERS?iframeSizedToWindow=true&amp;:embed=y&amp;:showAppBanner=false&amp;:display_count=no&amp;'}">
+        </iframe >
+
+        <iframe  width="100%" height="600px" id="tbluSupl"
+                src="{!'https://tableau-dtna.app.corpintra.net/views/SMOfflineforSupplier360app/E-STATOfflineTrucks?iframeSizedToWindow=true&amp;:embed=y&amp;:showAppBanner=false&amp;:display_count=no&amp;'}">
+        </iframe >
+    <div class="slds-card__header slds-grid" data-aura-rendered-by="2269:0">
+        <header class="slds-media slds-media--center slds-has-flexi-truncate" data-aura-rendered-by="2271:0">
+            <div class="slds-media__body" data-aura-rendered-by="2276:0">
+                <h3 class="header-title-container" id="header_337:0" >
+                    <span class="slds-card__header-title slds-truncate black" title="Returnable Packaging Dashboard " >
+                        Returnable Packaging Dashboard 
+                    </span>
+                </h3>
+            </div>
+        </header>
+    </div>
+        <iframe  width="100%" height="850px" id="tblu"
+                src="{!'https://tableau-dtna.app.corpintra.net/#/views/DTNASupplierScorecardv20/DTNAScorecardExecutiveSummary?iframeSizedToWindow=true&amp;:embed=y&amp;:showAppBanner=false&amp;:display_count=no&amp;:tabs=no;'}">
+        </iframe >
+    </div>
+    
+  
+</aura:component>

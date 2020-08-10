@@ -1,0 +1,38 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" 
+                access="global" 
+                controller="APC_MasterController">
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="data" type="Object" description="Visible accounts of the logged user"/>
+    <aura:attribute name="hasvisiblecontacts" type="boolean" default="false" description ="True if user has visible accounts"/>
+    
+    <aura:handler name="init" action="{!c.doinit}" value="{!this}" />
+    
+  <!--  <lightning:listView aura:id="listViewContacts"
+                        objectApiName="Contact"
+                        listName="X01_All_Contacts"
+                        rows="5"
+                        showSearchBar="true"
+                        showActionBar="true"
+                        enableInlineEdit="false"
+                        showRowLevelActions="false"
+                        />
+    -->
+    <aura:if isTrue="{!v.hasvisiblecontacts}">
+        <div class="slds-box">
+            <div class="slds-float_right">
+                 <lightning:button variant="brand" label="New" title="New" onclick="{! c.createnewcontactrecord }"/>
+            </div>           
+            <div class="slds-text-heading_large">All Contacts </div>
+            <div class="slds-border_bottom slds-p-bottom_small"></div>
+            <div style="height: 35rem">
+                <lightning:datatable
+                                     keyField="id"
+                                     data="{! v.data }"
+                                     columns="{! v.columns }"
+                                     hideCheckboxColumn="true"
+                                     showRowNumberColumn="true"/>
+            </div>
+        </div>
+    </aura:if>
+    
+</aura:component>

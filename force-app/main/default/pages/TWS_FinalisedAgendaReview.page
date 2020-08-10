@@ -1,0 +1,30 @@
+<apex:page StandardController="TCMeeting__c" tabStyle="TCMeeting__c" extensions="TWS_AgendaFinalisedEmailRequest">
+  <!-- Begin Default Content REMOVE THIS -->
+  <apex:form >
+ 
+  <apex:pageBlock >
+      <apex:pageMessages ></apex:pageMessages>
+      <apex:pageBlockButtons >
+          <apex:commandButton title="Takes Back to the TC Meeting Detail Page" value="Back" action="{!doCancel}"/>
+          <apex:commandButton title="Send Agenda Finalised Template to your Email" value="Send Email" action="{!SendAgendaEmail}"/>
+      </apex:pageBlockButtons>
+      <h1>Following is the preview of the Email that will be sent for Agenda Finalized:</h1><br/>
+      <!-- End Default Content REMOVE THIS -->
+      <h1></h1>
+    <div style="border-style: ridge;font-family:verdana;">
+        <div style="margin-left:10px;">
+            <div style="font-size:110%;">
+                <p>Hello,</p>
+                This week's Transaction Council Meeting will occur on <apex:outputText value=" {!sObjTCM.TC_Meeting_Date__c}" /> at which time the deals listed below will be up for voting.<br/>
+                Click <a href="{!$Setup.EventInviteURLPrefix__c.Value__c}apex/TWC_ThisWeekTCMeeting?sfdc.tabName=01r210000008dBU">here</a> to view to this week's meeting agenda at a glance.
+                
+            </div>
+        <c:TWS_AgendaFinalized_DealList TC_Meeting_Id="{!Id}"/>
+        <p></p>
+        <p></p>
+        </div>
+        
+     </div>
+   </apex:pageBlock>
+   </apex:form>>
+</apex:page>

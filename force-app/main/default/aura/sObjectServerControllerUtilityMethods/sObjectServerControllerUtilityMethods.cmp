@@ -1,0 +1,8 @@
+<aura:component controller='sObjectServerController'>
+	<aura:method name="CallApexMethod" action="{!c.init}">
+        <aura:attribute name="component" type="Aura.Component"/>
+        <aura:attribute name="controllerMethod" type="String" />
+        <aura:attribute name="actionParameters" type="Object" />
+        <aura:attribute name="functionCallBack" type="Function" />
+    </aura:method>
+</aura:component>

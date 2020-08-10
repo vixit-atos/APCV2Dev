@@ -1,0 +1,7 @@
+<aura:component controller="QQ_ListController">
+	<aura:method name="submitquickquote">
+      <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+      <aura:attribute name="quoteitemlst" type="ASP_QQ_Line_Item__c[]"/>
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

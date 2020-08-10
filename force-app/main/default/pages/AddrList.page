@@ -1,0 +1,53 @@
+<apex:page showheader="false" standardController="Account" extensions="AddressCLController" >
+    
+     <apex:stylesheet value="{!URLFOR($Resource.SLDS203, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+     <div class="slds">
+     <div class="dtna">
+    <apex:pageBlock id="tst">
+        <script>
+        function refreshIT() {
+            //var iframe = document.getElementById('iframeContentId');
+            //iframe.src = iframe.src;
+            //alert('all refreshed now');
+            location.reload();
+        }
+        </script>
+        <apex:form >
+            <apex:pageBlockTable id="rl" value="{!account.MDM_Addresses_Active__r}" var="item" >
+                
+                <apex:column >
+                    <apex:facet name="header">Set To</apex:facet>
+                    {!item.Usage_Flag__c}
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header">Address</apex:facet>
+                    {!item.Name}
+                </apex:column>  
+               
+                
+                <apex:column >
+                    <apex:facet name="header">Action</apex:facet>
+                    
+                    <apex:commandLink value="Ship" action="{!processShipLinkClick}" oncomplete="refreshIT();">  
+                        <apex:param name="addrID" value="{!item.ID}" assignTo="{!addrID}"/>                 
+                    </apex:commandLink> |
+                    
+                    <apex:commandLink value="Mail" action="{!processMailLinkClick}" oncomplete="refreshIT();">  
+                        <apex:param name="addrID" value="{!item.ID}" assignTo="{!addrID}"/>                 
+                    </apex:commandLink> 
+                    
+                    <!--
+                    | <apex:commandLink value="Hide" action="{!processHideLinkClick}" oncomplete="refreshIT();" reRender="tst">  
+                        <apex:param name="addrID" value="{!item.ID}" assignTo="{!addrID}"/>                 
+                    </apex:commandLink>
+                    -->
+                    
+                </apex:column>
+                
+            </apex:pageBlockTable>
+        </apex:form>
+    </apex:pageBlock> 
+    </div>
+    </div>
+</apex:page>

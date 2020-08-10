@@ -1,0 +1,47 @@
+<apex:component controller="ThisWeeksTCMDealsController" access="global">
+  <!-- <apex:dataTable value="{!TheWeeksTCMDeals}" var="x">
+   <apex:column >
+   <div style="font-size: 12;font-family: verdana;">
+    <apex:facet name="header"></apex:facet>
+    <br>_______________________________________________________________________</br><br></br>
+    <b>Customer: </b>
+    <br><apex:outputField value="{!x.TWS_TC_Deal_Customer__c}" /></br><br></br>
+    <b>Deal Name: </b>
+    <br> 
+    <apex:outputLink value="{!$Setup.EventInviteURLPrefix__c.Value__c +x.TWS_TC_Deal__r.Id}" id="dealLink">
+        <apex:outputField value="{!x.TWS_TC_Deal_Name__c}" />
+    </apex:outputLink>
+    </br><br></br>
+    <b>TC Category: </b>
+    <br><apex:outputField value="{!x.TWS_TC_Category__c}" /></br><br></br>
+    <b>TC Reason: </b>
+    <br><apex:outputField value="{!x.TWS_TC_Reason__c}" /></br><br></br>
+    <b>Make: </b>
+    <br><apex:outputField value="{!x.TWS_TC_Deal_Make__c}" /></br><br></br>
+    <div style="display: {!If(x.TWS_TC_Deal__r.RecordType.DeveloperName=='National','block','none')};">
+        <b>NAD: </b>
+        <br>{!x.TWS_TC_Deal__r.NAD__c}</br><br></br>
+    </div>
+    <div style="display: {!If(x.TWS_TC_Deal__r.RecordType.DeveloperName=='National','block','none')};">
+        <b>NAE: </b>
+        <br>{!x.TWS_TC_Deal__r.NAE__c}</br><br></br>
+    </div>
+        <div style="display: {!If(x.TWS_TC_Deal__r.RecordType.DeveloperName=='National','none','block')};">
+        <b>District Manager: </b>
+        <br>{!x.TWS_TC_Deal__r.DistrictManager__r.Name}</br><br></br>
+    </div>
+        <div style="display: {!If(x.TWS_TC_Deal__r.RecordType.DeveloperName=='National','none','block')};">
+        <b>Regional Manager: </b>
+        <br>{!x.TWS_TC_Deal__r.RGM__c}</br><br></br>
+    </div>
+  <!--  <div style="display: {!If((x.TWS_TC_Deal__r.RecordType.DeveloperName=='National' || x.TWS_TC_Deal__r.RecordType.DeveloperName=='TWS_TC_Canadian_Deal' || x.TWS_TC_Deal__r.RecordType.DeveloperName=='TWS_TC_Deal'),'block','none')};">
+        <b>Deal worksheet: </b>
+        <br><a href="{!x.TCM_Link_to_Related_Oppty__c}">{!x.TWS_TC_Deal_Name__c}</a></br><br></br>
+    </div> 
+    <b>Description:</b>
+    <br><apex:outputField value="{!x.TWS_TC_Deal__r.Description__c}" /></br><br></br>
+    <p></p>
+    </div>
+   </apex:column>
+ </apex:dataTable> -->
+</apex:component>

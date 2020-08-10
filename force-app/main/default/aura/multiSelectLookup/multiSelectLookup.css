@@ -1,0 +1,9 @@
+.THIS .inputSize {
+    width:100%; 
+}
+.THIS .toggle {
+    display: none;
+}
+.THIS .unhide{
+    display: block;
+}

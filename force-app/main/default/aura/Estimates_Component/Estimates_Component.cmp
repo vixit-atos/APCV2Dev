@@ -1,0 +1,36 @@
+<aura:component controller="EstimatesAndExpensesController" implements="force:hasRecordId,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="cab" type="Decimal" default="0"/>
+    <aura:attribute name="chassis" type="Decimal" default="0"/>
+    <aura:attribute name="mechatronics" type="Decimal" default="0"/>
+    <aura:attribute name="eve" type="Decimal" default="0"/>
+    <aura:attribute name="otherEstimates" type="Decimal" default="0"/>
+    <aura:attribute name="tooling" type="Decimal" default="0"/>
+    <aura:attribute name="otherExpenses" type="Decimal" default="0"/>
+    <aura:attribute name="values" type="Decimal"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <lightning:card title="Estimates and Expenses">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <br/><ui:inputNumber aura:id="cab" label="Cab Estimate" class="field" value="{!v.cab}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                <ui:inputNumber aura:id="chassis" label="Chassis Estimate" class="field" value="{!v.chassis}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                <ui:inputNumber aura:id="mechatronics" label="Mechatronics Estimate" class="field" value="{!v.mechatronics}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                <ui:inputNumber aura:id="eve" label="Eve Estimate" class="field" value="{!v.eve}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                <ui:inputNumber aura:id="other" label="Other Estimate" class="field" value="{!v.otherEstimates}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                <p><b>Total Estimate:</b></p>
+                <ui:outputNumber aura:id="totalEstimates"/>
+            </div>
+            
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <lightning:card class="slds-grid">
+                    <br/><ui:inputCurrency aura:id="tooling" label="Tooling Estimate" class="field" value="{!v.tooling}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                    <ui:inputCurrency aura:id="other" label="Other Estimate" class="field" value="{!v.otherExpenses}" updateOn="keyup" keyup="{!c.calculate}"/><br/>
+                    <p><b>Total Expenses:</b></p>
+                    <ui:outputCurrency aura:id="totalExpenses"/>
+                </lightning:card>
+            </div>
+
+        </div><br/>
+        <lightning:button class="slds-size_full" label="Save" onclick="{! c.save }"/>
+    </lightning:card>
+</aura:component>

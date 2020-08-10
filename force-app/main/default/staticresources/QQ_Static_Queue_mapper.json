@@ -1,0 +1,42 @@
+[
+  {
+    "status": "Draft",
+    "queue": "",
+    "group": ""
+  },
+  {
+    "status": "Pending for Validation",
+    "queue": "QQ Validation Queue",
+    "group": "QQ Validation Group"
+  },
+  {
+    "status": "Pending for Cost",
+    "queue": "QQ Cost Queue",
+    "group": "QQ Cost Group"
+  },
+  {
+    "status": "Pending for Price",
+    "queue": "QQ Price Queue",
+    "group": "QQ Price Group"
+  },
+  {
+    "status": "Pending for Control",
+    "queue": "QQ Control Queue",
+    "group": "QQ Control Group"
+  },
+  {
+    "status": "Pending for Management",
+    "queue": "QQ Management Queue",
+    "group": "QQ Management Group"
+  },
+  {
+    "status": "Rejected",
+    "queue": "QQ Superuser Queue",
+    "group": ""
+  },
+  {
+    "status": "Approved",
+    "queue": "QQ Superuser Queue",
+    "group": ""
+  }
+]

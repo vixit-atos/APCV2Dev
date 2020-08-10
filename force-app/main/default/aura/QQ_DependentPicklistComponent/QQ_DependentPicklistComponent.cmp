@@ -1,0 +1,9 @@
+<aura:component controller="QQdependentPicklist_UpdateCtrl" access="global" >
+    <aura:method name="getdeplist">
+        <aura:attribute name="sObjectName" type="String"/>
+        <aura:attribute name="controlfieldApiName" type="String" />
+        <aura:attribute name="controlfieldValue" type="String" />
+        <aura:attribute name="depfieldApiName" type="String" />
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

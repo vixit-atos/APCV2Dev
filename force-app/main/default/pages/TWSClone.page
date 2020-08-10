@@ -1,0 +1,40 @@
+<apex:page showHeader="true" sidebar="true" standardController="Opportunity" extensions="TWSClone" action="{!deepClone}">
+
+     <apex:variable var="name" value="{!Opportunity.Name}" />
+     <apex:variable var="dealNumber" value="{!Opportunity.DealNumber__c}" />
+     <apex:variable var="account" value="{!Opportunity.AccountId}" />
+     <apex:variable var="modelYear" value="{!Opportunity.MY__c}" />
+     <apex:variable var="datePrepared" value="{!Opportunity.DatePrepared__c}" />
+     <apex:variable var="newOrRevision" value="{!Opportunity.NewOrRevision__c}" />
+     <apex:variable var="revisionDate" value="{!Opportunity.RevisionDate__c}" />
+     <apex:variable var="dealerCode" value="{!Opportunity.SO_CD__c}" />
+     <apex:variable var="districtManager" value="{!Opportunity.DistrictManager__c}" />
+     <apex:variable var="reqDeliveryFrom" value="{!Opportunity.DATE_DELV_RQST__c}" />
+     <apex:variable var="reqDeliveryTo" value="{!Opportunity.DATE_LATEST_ACCEPT__c}" />
+     <apex:variable var="priceProtect" value="{!Opportunity.PriceProtect__c}" />
+     <apex:variable var="orderReceivedFrom" value="{!Opportunity.OrderReceivedFrom__c}" />
+     <apex:variable var="orderReceivedTo" value="{!Opportunity.OrderReceivedTo__c}" />
+     <apex:variable var="competition" value="{!Opportunity.CMPTR_CD__c}" />
+     <apex:variable var="dtrRequestedToQuoteResidual" value="{!Opportunity.DTR_Requested_to_Quote_Residual__c}" />
+     <apex:variable var="escalators" value="{!Opportunity.Escalators__c}" />
+     <apex:variable var="chassisWarrantyQuoteNumber" value="{!Opportunity.Chassis_Warranty_Quote__c}" />
+     <apex:variable var="engineWarrantyQuoteNumber" value="{!Opportunity.Engine_Warranty_Quote__c}" />
+     <apex:variable var="recordTypeId" value="{!Opportunity.RecordTypeId}" />
+     <apex:variable var="specNumber" value="{!Opportunity.Spec_Number__c}" />
+     <apex:variable var="country" value="{!Opportunity.Country__c}" />
+     <apex:variable var="stage" value="{!Opportunity.StageName}" />
+     <apex:variable var="closeDate" value="{!Opportunity.CloseDate}" />
+     <apex:variable var="probability" value="{!Opportunity.Probability}" />
+     <apex:variable var="make" value="{!Opportunity.Make__c}" />
+     <apex:variable var="tcTargetDate" value="{!Opportunity.TC_Target_Date__c}" />
+     <apex:variable var="tcReason" value="{!Opportunity.TC_Reason__c}" />
+     <apex:variable var="tcCategory" value="{!Opportunity.TC_Category__c}" />
+     <apex:variable var="tcDecision" value="{!Opportunity.TC_Decision__c}" />
+     <apex:variable var="revisionStatus" value="{!Opportunity.Revision_Status__c}" />
+     <apex:variable var="dealSubmitDate" value="{!Opportunity.DealSubmitDate__c}" />
+     <apex:variable var="passedTCProcess" value="{!Opportunity.Passed_TC_Process__c}" />
+      <apex:variable var="RGM" value="{!Opportunity.RGM_U__c}" />
+       <apex:variable var="NAD" value="{!Opportunity.NAD_U__c}" />
+       <apex:variable var="NAE" value="{!Opportunity.NAEU__c}" />
+
+</apex:page>

@@ -1,0 +1,63 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId" access="global" >
+    
+    <!-- Attribute Declaration -->
+    <aura:attribute name="isOpen" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="caserecord" type="Object"/>
+    <aura:attribute name="showspinner" type="Boolean" default="false"/>
+    <aura:attribute name="parturl" type="string" default=""/>
+    
+    <lightning:quickActionAPI aura:id="quickActionAPI" />
+    
+    <div class="slds-hide">
+        <lightning:flow aura:id="flow" onstatuschange="{!c.handleflowfinish}"/>
+    </div>
+    
+    <aura:attribute name="disable_reprocess" type="Boolean" default="false"/>
+    <aura:attribute name="refpartno_split" type="Array"/>
+    <aura:attribute name="partno_split" type="Array"/>
+    <aura:attribute name="recordLoadError" type="string"/>
+    <aura:handler name="change" value="{!v.isOpen}" action="{!c.refresh}" />
+    <aura:handler name="change" value="{!v.caserecord}" action="{!c.itemsChange}"/>
+    
+    <!-- Query Case Record -->
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="CaseNumber,Status"
+                      targetFields="{!v.caserecord}"
+                      targetError="{!v.recordLoadError}"
+                      recordUpdated="{!c.handleRecordUpdated}"
+                      mode="EDIT"
+                      />
+    
+    <div class="slds-page-header slds-page-header_record-home">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-opportunity">
+                            <lightning:icon iconName="standard:case" alternativeText=""/>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span>Case</span>
+                                    <span class="slds-page-header__title slds-truncate" title="">{!v.caserecord.CaseNumber}</span>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-page-header__col-actions">
+                <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                        
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</aura:component>

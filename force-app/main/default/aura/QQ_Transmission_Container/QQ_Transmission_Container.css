@@ -1,0 +1,33 @@
+.THIS .textcolor{
+    color:rgb(37, 99, 169);
+    font-size:1.25rem;
+    font-weight:bold;
+}
+.THIS .slds-form-element__label{
+    font-size:.9rem;
+    font-weight:bold;
+}
+.THIS .table__label{
+    font-size:.7rem;
+    font-weight:bold;
+}
+.THIS .table__data{
+    font-size:.7rem;
+    
+}
+
+.THIS .slds-form-element__control{
+    font-size:.8rem;
+}
+
+.THIS .slds-radio_faux{
+    width:1rem;
+    height:1rem;
+   
+}
+.THIS .slds-radio{
+   padding-bottom:.7rem; 
+}
+.THIS .slds-assistive-text{
+    background-color:red;
+}

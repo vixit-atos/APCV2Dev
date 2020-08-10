@@ -1,0 +1,13 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForAllPageTypes">
+    
+    <aura:attribute name="fieldset" type="List" default="['CaseNumber','APC_Reason__c','Origin','Priority']"/>
+    <aura:attribute name="recordId" type="String" default="500L000000FBKZOIA5" /> 
+    
+    <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Case">
+        <div class="slds-box">
+            <aura:iteration items="{!v.fieldset}" var="item">
+                <lightning:outputField fieldName="{!item}" /> <br></br>
+            </aura:iteration> 
+        </div>
+    </lightning:recordViewForm>
+</aura:component>

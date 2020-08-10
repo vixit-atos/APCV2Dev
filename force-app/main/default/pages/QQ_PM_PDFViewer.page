@@ -1,0 +1,397 @@
+<apex:page controller="QQ_PM_PDFController" applyHtmlTag="false" applyBodyTag="false" showHeader="false" cache="false" renderAs="advanced_pdf" >
+    
+    <head>
+        <style type="text/css">
+            @page {size : landscape}
+            @page rotated { size : portrait; margin: 50px 50px 50px 50px;}
+            div.port{ page : rotated }
+            
+            .red_normal_12 {
+            color:red;
+            font-family:Calibri, Arial;
+            font-size:12px;
+            font-weight:normal;
+            }
+            
+            .black_normal_12 {
+            color:black;
+            font-family:Calibri, Arial;
+            font-size:12px;
+            font-weight:normal;
+            }
+            
+            .black_bold_12 {
+            color:black;
+            font-family:Calibri, Arial;
+            font-size:12px;
+            font-weight:bold;
+            }
+            
+            .black_bold_14 {
+            color:black;
+            font-family:Calibri, Arial;
+            font-size:14px;
+            font-weight:bold;
+            }
+            
+            .black_bold_16 {
+            color:black;
+            font-family:Calibri, Arial;
+            font-size:16px;
+            font-weight:bold;
+            }
+            
+            .white_bold_12 {
+            color:#FFFFFF;
+            background-color:#848484;
+            font-family:Calibri, Arial;
+            font-size:12px;
+            font-weight:normal;
+            }
+            
+            .white_bold_14 {
+            color:#FFFFFF;
+            font-family:Calibri, Arial;
+            font-size:14px;
+            font-weight:normal;
+            }
+            
+            .white_bold_16 {
+            color:#FFFFFF;
+            font-family:Calibri, Arial;
+            font-size:16px;
+            font-weight:normal;
+            }
+            
+            table.tab_style {
+            border-collapse: separate; 
+            border-spacing: 0px 10px;
+            width: 100%;
+            }
+            
+            th.th_style_left {
+            text-align:left;
+            }
+            
+            th.th_style_right {
+            text-align:right;
+            }
+            
+            th.th_style_center {
+            text-align:center;
+            }
+            
+            td.td_border_05{
+            border: solid 0px #000000;
+            border-top: solid 0.5px #000000;
+            border-bottom: solid 0.5px #000000;
+            border-style: solid none;
+            }
+            
+            td.td_padding_10px{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            }
+            
+            td.td_padding_6px{
+            padding-top: 6px;
+            padding-bottom: 6px;
+            }
+            
+            td.td_style_left {
+            text-align:left;
+            }
+            
+            td.td_style_right {
+            text-align:right;
+            }
+            
+            td.td_style_center {
+            text-align:center;
+            }
+        </style>
+    </head>
+    <body style="font-family: Arial, Helvetica, sans-serif;">
+        <table style="width:100%">
+            <tr>
+                <td style="text-align: center;">
+                    <apex:image url="{!URLFOR($Resource.ReportImages, 'Images/PM_Header.jpg')}"  width="68%"/>
+                </td>
+            </tr>
+        </table>
+        <table style="width:100%">
+            <tr>
+                <td style="width:70%;" valign="top" >
+                    <br/>
+                    <apex:image url="{!URLFOR($Resource.ReportImages, 'Images/QuickQuote.jpg')}" width="30%"/>
+                </td>
+                <td style="text-align:right; width:30%">
+                    <div>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">Expiration Date</span></td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">{!ExpirationDate}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">Date Quoted</span></td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">{!DateQuoted}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">Customer</span></td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">{!Customer}</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">Quote #</span></td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:left; white-space: nowrap;"><span class="black_normal_12">{!recordID}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <br/>
+        
+        <div style="page-break-after:always;">
+            <div style= "display: {!If(PM_Flag ,'','none')}">
+                <div style="background-color:#FFFFFF">
+                    <span class="black_bold_16">PACKAGE DETAILS</span>
+                    <br/>
+                    <br/>
+                </div>
+                <div>
+                    <table class="tab_style">
+                        <apex:variable value="{!0}" var="rowNum1"/>
+                        <apex:repeat value="{!PM_List}" var="PM">
+                            <apex:variable var="rowNum1" value="{!rowNum1 + 1}"/>
+                            <tr class="black_bold_12">
+                                <th class="th_style_left">PACKAGE</th>
+                                <th class="th_style_left">ENGINE MODEL</th>
+                                <th class="th_style_left">DUTY-CYCLE</th> 
+                                <th class="th_style_left">AIR FILTER</th>
+                                <th class="th_style_left">DURATION</th>                                
+                                <th class="th_style_center">DB CODE</th>
+                                <th class="th_style_center">NET PRICE</th>
+                            </tr>
+                            <tr class="black_normal_12" style= "background-color: {!If(mod(rowNum1, 2) != 0 ,'#f2f2f2','#f2f2f2')}">
+                                <td class="td_style_left td_padding_10px">{!PM.PD_Package}</td>
+                                <td class="td_style_left td_padding_10px">{!PM.PD_EngineModel}</td>
+                                <td class="td_style_left td_padding_10px">{!PM.PD_DutyCycle}</td>
+                                <td class="td_style_left td_padding_10px">{!PM.PD_AirFilter}</td>
+                                <td class="td_style_left td_padding_10px">{!PM.PD_TermDuration}</td>
+                                <td class="td_style_center td_padding_10px">{!PM.PD_DbCode}</td>
+                                <td class="td_style_center td_padding_10px">{!PM.PD_Price}</td>
+                            </tr>
+                            <!--  ============================  OFFER MASTER SERVICE  ===========================  -->                            
+                            <tr style= "display: {!If(PM.PD_OMS_Flag ,'','none')}; background-color: #FFFFFF;">
+                                <td></td>
+                                <td></td>
+                                <td colspan="4" style="text-align:left;">
+                                    <br/>
+                                    <div style="background-color:#FFFFFF">
+                                        <span class="black_bold_14">PM SERVICES INCLUDED</span>
+                                    </div>
+                                    <table class="tab_style">
+                                        <tr class="black_bold_12">
+                                            <th class="th_style_left">PM SERVICE TYPE</th>
+                                            <th class="th_style_left"># OF SERVICES</th>
+                                            <th class="th_style_center">INTERVAL (MONTH)</th>
+                                            <th class="th_style_center">INTERVAL (MILES)</th>
+                                        </tr>
+                                        <apex:variable value="{!0}" var="rowNum3"/>
+                                        <apex:repeat value="{!PM.OMS_List}" var="OMS">
+                                            <apex:variable var="rowNum3" value="{!rowNum3 + 1}"/>
+                                            <tr class="black_normal_12" style= "background-color: {!If(mod(rowNum3, 2) != 0 ,'#f2f2f2','#ffffff')}">
+                                                <td class="td_style_left td_padding_6px">{!OMS.OMS_ServiceType}</td>
+                                                <td class="td_style_center td_padding_6px">{!OMS.OMS_ServiceFrequency}</td>
+                                                <td class="td_style_center td_padding_6px">{!OMS.OMS_MonthsInterval}</td>
+                                                <td class="td_style_center td_padding_6px">{!OMS.OMS_MilesInterval}</td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                    <br/>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <!--  ============================  PM3 ADD-ONS  ===========================  -->
+                            <tr style= "display: {!If(PM.PD_AddOns_Flag ,'','none')}; background-color: #FFFFFF;">
+                                <td colspan="7" style="text-align:left;">
+                                    <div style="background-color:#FFFFFF">
+                                        <span class="black_bold_14">ADD-ON(S) SELECTED WITH PM3 PACKAGE</span>
+                                    </div>
+                                    <br/>
+                                    <table class="tab_style">
+                                        <tr class="black_bold_12">
+                                            <th class="th_style_left">ADD-ON</th>
+                                            <th class="th_style_left">TYPE</th>
+                                            <th class="th_style_center"># OF SERVICES</th>
+                                            <th class="th_style_center">DB CODE</th>
+                                            <!--<th class="th_style_center">INTERVAL (MONTH)</th>-->
+                                            <!--<th class="th_style_center">INTERVAL (MILES)</th>-->
+                                            <th class="th_style_center">NET PRICE</th>
+                                        </tr>
+                                        <apex:variable value="{!0}" var="rowNum2"/>
+                                        <apex:repeat value="{!PM.AddOns_List}" var="AO">
+                                            <apex:variable var="rowNum2" value="{!rowNum2 + 1}"/>
+                                            <tr class="black_normal_12" style= "background-color: {!If(mod(rowNum2, 2) != 0 ,'#f2f2f2','#ffffff')}">
+                                                <td class="td_style_left td_padding_10px">{!AO.AO_AddOns}</td>
+                                                <td class="td_style_left td_padding_10px">{!AO.AO_Manufacturer}</td>
+                                                <td class="td_style_center td_padding_10px">{!AO.AO_Service}</td>
+                                                <td class="td_style_center td_padding_10px">{!AO.AO_DBCode}</td>
+                                                <!--<td class="td_style_center td_padding_10px">{!AO.AO_Service_Interval_Months}</td>-->
+                                                <!--<td class="td_style_center td_padding_10px">{!AO.AO_Service_Interval_Miles}</td>-->
+                                                <td class="td_style_center td_padding_10px">{!AO.AO_Price}</td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                    <span class="black_bold_12">Total Price for PM3 and Add-on(s): {!PM.PD_NetPrice}</span>        
+                                    <br/>
+                                    <br/>
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+            </div>
+            
+            <div style= "display: {!If(TRANS_Flag ,'','none')}">
+                <div style="background-color:#FFFFFF">
+                    <span class="black_bold_16">TRANSMISSION</span>
+                    <br/>
+                    <br/>
+                </div>
+                <div>
+                    <table class="tab_style">
+                        <apex:variable value="{!0}" var="rowNum4"/>
+                        <apex:repeat value="{!TRANS_List}" var="TR">
+                            <apex:variable var="rowNum4" value="{!rowNum4 + 1}"/>
+                            <tr class="black_bold_12">
+                                <th class="th_style_left">MANUFACTURER</th>
+                                <th class="th_style_left">MODEL</th>
+                                <th class="th_style_left">DURATION</th>
+                                <th class="th_style_center">DB CODE</th>
+                                <th class="th_style_center">NET PRICE</th>
+                            </tr>
+                            <tr class="black_normal_12" style= "background-color: {!If(mod(rowNum4, 2) != 0 ,'#f2f2f2','#f2f2f2')}">
+                                <td class="td_style_left td_padding_10px">{!TR.T_Manufacturer}</td>
+                                <td class="td_style_left td_padding_10px">{!TR.T_Model}</td>
+                                <td class="td_style_left td_padding_10px">{!TR.T_Duration}</td>
+                                <td class="td_style_center td_padding_10px">{!TR.T_DBCode}</td>
+                                <td class="td_style_center td_padding_10px">{!TR.T_TotalPrice}</td>
+                            </tr>
+                            <!--  ============================  TRANSMISSION SERVICE INCLUDED  ===========================  -->
+                            <tr style= "display: {!If(TR.T_TSI_Flag ,'','none')}; background-color: #FFFFFF;">
+                                <td></td>
+                                <td></td>
+                                <td colspan="2" style="text-align:left;">
+                                    <br/>
+                                    <div style="background-color:#FFFFFF">
+                                        <span class="black_bold_14">TRANSMISSION SERVICES INCLUDED</span>
+                                    </div>
+                                    <table class="tab_style">
+                                        <tr class="black_bold_12">
+                                            <th class="th_style_left">SERVICE TYPE</th>
+                                            <th class="th_style_left"># OF SERVICES</th>
+                                            <th class="th_style_center">INTERVAL (MONTH)</th>
+                                            <th class="th_style_center">INTERVAL (MILES)</th>
+                                        </tr>
+                                        <apex:variable value="{!0}" var="rowNum5"/>
+                                        <apex:repeat value="{!TR.TSI_List}" var="TSI">
+                                            <apex:variable var="rowNum5" value="{!rowNum5 + 1}"/>
+                                            <tr class="black_normal_12" style= "background-color: {!If(mod(rowNum5, 2) != 0 ,'#f2f2f2','#ffffff')}">
+                                                <td class="td_style_left td_padding_6px">{!TSI.TSI_ServiceType}</td>
+                                                <td class="td_style_center td_padding_6px">{!TSI.TSI_ServiceFrequency}</td>
+                                                <td class="td_style_center td_padding_6px">{!TSI.TSI_MonthsInterval}</td>
+                                                <td class="td_style_center td_padding_6px">{!TSI.TSI_MilesInterval}</td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                    <br/>
+                                </td>                                
+                                <td></td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+            </div>
+            
+            <div style= "display: {!If(ATS_Flag ,'','none')}">
+                <div style="background-color:#FFFFFF">
+                    <span class="black_bold_16">AFTER-TREATMENT MAINTENANCE SERVICE</span>
+                    <br/>
+                    <br/>
+                </div>
+                <div>
+                    <table class="tab_style">
+                        <tr class="black_bold_12">
+                            <th class="th_style_left">ENGINE MODEL</th>
+                            <th class="th_style_left">ATS SERVICE</th>
+                            <th class="th_style_left">DURATION</th>
+                            <th class="th_style_center">DB CODE</th>
+                            <th class="th_style_center">NET PRICE</th>
+                        </tr>
+                        <apex:variable value="{!0}" var="rowNum6"/>
+                        <apex:repeat value="{!ATS_List}" var="ATS">
+                            <apex:variable var="rowNum6" value="{!rowNum6 + 1}"/>
+                            <tr class="black_normal_12" style= "background-color: {!If(mod(rowNum6, 2) != 0 ,'#f2f2f2','#ffffff')}">
+                                <td class="td_style_left td_padding_10px">{!ATS.ATS_EngineModel}</td>
+                                <td class="td_style_left td_padding_10px">{!ATS.ATS_Service}</td>
+                                <td class="td_style_left td_padding_10px">{!ATS.ATS_Duration}</td>
+                                <td class="td_style_center td_padding_10px">{!ATS.ATS_DBCode}</td>
+                                <td class="td_style_center td_padding_10px">{!ATS.ATS_TotalPrice}</td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+            </div>
+            
+            <div style= "display: {!If((PM_Flag == false && TRANS_Flag == false && ATS_Flag == false),'','none')}">
+                <span class="red_normal_12">There is nothing to display, please check quote number.</span>
+                <br/>
+                <br/>
+            </div>            
+        </div>
+        
+        <div style="page-break-after:always;">
+            <span class="black_normal_12">
+                DISCLAIMER(s):<br/><br/>                
+                • Prices are quoted in US Dollars and are subject to change without notice.<br/>
+                • Current foreign exchange rates apply and will be added to your OWL quote at time of purchase.<br/>
+                • Spec changes may affect coverages and prices quoted.<br/>
+                <span style= "display: {!If(PM_AddOn ,'','none')}" class="black_normal_12">
+                    • All Add-on options may not meet minimum recommended intervals of service for the term/mileage selected.<br/>
+                </span>
+                • DD13 Engine Coverage quotes are not applicable to all DD13 Torque ratings. Please contact asphelp@daimler.com for DD13 quotes and datacodes.<br/>
+                • For DTNA Chassis and Detroit Extended Coverage Aftermarket Purchases, please follow the OWL Quote to Contract Registration process.<br/><br/>
+                Please refer to attached ESC policy manual for full information on coverage availability.<br/>
+                For additional questions, please contact asphelp@daimler.com<br/>
+            </span>
+        </div>
+        
+        <div class="port">
+            <table style="width:72%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                    <td style="text-align: center;">
+                        <apex:image url="{!URLFOR($Resource.Disclaimer, 'Disclaimer/PMPM_1.jpg')}" width="98%"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        <apex:image url="{!URLFOR($Resource.Disclaimer, 'Disclaimer/PMPM_2.jpg')}" width="100%"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+    </body>
+</apex:page>

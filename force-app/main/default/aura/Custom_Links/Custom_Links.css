@@ -1,0 +1,22 @@
+.THIS {
+    background-color: #c2e8ff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 16pt;
+    background-color: #c2e8ff;
+}
+.THIS .title{
+    border-left: 6px;
+    border-radius: 5px;
+    font-size: 17px;
+    font-weight: bold;
+    background-color: #52baf1;
+    color: white !important;
+    text-align: center; 
+}
+.THIS .list{
+    text-decoration:none;
+    color: #2F5CA0 !important; 
+    line-height: 16pt;
+    font-size: 15px;
+}

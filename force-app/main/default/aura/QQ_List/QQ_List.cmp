@@ -1,0 +1,137 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <c:QQ_ListColumnService aura:id="ListColumnservice" />
+    <c:QQ_List_DataService aura:id="ListDataservice" />
+    
+    <aura:handler event="c:QQ_NQ_Submit_Save_event" action="{!c.doInit}"/>
+    
+    
+    <aura:attribute name="quotes" type="List"/>
+    <aura:attribute name="sort" type="String" default="ASC"/>
+    <aura:attribute name="Statuslist"  type="List"/>
+    <aura:attribute name="Static_resource_list" type="String" default="QQ_Internal_List"/>
+    <aura:attribute name="pageNumber" type="String" default="1" />
+    <aura:attribute name="totalPages" type="integer" default="0" />
+    <aura:attribute name="totalrecord" type="integer" default="0" />
+    <aura:attribute name="currentPage" type="integer" default="1" />
+    <aura:attribute name="pagecounter" type="List"/>
+    <aura:attribute name="startrow" type="integer" default="0"/>
+    <aura:attribute name="endrow" type="integer" default="0"/>
+    <aura:attribute name="DSKpagesize" type="integer" default="10" />
+    <aura:attribute name="TABpagesize" type="integer" default="2" />
+    <aura:attribute name="pagesize" type="integer" default="{!($Browser.isTablet)|| ($Browser.isPhone) ? v.TABpagesize : v.DSKpagesize}" />
+    <aura:attribute name="InternalQQPending" type="Boolean" default="false" />
+    <aura:attribute name="searchedquotes" type="List"/>
+    <aura:attribute name="pagequotes" type="List"/>
+    
+    <aura:attribute name="Stagefilter" type="String" default=""/>
+    <aura:attribute name="Statusfilter" type="String" default=""/>
+    <aura:attribute name="filter" type="String" default="Pending"/>    
+    
+    <aura:attribute name="domain" type="String" default="Extended Warranty"/>
+    <aura:attribute name="source" type="String" default="Internal"/>
+    
+    <aura:attribute name="hidefilter" type="String" default=""/>
+    <aura:attribute name="recordcount" type="integer" default=""/>
+    <aura:attribute name="tablabel" type="String" default=""/>
+    <aura:attribute name="ListColumn" type="List" default="[]"/>
+    <aura:attribute name="ListColumnselected" type="List" default="[]"/>
+    <aura:attribute name="ListColumnavail" type="List" default="[]" />
+    <aura:attribute name="FieldNames" type="List" default="[]" />
+    <aura:attribute name="globalid"  type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:handler event="c:QQ_archiveclickevent" action="{!c.handleArchiveClick}"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <!--create a component attributs -->
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    
+    <aura:if isTrue="{!false}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if> 
+    <div class="slds-theme_default slds-size_full tableheight">
+        <table id="{!concat(v.globalid , 'table')}" aura:id="{!concat(v.globalid , 'table')}" class="slds-table_col-bordered slds-table_striped Sorted Ascending slds-border_right slds-border_left slds-table slds-table_bordered slds-max-medium-table_stacked-horizontal">    
+            <thead style="QQTablehd">
+                <tr class="slds-line-height--reset">
+                    <th  class="slds-cell-shrink slds-cell-wrap QQTablelabel" scope="col"  >
+                        <div  class="QQLabeltext slds-align_absolute-center">Select</div>
+                    </th>
+                    <aura:iteration items = "{!v.ListColumn}" var="item">    
+                        <th class="slds-cell-shrink QQTablelabel slds-cell-wrap " scope="col">
+                            <div class="slds-truncate slds-align_absolute-center QQLabeltext" title="{!item.label}">{!item.label} &nbsp;
+                                <div class="slds-float_right">
+                                    <lightning:icon padding="large" iconName="{!item.Sort == 'ASC' ? 'utility:sort' : 'utility:sort'}" alternativeText="{!item.Field}" variant="inverse" size="xx-small" onclick="{!c.handlesort }"/>
+                                    
+                                </div> 
+                            </div>
+                        </th>
+                    </aura:iteration>
+                </tr>
+            </thead>
+            <tbody id="{!concat(v.globalid , 'tbody')}">
+                <aura:if isTrue="{!or(v.Stagefilter == 'Complete' ,or(v.source =='External' , v.Statusfilter == 'Pending'))}">
+                    <aura:if isTrue= "{!$Browser.formFactor == 'DESKTOP'}">
+                        <tr aria-selected="false" class="slds-hint-parent" id="{!v.filter}">
+                            
+                            <td class="slds-cell-edit" role="gridcell"></td>
+                            
+                            <aura:iteration items = "{!v.ListColumn}" var="item">    
+                                <td class="" role="gridcell" id="{!concat(v.globalid , item.label)}">
+                                    <lightning:input
+                                                     aura:id="{!concat(v.filter , item.label)}"
+                                                     id="{!concat(v.filter , item.label)}"
+                                                     name="{!item.Field}"
+                                                     label=""
+                                                     placeholder = ""
+                                                     type="search"
+                                                     variant="label-hidden"
+                                                     value="{!item.Search}"
+                                                     onchange ="{!c.handlesearch }"
+                                                     />
+                                    
+                                </td>
+                            </aura:iteration>             
+                        </tr>
+                    </aura:if>
+                </aura:if>
+                <aura:iteration items="{!v.pagequotes}" var="item">
+                    <tr aria-selected="false" class="slds-hint-parent" id="{!concat(v.globalid , item.Name)}">
+                        <c:QQ_List_Row record="{!item}" fieldname="{#v.ListColumn}" internalQQ = "{#v.InternalQQ}"
+                                       source="{#v.source}" domain="{#v.domain}"/> 
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        <br></br>
+        
+        <div class="slds-float_left">
+            Showing {!v.startrow}  to {!v.endrow} ({!v.recordcount} entries)
+        </div>
+        <br></br>
+        <div class="slds-float_left">
+            Note: All dates are in format of MM/DD/YYYY
+        </div>
+        <div class="slds-float_right">
+            <lightning:button iconPosition="left"  iconName="utility:left" label="Previous" onclick="{!c.goPrevPage}" disabled ="{!v.currentPage == 1 ? true : false}"/>
+            
+            <span class="pagination">
+                <aura:iteration items = "{!v.pagecounter}" var="item">
+                    <lightning:button  label="{!item}"  class="{!item == v.currentPage ? 'active':'inactive'}" name="{!item}" onclick="{!c.gotoPage}" disabled="{!item=='...' ? true : false}"/>
+                </aura:iteration>
+            </span>
+            <lightning:button iconPosition="right"  iconName="utility:right" label="Next"  onclick="{!c.goNextPage}" disabled="{!v.currentPage == v.totalPages ? true:false}"/> 
+        </div>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,21 @@
+<aura:component controller="TWS_ItemsToApproveMobileController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+<!-- Handle component initialization in a client-side controller -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+  <!-- Dynamically load the list of contacts -->
+    <aura:attribute name="approvals" type="approval_item_wrapper[]" />
+    <aura:attribute name="totalItemToApprove" type="Integer"/>
+    
+    <!-- Page header with a counter that displays total number of contacts -->
+    <!-- Body with list of contacts -->  
+    <div>    
+    	<lightning:layout >
+			<lightning:layoutItem flexibility="auto"  >
+            	<aura:iteration var="approval" items="{!v.approvals}">
+                	<!-- If you’re using a namespace, replace with myNamespace:contacts-->
+                	<c:TWS_approval_template_mobile approval="{!approval}"/>
+                </aura:iteration>
+            </lightning:layoutItem>    
+       </lightning:layout>
+    </div>
+</aura:component>

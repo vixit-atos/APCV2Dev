@@ -1,0 +1,29 @@
+<apex:page standardController="opportunity" extensions="Isp_Won_or_lost_vf_page_cont_extn" >
+    <apex:form >
+        <!-- <apex:actionFunction action="{!pageAction}" name="pageAction"/> -->
+    </apex:form>
+    <apex:includeScript value="/canvas/sdk/js/publisher.js" />
+    <script> 
+    var stage='{!oppstage}';
+    var oppid='{!oppId}' 
+    //if ({!$User.UITheme=='Theme4t'}==true) 
+    window.onload = function redirectToDestinationPage(){
+        if((stage != 'ISP Approved')){
+            if( (typeof sforce != 'undefined') && (sforce != null) ){
+                Sfdc.canvas.publisher.publish({ name : "publisher.close", payload : {refresh:"true" }});  
+                sforce.one.navigateToURL('/'+oppid+'/e?retURL=%2F'+oppid,true);
+            }else{
+                window.location='/'+oppid+'/e?retURL=%2F'+oppid;
+            }
+        }
+        else{
+            
+            if( (typeof sforce != 'undefined') && (sforce != null) ){
+                
+                Sfdc.canvas.publisher.publish({ name : "publisher.close", payload : {refresh:"true" }});
+                sforce.one.navigateToURL('/apex/Isp_Won_or_lost_on_opportunity_vf_page?Id=' + oppid +'&retURL=%2F'+oppid, true);
+            }
+            else{}}
+    }
+    </script>
+</apex:page>

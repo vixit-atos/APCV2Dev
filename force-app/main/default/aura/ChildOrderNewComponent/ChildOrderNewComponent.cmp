@@ -1,0 +1,95 @@
+<!--
+  @Component Name     : ChildOrderNewComponent.cmp
+  @Description        : Existing Order
+  @Author             : Anuhya Mandapati
+  @Group              : 
+  @Last Modified By   : Anuhya Mandapati
+  @Last Modified On   : 07/04/2019
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0        04/30/2019                 Anuhya Mandapati  	   Initial Version
+-->
+<aura:component >
+    
+    <aura:attribute name="orderRecord" type="Object" />    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="caseToCreateFromOrderRecord" type="c:APC_OrderComponent_Event"/>
+    
+    
+    <tr class="slds-hint-parent">
+        <td data-label="Case" class="crecord">
+            <aura:if isTrue="{!not(empty(v.orderRecord.case))}">
+                <div class="slds-truncate" value="{!v.orderRecord.case.Line_Number__c}" title="{!v.orderRecord.case.Line_Number__c}">
+                    <a data-id="{!v.orderRecord.case.Id}" onclick="{!c.goToCase}">{!v.orderRecord.case.CaseNumber}</a>
+                </div>
+            </aura:if>
+        </td>
+        <td data-label="Part Number" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.OrderLineNumber}" title="{!v.orderRecord.PlannerCode}">
+                {!v.orderRecord.OrderLineNumber}
+            </div>
+        </td>
+        <td data-label="Order Status" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.Material}" title="{!v.orderRecord.Material}">
+                <aura:unescapedHtml value="{!v.orderRecord.Material}" />
+            </div>
+        </td>
+        <td data-label="Original Delivery" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.Plant}" title="{!v.orderRecord.Plant}">
+                {!v.orderRecord.Plant}
+            </div>
+        </td>
+        <td data-label="partRecord.PDC" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.ShippingStatus}" title="{!v.orderRecord.ShippingStatus}">
+                {!v.orderRecord.ShippingStatus}
+            </div>
+        </td>
+        <td data-label="partRecord.PDC" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.OriginalDelivery}" title="{!v.orderRecord.OriginalDelivery}">
+                {!v.orderRecord.OriginalDelivery}
+            </div>
+        </td>
+        <td data-label="partRecord.PDC" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.OriginalDelivery}" title="{!v.orderRecord.OriginalDelivery}">
+                {!v.orderRecord.Delivery}
+            </div>
+        </td>
+        <td data-label="partRecord.PDC" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.TrackingNumber}" title="{!v.orderRecord.TrackingNumber}">
+                {!v.orderRecord.TrackingNumber}
+            </div>
+        </td>
+        <td data-label="partRecord.PDC" class="crecord">
+            <div class="slds-truncate" value="{!v.orderRecord.ShippingCondition}" title="{!v.orderRecord.ShippingCondition}">
+                {!v.orderRecord.ShippingCondition}
+            </div>
+        </td>
+        <td data-label="Action">
+            <div class="slds-truncate" title="Action">
+                <lightning:select label="" 
+                                  value="{!v.orderRecord.Action}" 
+                                  onchange="{!c.actionChanged}" 
+                                  class="single"  
+                                  aura:id="BICAction"                                  
+                                  disabled="{!or(empty(v.orderRecord.ShippingStatus),not(empty(v.orderRecord.case)))}">
+                    <option value="">Select</option>
+                    <aura:iteration items="{!v.orderRecord.Actions}" var="at">
+                        <option value="{!at}">{!at}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>
+        </td>
+        
+        <td data-label="partRecord.PDC">
+            <div class="slds-truncate" title="Additional Information">
+                <lightning:input variant="label-hidden"
+                                 disabled="{!or(empty(v.orderRecord.ShippingStatus),not(empty(v.orderRecord.case)))}"
+                                 value="{!v.orderRecord.AdditionalInformation}" 
+                                 onchange="{!c.actionChanged}" />
+            </div>
+        </td>
+    </tr>
+</aura:component>

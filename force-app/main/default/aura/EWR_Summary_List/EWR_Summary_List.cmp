@@ -1,0 +1,27 @@
+<aura:component controller="EWRController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="EWRs" type="List"/>
+    <aura:attribute name="ewrString" type="String"/>
+    <aura:attribute name="foundEWRs" type="String"/>
+    <aura:attribute name="missingEWRs" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.initializeComponent}" />
+    <div aura:id="EWRList" id="EWRList">
+        <lightning:card>
+            <div class="slds-scope">
+                <legend id="newewrform" class="slds-text-heading_medium slds-p-vertical_medium slds-card_boundary slds-p-around--small">
+                    <lightning:input aura:id="ewrIds" style="width: 50%" label="EWR Numbers" name="ewrIds" value="{!v.ewrString}"/>
+                    <lightning:button label="Add EWRS To Case Work Request" 
+                                      class="slds-button slds-button_brand slds-text-body_small"
+                                      variant="brand"
+                                      onclick="{!c.addEWRs}"/>
+                </legend>
+            </div>
+            
+            <br/>
+            <aura:iteration items="{!v.EWRs}" var="ewr">
+                <c:EWR_Summary recordId="{!ewr.Id}"/>
+                <br/>
+            </aura:iteration>
+        </lightning:card>
+    </div>
+</aura:component>

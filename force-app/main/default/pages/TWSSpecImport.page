@@ -1,0 +1,113 @@
+<apex:page showHeader="true" sidebar="true" standardController="PricingProposal__c" extensions="PricingProposalControllerExtension" id="pg">
+    <script>
+    var artID;
+      window.onload=function()       
+    {        
+         //alert('Hi');
+         artID = '{!oppRecordtypeCheck }';
+         //alert('artID::: '+artID );
+    };
+
+    function EnableCnsn(){
+        var cnsk = document.getElementById("pg:frm:pb:pbs:cnsnNumber").value;
+        if(cnsk !=null && artID == 'true' ) {
+            //document.getElementById("pg:frm:pb:pbs:resno").disabled = true;
+            document.getElementById("pg:frm:pb:pbs:Qspec").disabled = true;
+        }
+        if(cnsk =='' && artID == 'true'){
+            //document.getElementById("pg:frm:pb:pbs:resno").disabled = false;
+            document.getElementById("pg:frm:pb:pbs:Qspec").disabled = false;
+        }
+        
+    }
+    
+    function EnableRefser(){
+        var cnsk = document.getElementById("pg:frm:pb:pbs:resno").value;
+        if(cnsk !=null && artID == 'true') {
+            //document.getElementById("pg:frm:pb:pbs:cnsnNumber").disabled = true;
+            document.getElementById("pg:frm:pb:pbs:Qspec").disabled = true;
+        }
+        if(cnsk =='' && artID == 'true'){
+            //document.getElementById("pg:frm:pb:pbs:cnsnNumber").disabled = false;
+            document.getElementById("pg:frm:pb:pbs:Qspec").disabled = false;
+        }
+        
+        
+        
+    }
+    function EnableQSpex(){
+        var cnsk = document.getElementById("pg:frm:pb:pbs:Qspec").value;
+        if(cnsk !=null) {
+            //document.getElementById("pg:frm:pb:pbs:cnsnNumber").disabled = true;
+            //document.getElementById("pg:frm:pb:pbs:resno").disabled = true;
+        }
+        if(cnsk ==''){
+            //document.getElementById("pg:frm:pb:pbs:cnsnNumber").disabled = false;
+            //document.getElementById("pg:frm:pb:pbs:resno").disabled = false;
+        }
+        
+        
+        
+    }
+    function OnApprovalStatusChange(newValue) {
+    
+    console.log('---',artID);
+    console.log('--- newValue ',newValue);
+    if(artID == 'true')
+    {
+        if (newValue == '') {
+            document.querySelector('input[id *=resno]').removeAttribute('required');
+            document.querySelector('input[id *=cnsnNumber]').removeAttribute('required');
+            document.querySelector('input[id *=cnsnNumber]').disabled = false;
+            document.querySelector('input[id *=resno]').disabled = false;
+            
+        } else if (newValue == 'Approved') {
+        console.log('1');
+            document.querySelector('input[id *=resno]').setAttribute('required', 'true');
+            document.querySelector('input[id *=cnsnNumber]').removeAttribute('required');
+            
+            document.querySelector('input[id *=cnsnNumber]').disabled = true;
+            document.querySelector('input[id *=cnsnNumber]').value='';
+            document.querySelector('input[id *=resno]').disabled = false;
+            
+        } else if (newValue == 'Proposed') {
+        console.log('2');
+            document.querySelector('input[id *=resno]').removeAttribute('required');
+            document.querySelector('input[id *=cnsnNumber]').setAttribute('required', 'true');
+            document.querySelector('input[id *=cnsnNumber]').disabled = false;
+            document.querySelector('input[id *=resno]').value='';
+            document.querySelector('input[id *=resno]').disabled = true;
+            
+        }
+    }
+}
+    function removeRequired() {
+        document.querySelector('input[id *=resno]').removeAttribute('required');
+        document.querySelector('input[id *=cnsnNumber]').removeAttribute('required');
+        document.querySelector('input[id *=cnsnNumber]').disabled = false;
+        document.querySelector('input[id *=resno]').disabled = false;
+        cancel();
+    }
+    </script>   
+    <apex:form id="frm">
+      
+        <apex:pageBlock id="pb" >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" onclick="removeRequired();"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="1" id="pbs">
+                <apex:inputField value="{!pricingproposal.name}" required="true"/>
+                <apex:inputField value="{!pricingproposal.Approval_Status__c}" required="true" onchange="OnApprovalStatusChange(this.value)"/>
+                <apex:inputField value="{!pricingproposal.ConcessionNumber__c}" id="cnsnNumber" onkeyup="EnableCnsn()" onmouseover="EnableCnsn()"/><!---->
+                <apex:inputField value="{!pricingproposal.ReferenceSerialNumber__c}" id="resno" onkeyup="EnableRefser()" onmouseover="EnableRefser()"/><!---->
+                <apex:inputText value="{!pricingproposal.QSpec__c}" id="Qspec" onkeyup="EnableQSpex()" onmouseover="EnableQSpex()"/>
+                <apex:inputField value="{!pricingproposal.DTRResiduals__c}" required="true"/>
+                <apex:inputField value="{!pricingproposal.DTRTrades__c}" required="true"/>
+                
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,79 @@
+<aura:component controller="QQ_AdminTool_Controller" implements="lightning:hasPageReference,force:hasRecordId,lightning:actionOverride" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+            
+    <aura:attribute name="recordURL" type="String" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="recordTypeId" type="string"/>
+    <aura:attribute name="recordType" type="string" default=""/>
+    <aura:attribute name="policyFlag" type="Boolean" default="false"/>
+        
+    <aura:attribute name="AdminTool" type="Administrative_Tool__c" default="{'sobjectType':'Administrative_Tool__c'}"/>
+    <c:QQ_AdminTool_Submit aura:id="SubmitAdminTool" />
+    
+    <aura:if isTrue="{!or(or(v.recordType == 'Create New Model Relationship', v.recordType == 'PDF Disclaimer Management'), v.recordType == 'PDF Policy Management')}">
+        <div class="DESKTOP uiModal--medium uiModal forceModal open active" style="display: block; z-index: 2;">
+            <div role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="title slds-text-heading--medium">New Administrative Tool: {!v.recordType}</h2>
+                        <lightning:buttonIcon class="slds-button slds-modal__close slds-button--icon-inverse" 
+                                              iconName="utility:close"
+                                              variant ="brand"
+                                              size="large"
+                                              title="Close this window"
+                                              onclick="{!c.closePanel}"/>
+                    </header>
+                    <div class="modal-body scrollable slds-modal__content slds-p-around--medium" id="modal-content-id-1">
+                        <aura:if isTrue="{!v.recordType == 'Create New Model Relationship'}">
+                            <c:QQ_AdminTool_ModelRelation aura:id="ModelRelation"
+                                                          recordType="{!v.recordType}"
+                                                          AdminTool="{!v.AdminTool}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!and(v.recordType == 'PDF Policy Management', v.policyFlag)}">
+                            <c:QQ_AdminTool_PolicyManual aura:id="PolicyManual"
+                                                         recordType="{!v.recordType}"/>
+                        </aura:if>
+                        <aura:if isTrue="{!v.recordType == 'PDF Disclaimer Management'}">
+                                <c:QQ_AdminTool_Disclaimer aura:id="Disclaimers"
+                                                           recordType="{!v.recordType}"
+                                                           AdminTool="{!v.AdminTool}"/>
+                        </aura:if>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <span class="slds-float_right">
+                            <lightning:button variant="brand"
+                                              label="Cancel"
+                                              iconName="utility:close"
+                                              title="Cancel Panel"
+                                              onclick="{!c.closePanel}" />
+                            
+                            <aura:if isTrue="{!and(v.recordType != 'PDF Disclaimer Management', v.policyFlag == false)}">
+                                <lightning:button variant="brand"
+                                                  label="Save"
+                                                  iconName="utility:save"
+                                                  title="Save Record"
+                                                  onclick="{!c.submitRecord}" />
+                            </aura:if>
+                            
+                            <aura:if isTrue="{!and(v.recordType == 'PDF Policy Management', v.policyFlag)}">
+                                <lightning:button label="Upload Files"
+                                                  variant="brand"
+                                                  iconName="utility:upload"
+                                                  iconPosition="left"
+                                                  onclick="{!c.uploadFile}" />
+                            </aura:if>
+                            <aura:if isTrue="{!v.recordType == 'PDF Disclaimer Management'}">
+                                <lightning:button label="Save Disclaimers"
+                                                  variant="brand"
+                                                  iconName="utility:save"
+                                                  iconPosition="left"
+                                                  onclick="{!c.saveDisclaimer}" />
+                            </aura:if>
+                        </span>
+                    </footer>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+</aura:component>

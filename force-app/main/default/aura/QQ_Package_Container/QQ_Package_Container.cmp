@@ -1,0 +1,339 @@
+<aura:component controller="QQ_PM_Ext_Controller" access="global">
+    <aura:attribute name="addonitems" 
+                    type="PM_Line_Item_AddOn__c[]"/>
+    <aura:handler name="change" value="{!v.addonitems}" action="{!c.UpdatePckgprice}"/>
+    <aura:attribute name="quoteitem" type="ASP_PM_Line_Items__c" default="{'sobjectType': 'ASP_PM_Line_Items__c'}"/>
+    <aura:attribute name="quoteitemlist" type="ASP_PM_Line_Items__c[]" />
+    <aura:attribute name="addonselected" type="List"/>
+    <aura:attribute name="enginemodellist" type="List"/>
+    <aura:attribute name="dutycycleList" type="List"/>
+    <aura:attribute name="packagelist" type="List" />
+    <aura:attribute name="severemessage" type="String" default=""/>   
+    <aura:attribute name="ServiceList" type="list"  />
+    <aura:attribute name="servicelisttable" type="list"  />
+    
+    <aura:attribute name="FilterList" type="list" />
+    <aura:attribute name="AirFilterList" type="list" />
+    <aura:attribute name="addonlist" type="list" />
+    <aura:attribute name="addonfor_engine" type="list"/>
+    <aura:attribute name="durationList" type="list" />
+    <aura:attribute name="disableaddbtn" type="boolean" default="true"/>
+    
+    <aura:attribute name="enableaddonlist" type="List" default=""/>
+    <aura:attribute name="masterlineitems" type="List"/>
+    <aura:attribute name="enginemodelitems" type="List"/>
+    <aura:attribute name="dutylineitems" type="List"/>
+    <aura:attribute name="cvrgtypelineitems" type="List"/>
+    <aura:attribute name="optionslineitems" type="List"/>
+    <aura:attribute name="deductiblelineitems" type="List"/>
+    <aura:attribute name="durationlineitems" type="List"/>
+    <aura:attribute name="finallineitem" type="String"/>
+    <aura:attribute name="grouplineitems" type="List"/>
+    <aura:attribute name="levellineitems" type="List"/>
+    <aura:attribute name="packagelineitems" type="List"/>
+    <aura:attribute name="standalonelineitems" type="List"/>
+    <aura:attribute name="servicelineitem" type="List"/>
+    <aura:attribute name="pricelineitem" type="List"/>
+    <aura:attribute name="pricelist" type="List"/>
+    <aura:attribute name="serviceintervallineitem" type="List"/>
+    <aura:attribute name="serviceintervallist" type="List"/>
+    <aura:attribute name="activeSections" type="List" default="" />
+    
+    <!--<aura:attribute name="pminfo" type="string"/>-->
+    <!--<aura:attribute name="dutyinfo" type="string"/>-->
+    
+    
+    <aura:attribute name="showaddonlist" type="List" default=""/>
+    
+    
+    
+    <c:QQ_Pm_LineItem_DataService aura:id="Lineitemservice" />
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    <c:QQ_Query_OfferService_DataService aura:id="QueryOfferService_Srvc" />
+    
+    <c:LightningPicklistComponent sObjectName="ASP_PM_Line_Items__c" fieldName="Air_Filter__c" picklistValues="{!v.AirFilterList}" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>
+    <form  class="slds-form_stacked slds-box slds-theme_shade">
+        <aura:iteration items="{!v.quoteitemlist}" var="item">
+            <aura:if isTrue="{!item.Program__c == 'PACKAGE'}">
+                <div class="slds-box slds-box_x-small slds-theme_default">
+                    <a class="slds-text-title_bold">Data Book Code:</a> {!item.Databook_Code__c}
+                    <div class="slds-float_right slds-p-around_large">
+                        <lightning:buttonIcon
+                                              iconName="utility:delete" 
+                                              variant="bare"
+                                              size="large"
+                                              alternativeText="Settings" 
+                                              iconClass="dark"
+                                              onclick="{! c.removequoteitem}"
+                                              name="{!item.Offer_Master_Id__c}"/>
+                    </div>
+                    <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Engine_Model__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Duty_Cycle__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Package__c} 
+                        </lightning:layoutItem>
+                        <aura:if isTrue="{!item.Air_Filter__c}">
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!item.Air_Filter__c}  
+                            </lightning:layoutItem>
+                        </aura:if> 
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Duration__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!item.Total_Price__c}">
+                                <ui:outputCurrency value="{!item.Total_Price__c}"/> USD
+                                <aura:set attribute="else">
+                                    <ui:outputText value="$--.-- USD"/>
+                                </aura:set>
+                            </aura:if> 
+                            
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    <aura:if isTrue= "{!item.Package__c == 'PM3' ? true : false}">
+                        
+                        <c:QQ_Package_Add_On_Container quoteitem = "{!item}"
+                                                       offermasterid = "{!item.Offer_Master_Id__c}" 
+                                                       addonitems="{!v.addonitems}"/>
+                        
+                        
+                        <aura:set attribute="else">
+                            <div class="slds-text-title">Note: PM1 and PM2 do not allow add-on purchases.  If add-ons are desired, please select PM3. </div>
+                        </aura:set> 
+                    </aura:if>
+                </div>
+            </aura:if>
+        </aura:iteration>
+        
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="4" padding="around-small">
+                <lightning:combobox name="Engine_Model__c"                                     
+                                    label="Engine Model"                                   
+                                    value="{!v.quoteitem.Engine_Model__c}" 
+                                    placeholder="None" 
+                                    options="{! v.enginemodellist }" 
+                                    onchange="{!c.handlechange}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="4"  padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.Engine_Model__c}"  >
+                    <span class="slds-form-element__label">
+                        Duty Cycle
+                        <div class="tooltip">
+                            <lightning:buttonIcon variant="bare" iconName="utility:info" title="" iconClass="dark"/>
+                            <div class="dutyinfo">
+                                <table>
+                                    <tr>
+                                        <th>ENGINE</th>
+                                        <th>SEVERE</th>
+                                        <th>SHORT HAUL</th>
+                                        <th>LONG HAUL</th>
+                                        <th>EFF LONG HALL</th>
+                                    </tr>
+                                    <tr>
+                                        <td>DD5</td>
+                                        <td>&lt; 10 MPG</td>
+                                        <td>60K annual miles 10.1-11.9 MPG</td>
+                                        <td>60K annual miles 12.0 MPG</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>DD8</td>
+                                        <td>6.5 MPG</td>
+                                        <td>60K annual miles 6.5-8.5 MPG</td>
+                                        <td>60K annual miles &gt; 8.5 MPG</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>DD13</td>
+                                        <td>30K annual miles 5 MPG</td>
+                                        <td>30K-60K annual miles 5.1-5.9 MPG</td>
+                                        <td>60K annual miles 6.0-6.9 MPG</td>
+                                        <td>&gt; 60K annual 7 MPG</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DD15</td>
+                                        <td>30K annual miles 5 MPG</td>
+                                        <td>30K-60K annual miles 5.1-5.9 MPG</td>
+                                        <td>60K annual miles 6.0-6.9 MPG</td>
+                                        <td>&gt; 60K annual 7 MPG</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DD16</td>
+                                        <td>30K annual miles 5 MPG</td>
+                                        <td>30K-60K annual miles 5.1-5.9 MPG</td>
+                                        <td>60K annual miles 6.0-6.9 MPG</td>
+                                        <td></td>
+                                    </tr>
+                                </table>        
+                            </div>
+                        </div>
+                    </span>
+                    <lightning:combobox name="Duty_Cycle__c" 
+                                        variant="label-hidden"
+                                        label="Duty Cycle" 
+                                        value="{!v.quoteitem.Duty_Cycle__c}" 
+                                        placeholder="" 
+                                        options="{! v.dutycycleList }" 
+                                        onchange="{!c.handlechange}" 
+                                        />
+                    
+                </aura:if>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="2" padding="around-small" >
+                <span class="textcolor slds-float_right slds-p-top_large">
+                    <aura:if isTrue="{!v.quoteitem.Price__c}">
+                        <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> USD
+                        <aura:set attribute="else">
+                            <ui:outputText value="$--.-- USD"/>
+                        </aura:set>
+                    </aura:if>
+                </span>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="slds-float_right">
+                    <br></br> 
+                    <lightning:buttonIcon
+                                          iconName="utility:add"  
+                                          variant="brand"
+                                          size="large"
+                                          alternativeText="Add Item" 
+                                          disabled = "{!v.disableaddbtn}"
+                                          iconClass="dark"
+                                          onclick="{! c.addquoteitem}"
+                                          name="Add"/>
+                    
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <aura:if isTrue="{!v.severemessage}">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div class="slds-text-color_success slds-text-heading_medium">{!v.severemessage}</div>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <aura:set attribute="else">
+                <lightning:layout multipleRows="true">
+                    <aura:if isTrue= "{!and(v.quoteitem.Duty_Cycle__c , not(empty(v.packagelist)))}" >
+                        <lightning:layoutItem size="6" largeDeviceSize="6" padding="around-small">
+                            <span class="slds-form-element__label">
+                                Package
+                                <div class="tooltip">
+                                    <lightning:buttonIcon variant="bare" iconName="utility:info" title="" iconClass="dark"/>
+                                    <div class="pminfo slds-text-longform">
+                                        <ul>
+                                            <li>PM1 includes basic services.</li>
+                                            <li>PM2 includes PM1 and additional services.</li>
+                                            <li>PM3 includes everything in PM1 and PM2, additional services, and allows add-ons to be purchased.</li>
+                                            <li>PM1 and PM2 do not allow add-on purchases.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <lightning:radioGroup
+                                                      aura:id="Package__c"
+                                                      name="Package__c"
+                                                      label=""
+                                                      variant="label-hidden"
+                                                      options="{!v.packagelist }"
+                                                      value="{! v.quoteitem.Package__c}"
+                                                      required="" 
+                                                      type="{!$Browser.formFactor == 'DESKTOP' ? 'button':''}"
+                                                      onchange="{!c.handlechange}"/>
+                                
+                            </span>
+                            
+                        </lightning:layoutItem>
+                        
+                    </aura:if>
+                    
+                    <lightning:layoutItem size="6" largeDeviceSize="6" padding="around-small">
+                        <aura:if isTrue= "{!v.quoteitem.Package__c=='PM3'}" >
+                            <lightning:radioGroup
+                                                  
+                                                  name="Air_Filter_Type__c"
+                                                  label="Air Filter"
+                                                  options="{!v.AirFilterList }"
+                                                  value="{! v.quoteitem.Air_Filter__c}"
+                                                  onchange="{!c.handlechange}"/>
+                        </aura:if>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="4" largeDeviceSize="4" padding="around-small">
+                        <aura:if isTrue= "{! or(or(v.quoteitem.Package__c=='PM1',v.quoteitem.Package__c=='PM2'),v.quoteitem.Air_Filter__c)}">
+                            <lightning:RadioGroup
+                                                  name="Duration__c"
+                                                  label="Duration"
+                                                  options="{!v.durationList }"
+                                                  placeholder="None" 
+                                                  value="{!v.quoteitem.Duration__c }"
+                                                  onchange="{!c.handlechange}"
+                                                  />
+                        </aura:if>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="8" largeDeviceSize="8" padding="around-small">
+                        <aura:if isTrue= "{!v.quoteitem.Duration__c }" >
+                            <div class="slds-form-element__label">PM Services Included</div>
+                            
+                            <Table border="1" class="slds-box slds-table slds-theme_alert-texture">
+                                
+                                <Thead>
+                                    <tr></tr>
+                                    <th class="slds-text-align_left table__label">PM Service Type</th>
+                                    <th class="slds-text-align_left table__label"># of Services</th>
+                                    <th class="slds-text-align_left table__label">Interval (month)</th>
+                                    <th class="slds-text-align_left table__label">Interval (miles)</th>
+                                    
+                                </Thead>
+                                
+                                <Tbody>
+                                    
+                                    <aura:iteration items="{! v.servicelisttable }"  var="item" indexVar="index">
+                                        <tr>
+                                            <td class="table__data slds-text-align_left">{!item.Service_Type__c}</td>
+                                            <td class="table__data slds-text-align_left">{!item.Service_Frequency__c}</td>
+                                            <td class="table__data slds-text-align_left">{!item.Service_Interval_Months__c}</td>
+                                            <td class="table__data slds-text-align_left">{!item.Service_Interval_Miles__c}</td>
+                                            
+                                        </tr>
+                                    </aura:iteration>
+                                    
+                                </Tbody>
+                            </Table>
+                            
+                            
+                            <lightning:layout >
+                                
+                                
+                                <lightning:layoutItem   alignmentBump="left" >
+                                    <div class="custom-box">   <lightning:buttonIcon
+                                                                                     iconName="utility:add"  
+                                                                                     variant="brand"
+                                                                                     size="large"
+                                                                                     alternativeText="Add Item" 
+                                                                                     disabled = "{!v.disableaddbtn}"
+                                                                                     iconClass="dark"
+                                                                                     onclick="{! c.addquoteitem}"
+                                                                                     name="Add"/></div>
+                                </lightning:layoutItem>
+                            </lightning:layout>  
+                        </aura:if>
+                        
+                        
+                    </lightning:layoutItem>
+                    
+                    
+                </lightning:layout>
+                
+            </aura:set>
+            
+        </aura:if>
+    </form>
+</aura:component>

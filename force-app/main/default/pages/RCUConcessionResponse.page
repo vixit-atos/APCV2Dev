@@ -1,0 +1,9 @@
+<apex:page standardController="Opportunity">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Regional Concession Request</h1>
+  <br/><br/>
+The Regional Concession Approval Request was sent to Mainframe. <br/><br/>
+Following was the response recieved:<br/>
+CONCESSION APPROVED BY REGION
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

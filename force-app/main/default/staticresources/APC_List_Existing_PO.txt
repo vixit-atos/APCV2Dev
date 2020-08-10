@@ -1,0 +1,100 @@
+[
+  {
+    "label": "Case",
+    "value": "Case number",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Item",
+    "value": "item",
+    "Field": "OrderLineNumber",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Part Number",
+    "value": "Part number",
+    "Field": "Material",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "PO Number",
+    "value": "PO number",
+    "Field": "POnumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Order",
+    "value": "SAPnumber",
+    "Field": "SalesOrderNumber",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Direct Ship",
+    "value": "Directshiporder",
+    "Field": "Directship",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Orginal Delivery",
+    "value": "orig delivery#",
+    "Field": "OriginalDelivery",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Carrier",
+    "value": "Carrier",
+    "Field": "Carrier",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Tracking",
+    "value": "Tracking Number",
+    "Field": "TrackingNumber",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "FAC PDC",
+    "value": "FAC PDC",
+    "Field": "Plant",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Invoice",
+    "value": "Invoice",
+    "Field": "Invoice",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Reason",
+    "value": "Reason",
+    "Field": "Reason",
+    "Search": "",
+    "Sort": "ASC"    
+  },
+  {
+    "label": "Select All",
+    "value": "Choose Part",
+    "Field": "Choosepart",
+    "Search": "",
+    "Sort": "ASC"    
+  }, 
+  {
+    "label": "Attach",
+    "value": "Attach",
+    "Field": "Attachments",
+    "Search": "",
+    "Sort": "ASC"    
+  }
+]

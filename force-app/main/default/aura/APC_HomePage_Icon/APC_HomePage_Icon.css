@@ -1,0 +1,52 @@
+.THIS h3.slds-page-header{
+    font-weight:300;
+    font-size:3rem;   
+    line-height: 3.5rem;
+    background-color: white;
+}
+
+.THIS label.slds-form-element{    
+    font-size:1.25rem;
+    line-height: 1.25rem;    
+}
+@media (max-width: 1440px) {
+.THIS h3.slds-page-header{
+    font-weight:300;
+    font-size:3rem;   
+    line-height: 3.5rem;
+    background-color: white;
+}
+}
+
+@media (max-width: 1024px) {
+.THIS h3.slds-page-header{
+    font-weight:300;
+    font-size:2rem;   
+    line-height: 2.5rem;
+    background-color: white;
+}
+}
+@media (max-width: 768px) {
+.THIS h3.slds-page-header{
+    font-weight:300;
+    font-size:1.5rem;   
+    line-height: 2rem;
+    background-color: white;
+}
+}
+@media (max-width: 425px) {
+.THIS h3.slds-page-header{
+    font-weight:300;
+    font-size:1rem;   
+    line-height: 1.5rem;
+    background-color: white;
+}
+}
+@media (max-width: 425px) {
+.THIS h3.slds-page-header{
+    font-weight:300;
+    font-size:0.7rem;   
+    line-height: 0.7rem;
+    background-color: white;
+}
+}

@@ -1,0 +1,52 @@
+<aura:component >
+    
+   
+    <aura:attribute name="approval" type="approval_item_wrapper"/>
+    
+	<div class="slds-grid slds-wrap slds-theme_default slds-border_bottom">
+  		<div class="slds-col slds-size_1-of-1  slds-p-top_small">
+     		<button name="lead" class="slds-button slds-m-left_small" onclick="{!c.goToRecord}"><span>{!v.approval.name}</span></button>
+  		</div>
+        <div class="slds-col slds-grid slds-size_1-of-1 slds-p-bottom_small">
+            <div class="slds-col slds-size_1-of-3 slds-text-color_weak slds-text-body_medium">
+                    <p class="slds-m-left_small slds-truncate">Type:</p>
+                	<p class="slds-m-left_small slds-truncate" >Submitted By:</p>
+                    <p class="slds-m-left_small slds-truncate" >Date Submitted:</p>
+            </div>
+            <div class="slds-col slds-size_2-of-3 slds-text-body_medium ">
+                <p class="slds-m-left_small">{!v.approval.objtype}</p>
+                <p class="slds-m-left_small">{!v.approval.submittedBy}</p>
+                <p class="slds-m-left_small">{!v.approval.DateSubmited}</p>
+            </div>
+        </div>
+  </div> 
+    
+
+
+    
+    
+    
+    
+    
+    
+ <!-- <div class = "slds-grid slds-grid_vertical slds-theme_default slds-border_bottom">
+            <div class="slds-grid slds-grid_vertical">
+                <div class="slds-col slds-p-top_small">
+                    <div class="slds-grid slds-m-left_small"> 
+                        <button name="lead" class="slds-button" onclick="{!c.goToRecord}"><span>{!v.approval.name}</span></button>
+                    </div>
+                </div>
+                <div class="slds-col slds-p-bottom_small">
+                    <div class="slds-grid slds-gutters_x-small slds-text-body_medium">
+                        <div class="slds-col slds-size_1-of-3 slds-text-color_weak">
+                                <p class="slds-m-left_small">Typsadasdasdasddasdasdasdasdadsadasdasdasdasdsde:</p>
+                            </div>
+                            <div class="slds-col slds-size_2-of-3 ">
+                          
+                            </div>
+                        </div> 
+                </div>
+            </div>
+    </div>   --> 
+    
+</aura:component>

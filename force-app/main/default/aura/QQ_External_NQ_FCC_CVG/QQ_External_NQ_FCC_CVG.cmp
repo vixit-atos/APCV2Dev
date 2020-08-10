@@ -1,0 +1,224 @@
+<aura:component>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quoteitem" type="ASP_QQ_Line_Item__c" default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <aura:attribute name="quoteitemlist" type="ASP_QQ_Line_Item__c[]"/> 
+    
+    <aura:attribute name="disableaddbtn" type="boolean" default="true"/>
+    
+    <aura:attribute name="qq_cvg_completed" type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/>      
+    
+    <aura:attribute name="masterlineitems" type="List"/>
+    <aura:attribute name="usagelineitems" type="List"/>
+    <aura:attribute name="complineitems" type="List"/>
+    <aura:attribute name="cvrgtypelineitems" type="List"/>
+    <aura:attribute name="optionslineitems" type="List"/>
+    <aura:attribute name="deductiblelineitems" type="List"/>
+    <aura:attribute name="durationlineitems" type="List"/>    
+    <aura:attribute name="finallineitem" type="String"/>
+    <aura:attribute name="grouplineitems" type="List"/>
+    <aura:attribute name="levellineitems" type="List"/>
+    <aura:attribute name="packagelineitems" type="List"/>
+    <aura:attribute name="standalonelineitems" type="List"/>
+    
+    
+    
+    <aura:attribute name="usageoptions" type="List"/>
+    <aura:attribute name="componentoptions" type="List"/>
+    <aura:attribute name="CoverageOptions" type="List"/>
+    <aura:attribute name="Coveragetypeoptions" type="List"/>
+    <aura:attribute name="optionslist" type="List"/>
+    <aura:attribute name="deductiblelist" type="List"/>
+    <aura:attribute name="durationlist" type="List"/>
+    <aura:attribute name="modellist" type="List"/>
+    <aura:attribute name="levellist" type="List"/>
+    
+    <aura:attribute name="truckpackagetypelist" type="List" default="[
+                                                                     {'label': 'Package', 'value': 'PACKAGE'},
+                                                                     {'label': 'Standalone, 'value': 'STANDALONE'}
+                                                                     ]" />
+    
+    <aura:attribute name="FCCCpackagetypelist" type="List" default="[
+                                                                    {'label': 'Standalone', 'value': 'STANDALONE'}
+                                                                    ]" />
+    
+    <aura:attribute name="packagelist" type="List"/>
+    <aura:attribute name="custommonth" type="integer"/>
+    <aura:attribute name="custommiles" type="integer"/>    
+    <aura:attribute name="Coverageval" type="string"/>
+    <aura:attribute name="customduration" type="boolean" default="false"/>
+    <aura:attribute name="createdduration" type="boolean" default="false"/>
+    <aura:attribute name="packagetype" type="string"/>
+    <aura:attribute name="A85_codeOptions" type="List"/>    
+    <aura:attribute name="standalonelist" type="List"/>
+    
+    
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="A85_Code__c" 
+                                  picklistValues="{!v.A85_codeOptions}" />
+    
+    <c:QQ_LineItem_DataService aura:id="Lineitemservice" />
+    
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    
+    <form class="slds-form--stacked slds-box slds-theme_shade"> 
+        
+        <aura:iteration items="{!v.quoteitemlist}" var="item">
+            <aura:if isTrue="{! item.Coverage__c == 'FCCC' ? true : false}">
+                
+                <div class="slds-box slds-box_x-small slds-theme_default">
+                    <span class="slds-text-title_bold">Data Book Code:</span><span>{!item.Databook_Code__c} </span>
+                    
+                    
+                    <div class="slds-float_right slds-p-around_small">
+                        <lightning:buttonIcon
+                                              iconName="utility:delete" 
+                                              variant="bare"
+                                              size="large"
+                                              alternativeText="Settings" 
+                                              iconClass="dark"
+                                              onclick="{! c.removequoteitem}"
+                                              name="{!item.Databook_Code__c}"/>
+                    </div>
+                    
+                    
+                    <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Model__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Group__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="3" padding="around-small">
+                            {!item.Standalone_Package_1__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            {!item.Duration_Final__c}                
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!item.Price__c}">
+                                <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                <aura:set attribute="else">
+                                    <ui:outputText value="$--.-- USD"/>
+                                </aura:set>
+                            </aura:if>               
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                </div>
+            </aura:if>
+        </aura:iteration>
+        
+        <lightning:layoutItem size="12">
+            <div class="slds-float_right slds-p-around_x-large">
+                <lightning:buttonIcon  
+                                      iconName="utility:add" 
+                                      variant="brand"
+                                      disabled="{!v.disableaddbtn}"
+                                      onclick="{! c.addquoteitem}"/>
+            </div>
+        </lightning:layoutItem>
+        
+        <lightning:layout>
+            <aura:if isTrue="{!v.quoteitem.Coverage__c}">
+                <lightning:layoutItem size="4" padding="around-small">
+                    
+                    <lightning:combobox 
+                                        name="Model__c" 
+                                        label="Model" 
+                                        value="{! v.quoteitem.Model__c}" 
+                                        placeholder="None" 
+                                        options="{! v.modellist }"
+                                        onchange="{! c.handleChange }"/>
+                </lightning:layoutItem> 
+            </aura:if>
+            <lightning:layoutItem size="2" padding="around-small">
+                <aura:if isTrue="{!v.quoteitem.Model__c}">
+                    <lightning:input name="Group__c" 
+                                     disabled="true" 
+                                     value="{!v.quoteitem.Group__c}" 
+                                     label="Group"
+                                     onchange="{! c.handleChange }" />
+                </aura:if>
+            </lightning:layoutItem>                
+            <lightning:layoutItem size="3" padding="around-small">
+                
+                <div class="slds-float_right slds-p-around_large">
+                    <span class="textcolor">
+                        <aura:if isTrue="{!v.quoteitem.Price__c}">
+                            <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> USD
+                            <aura:set attribute="else">
+                                <ui:outputText value="$--.-- USD"/>
+                            </aura:set>
+                        </aura:if>
+                    </span>
+                </div>
+            </lightning:layoutItem>
+            
+        </lightning:layout> 
+        
+        <lightning:layout>
+            
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue="{!v.quoteitem.Model__c}">
+                    <lightning:radioGroup
+                                          aura:id="Package"
+                                          name="Package"
+                                          label="Select One"
+                                          options="{!v.FCCCpackagetypelist }"
+                                          value = "{!v.packagetype }"                                      
+                                          required="" 
+                                          type="button"
+                                          onchange="{! c.handleChange }"/>
+                </aura:if>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue="{!v.packagetype == 'PACKAGE'}">
+                    <lightning:radioGroup
+                                          aura:id="Truck_Coverage_Package_1__c"
+                                          name="Truck_Coverage_Package_1__c"
+                                          label="Package"
+                                          options="{! v.packagelist }"
+                                          value="{! v.quoteitem.Truck_Coverage_Package_1__c}"
+                                          onchange="{! c.handleChange }"
+                                          required="" 
+                                          type=""/>
+                </aura:if>
+                <aura:if isTrue="{!v.packagetype == 'STANDALONE'}">
+                    <lightning:radioGroup 
+                                          name="StandalonePackage" 
+                                          label="Standalone" 
+                                          value="{! v.quoteitem.Standalone_Package_1__c}" 
+                                          placeholder="None" 
+                                          options="{! v.standalonelist }"
+                                          onchange="{! c.handleChange }"/>
+                    
+                </aura:if>                           
+                
+            </lightning:layoutItem>
+            
+            
+            <lightning:layoutItem size="3" padding="around-small">
+                <aura:if isTrue="{!or(v.quoteitem.Truck_Coverage_Package_1__c , v.quoteitem.Standalone_Package_1__c)}">
+                    <lightning:radioGroup
+                                          aura:id="DURATION"
+                                          name="Duration"
+                                          label="Duration"
+                                          options="{! v.durationlist }"
+                                          value="{! v.quoteitem.Duration_Final__c}"
+                                          onchange="{! c.handleChange }"
+                                          required="" 
+                                          />
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        
+        
+    </form>
+    
+</aura:component>

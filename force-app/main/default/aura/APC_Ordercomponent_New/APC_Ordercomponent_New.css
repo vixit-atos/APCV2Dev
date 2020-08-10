@@ -1,0 +1,23 @@
+.THIS .slds-form-element__label{
+    font-size: 1.4rem !important;
+}
+.THIS .slds-text-heading_large{
+    font-size: 1.4rem;
+}
+.THIS .spins::after {
+    position: absolute;
+    content: 'Processing...';
+    width: 100%;
+    text-align: center;
+    top: calc(50% + 1.5rem );
+    font-style: barlow;
+    font-size: 1.2rem;
+    
+}
+.THIS .slds-button_icon{
+    line-height: 1;
+    vertical-align: inherit !important;
+    justify-content: center;
+    color: none;
+    flex-shrink: 0;
+}

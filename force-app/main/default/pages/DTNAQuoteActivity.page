@@ -1,0 +1,423 @@
+<apex:page docType="html-5.0" showHeader="false" sidebar="false" standardcontroller="Opportunity" extensions="DTNA_Quote_Activity_List" action="{!RCUInquiryRequest}" tabStyle="Opportunity" recordSetVar="risks">  
+    <style>
+        .inpQASrchQuery
+        {
+            padding-right:5px;
+            padding-left:15px;
+            font-weight:600;
+        }
+        .QAPgBlkTable
+        {
+            style=border-width:thin;
+            white-space: nowrap;
+        }
+        .txtAreaMiscCmnts
+        {
+            height:15px;
+        }
+        .txtProbability
+        {
+             width:40px;   
+        }
+        a.back-to-top
+        {
+            display: none;
+            width: 50px;
+            height: 50px;
+            text-indent: -9999px;
+            position: fixed;
+            z-index: 999;
+            right: 10px;
+            bottom: 80px;
+            background: #ddb929 url("{!URLFOR($Resource.ImgsforVFPgs,'/up-arrow.png')}") no-repeat center 43%;
+            -webkit-border-radius: 30px;
+            -moz-border-radius: 30px;
+            border-radius: 10px;
+            opacity: .8;
+        }
+        a:hover.back-to-top {
+            background-color: #000;
+        }
+        QASaveButton:hover.back-to-top {
+            background-color: #000;
+        }
+        .QASaveButton 
+        {
+            z-index: 999;
+            display:none !important;
+            background: #ddb929 !important; 
+            border: none !important;
+            color: white !important;
+            padding: 11px 15px  !important;
+            text-align: center !important;
+            text-decoration: none !important;
+            display: inline-block !important;
+            font-size: 16px !important;
+            margin: 4px 2px !important;
+            cursor: pointer !important;
+            border-radius: 10px !important;
+            position: fixed !important;
+            right:10px !important;
+            bottom:10px !important;
+            opacity: .8 !important;
+        }
+        
+        .qaReadOnly1
+        {
+            border-width:thin !important;
+            background-color:#ececec;
+            border-color: lightgray !important;
+        }
+        
+        .qaEditable1
+        {
+            border-width:thin;
+            border-color: lightgray;
+        }
+        .qaCollapsible1
+        {
+            display:none;
+        }
+        .qaEven
+        {
+            border-width:thin !important;
+            background-color:#f2f2f2;
+            border-color: lightgray !important;
+        }
+        .qaOdd
+        {
+            border-width:thin !important;
+            background-color:#fffae6;
+            border-color: lightgray !important;
+        }
+        .body .pbBody table.list tr.headerRow td, body .pbBody table.list tr.headerRow th
+        {
+            background-color:#ffe680;
+            font-size: 12px;
+        }
+        .QAButtonsdiv
+        {
+            text-align: center;
+        }
+    </style>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <script> 
+        $(function () {
+         //   var x = document.getElementsByClassName("pbSubsection");
+         //   x[1].style.overflow= "auto";
+         //   x[1].style.width= "800px";
+         //   x[1].style.height= "300px"; 
+            var y = document.getElementsByClassName("detailList");
+            y[1].style.overflow= "relative";
+            y[1].style.left= "-10px";
+            y[1].style.top= "-180px";
+            var z = document.getElementsByClassName("data2Col");
+            z[0].style.display= "none";
+            z[1].style.padding= "0px";
+            
+            var xy = document.getElementsByClassName("qaCollapsible");
+            var i;
+            for (i = 0; i < xy.length; i++) 
+            {
+                xy[i].parentElement.style.display= "none";
+            }
+           });
+    </script>
+    
+    <script>
+        $(document).ready(function() {
+          function setHeight() {
+            windowHeight = $(window).innerHeight()-90;
+            windowWidth = $(window).innerWidth()-250;
+            var x = document.getElementsByClassName("pbSubsection");
+            x[1].style.overflow= "auto";          
+            if (windowHeight < 300) 
+            {
+                windowHeight = 300;
+            }
+            x[1].style.height= windowHeight+ "px";
+            x[1].style.width= windowWidth+ "px";
+                       
+          };
+          setHeight();
+          
+          $(window).resize(function() {
+            setHeight();
+          });
+        });
+    </script>
+
+    <script>
+        function qaHideChild(clicked_id,strFunc) 
+        {
+            var x = document.getElementsByClassName(clicked_id);
+            var i;
+            for (i = 0; i < x.length; i++) 
+            {
+                if(strFunc == 'plus')
+                {
+                    x[i].style.display= "table-cell";
+                    x[i].parentElement.style.display= "";
+                }
+                else
+                {
+                    x[i].style.display= "none";
+                    x[i].parentElement.style.display= "none";
+                }
+            }
+            if(strFunc == 'plus')
+            {    
+                document.getElementById('plus' + clicked_id).style.display= "none";
+                document.getElementById('minus' + clicked_id).style.display= "block";
+            }
+            else
+            {
+                document.getElementById('minus' + clicked_id).style.display= "none";
+                document.getElementById('plus' + clicked_id).style.display= "block";
+            }
+            
+        }
+        
+        function ClickLeftArrow() 
+        {
+            document.getElementById("SearchSection").style.display = "none";
+            document.getElementById("rightArrow").style.display = "block"; 
+            document.getElementById("leftArrow").style.display = "none";  
+            windowWidth = $(window).innerWidth()-100;
+            var x = document.getElementsByClassName("pbSubsection");
+            x[1].style.width= windowWidth+ "px";
+        }
+        function ClickRightArrow()
+        {
+            document.getElementById("SearchSection").style.display = "block";
+            document.getElementById("rightArrow").style.display = "none"; 
+            document.getElementById("leftArrow").style.display = "block"; 
+            windowWidth = $(window).innerWidth()-250;
+            var x = document.getElementsByClassName("pbSubsection");
+            x[1].style.width= windowWidth+ "px";
+        }
+
+        function CalcOnChangedQA()
+        {
+            document.getElementById("QASaveButtonid").style.display = "block";
+        }
+        
+        function qaTrySaveAll()
+        {
+            //document.getElementByClass("txtAreaMiscCmnts").required = "Required";
+            QASave();
+        }
+
+      //  $('body').prepend('<a href="#" class="back-to-top">Back to Top</a>');
+
+        var amountScrolled = 300;
+
+        $(window).scroll(function() {
+            if ( $(window).scrollTop() > amountScrolled ) {
+                $('a.back-to-top').fadeIn('slow');
+            } else {
+                $('a.back-to-top').fadeOut('slow');
+            }
+        });
+
+        $('a.back-to-top, a.simple-back-to-top').click(function() {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 700);
+            return false;
+        });
+
+    </script>
+    
+    <apex:form html-novalidate="novalidate">
+
+    <apex:sectionHeader rendered="false" title="Quote Activity"/> 
+    
+    <table width="100%" border="0">
+      <tr>  
+        <div class="collapsible sidebar" id="sidebarDiv">
+        <td width="200" valign="top" id='SearchSection'>
+        
+          <apex:pageBlock mode="edit" id="criteria">
+              <table cellpadding="2" cellspacing="2">
+                  <tr>
+                  <td class="pbTitle"><h2 class="mainTitle" style="font-weight: bolder;font-size: large;">Query</h2>
+                  <img id="leftArrow" alt='Close Query' style="background:none; height: 30px;float:right;" src="{!URLFOR($Resource.ImgsforVFPgs,'/ArrowLeft_Goldleft.png')}" height="30" onclick="ClickLeftArrow()" /></td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Concession Number<br/>
+                       <apex:inputText value="{!obj_Conc.Name}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Lead Concession<br/>
+                       <apex:inputText value="{!obj_Conc.LEAD_CONC_NO__c}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Region<br/>
+                       <apex:inputText value="{!obj_Conc.SLS_RGN_CD__c}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">District<br/>
+                       <apex:inputText value="{!obj_Conc.SLS_DIST_CD__c}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Dealer Code<br/>
+                       <apex:inputText value="{!obj_Conc.Dealer_Code__c}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Customer Name<br/>
+                       <apex:inputText value="{!obj_Conc.CUST_NAME_50__c}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">Minimum Units<br/>
+                       <apex:inputText value="{!obj_Conc.RQST_MIN_UNITS__c}"  />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:bold;">
+                       <apex:commandButton id="Query"  action="{!QAQueryRequest}" value="Query"  styleclass="QueryButton"/>
+                    </td>
+                  </tr>
+              </table>
+          </apex:pageBlock>
+      <!--    <a class="handlebarContainer zen" href="javascript:void(0);" id="handlebarContainer" title="Click to Close Sidebar [Alt+S]"><span class="zen-assistiveText">Click to Close Sidebar</span><span class="indicator" id="pinIndicator"></span><span class="indicator" id="pinIndicator2"></span><span class="pinBox" id="handle">&nbsp;</span></a> -->
+        </td>
+        </div>
+    <!--    <td width="0" valign="top" >
+            <img id="rightArrow" alt='Open Query' style="background:none; height: 30px;display:none" src="{!URLFOR($Resource.ImgsforVFPgs,'/ArrowLeft_Goldright.png')}" height="30"  onclick="ClickRightArrow()" />
+        </td>-->
+        <td valign="top" width="0" style="max-width: 30px;" >
+            <div id="rightArrow" style="display:none;color: darkgoldenrod;">
+              <img alt='Open Query' style="background:none; height: 30px;" src="{!URLFOR($Resource.ImgsforVFPgs,'/ArrowLeft_Goldright.png')}" height="30"  onclick="ClickRightArrow()" />
+              <div>Open Query</div>
+            </div>
+        </td>
+        <td valign="top">
+           <div> 
+            <apex:actionStatus startText="(Processing...)"  id="counterStatus"/>
+            <div> 
+               <apex:pageBlock id="qaLstPgeBlock" >
+                <!--    <button  class="QASaveButton" onclick="QASave()">Save</button> -->
+                <!--    <p><a href="#" class="simple-back-to-top"></a></p>-->
+                <apex:pageMessages ></apex:pageMessages>
+                    <div id="QAButtons" class="QAButtonsdiv">
+                       <!-- <apex:commandButton id="QASaveButtonid" styleclass="QASaveButton1" action="{!SaveQAChanges}" value="Save" style="font-size: 12px;" /> -->
+                        <apex:commandButton id="QASaveButtonid" styleclass="QASaveButton1" action="{!SaveQAChanges}" value="Save" style="font-size: 12px;" />
+                        <apex:commandButton value="Print" immediate="true" onclick="window.print()" style="font-size: 12px;" />
+                        <apex:commandButton value="Back" immediate="true" action="{!doCancel}" style="font-size: 12px;" />
+                    </div>
+                    <apex:actionFunction name="QASave" action="{!SaveQAChanges}"/>   
+                    <apex:actionFunction name="UpdateQA" action="{!UpdateQAEdittedFlag}"/>   
+                    <div id='QAdebug' style="display:none;">   
+                        <apex:repeat value="{!lst_log}" var="string" id="theRepeat" >
+                            <apex:outputText value="{!string}" id="theValue"/><br/>
+                        </apex:repeat>                                                                                  
+                    </div>
+                    <apex:PageBlockSection columns="{!If($User.UITheme=='Theme4t',1,6)}"  collapsible="true" >
+                    </apex:PageBlockSection>
+                    
+                    <apex:PageBlockSection columns="1" collapsible="true" title="Quote Activity" id="QAPageBlockSec" >
+                    <div class="QAPageBlockTable">
+                        <apex:pageBlockTable value="{!LstQuoteActivity}" var="varQAObj" rules="all" styleClass="QAPgBlkTable" id="qaPageBlockTable">
+                            <apex:column headerValue=" " styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly {!IF(varQAObj.strDealNo == null,"","qaCollapsible")}">
+                                <button type="button" id="plus{!varQAObj.objConc.LEAD_CONC_NO__c}" onclick="qaHideChild('{!varQAObj.objConc.LEAD_CONC_NO__c}','plus')" style="font-size: 14px;font-weight: 700;display:{!IF(varQAObj.strExpandable,"","none")};" >+</button>
+                                <button type="button" id="minus{!varQAObj.objConc.LEAD_CONC_NO__c}" onclick="qaHideChild('{!varQAObj.objConc.LEAD_CONC_NO__c}','minus')" style="font-size: 14px;font-weight: 700;display:none;" >–</button>
+                            </apex:column>
+                            <apex:column headerValue="Lead No" value="{!varQAObj.objConc.LEAD_CONC_NO__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly {!IF(varQAObj.strDealNo == null,"","qaCollapsible")}" />
+                            <apex:column headerValue="Conc No"  value="{!varQAObj.objConc.Name}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly"/>
+                            <apex:column headerValue="District Manager" value="{!varQAObj.strDistrictManager}"  styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "/>
+                            <apex:column headerValue="APV" value="{!varQAObj.objConc.APV__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+                            <apex:column headerValue="TC" value="{!varQAObj.objConc.TXNCOUN_INDC__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+                            <apex:column headerValue="Class" value="{!varQAObj.objConc.Class__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+                            <apex:column value="{!varQAObj.objConc.SLS_RGN_CD__c}"  styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+                            <apex:column value="{!varQAObj.objConc.SLS_DIST_CD__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.CUST_NAME_50__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+                            <apex:column headerValue="SO CD" value="{!varQAObj.objConc.Dealer_Code__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+<!--                            <apex:column value="{!varQAObj.objConc.CITY__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " /> -->
+                            <apex:column value="{!varQAObj.objConc.CONC_STATUS_CD__c}" headerValue="Conc Status" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly " />
+                            <apex:column headerValue="Stage" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable" >
+                                <apex:inputField value="{!varQAObj.objConc.Stage__c}" rendered="{!varQAObj.strRepeatedDeal}" >
+                                    <apex:actionSupport event="onchange" action="{!changeStageName}"  rerender="QASaveButtonid,qaInpLstOEM,probability" >
+                                        <apex:param name="{!varQAObj.objConc.id}" value="{!varQAObj.objConc.id}" assignTo="{!fid}"/>
+                                        <apex:param name="{!varQAObj.objConc.Name}" value="{!varQAObj.objConc.Name}" assignTo="{!varQAObj.DealName}"/>
+                                        <apex:param name="{!varQAObj.objConc.Name}{!varQAObj.strEditedFlg}" value="Y" assignTo="{!varQAObj.strEditedFlg}"/>
+                                        <apex:param name="{!varQAObj.objConc.Name}{!enableSave}" value="true" assignTo="{!varQAObj.strEditedFlg}"/>
+                                    </apex:actionSupport>
+                                </apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue="Probability" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable"  >
+                                <apex:inputField styleClass="txtProbability" style="width=50%" value="{!varQAObj.objConc.Probability__c}" rendered="{!varQAObj.strRepeatedDeal}" id="probability">
+                                </apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue="Comments about the Deal" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable" id="DealCmts">
+                                <div class="requiredInput">
+                                    <div class="requiredBlock" style="top: 0px;"></div>
+                                    <apex:inputField styleClass="txtAreaMiscCmnts" value="{!varQAObj.objConc.Miscellaneous_Comments__c}" required="{!IF((varQAObj.strEditedFlg == "Y"),"true","false")}"  rendered="{!varQAObj.strRepeatedDeal}"/>
+                                </div>
+                            </apex:column>
+                            <apex:column value="{!varQAObj.objConc.CONT_PRSN_NAME_42__c}" headerValue="Sales Person" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "/>
+                            <apex:column value="{!varQAObj.objConc.CTRADE_INDC__c}" headerValue="CT" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "/>
+                            <apex:column value="{!varQAObj.objConc.RV_INDC__c}" headerValue="RV" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.RQST_MIN_UNITS__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.DEAL_QUOTE_COUNT__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.CreatedDate}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.PROD_FAM_CD__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.Conc_Repls__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.Dealer_net__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.CMPTR_CD__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.Engine_Mfr__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly ColEngine"/>
+                            <apex:column value="{!varQAObj.objConc.VEH_BASE_MDL_NO__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column headerValue="Dealer Name" value="{!varQAObj.strDealerName}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column headerValue="Dealer City" value="{!varQAObj.strDealerCity}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.CITY__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.APPR_MIN_UNITS__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column value="{!varQAObj.objConc.CONCMCDB_MARKET_SEG__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "/>
+                            <apex:column value="{!varQAObj.objConc.PRC_METH_TYPE_CD__c}" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaReadOnly "  />
+                            <apex:column headerValue="Target" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable"  >
+                                <apex:inputField value="{!varQAObj.objConc.Target__c}" rendered="{!varQAObj.strRepeatedDeal}"></apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue="Date Quoted" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable"  >
+                                <apex:inputField value="{!varQAObj.objConc.Date_Quoted__c}" showDatePicker="true" rendered="{!varQAObj.strRepeatedDeal}"></apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue="Approximate Close Date" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable" >
+                                <apex:inputField value="{!varQAObj.objConc.Approximate_Close_Date__c}" showDatePicker="true" rendered="{!varQAObj.strRepeatedDeal}"></apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue="$ Per Unit Margin" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable"  >
+                                <apex:inputField value="{!varQAObj.objConc.Per_Unit_Margin__c}" rendered="{!varQAObj.strRepeatedDeal}"></apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue="Lost to OEM" id="qaColLstOEM" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable" >
+                                <apex:inputField id="qaInpLstOEM" value="{!varQAObj.objConc.Lost_to_OEM__c}" rendered="{!varQAObj.strRepeatedDeal}" required="{!IF((varQAObj.objConc.Stage__c == "Lost"),"true","false")}" />
+                            </apex:column>
+                            <apex:column headerValue="Lost Reason Code" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable"  >
+                                <div class="requiredInput">
+                                    <div class="requiredBlock" style="display:none;"></div>
+                                    <apex:inputField value="{!varQAObj.objConc.Lost_Reason_Code__c}" rendered="{!varQAObj.strRepeatedDeal}" required="{!IF((varQAObj.objConc.Stage__c == "Lost"),"true","false")}"/>
+                                </div>
+                            </apex:column>
+                            <apex:column headerValue="Customer Fleet Size" styleClass="{!varQAObj.strDealNo} {!varQAObj.strOddEven} qaEditable">
+                                <apex:inputField value="{!varQAObj.objConc.Customer_Fleet_Size__c}" rendered="{!varQAObj.strRepeatedDeal}"></apex:inputField>
+                            </apex:column>
+                            <apex:column headerValue=" " style="display:none;">
+                                <apex:inputField value="{!varQAObj.objConc.CONC_STATUS_CD__c}" ></apex:inputField>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                     </div>
+                    </apex:PageBlockSection>
+                </apex:pageBlock>
+                </div>
+                </div>
+            </td>
+          </tr>
+        </table>
+        
+
+    </apex:form>
+</apex:page>

@@ -1,0 +1,160 @@
+<!--
+  @Component Name     : Template.cmp
+  @Description        : Displays Templates in Internal case detail page.
+  @Author             : Akhila Putta
+-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="APC_TemplateController">
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="listControllingValues" type="list" default="[]" description="to store controller field values"/>
+    <aura:attribute name="listDependingValues" type="list" default="['-- select --']" description="to store dependent field values"/>
+    <aura:attribute name="depnedentFieldMap" type="map" description="map to store dependent values with controlling value"/>
+    <aura:attribute name="bDisabledDependentFld" type="boolean" default="true"/>
+    <aura:attribute name="IsActive" type="boolean" default="false"/> 
+    
+    <aura:attribute name="objDetail" type="contact" default="{'sobjectType' : 'Template__c'}"/>
+    <aura:attribute name="controllingFieldAPI" type="string" default="Group_Assigned__c" description="store field API name of Controller field"/>
+    <aura:attribute name="dependingFieldAPI" type="string" default="Title_c__c" description="store field API name of dependent field"/>
+    <aura:attribute name="textTemplate" type="string" />
+    <aura:attribute name="profileName" type="string" />
+    <aura:attribute name="roleName" type="string" />
+    
+    <aura:attribute name="isOpenTemplate" type="Boolean" default="false" access="public"/>
+    <aura:method name="showChildModal" action="{! c.createTemplate }" access="public">
+        <aura:attribute name="createTemplate" type="Boolean" default="false" access="public"/>
+    </aura:method>
+    
+    <aura:if isTrue="{!v.isOpenTemplate}" >
+        
+        <!--Modal Box-->
+        
+        <section role="dialog" tabindex="-1" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                
+                <!--Header-->
+                
+                <header class="slds-modal__header">  
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutitem size="4">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">                                
+                                    <span class="slds-icon_container slds-avatar_profile-image-large" 
+                                          title="Description of icon when needed">
+                                        <img src ="{!$Resource.APCLogo}" 
+                                             onclick="{!c.closeModal}"/> 
+                                    </span>
+                                </div> 
+                            </div>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="4">
+                            <div class="slds-media__body">
+                                
+                                <div class="slds-p-bottom_large slds-p-left_xx-large"></div>
+                                <h2 id="modal-heading-01" 
+                                    class="slds-text-heading--large slds-align_left">Template</h2>
+                            </div>
+                        </lightning:layoutitem>
+                    </lightning:layout>
+                    
+                </header>
+                
+                <!--Controller Field-->
+                
+                <div class="slds-modal__content slds-p-around_medium" 
+                     id="modal-content-id-1">
+                    <lightning:layoutItem size="6" padding="around-small">    
+                        <lightning:select name="controllerFld"
+                                          value="{!v.objDetail.Group_Assigned__c}"
+                                          label="Group Assigned"
+                                          onchange="{!c.onControllerFieldChange}">
+                            <aura:iteration items="{!v.listControllingValues}" var="val">
+                                <option value="{!val}">{!val}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <lightning:layoutitem size="4"/>
+                    <lightning:layoutitem size="2"/>
+                    
+                    <!--Dependent Field-->
+                    
+                    <lightning:layoutItem size="6" padding="around-small">
+                        <lightning:select name="dependentFld"
+                                          value="{!v.objDetail.Title_1__c}"
+                                          label="Title"
+                                          onchange="{!c.onTitleChange}"
+                                          disabled="{!v.bDisabledDependentFld}">
+                            <aura:iteration items="{!v.listDependingValues}" var="val">
+                                <option value="{!val}">{!val}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <lightning:layoutitem size="4"/>
+                    <lightning:layoutitem size="2"/>
+                    
+                    <!-- Description -->
+                    
+                    <lightning:layoutItem size="6" padding="around-small">
+                        <lightning:textarea aura:id="DescriptionID" 
+                                            value="{!v.objDetail.Description__c}" 
+                                            label="Description" />
+                    </lightning:layoutItem>
+                    <lightning:layoutitem size="4"/>
+                    <lightning:layoutitem size="2"/>
+                    
+                    <!-- Active/Inactive-->
+                    
+                    <aura:if isTrue="{!or(v.roleName=='crm admin', v.roleName=='apc supervisor')}" >
+                        <lightning:layoutItem size="6" padding="around-small"> 
+                            <ui:inputCheckbox aura:id="checkbox" 
+                                              label="IsActive" 
+                                              value="{!v.objDetail.IsActive__c}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutitem size="4"/>
+                        <lightning:layoutitem size="2"/>
+                    </aura:if>
+                    
+                    <!-- Standard Response -->
+                    
+                    <aura:if isTrue="{!and(v.textTemplate!=null, v.textTemplate!='')}" >  
+                        
+                        <lightning:layoutItem size="6" padding="around-small"> 
+                            <div class="slds-box">
+                                <p class="slds-p-bottom--small"></p>
+                                <aura:unescapedHtml aura:id="templateID" 
+                                                    value="{!v.textTemplate}" />
+                                
+                            </div>
+                            <br/>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <lightning:layoutitem size="4"/>
+                    <lightning:layoutitem size="2"/>
+                    
+                    <!-- Footer-->
+                    
+                    <div class= "slds-theme_default">
+                        <footer class="slds-modal__footer slds-align_absolute-center">
+                            <button class="oval-button slds-button slds-button_brand" 
+                                    onclick="{!c.closeModal}">Cancel</button>
+                    <aura:if isTrue="{!or(v.roleName=='crm admin', v.roleName=='apc supervisor')}" >
+
+                             <button class="oval-button slds-button slds-button_brand" disabled="{! !v.issubmitactive}"
+                                     onclick="{!c.submitclicked}">Submit</button> 
+                            </aura:if>
+                        </footer>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </section>
+        
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+</aura:component>

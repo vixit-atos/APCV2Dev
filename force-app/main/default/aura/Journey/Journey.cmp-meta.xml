@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuraDefinitionBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>45.0</apiVersion>
+    <description>Custom path component that works with any sobject and field with field tracking on. Shows the full history of the field and has buttons to update the field&apos;s value based on transitions between values specified with Dynamic_Path_Transition__mdt records</description>
+</AuraDefinitionBundle>

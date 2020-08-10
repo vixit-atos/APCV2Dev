@@ -1,0 +1,90 @@
+.THIS .modal__header
+{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    
+}
+.THIS .modal__content {
+    position: absolute;
+    width: 100%;   
+}
+
+.THIS .slds-modal__content{   
+    
+     overflow-y: scroll !important;
+}
+.THIS .modal__footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+.THIS .modal__content {
+    bottom: 100px;
+    top: 100px;
+    overflow-y: auto;
+}
+
+
+.THIS .modal__footer {
+    
+}
+.THIS .slds-modal__container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100rem;
+    min-width: 40rem;
+    height: 98rem;    
+}
+
+.THIS .modal-dialog{
+    overflow-y: initial !important
+}
+.THIS .modal-body {
+    height: 98%;
+    overflow-y: auto;
+}
+
+.THIS .modalheader {
+    padding: 15px;
+    background: #2e6d8c;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.THIS .headingcolor {
+    color:white;
+    font-weight:bold;
+}
+
+.THIS .tabletheadingcolor {
+    color:white;
+    font-weight:bold;
+    font-size:0.6rem;
+}
+
+.THIS .fa {
+    display: inline-block;
+    font-size: 1rem;
+    font-weight:bold;
+    color:white;   
+}
+.THIS .close {
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;    
+    text-shadow: 0 1px 0 #fff;    
+    filter: alpha(opacity=20);
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    color:white;
+    border: 0;
+    -webkit-appearance: none;
+}
+
+.THIS .btn-primary {
+    background-color: #bfcc33 !important;
+    border-color: transparent;
+}

@@ -1,0 +1,314 @@
+<!--
+  @Component Name     : Template.cmp
+  @Description        : Displays Templates in Internal case detail page.
+  @Author             : Akhila Putta
+-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" controller="APC_TemplateController">
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+    <aura:attribute name="listControllingValues" type="list" default="[]" description="to store controller field values"/>
+    <aura:attribute name="listDependingValues" type="list" default="['-- select --']" description="to store dependent field values"/>
+    <aura:attribute name="titlelistvalues" type="list" default="['-- select --']" description="to store title field values"/>
+    <aura:attribute name="depnedentFieldMap" type="map" description="map to store dependent values with controlling value"/>
+    <aura:attribute name="bDisabledDependentFld" type="boolean" default="true"/>
+    <aura:attribute name="IsActive" type="boolean" default="false"/>
+    <aura:attribute name="bucketname" type="String" default=""/>
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="isadminuser" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="IsSpinner" type="Boolean" default="false" />
+    
+    <aura:attribute name="objDetail" type="contact" default="{'sobjectType' : 'Template__c'}"/>
+    <aura:attribute name="controllingFieldAPI" type="string" default="Group_Assigned__c" description="store field API name of Controller field"/>
+    <aura:attribute name="dependingFieldAPI" type="string" default="Title_1__c" description="store field API name of dependent field"/>
+    <aura:attribute name="textTemplate" type="string" />
+    <aura:attribute name="profileName" type="string" />
+    <aura:attribute name="roleName" type="string" />
+    
+    <aura:attribute name="isOpenTemplate" type="Boolean" default="false" access="public"/>
+    <aura:attribute name="isActiveForNew" type="Boolean" default="false" access="public"/>
+    <aura:attribute name="isNew" type="Boolean" default="true" access="public"/>
+    <aura:attribute name="whichbucket" type="String" default=""/>
+    <aura:attribute name="isbucketclicked" type="boolean" access="global" default="false" />
+    <aura:attribute name="issavebuttonactive" type="boolean" access="global" default="false" />
+
+    
+    <aura:method name="showChildModal" action="{! c.createTemplate }" access="public">
+        <aura:attribute name="createTemplate" type="Boolean" default="false" access="public"/>
+    </aura:method>
+    <aura:handler name="change" value="{!v.textTemplate}" action="{!c.onTemplateChange}"/>
+    
+    <aura:if isTrue="{!v.isOpenTemplate}" >
+        
+        <!--Modal Box-->
+        
+        <section role="dialog" tabindex="-1" 
+                 aria-labelledby="modal-heading-01" 
+                 aria-modal="true" 
+                 aria-describedby="modal-content-id-1" 
+                 class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                
+                <!--Header-->
+                
+                <header class="slds-modal__header">  
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutitem size="4">
+                            <div class="slds-media">
+                                <div class="slds-media__figure">                                
+                                    <span class="slds-icon_container slds-avatar_profile-image-large" 
+                                          title="Description of icon when needed">
+                                        <img src ="{!$Resource.APCLogo}" 
+                                             onclick="{!c.closeModal}"/> 
+                                    </span>
+                                </div> 
+                            </div>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="4">
+                            <div class="slds-media__body">
+                                
+                                <div class="slds-p-bottom_large slds-p-left_xx-large"></div>
+                                <h2 id="modal-heading-01" 
+                                    class="slds-text-heading--large slds-align_left">Template</h2>
+                            </div>
+                        </lightning:layoutitem>
+                    </lightning:layout>
+                    
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" 
+                     id="modal-content-id-1">
+                    
+                    <aura:if isTrue="{!v.isadminuser}" > <br/>
+                        <aura:if isTrue="{!v.isbucketclicked==false}" >
+                            
+                            <!--  Admin Users Button-->
+                            
+                            <lightning:layout>
+                                <lightning:layoutitem size="6" class="slds-p-right_x-small">
+                                    <a aura:id="tile1"  class="slds-text-align_center slds-has-blur-focus" >    
+                                        <div data-id="tile1" onclick="{!c.openModal}" aura:id="tile1" name="tile1">
+                                            <c:APC_Homepage1_Tile maintext="New" />
+                                        </div>
+                                    </a>
+                                </lightning:layoutitem>
+                                
+                                <lightning:layoutitem size="6" class="slds-p-right_x-small">
+                                    <a aura:id="tile1"  class="slds-text-align_center slds-has-blur-focus" >    
+                                        <div data-id="tile2" onclick="{!c.openModal1}" aura:id="tile2" name="tile2">
+                                            <c:APC_Homepage1_Tile maintext="View/Edit" />
+                                        </div>
+                                    </a>
+                                </lightning:layoutitem>
+                            </lightning:layout>
+                        </aura:if>
+                        <br/>
+                        
+                        <!--  Admin Users New Tile Template-->
+                        
+                        <aura:if isTrue="{!and(v.isNew==true,v.isbucketclicked==true)}" >
+                            <lightning:recordEditForm objectApiName="Template__c">
+                                
+                                <lightning:layoutItem size="6" padding="around-small">    
+                                    <lightning:inputField label="Group Assigned" fieldName="Group_Assigned__c" value="{!v.objDetail.Group_Assigned__c}" aura:id="groupAssigned" required="true" onchange="{!c.onNewtemplateChange}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutitem size="4"/>
+                                <lightning:layoutitem size="2"/>
+                                
+                                <lightning:layoutItem size="6" padding="around-small">    
+                                    <lightning:inputField label="Title" fieldName="Title_1__c" value="{!v.objDetail.Title_1__c}" aura:id="titleid" required="true" onchange="{!c.onNewtemplateChange}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutitem size="4"/>
+                                <lightning:layoutitem size="2"/>
+                                
+                                <lightning:layoutItem size="6" padding="around-small">    
+                                    <lightning:inputField label="Description" fieldName="Description__c" value="{!v.objDetail.Description__c}" aura:id="descriptionid" required="false" onchange="{!c.onNewtemplateChange}" />
+                                </lightning:layoutItem>
+                                <lightning:layoutitem size="4"/>
+                                <lightning:layoutitem size="2"/>
+                                
+                                <lightning:layoutItem size="6" padding="around-small">    
+                                    <lightning:inputField label="IsActive" fieldName="IsActive__c" value="{!v.objDetail.IsActive__c}" aura:id="isactivenewid" onchange="{!c.onIsactiveChangeForNew}"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutitem size="4"/>
+                                <lightning:layoutitem size="2"/>
+                                
+                               <lightning:layoutItem size="6" padding="around-small">
+                                    <lightning:inputField label="Template" fieldName="Template__c" value="{!v.objDetail.Template__c}" aura:id="templateID" required="true" onchange="{!c.onNewtemplateChange}"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutitem size="4"/>
+                                <lightning:layoutitem size="2"/>
+                                
+                            </lightning:recordEditForm>
+                        </aura:if>
+                        
+                        <!--  Admin Users View /  Edit-->
+                        
+                        <!--Controller Field-->
+                        <aura:if isTrue="{!v.isNew==false}" >
+                            <lightning:layoutItem size="6" padding="around-small">    
+                                <lightning:select name="controllerFld"
+                                                  value="{!v.objDetail.Group_Assigned__c}"
+                                                  label="Group Assigned"
+                                                  onchange="{!c.onControllerFieldChange}">
+                                    <aura:iteration items="{!v.listControllingValues}" var="val">
+                                        <option value="{!val}">{!val}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </lightning:layoutItem>
+                            <lightning:layoutitem size="4"/>
+                            <lightning:layoutitem size="2"/>
+                            
+                            <!--Dependent Field-->
+                            
+                            <lightning:layoutItem size="6" padding="around-small">
+                                <lightning:select name="dependentFld"
+                                                  value="{!v.objDetail.Title_1__c}"
+                                                  label="Title"
+                                                  onchange="{!c.onTitleChange}">
+                                    <option value="">-- select --</option>
+                                    <aura:iteration items="{!v.titlelistvalues}" var="val">
+                                        <option value="{!val}">{!val}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </lightning:layoutItem>
+                            <lightning:layoutitem size="4"/>
+                            <lightning:layoutitem size="2"/>
+                            
+                            <!-- Active/Inactive-->
+                            
+                            <aura:if isTrue="{!v.isadminuser}" >
+                                <lightning:layoutItem size="6" padding="around-small"> 
+                                    <ui:inputCheckbox aura:id="checkbox" 
+                                                      label="IsActive" 
+                                                      value="{!v.objDetail.IsActive__c}"
+                                                      change="{!c.onIsactiveChange}" /> 
+                                </lightning:layoutItem>
+                                <lightning:layoutitem size="4"/>
+                                <lightning:layoutitem size="2"/>
+                            </aura:if>
+                            
+                            <!-- Standard Response -->
+                            
+                            <aura:if isTrue="{!and(v.textTemplate!=null, v.textTemplate!='')}" >  
+                                <aura:if isTrue="{!v.isadminuser==false}" >
+                                    <lightning:layoutItem size="6" padding="around-small"> 
+                                        <div class="slds-box">
+                                            <p class="slds-p-bottom--small"></p>
+                                            <aura:unescapedHtml aura:id="templateID" 
+                                                                value="{!v.textTemplate}" />
+                                            
+                                        </div>
+                                        <br/>
+                                    </lightning:layoutItem>
+                                </aura:if>
+                                <aura:if isTrue="{!v.isadminuser==true}" >
+                                    <lightning:layoutItem size="6" padding="around-small"> 
+                                        <lightning:inputRichText aura:id="templateID" 
+                                                                 value="{!v.textTemplate}"/>
+                                        
+                                    </lightning:layoutItem>
+                                </aura:if>
+                            </aura:if>
+                            <lightning:layoutitem size="4"/>
+                            <lightning:layoutitem size="2"/>
+                        </aura:if>
+                    </aura:if>
+                    
+                    <!-- Non - Admin Users Button-->
+                    
+                    <!--Controller Field-->                        
+                    
+                    <aura:if isTrue="{!v.isadminuser==false}" >
+                        <lightning:layoutItem size="6" padding="around-small">    
+                            <lightning:select name="controllerFld"
+                                              value="{!v.objDetail.Group_Assigned__c}"
+                                              label="Group Assigned"
+                                              onchange="{!c.onControllerFieldChange}">
+                                <aura:iteration items="{!v.listControllingValues}" var="val">
+                                    <option value="{!val}">{!val}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        <lightning:layoutitem size="4"/>
+                        <lightning:layoutitem size="2"/>
+                        
+                        <!--Dependent Field-->
+                        
+                        <lightning:layoutItem size="6" padding="around-small">
+                            <lightning:select name="dependentFld"
+                                              value="{!v.objDetail.Title_1__c}"
+                                              label="Title"
+                                              onchange="{!c.onTitleChange}">
+                                <option value="">-- select --</option>
+                                <aura:iteration items="{!v.titlelistvalues}" var="val">
+                                    <option value="{!val}">{!val}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        <lightning:layoutitem size="4"/>
+                        <lightning:layoutitem size="2"/>
+                        
+                        <!-- Active/Inactive-->
+                        
+                        <aura:if isTrue="{!v.isadminuser}" >
+                            <lightning:layoutItem size="6" padding="around-small"> 
+                                <ui:inputCheckbox aura:id="checkbox" 
+                                                  label="IsActive" 
+                                                  value="{!v.objDetail.IsActive__c}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutitem size="4"/>
+                            <lightning:layoutitem size="2"/>
+                        </aura:if>
+                        
+                        <!-- Standard Response -->
+                        
+                        <aura:if isTrue="{!and(v.textTemplate!=null, v.textTemplate!='')}" >  
+                            
+                            <lightning:layoutItem size="6" padding="around-small">
+                                <div class="slds-box">
+                                    <p class="slds-p-bottom--small">
+                                    <lightning:inputRichText aura:id="templateID" 
+                                                        value="{!v.textTemplate}"
+                                                             disabled="true"/>
+                                        </p>
+                                    
+                                </div>
+                                <br/>
+                            </lightning:layoutItem>
+                        </aura:if>
+                        <lightning:layoutitem size="4"/>
+                        <lightning:layoutitem size="2"/>
+                        
+                    </aura:if>
+                     </div>
+                    
+                    <!-- Footer-->
+                    
+                    <div class= "slds-theme_default">
+                        <footer class="slds-modal__footer slds-align_absolute-center">
+                            <button class="oval-button slds-button slds-button_brand" 
+                                    onclick="{!c.closeModal}">Cancel</button>
+                            <aura:if isTrue="{!or(v.roleName=='crm admin', v.roleName=='apc supervisor', v.roleName=='asp quick quote')}" >
+                            
+                            <aura:if isTrue="{!and(v.issavebuttonactive==true,v.isbucketclicked==true)}">
+                                	<button class="oval-button slds-button slds-button_brand"
+                                            onclick="{!c.submitclicked}">Save </button>
+                            	</aura:if>
+                                <aura:if isTrue="{! !v.issavebuttonactive}">
+                                	<button class="oval-button slds-button slds-button_brand"
+                                            onclick="{!c.submitclicked}" disabled="true">Save </button>
+                            	</aura:if>
+                                </aura:if>
+                            
+                        </footer>
+                    </div>
+               
+                
+            </div>
+            
+        </section>
+        
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if>
+</aura:component>

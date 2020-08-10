@@ -1,0 +1,220 @@
+<aura:component controller="QQ_Internal_EditQuote">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="appEvent" type="c:QQ_App_Event"/>
+    
+    <aura:attribute name="QuoteNum" type="String" default=""/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quoteitem" type="ASP_QQ_Line_Item__c" default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    <aura:attribute name="quotestatus" type="String"/>
+    
+    <aura:attribute name="qq_cvg_completed" type="boolean" default="false"/>
+    <aura:attribute name="customduration" type="boolean" default="false"/>
+    <aura:attribute name="createdduration" type="boolean" default="false"/>    
+    <aura:attribute name="editmode" type="boolean" default="true"/>
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>
+    <aura:attribute name="openpopup" type="boolean" default="false" />
+    
+    <aura:attribute name="masterlineitems" type="List"/>
+    <aura:attribute name="usagelineitems" type="List"/>
+    <aura:attribute name="complineitems" type="List"/>
+    <aura:attribute name="cvrgtypelineitems" type="List"/>
+    <aura:attribute name="optionslineitems" type="List"/>
+    <aura:attribute name="deductiblelineitems" type="List"/>
+    <aura:attribute name="durationlineitems" type="List"/>    
+    <aura:attribute name="finallineitem" type="String"/>
+    <aura:attribute name="grouplineitems" type="List"/>
+    <aura:attribute name="levellineitems" type="List"/>
+    <aura:attribute name="packagelineitems" type="List"/>
+    <aura:attribute name="standalonelineitems" type="List"/>    
+    <aura:attribute name="usageoptions" type="List"/>
+    <aura:attribute name="componentoptions" type="List"/>
+    <aura:attribute name="CoverageOptions" type="List"/>
+    <aura:attribute name="Coveragetypeoptions" type="List"/>
+    <aura:attribute name="optionslist" type="List"/>
+    <aura:attribute name="deductiblelist" type="List"/>
+    <aura:attribute name="durationlist" type="List"/>
+    <aura:attribute name="modellist" type="List"/>
+    <aura:attribute name="levellist" type="List"/>
+    
+    <aura:attribute name="packagelist" type="List"/>
+    <aura:attribute name="custommonth" type="integer"/>
+    <aura:attribute name="custommiles" type="integer"/>    
+    <aura:attribute name="Coverageval" type="string"/>
+    <aura:attribute name="packagetype" type="string"/>
+    <aura:attribute name="A85_codeOptions" type="List"/>    
+    <aura:attribute name="standalonelist" type="List"/>
+    
+    <aura:attribute name="detroit_fieldorder" type="List" default="[{'name' : 'EngineComponent', 'setfieldname' : 'Coverage_Type_1__c', 'filterdlineitems' : 'v.complineitems', 'options' : 'v.componentoptions'},
+                                                                   {'name' : 'CoverageType', 'setfieldname' :'Coverage_Type_1__c', 'filterdlineitems' : 'v.cvrgtypelineitems', 'options' : 'v.Coveragetypeoptions'},
+                                                                   {'name' : 'Option', 'setfieldname' : 'Option_1__c', 'filterdlineitems' : 'v.optionslineitems', 'options' : 'v.optionslist'},
+                                                                   {'name' : 'Deductible', 'setfieldname' : 'Deductible_1__c', 'filterdlineitems' : 'v.deductiblelineitems', 'options' : 'v.deductiblelist'},
+                                                                   {'name' : 'Duration', 'setfieldname' : 'Duration_Final_1__c', 'filterdlineitems' : 'v.durationlineitems', 'options' : 'v.durationlist'}]" />
+    
+    <aura:if isTrue="{!v.openpopup }">
+        <c:QQ_Internal_Edit_Coverage openpopup = "{!v.openpopup}"
+                                     quoteid="{!v.quote.Id}" 
+                                     quotestatus ="{!v.quotestatus}"
+                                     quotenum = "{!v.quote.Name}"/>
+    </aura:if>
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="A85_Code__c" 
+                                  picklistValues="{!v.A85_codeOptions}" />
+    
+    <c:QQ_LineItem_DataService aura:id="Lineitemservice" />
+    
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    
+    <form class="slds-form--stacked slds-box"> 
+        
+        <div class="slds-text-heading_small slds-float_left labelbold">
+            Coverage Details
+        </div>
+        
+        <aura:if isTrue="{!v.haseditaccess}">
+            <!--<aura:if isTrue="{!and((notequals(v.editmode, true)), or((v.quotestatus == 'Pending for Validation'), (v.quotestatus == 'Draft')))}">-->
+            <aura:if isTrue="{!and(notequals(v.editmode, true), v.quotestatus == 'Pending for Validation')}">
+                <div class="slds-float_right">
+                    <lightning:buttonIcon iconName="utility:edit"
+                                          variant ="brand"
+                                          size="large"
+                                          iconClass="dark"
+                                          onclick="{!c.editCoverage}"/>
+                </div>
+            </aura:if>
+        </aura:if>
+        <br></br>
+        <!-- #############################################  EDIT MODE ############################  -->
+        <aura:if isTrue="{! v.editmode}">
+            <div>
+                <br></br>
+                <div class="slds-text-align_left">
+                    All fields are required
+                </div>
+                <br></br>
+                <lightning:layout>
+                    <lightning:layoutItem size="12" padding="around-small">
+                        <lightning:combobox aura:id = "quoteform"
+                                            name="A85 CODE" 
+                                            label="A85 Code" 
+                                            value="{!v.quote.A85_Code__c}" 
+                                            placeholder="None" 
+                                            options="{! v.A85_codeOptions }" 
+                                            onchange="{!c.handleChange}"
+                                            dropdownAlignment = "top"
+                                            required="true"/>
+                        
+                    </lightning:layoutItem>                    
+                </lightning:layout>                
+                <lightning:layout>                    
+                    <aura:if isTrue="{!v.quote.A85_Code__c}"> 
+                        <hr></hr>
+                        <lightning:layoutItem padding="around-small">                            
+                            <span class="slds-float_left labelstyle">Select a coverage type for:  </span>{!v.quote.A85_Code__c}                            
+                        </lightning:layoutItem>                        
+                    </aura:if>                    
+                </lightning:layout>
+                <lightning:layout>
+                    <aura:if isTrue="{!v.quote.A85_Code__c}">                        
+                        <aura:iteration items="{! v.CoverageOptions }"  var="item">
+                            <lightning:layoutItem size="3" padding="around-small">
+                                <div class="slds-box slds-theme_shade">
+                                    <lightning:input type="radio"                                                     
+                                                     name="Coverage__c" value="{!item.label}" label="{!item.label}" onchange="{! c.handleChange }"/>
+                                </div>
+                            </lightning:layoutItem>
+                        </aura:iteration>
+                    </aura:if>
+                </lightning:layout>                
+                <aura:if isTrue="{!v.quoteitem.Coverage__c == 'DETROIT COVERAGE' ? true: false}">
+                    <c:QQ_Internal_Detroit_CVG aura:id ="detroitform"
+                                               quote="{!v.quote}" 
+                                               quoteitem="{!v.quoteitem}"/>
+                </aura:if>
+                <aura:if isTrue="{!v.quoteitem.Coverage__c == 'TRUCK CHASSIS'  ? true: false}">
+                    <c:QQ_Internal_Truck_CVG aura:id ="truckform"
+                                             quote="{!v.quote}" 
+                                             quoteitem="{!v.quoteitem}" />
+                </aura:if>
+            </div>
+            
+            
+            <!-- #############################################  READ ONLY MODE ############################  -->
+            <aura:set attribute="else">
+                <br></br>
+                <lightning:layout>
+                    <lightning:layoutItem size="11" padding="around-small">
+                        <div class="slds-float_left">
+                            A85 Code: {!v.quote.A85_Code__c}                            
+                        </div>
+                    </lightning:layoutItem>                    
+                </lightning:layout>
+                <aura:if isTrue="{!v.quoteitem.Coverage__c == 'DETROIT COVERAGE' ? true: false}">
+                    <div class="slds-box slds-box_x-small slds-theme_shade">
+                        <div class="slds-text-title_bold slds-float_left">Detroit Coverage</div>
+                        <lightning:layout>
+                            <lightning:layoutItem size="" padding="around-small">
+                                
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Engine_Component_1__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Coverage_Type_1__c}
+                            </lightning:layoutItem >
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Option_1__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Deductible_1__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Duration_Final__c}                
+                            </lightning:layoutItem>
+                        </lightning:layout> <lightning:layout>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            Cost:  <ui:outputCurrency value="{!v.quoteitem.Cost__c}"/>              
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            Price: <ui:outputCurrency value="{!v.quoteitem.Price__c}"/>
+                        </lightning:layoutItem> 
+                        </lightning:layout>
+                        
+                    </div> 
+                </aura:if>
+                <aura:if isTrue="{!v.quoteitem.Coverage__c == 'TRUCK CHASSIS'}">           
+                    <div class="slds-box slds-box_x-small slds-theme_shade">
+                        
+                        <div class="slds-text-title_bold slds-float_left">Truck Chasis Coverage</div>
+                        <br></br>
+                        <lightning:layout>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Level__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Chassis_Model__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Group__c}
+                            </lightning:layoutItem >
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!v.quoteitem.Truck_Coverage_Package_1__c}
+                                {!v.quoteitem.Standalone_Package_1__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="4" padding="around-small">
+                                {!v.quoteitem.Duration_Final__c}                
+                            </lightning:layoutItem></lightning:layout>
+                        <lightning:layout>
+                            <lightning:layoutItem size="3" padding="around-small">
+                                Cost:  <ui:outputCurrency value="{!v.quoteitem.Cost__c}"/>                              </lightning:layoutItem>
+                            <lightning:layoutItem size="3" padding="around-small">
+                                Price: <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> 
+                            </lightning:layoutItem>
+                        </lightning:layout> 
+                        
+                    </div>
+                </aura:if>                
+            </aura:set>
+        </aura:if>        
+    </form>    
+</aura:component>

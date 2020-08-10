@@ -1,0 +1,8 @@
+<aura:component controller="QQ_Approval_Controller">
+    <aura:method name="updatemaster">
+        <aura:attribute name="masterid" type="Id"/>
+        <aura:attribute name="price" type="Decimal"/>
+        <aura:attribute name="databook" type="String"/>
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

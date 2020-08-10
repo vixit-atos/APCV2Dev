@@ -1,0 +1,12 @@
+.THIS {
+}
+
+.THIS .iconsize{
+     height: 3%;
+    width: 3%;
+}
+.THIS .transparent{
+    color: white !important;
+    background-color: white;
+    opacity:0.5;
+}

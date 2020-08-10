@@ -1,0 +1,40 @@
+<apex:page showHeader="true" sidebar="true" standardController="Outgoing_Residuals_Info__c" extensions="OutgoingResidualInfoControllerExtension">
+    
+<apex:form >
+    <apex:pageBlock >
+        <apex:outputPanel layout="none" id="messages">   
+            <apex:pagemessages />
+        </apex:outputPanel>
+
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Save" action="{!save}"/>
+            <apex:commandButton value="Cancel" action="{!cancel}"/>
+        </apex:pageBlockButtons>
+
+        <apex:pageBlockSection columns="1">
+            <apex:inputField value="{!outgoingResidual.Residual_Commit_Number__c}" required="true"/>
+            <apex:inputField value="{!outgoingResidual.Opportunity__c}" required="true"/>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="{!$ObjectType.Outgoing_Residuals_Info__c.fields.Pricing_Proposal__c.label}" for="pricingProposalID"/>
+                <apex:actionRegion >
+                    <apex:inputField value="{!outgoingResidual.Pricing_Proposal__c}" required="true" id="pricingProposalID">
+                        <apex:actionSupport event="onchange" action="{!populateValues}" rerender="rvCommitField, rtrmField, messages"/> 
+                    </apex:inputField>
+                </apex:actionRegion>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="{!$ObjectType.PricingProposal__c.fields.RV_COMMIT_GRP_CD__c.label}" for="rvCommitField"/>
+                <apex:inputText value="{!rvCommitField}" id="rvCommitField"/>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="{!$ObjectType.PricingProposal__c.fields.RTRM__c.label}" for="rtrmField"/>
+                <apex:inputText value="{!rtrmField}" id="rtrmField"/>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+
+</apex:page>

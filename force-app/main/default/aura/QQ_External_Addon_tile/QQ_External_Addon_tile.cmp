@@ -1,0 +1,95 @@
+<aura:component >
+    
+    <aura:attribute name="addonitems" type="PM_Line_Item_AddOn__c[]"/>
+    
+	<aura:attribute name="addonitem" 
+                    type="PM_Line_Item_AddOn__c" default="{'sobjectType':'PM_Line_Item_AddOn__c'}"/>
+    <aura:attribute name="emptyitem" 
+                    type="PM_Line_Item_AddOn__c" default="{'sobjectType':'PM_Line_Item_AddOn__c'}"/>
+    
+    <aura:attribute name="typeoptions" type="list"/>
+    <aura:attribute name="servicelist" type="list"/>
+    <aura:attribute name="serviceoption" type="list"/>
+    <aura:attribute name="addonname" type="string"/>
+    <aura:attribute name="servicetypeselected" type="list"/>
+    <aura:attribute name="offermasterid"  type="String"/>
+    <aura:attribute name="airfilter"  type="String"/>
+    
+    
+   
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/> 
+    
+     <lightning:layoutItem size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+           
+            <div class="{!v.addonitem.Add_On__c ? 'slds-box slds-theme_alert-texture' :'slds-box slds-theme_shade'}">
+                <div class="slds-float_right">
+                    <aura:if isTrue= "{!not(v.addonitem.Add_On__c)}">
+                        <lightning:button
+                                              iconName="utility:cart"
+                                              variant="brand"
+                                              name="ADD"
+                                          	  disabled = "{!!v.addonitem.Price__c}"
+                                              label="ADD"
+                                              onclick="{!c.saveaddon}"/>  
+                    </aura:if>
+                    <aura:if isTrue= "{!v.addonitem.Add_On__c}">
+                        <lightning:buttonIcon
+                                              iconName="utility:delete" 
+                                              variant="bare"
+                                              name="REMOVE"
+                                              size="large"
+                                              alternativeText="REMOVE ADD-ON" 
+                                              iconClass="dark"
+                                              onclick="{! c.removeaddon}" />
+                    </aura:if>
+                    
+                </div> 
+                
+                <div class="slds-text-title_bold">{!v.addonname}</div>
+                <br></br><br></br>
+                <div class="slds-float_right textcolor">
+                    $ {!v.addonitem.Price__c ? v.addonitem.Price__c : '--.--' } USD
+                </div>
+                
+                <lightning:layout multipleRows="true" horizontalAlign="spread">
+                    <aura:if isTrue= "{!not(v.addonitem.Add_On__c)}">
+                        <lightning:layoutItem>
+                            <lightning:combobox name="type" 
+                                                label="Type" 
+                                                value="{!v.addonitem.Manufacturer__c}"
+                                                placeholder="None" 
+                                                options="{!v.typeoptions}"
+                                                onchange = "{!c.handlechange}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem>
+                            <lightning:combobox name="service" 
+                                                label="Number of Service" 
+                                                value="{!v.addonitem.Service_Name__c}"
+                                                placeholder="None" 
+                                                options="{!v.serviceoption}"
+                                                onchange = "{!c.handlechange}"/>
+                        </lightning:layoutItem>
+                        <aura:set attribute="else">
+                            <lightning:layoutItem>
+                                <lightning:input name="type" 
+                                                 label="Type" 
+                                                 value="{!v.addonitem.Manufacturer__c}"
+                                                 placeholder="None" 
+                                                 disabled="true" />
+                                
+                            </lightning:layoutItem>
+                            <lightning:layoutItem>
+                                <lightning:input name="service" 
+                                                 label="Number of Service" 
+                                                 value="{!v.serviceoptions}"
+                                                 placeholder="None" 
+                                                 disabled="true"/>
+                            </lightning:layoutItem>  
+                            
+                        </aura:set>
+                    </aura:if>
+                </lightning:layout> 
+            </div>
+            
+        </lightning:layoutItem>
+</aura:component>

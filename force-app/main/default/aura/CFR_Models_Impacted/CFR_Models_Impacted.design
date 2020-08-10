@@ -1,0 +1,4 @@
+<design:component>
+    <design:attribute name="readonly" label="readonly" default="true" description="Allows you to edit matrix if false" />
+    <design:attribute name="title" default="Models Impacted" description="The title above the component"/>
+</design:component>

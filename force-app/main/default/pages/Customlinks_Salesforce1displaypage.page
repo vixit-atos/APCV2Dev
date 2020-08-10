@@ -1,0 +1,265 @@
+<apex:page standardStylesheets="true">
+    
+    <style type="text/css" >
+        .myFormStyle {
+        background-color: #CFEEF8;
+        border-radius: 5px;
+        text-align: center;
+        
+        }
+        p {
+        border-left: 6px;
+        background-color: #1797C0;
+        border-radius: 5px;
+        font-size: 17px;
+        color: white !important;
+        text-align: center;
+        
+        }
+        .myoutputlink {
+        
+        text-decoration:none;
+        color: #2F5CA0 !important; 
+        line-height: 16pt;
+        font-size: 15px;
+        
+        }
+    </style>
+    <script type="text/javascript">
+    
+    function sForce1Navigate(url) {
+        if( (typeof sforce != 'undefined') && (sforce != null) ) {
+            sforce.one.navigateToURL(url);
+        }
+        return false;
+    }
+    </script>
+    
+    
+    <!--<apex:pageBlock title="FTL Links"> -->
+    
+     <!--<p style="font-weight: bold;">Links</p>-->
+    
+    
+    <apex:pageBlock >
+        
+        <apex:pageBlockSection id="FTLLinks" rendered="{!IF(OR($Profile.Name=='DTNA - FTL Sales',$Profile.Name=='System Administrator',$Profile.Name=='DTNA - FTL DOA'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">FTL Links</p>
+            <apex:form styleClass="myFormStyle">
+            
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://dtnadash.com/" styleClass="myoutputlink" >DTNA DASH<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+                <apex:outputLink value="/apex/DTNAConcessionInquiryMobile" styleClass="myoutputlink" >Concession Inquiry<br/></apex:outputLink>
+                
+                <apex:outputLink value="/apex/dtnaquoteactivity" styleClass="myoutputlink" >Quote Activity<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://stnaicvdw005.us164.corpintra.net:8080/bidtna/cgi-bin/cognosisapi.dll?b_action=xts.run&m=portal/cc.xts&m_folder=i95C03E50E87F49BC9C45116D7EECB9B8" styleClass="myoutputlink" >New Truck Tools<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Customer_Repair_Tracker&sRefresh=Y" styleClass="myoutputlink" >Repair Tracker Customer<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Dealer_Repair_Tracker&sRefresh=Y" styleClass="myoutputlink" >Repair Tracker Dealer<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Uptime_Performance&sRefresh=Y" styleClass="myoutputlink" >Uptime Service Performance<br/></apex:outputLink>
+
+                <apex:outputLink value="https://newvehicleinvoices-dtna.e.corpintra.net/NewVehicleInvoices/View/WebInvoiceLookup.aspx" styleClass="myoutputlink" >New Truck Invoice<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://www.safersys.org/" styleClass="myoutputlink" >SAFER<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://team.nafta.sp.wp.corpintra.net/sites/03513/drp/DM%20Tools/default.aspx" styleClass="myoutputlink" >Sales and Marketing SharePoint<br/></apex:outputLink>
+                              
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="ASPLinks" rendered="{!IF(OR($Profile.Name=='DTNA - ASP',$Profile.Name=='System Administrator'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">ASP Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="CustomLinks" rendered="{!IF(OR($Profile.Name=='Contract Manager',$Profile.Name=='System Administrator',$Profile.Name=='CRM API Admin',$Profile.Name=='DTNA - Call Centers',$Profile.Name=='DTNA - National Accounts',$Profile.Name=='DTNA - STC Charlotte',$Profile.Name=='DTNA - STC Cleveland',$Profile.Name=='DTNA - STC Kansas City',$Profile.Name=='DTNA - STC Louisville',$Profile.Name=='DTNA - STC New England',$Profile.Name=='DTNA - STC Tampa',$Profile.Name=='DTNA - STC Toronto',$Profile.Name=='Marketing User',$Profile.Name=='Read Only',$Profile.Name=='Solution Manager',$Profile.Name=='Standard User',$Profile.Name=='International - Sales',$Profile.Name=='International - Super User',$Profile.Name=='TWS/TC - Read Only', $Profile.Name=='TWS - Read Only - Partners', $Profile.Name=='TWS/TC - Sales',$Profile.Name=='TWS/TC - Sales Contract User',$Profile.Name=='TWS/TC - Super User'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">Custom Links</p>
+            <apex:form styleClass="myFormStyle"> 
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="DNDLinks" rendered="{!IF(OR($Profile.Name=='DTNA - DND',$Profile.Name=='System Administrator'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">DND Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="DTRLinks" rendered="{!IF(OR($Profile.Name=='DTNA - DTR',$Profile.Name=='System Administrator'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">DTR Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="FieldServiceLinks" rendered="{!IF(OR($Profile.Name=='DTNA - Field Service',$Profile.Name=='System Administrator'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">Field Service Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://portal.oeconnection.com/login.aspx?ReturnUrl=%2fDefault.aspx" styleClass="myoutputlink" >OE Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://dtnaarc.logicbay.com/daimler/PerfCtr" styleClass="myoutputlink" >DTNA ARC<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://viewcad2010/Drawing.aspx" styleClass="myoutputlink" >ViewCad<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://remedy-dtna-test.app.corpintra.net/cacarsys/shared/login.jsp?/cacarsys/forms/remcactest/CAC-FS:PR-ControlPanel_D/WebDisplay/" styleClass="myoutputlink" >Field Service Reporting<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://dtnasynchronize.daimler.com/login.jspa?referer=%252Fwelcome&hint=" styleClass="myoutputlink" >DTNA Synchronize<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://team.nafta.sp.wp.corpintra.net/sites/03524/dtnadsm/default.aspx" styleClass="myoutputlink" >Field Service SharePoint<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://aftermarketserviceproducts.com/" styleClass="myoutputlink" >Aftermarket Service Products<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Customer_Repair_Tracker&sRefresh=Y" styleClass="myoutputlink" >Repair Tracker Customer<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Dealer_Repair_Tracker&sRefresh=Y" styleClass="myoutputlink" >Repair Tracker Dealer<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Uptime_Performance&sRefresh=Y" styleClass="myoutputlink" >Uptime Service Performance<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="PartsLinks" rendered="{!IF(OR($Profile.Name=='DTNA - Parts',$Profile.Name=='System Administrator'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">Parts Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+              <!--  <apex:outputLink value="/apex/calendar_salesforce1?Cal=East Parts Master Calendar&CalId=023d0000004R3jA" styleClass="myoutputlink" >East Parts Master Calendar<br/></apex:outputLink>-->
+                
+                <apex:outputLink value="/apex/calendar_salesforce1?Cal=West Parts Master Calendar&CalId=0230W000004Sc28" styleClass="myoutputlink" >West Parts Master Calendar<br/></apex:outputLink>
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com" styleClass="myoutputlink" >DDC Extranet<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://dtna.mymackay.com/(S(se50deua5lrxfk45sp4yx145))/default.aspx" styleClass="myoutputlink" >DTNA MacKay Reports<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://intra.corpintra.net/intra-dtna/it_forms" styleClass="myoutputlink" >IT Access Form<br/></apex:outputLink>
+                                
+                <apex:outputLink value="https://otc-dtna.prd.freightliner.com/DTNA_PRD/Aftermarket/OTC/Apps/SalesManageTool/webapp/index.html" styleClass="myoutputlink" >OtC Lumira Reporting<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://ca-dtna.app.corpintra.net/ibmcognos/bi/?perspective=classicviewer&pathRef=.public_folders%2FFleet%2FPView+Main+Report&id=i4D827B7EF17E46648BC7F618373F6739&objRef=i4D827B7EF17E46648BC7F618373F6739&type=report&format=HTML&Download=false&prompt=true&action=run&cmProperties%5Bid%5D=i4D827B7EF17E46648BC7F618373F6739&cmProperties%5BdefaultName%5D=PView+Main+Report&cmProperties%5Btype%5D=report&cmProperties%5Bpermissions%5D%5B%5D=execute&cmProperties%5Bpermissions%5D%5B%5D=read&cmProperties%5Bpermissions%5D%5B%5D=traverse&cmProperties%5Bpermissions%5D%5B%5D=write" styleClass="myoutputlink" >P View<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://paragon-dtna.prd.freightliner.com/sap/bc/gui/sap/its/y_dealer_gui?sap-system-login-basic_auth=X&sap-client=010&sap-language=EN" styleClass="myoutputlink" >Paragon SAP Main Page<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://paragon-dtna.prd.freightliner.com/sap/bc/gui/sap/its/y_dealer_gui?sap-system-login-basic_auth=X&sap-client=010&sap-language=EN&~transaction=YAVAILN" styleClass="myoutputlink" >Paragon SAP Part Inquiry<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://paragon-dtna.prd.freightliner.com/sap/bc/gui/sap/its/y_dealer_gui?sap-system-login-basic_auth=X&sap-client=010&sap-language=EN&~transaction=VA23" styleClass="myoutputlink" >Paragon Quote Inquiry<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://paragon-dtna.prd.freightliner.com/sap/bc/gui/sap/its/y_dealer_gui?sap-system-login-basic_auth=X&sap-client=010&sap-language=EN&~transaction=VA03" styleClass="myoutputlink" >Paragon SAP Part Order Status<br/></apex:outputLink>
+                                                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/PartsPro/partsProHome/!ut/p/a1/04_Sj9CPykssy0xPLMnMz0vMAfGjzOKN3J1NDL38DbwsPD0tDTzDnAL8vU0tDA0MzIAKIoEKDHAARwNC-sP1o8BK8JhQkBthkO6oqAgAQxDJ1w!!/dl5/d5/L2dBISEvZ0FBIS9nQSEh/" styleClass="myoutputlink" >Parts Pro<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://pinnacletruckparts.com/sap(bD1lbiZjPTAxMA==)/bc/bsp/sap/ysimp_e_parts/main.do" styleClass="myoutputlink" >Pinnacle Truck Parts<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/VehicleInformation" styleClass="myoutputlink" >Vehicle Info<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://dtnacontent-dtna.prd.freightliner.com/content/dtna-servicelit/search/manuals-search.html?SM_USER=" styleClass="myoutputlink" >TechLit<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://stnaicvdw001.us164.corpintra.net/#/signin?redirect=%2Fprojects%2F68%2Fworkbooks&error=42&disableAutoSignin=true" styleClass="myoutputlink" >Tableau Sales Reporting<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://dtnacontent-dtna.prd.freightliner.com/content/dtna-warrantylit-and-recalls/warranty-letters.html" styleClass="myoutputlink" >Warranty Lit<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="TCSharepointLinks" rendered="{!IF(OR($Profile.Name=='DTNA - FTL DOA',$Profile.Name=='System Administrator',$Profile.Name=='DTNA - FTL Sales',$Profile.Name=='TWS/TC - Read Only', $Profile.Name=='TWS - Read Only - Partners', $Profile.Name=='TWS/TC - Sales',$Profile.Name=='TWS/TC - Sales Contract User',$Profile.Name=='TWS/TC - Super User',$Profile.Name=='DTNA - WST DOA',$Profile.Name=='DTNA - WST Sales'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">TC Sharepoint Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink value="https://team.nafta.sp.wp.corpintra.net/sites/05184/SalesContractSignOff/SitePages/DaimlerHome.aspx" styleClass="myoutputlink" >DTNA Sales Contracts Sign-Off<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://team.nafta.sp.wp.corpintra.net/sites/05184/TCMDOA/SitePages/DaimlerHome.aspx" styleClass="myoutputlink" >DTNA Sales Proposal<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://team.nafta.sp.wp.corpintra.net/sites/05184/TCM/SitePages/DaimlerHome.aspx" styleClass="myoutputlink" >DTNA Transaction Council<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://team.nafta.sp.wp.corpintra.net/sites/05184/twsPrepApp/SitePages/DaimlerHome.aspx" styleClass="myoutputlink" >DTNA TWS Preparation<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="UptimeProLinks" rendered="{!IF(OR($Profile.Name=='DTNA - Uptime Pro',$Profile.Name=='System Administrator'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">UptimePro Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection id="WSTLinks" rendered="{!IF(OR($Profile.Name=='DTNA - WST DOA',$Profile.Name=='System Administrator',$Profile.Name=='DTNA - WST Sales'),true,false)}" columns="1" >
+            <p style="font-weight: bold;">WST Links</p>
+            <apex:form styleClass="myFormStyle">
+                
+                <apex:outputLink onclick="sforce.one.createRecord('Case','012d0000001UOqO');" styleClass="myoutputlink" >CONTACT SUPPORT<br/></apex:outputLink>
+                
+                <apex:outputLink value="/apex/DTNAConcessionInquiryMobile" styleClass="myoutputlink" >Concession Inquiry<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://secure.freightliner.com/wps/myportal/dtnaconnect/DTNAConnectHome" styleClass="myoutputlink" >DTNA Connect<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://extranet-ddc.freightliner.com/servexc/SSI_SearchDealers.aspx" target="_parent"  styleClass="myoutputlink" >SSI Portal<br/></apex:outputLink>
+                
+                <apex:outputLink value="http://stnaicvdw005.us164.corpintra.net:8080/bidtna/cgi-bin/cognosisapi.dll?b_action=xts.run&m=portal/cc.xts&m_folder=i95C03E50E87F49BC9C45116D7EECB9B8" styleClass="myoutputlink" >New Truck Tools<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Customer_Repair_Tracker&sRefresh=Y" styleClass="myoutputlink" >Repair Tracker Customer<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Dealer_Repair_Tracker&sRefresh=Y" styleClass="myoutputlink" >Repair Tracker Dealer<br/></apex:outputLink>
+                
+                <apex:outputLink value="https://utpbireports-dtna.prd.freightliner.com/BOE/OpenDocument/opendoc/openDocument.jsp?sDocName=Uptime_Performance&sRefresh=Y" styleClass="myoutputlink" >Uptime Service Performance<br/></apex:outputLink>
+                
+            </apex:form>
+        </apex:pageBlockSection>
+        
+        
+    </apex:pageBlock>
+    
+    
+    <!--</apex:pageBlock> -->
+    
+</apex:page>

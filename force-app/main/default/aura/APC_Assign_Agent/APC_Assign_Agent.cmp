@@ -1,0 +1,33 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" 
+                 >
+ <aura:handler name="init" value="{!this}" action="{!c.init}"/> 
+    <aura:attribute name="recordId" type="String" />
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+        <div class="slds-modal__container ">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closequickaction}">
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Assign Agent</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"> 
+                <lightning:layout>
+                <lightning:layoutItem padding="horizontal-small" size="4">
+                    <c:APC_CustomLookupUser /> 
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-small" size="4">
+                   
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="4">
+                </lightning:layoutItem>
+                    </lightning:layout>
+            </div>
+            <footer class="slds-modal__footer">
+                <lightning:button label="Cancel" variant="neutral" onclick="{!c.closequickaction}"/>
+                <lightning:button label="Save" variant="brand" onclick="{!c.CreateRecord}"/>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+    
+</aura:component>

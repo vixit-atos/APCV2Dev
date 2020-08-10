@@ -1,0 +1,185 @@
+<!--
+  @File Name          : APC_List_Row2.cmp
+  @Description        : 
+  @Author             : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Group              : 
+  @Last Modified By   : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Last Modified On   : 4/23/2020, 3:52:35 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    4/23/2020   VIXIT BHARDWAJ - ATOS SYNTEL INC     Initial Version
+-->
+
+<aura:component access="global" 
+                controller="APC_MasterController" >
+    
+    <aura:attribute name="record" type="List"  description="To store list of records" />
+    <aura:attribute name="fieldname" type="List"  description="To ge the field names from parent" />
+    <aura:attribute name="recorddata" type="List" description="To store data of list records fields" />
+    <aura:attribute name="globalid"  type="String"  description="To store global id"/>
+    <aura:attribute name="additionalinfo" type="String" default="" description="To store additional infor for each line item on order"/>
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global" description="To maintain the stateof submit button" />
+    <aura:attribute name="isdownloadclicked" type="Boolean" default="false" access="global" description="To identify if the download button was clicked"/>    
+    <aura:attribute name="files" type="List" default="ContentDocument[]" description="To maintain files uploaded" />
+    <aura:attribute name="pillsoffiles" type="List" default="[]" description="To maintain pills of files uploaded"  />
+    <aura:attribute name="caseid"  type="String" default=""  description="To identify the case records"/>
+    
+    <aura:attribute name="actionsMap" type="List" description="To store map of action that can be requested" />
+    <aura:attribute name="actionselected" type="String" description="To store the selected action" />
+    <aura:attribute name="isrowselected" type="Boolean" default="false" description="To identify a selected row"/>
+    <aura:attribute name="iscolumndisabled" type="boolean" default="false" description="To identify a disabled column on the row"/>
+    <aura:attribute name="isnoactionselected" type="boolean" default="true" description="To identify if an action is selected"/>
+
+    <aura:attribute name="domain" type="String" default="Extended Warranty" description="Required for list row service"/>
+    <aura:attribute name="source" type="String" default="Internal" description="Required for list row service"/>
+    <aura:attribute name="caseobj" type="Case" access="global" default="{'sobjectType': 'Case',
+                                                                        'Planner_Code__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Part_No__c':'',
+                                                                        'VIN__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Reason__c':'',
+                                                                        'RecordTypeId':'',
+                                                                        'Description':'',
+                                                                        'Additional_Contacts__c':'',
+                                                                        'Request_Type__c':'',
+                                                                        'Origin':'Web',
+                                                                        'Status':'New',
+                                                                        'Priority':'Medium',
+                                                                        'ContactId':'',
+                                                                        'AccountId':'',
+                                                                        'APC_Source__c':'',
+                                                                        'NSN_Number__c':'',
+                                                                        'Quantity__c':'',
+                                                                        'Lead_Time_Reason__c':'',
+                                                                        'PDC_Location__c':'',
+                                                                        'DeliveryStatus__c':''
+                                                                        }"/>
+
+    <aura:attribute name="accountid" type="string" access="global" default="" />        
+    <aura:registerEvent name="rowcheckevent" type="c:APC_rowselected"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <lightning:navigation aura:id="navService" />
+    
+    <aura:iteration items="{!v.recorddata}" var="item">
+        
+        <td data-label="{!item.label}" class="APCtext" scope="col" id="{!concat(v.globalid , item.label)}">
+            <div class="slds-truncate" data-id="{! item.id}" > 
+                <aura:if isTrue="{!item.label=='Case'}">
+                    <lightning:button variant="base" 
+                                      label="{!item.value}" 
+                                      onclick="{! c.casenumberclicked }"  
+                                      title="{!item.value}"/> 
+                </aura:if>
+                <aura:if isTrue="{!item.label=='Action'}">   
+                    <aura:if isTrue="{! v.iscolumndisabled}">
+                        <lightning:input type="text" 
+                                         readonly="true" 
+                                         title="{!v.actionselected}" 
+                                         value="{!v.actionselected}"  
+                                         variant="label-hidden" />                       
+                        <aura:set attribute="else">                      
+                            <lightning:select  aura:id="actionselected" 
+                                              name="{!item.id}" 
+                                              variant="label-hidden"
+                                              value="{!v.record.actionselected}"  
+                                              onchange="{!c.actionchange}" 
+                                              class="slds-form_inline" >
+                                <option value="">--select--</option>
+                                <aura:iteration items="{!v.actionsMap}" var="action">
+                                    <option value="{!action.value}" 
+                                            selected="{!if(v.record.actionselected == action.value, true, false)}">{!action.value}</option>
+                                </aura:iteration>
+                            </lightning:select> 
+                        </aura:set>
+                    </aura:if>
+                </aura:if>
+                <aura:if isTrue="{! if(item.label=='Additional Information', true, false)}">
+                    <aura:if isTrue="{! or(v.iscolumndisabled, v.isnoactionselected)}">
+                        <lightning:input type="text" 
+                                         readonly="true" 
+                                         value="{!item.value}" 
+                                         title="{!item.value}" 
+                                         variant="label-hidden"/>
+                        <aura:set attribute="else">
+                            <lightning:input aura:id="{!item.id}" 
+                                             value="{!v.record.Description}"  
+                                             variant="label-hidden" 
+                                             onchange="" />
+                        </aura:set>
+                    </aura:if>                    
+                </aura:if>                
+                <aura:if isTrue="{! if(item.label =='Action', false, if(item.label=='Additional Information', false, if(item.label=='Select All', false, if(item.label=='Attachments', false,if(item.label=='Case', false,if(item.label =='Select', false,true))))))}">
+                    <div class="slds-float_left" data-id="{! item.id}">
+                        <lightning:input type="text" 
+                                         readonly="true" 
+                                         value="{!item.value}" 
+                                         title="{!item.value}" 
+                                         variant="label-hidden" /> 
+                    </div>
+                </aura:if>
+                <aura:if isTrue="{! if(item.label =='Select All', true, if(item.label =='Select', true, false))}">    
+                    <aura:if isTrue="{!v.iscolumndisabled}">                        
+                        <aura:set attribute="else">
+                            <lightning:input type="checkbox-button" 
+                                             name="rowSelected" 
+                                             aura:id="rowSelected"
+                                             variant="label-hidden" 
+                                             checked="{!v.record.isselected}"
+                                             onchange="{!c.rowselected}" 
+                                             value="{!v.record.isselected}"
+                                             disabled="{!v.record.isdisabled}"/> 
+                        </aura:set>
+                    </aura:if>
+                </aura:if>                
+                <aura:if isTrue="{! (item.label =='Attachments')}">
+                    <aura:if isTrue="{! or(v.iscolumndisabled, v.isnoactionselected)}">
+                        <div class="slds-align_absolute-center">                         
+                            <lightning:button iconName="utility:upload" 
+                                              disabled="true" 
+                                              onclick="{!c.handledownloadclick}" 
+                                              variant="{!if(not(empty(v.pillsoffiles)), 'brand', 'Neutral')}"/>                               
+                        </div>
+                        <aura:set attribute="else">
+                            <div class="slds-align_absolute-center">                         
+                                <lightning:button iconName="utility:upload" 
+                                                  onclick="{!c.handledownloadclick}" 
+                                                  variant="{!if(not(empty(v.pillsoffiles)), 'brand', 'Neutral')}"/>                               
+                            </div>                            
+                            <aura:if isTrue="{!v.isdownloadclicked}">                                
+                                <section role="dialog" 
+                                         tabindex="-1" 
+                                         aria-label="Upload Document box" 
+                                         aria-modal="true" 
+                                         aria-describedby="modal-content-id-1" 
+                                         class="slds-modal slds-fade-in-open slds-modal_small slds-align_absolute-center">
+                                    
+                                    <div class="slds-modal__container"> 
+                                        <header class="slds-modal__header slds-modal__header_empty">
+                                        </header>             
+                                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                            <c:APC_ExternalFileUpload aura:id="fileUpload"  
+                                                                      multiple="true" 
+                                                                      files="{!v.files}"
+                                                                      pillsoffiles="{!v.pillsoffiles}"
+                                                                      rowid="{!item.id}"/>
+                                        </div>
+                                        <footer class="slds-modal__footer">
+                                            <button class="oval-button slds-button slds-button_neutral" onclick="{!c.removeallattachments}">Remove All Attachments</button>
+                                            <button class="oval-button slds-button slds-button_neutral" onclick="{!c.closemodal}">Cancel</button>                        
+                                            <button class="oval-button slds-button slds-button_brand"  onclick="{!c.closemodal}">Done</button>                                            
+                                        </footer>
+                                    </div>
+                                </section>                                
+                                <div class="slds-backdrop slds-backdrop_open"></div>
+                            </aura:if>
+                        </aura:set>
+                    </aura:if>                    
+                </aura:if>  
+            </div>
+        </td>
+        
+    </aura:iteration>
+    
+</aura:component>

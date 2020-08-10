@@ -1,0 +1,22 @@
+.THIS .slds-path__item:not(.milestone-is-invalid) strong { color: white; }
+.THIS .milestone-is-invalid strong { color: black; }
+
+.THIS .milestone-is-invalid:before  { background: rgb(236, 235, 234); }
+.THIS .milestone-is-invalid:after   { background: rgb(236, 235, 234); }
+.THIS .milestone-is-invalid         { background: rgb(236, 235, 234); }
+
+.THIS .milestone-is-early:before    { background: rgb(0, 95, 178); }
+.THIS .milestone-is-early:after     { background: rgb(0, 95, 178); }
+.THIS .milestone-is-early           { background: rgb(0, 95, 178); }
+
+.THIS .milestone-was-early:before   { background: rgb(75, 202, 129); }
+.THIS .milestone-was-early:after    { background: rgb(75, 202, 129); }
+.THIS .milestone-was-early          { background: rgb(75, 202, 129); }
+
+.THIS .milestone-is-late:before     { background: rgb(194, 57, 52); }
+.THIS .milestone-is-late:after      { background: rgb(194, 57, 52); }
+.THIS .milestone-is-late            { background: rgb(194, 57, 52); }
+
+.THIS .milestone-was-late:before    { background: rgb(241,139,37); }
+.THIS .milestone-was-late:after     { background: rgb(241,139,37); }
+.THIS .milestone-was-late           { background: rgb(241,139,37); }

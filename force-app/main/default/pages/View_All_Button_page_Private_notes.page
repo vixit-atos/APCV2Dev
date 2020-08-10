@@ -1,0 +1,79 @@
+<apex:page title="View All button Private Notes " standardController="Private_Note__c" recordSetVar="PrivateNote" extensions="ViewAllExtensionController_PrivateNote">
+  <br/>
+  <style>
+  .customnotabBlock .brandSecondaryBrd {
+  border-top:3px solid #236fbd!important;
+  }
+  </style>
+ <!-- <h1 style="font-size:2em;font-weight:500;">View All Notes And Attachments</h1>  -->
+           
+            
+            <apex:form >
+            <apex:sectionHeader subtitle="View All Notes & Attachments"/>
+            <apex:commandButton value="Cancel" action="{!CancelClick}" style="display: block; margin: 0 auto 5px auto;font-size:1em;"/>
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:repeat value="{!PrivateActivitesNote}" var="P">
+          
+               <apex:pageBlock >
+                           
+                           
+                           <apex:pageBlockSection >
+                                  
+                                  <apex:outputText ></apex:outputText>
+                                  <br/> 
+                                  
+                                  <apex:outputText value="{!P.Name}" style="width: 360px; height: 400px"/>
+                                  <br/>
+                                  <apex:outputText label="Type" value="Note"/>
+                                  <br/>
+                                  <apex:outputText label="Owner" value="{!P.Owner.name}"/>
+                                  <br/>
+                                  <apex:outputText label="Description" value="{!P.Body__c}"/>
+                                  <br/>
+                                  <apex:outputText ></apex:outputText>
+                                  <br/>
+                                  
+                                  <apex:outputText label="Related To" value="{!Name}"/>
+                                  <br/>
+                                  
+                                                                    
+                             
+                           </apex:pageBlockSection>
+                                         
+                  </apex:pageBlock>
+              
+              </apex:repeat>
+              </apex:form> 
+             
+              <apex:form >
+              <apex:repeat value="{!PrivateActivitesAttachments}" var="P">
+           
+                   <apex:pageBlock >
+                           
+                           <apex:pageBlockSection >
+                                
+                                <apex:outputText ></apex:outputText>
+                                  <br/>
+                                  <apex:outputText value="{!P.Name}"/>
+                                  <br/>
+                                  <apex:outputText label="Type" value="Attachment"/>
+                                  <br/>
+                                  <apex:outputText label="Owner" value="{!P.Owner.name}"/>
+                                  <br/>
+                                  <apex:outputText label="Description" value="{!P.Description}"/>
+                                  <br/>
+                                  
+                                  
+                                  <apex:outputText label=" " ><apex:outputLink value="//servlet/servlet.FileDownload?file={!P.id}" target="_blank">View File</apex:outputLink> </apex:outputText>
+                                  <br/>
+                                  <apex:outputText label="Related To" value="{!P.parent.name}"/>
+                                  <br/>
+                         </apex:pageBlockSection>
+                                         
+                  </apex:pageBlock>
+              
+              </apex:repeat>
+              <br/>
+              <apex:commandButton value="Cancel" action="{!CancelClick}" style="display: block; margin: 0 auto 5px auto;font-size:1em;"/>
+              </apex:form> 
+</apex:page>

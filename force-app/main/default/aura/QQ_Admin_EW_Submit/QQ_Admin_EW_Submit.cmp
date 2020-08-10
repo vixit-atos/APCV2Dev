@@ -1,0 +1,6 @@
+<aura:component controller="QQ_Master_Controller">
+	<aura:method name="submitQQMaster" action="{!c.submitQQMaster}">
+        <aura:attribute name="QQMaster" type="QQ_Master__c" default="{'sobjectType': 'QQ_Master__c'}"/>
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

@@ -1,0 +1,15 @@
+.THIS .slds-form-element__label{
+    font-size: 1.4rem !important;
+}
+.THIS .slds-radio_button .slds-radio_faux{
+    padding-left: 4rem !important;
+    padding-right: 4rem !important;
+    font-size: 1.3rem !important;
+}
+.THIS .slds-button_icon{
+    line-height: 1;
+    vertical-align: none !important;
+    justify-content: center;
+    color: none;
+    flex-shrink: 0;
+}

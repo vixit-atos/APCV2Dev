@@ -1,0 +1,13 @@
+<aura:component>
+    <aura:attribute name="text" type="String"/>
+    <aura:method name="showAtMouse" action="{!c.showAtMouse}">
+        <aura:attribute name="xPosition" type="Integer"/>
+        <aura:attribute name="yPosition" type="Integer"/>
+    </aura:method>
+    <aura:method name="hide" action="{!c.hide}"/>
+
+    <div class="slds-popover slds-popover--tooltip slds-nubbin--left-top hidden" role="tooltip" id="help"
+        style="position:fixed; left:-9999px; white-space: pre;" aura:id="tooltip">
+        <div class="slds-popover__body">{!v.text}</div>
+    </div>
+</aura:component>

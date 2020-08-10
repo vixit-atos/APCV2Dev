@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <div id="container">
+        <div class="centered">
+            <img src="{!$Resource.ZibaGraphic_1}" />
+        </div>
+        <div class="centered">
+            <a id="navArea" href="https://trailblazer.me/relay?community=dtna.my.trailhead&amp;mydomain=dtna" target="_blank">
+                <img src="{!$Resource.ZibaGraphic_2}" />
+            </a>
+        </div>
+        <div class="centered">
+            <img src="{!$Resource.ZibaGraphic_3}" />
+        </div>
+        <div class="centered">
+            <img src="{!$Resource.ZibaGraphic_4}" />
+        </div>
+        <br/>
+    </div>
+</aura:component>

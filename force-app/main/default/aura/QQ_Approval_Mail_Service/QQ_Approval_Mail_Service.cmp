@@ -1,0 +1,9 @@
+<aura:component controller="QQ_MailMessage">
+    <c:QQ_ListColumnService aura:id="listservice"/>
+    <aura:method name="sendEmail">
+        <aura:attribute name="recordnum" type="String" />
+        <aura:attribute name="recordstatus" type="String" />
+        <aura:attribute name="queue_or_owner" type="String" />
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

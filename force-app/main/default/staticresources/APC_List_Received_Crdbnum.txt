@@ -1,0 +1,43 @@
+[
+  {
+    "label": "Case",
+    "value": "Case Number",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },{
+    "label": "Credit/Debit Number ",
+    "value": "LINEITEM",
+    "Field": "SalesOrderNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Item",
+    "value": "LINEITEM",
+    "Field": "OrderLineNumber",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Part Number",
+    "value": "Partnumber",
+    "Field": "Material",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "FAC PDC",
+    "value": "FACPDC",
+    "Field": "FacingPDC",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "Select All",
+    "value": "Select All That Apply",
+    "Field": "selectallthatapply",
+    "Search": "",
+    "Sort": "ASC"
+  }  
+]

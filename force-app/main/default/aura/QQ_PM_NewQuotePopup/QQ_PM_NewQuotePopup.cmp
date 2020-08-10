@@ -1,0 +1,80 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+	
+    <c:QQ_PM_SubmitQuickQuote aura:id="SubmitQuickQuote" />
+    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c', 'Customer_Name__c':''}" />
+    <aura:attribute name="quoteitemlist"  type="ASP_PM_Line_Items__c[]" /> 
+    <aura:attribute name="addonitemsfulllist" type="PM_Line_Item_AddOn__c[]"/>
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    
+   
+    <div class="slds-m-around_xx-large">
+        
+        
+          
+    <div class="slds-float_right">
+        <lightning:button class="btn-primary slds-is-selected-clicked slds-is-selected" 
+                          label="NEW QUOTE" title="Click to Create New Quote" 
+                          iconName="action:new" 
+                          variant ="brand"  
+                          iconPosition="right"
+                          onclick ="{!c.openModel}"/>
+        <aura:if isTrue= "{!$Browser.formFactor == 'DESKTOP' || $Browser.formFactor == 'TABLET'}">
+            &nbsp;<lightning:button iconName="utility:archive" variant="brand" label="ARCHIVE" iconPosition="right" disabled="{!v.enableArchive}" onclick="{!c.archive}"/>
+            &nbsp;<lightning:Icon iconName="utility:info" variant="neutral" size="small" onclick="" alternativeText="Information" />
+            &nbsp;
+        </aura:if>
+    </div>
+    
+    <div class="slds-media">
+        
+            <div class="slds-media__figure">                                
+                <span class="slds-icon_container slds-avatar slds-avatar_medium" title="Description of icon when needed">
+                    <img src="{!$Resource.DTNA_TRUCK_ICON}" /> 
+                </span>
+            </div>
+        
+        <div class="slds-media__body">
+            <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="{!v.heading}">{!v.heading}</h1>
+            <p class="slds-text-body_small slds-line-height_reset">{!v.subheading}</p>
+        </div>
+            
+    </div>
+         
+        <aura:if isTrue="{!v.isOpen}">
+            
+          
+            <section role="dialog" tabindex="1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Preventative maintaince</h2>
+                    </header>
+                    
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                       <c:QQ_PM_External_Container/>
+                    </div>
+                   
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+                        <lightning:button variant="brand" 
+                                          label="Submit"
+                                          title="Submit"
+                                          onclick="{! c.SubmitQuote }"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+           
+            
+        </aura:if>
+    </div>
+</aura:component>

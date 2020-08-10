@@ -1,0 +1,9 @@
+.THIS .labelbold {
+    font-weight:bold;
+    font-family:'Salesforce Sans',Arial,sans-serif;
+}
+.THIS .td1
+{
+    border-left: none;
+    border-right: none;
+}

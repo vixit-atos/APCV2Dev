@@ -1,0 +1,89 @@
+<apex:page docType="html-5.0" controller="QACommentsHistoryMiniPageController" id="CommentsHistory" showHeader="false" >  
+    
+    <style id="styleid">
+        tr.headerRow td, tr.headerRow th
+        {
+            background-color:#ffe680;
+            font-size: 12px;
+        }
+        .historytable {
+        
+        background-color: White !important;
+        border: 1px solid;
+        border-width:thin !important;
+        border-color: black !important
+        
+        }
+        .tableheaders {
+        background-color: #ccffff!important;
+        border: 1px solid;
+        border-width:thin !important;
+        border-color: gray !important;
+         
+        }
+        .tabledata {
+        background-color: #e6e6e6!important;
+        border: 1px solid;
+        border-width:thin !important;
+        border-color: lightgray !important
+        text-align:top;
+        }
+        #table-scroll {
+          max-height:300px;
+          overflow:auto; 
+          border: 1px solid; 
+          margin-top:20px;
+        }
+        .historypannel {
+        
+        }
+        
+    </style>  
+    
+    <apex:form id="historyform">
+        
+        <div align="center" draggable="false" >
+            <apex:commandButton value="Back" immediate="true" action="{!returnback}" style="font-size: 12px;" rendered="{!showbutton}" />
+        </div> 
+        
+        <apex:outputPanel id="historypannel" layout="block1" title="Comments History" styleClass="historypanel" rendered="{!QACommentsHistory.size>0}">
+            
+           <div id="table-scroll">
+            <table id="test" class="historytable">
+                <tr><th colspan="4" Style="text-align:center" class="tableheaders">Comments History</th> </tr>
+                <tr id="history" > 
+                    <th id="historyheader" class="tableheaders">Created By</th> 
+                    <apex:outputPanel id="DOACommentsheader" rendered="{!CONTAINS(ProfileName,'DOA')}">
+                        <th id="historyheader" class="tableheaders">Comment Type</th>
+                    </apex:outputPanel> 
+                    <th id="historyheader" class="tableheaders">Deal comment</th> 
+                </tr>
+                <apex:repeat var="conc" value="{!QACommentsHistory}">
+                    
+                    <tr id="history">
+                        <td id="historydata" class="tabledata"><apex:outputField value="{!conc.CreatedBy.Name}"/>&nbsp; <apex:outputField value="{!conc.Date_time__c}"/></td>
+                        <apex:outputPanel id="DOACommentsdata" rendered="{!CONTAINS(ProfileName,'DOA')}">
+                            <td id="historydata" class="tabledata">{!conc.RecordType.Name}</td> 
+                        </apex:outputPanel>
+                        <td id="historydata" class="tabledata">{!conc.Comment__c}</td> 
+                        
+                    </tr>
+                    
+                </apex:repeat>
+              
+            </table>
+           </div > 
+              
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!QACommentsHistory.size=0}"> 
+            <table id="test" class="historytable">
+                <tr><th colspan="4" Style="text-align:center" class="tableheaders">There is no History of Comments for this concession</th> </tr>
+            </table>
+        </apex:outputPanel>
+        
+        <div align="center" draggable="false" >
+            <apex:commandButton value="Back" immediate="true" action="{!returnback}" style="font-size: 12px;" rendered="{!showbutton}" />
+        </div>
+        
+    </apex:form>   
+</apex:page>

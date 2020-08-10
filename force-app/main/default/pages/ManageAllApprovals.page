@@ -1,0 +1,81 @@
+<apex:page id="Page" showHeader="true" sidebar="true" controller="ManageAllController" >
+    <script>
+        if (location.href.match(/inline=1/)) window.top.location=location.href.replace(/inline=1/, '');
+    </script>
+    <apex:form id="form" style="margin-left: -10px;" >
+        <apex:actionFunction action="{!goToMassReassign}" name="Reassign" reRender="Page" />
+        <apex:actionFunction action="{!goToMassApproveReject}" name="AppOrRej" reRender="Page" />
+        <apex:pageBlock id="details" title="Items To Approve">
+            <apex:pageMessages ></apex:pageMessages>
+
+            <apex:pageBlockButtons location="top" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}" >
+                <apex:commandLink value="Reassign" action="{!goToMassReassign}" styleClass="btn" target="_top"  />
+                <apex:commandLink value="Approve/Reject" action="{!goToMassApproveReject}" styleClass="btn" target="_top"  />
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockTable value="{!items_to_approve_pageList}" var="item_to_approve"  >
+                <apex:column headerValue="Action" width="160 px" >
+                    <apex:facet name="header">
+                         <apex:outputPanel layout="none">
+                            <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')">
+                                <apex:actionSupport event="onchange" reRender="details"/>
+                            </apex:inputCheckbox>
+                             <apex:outputLabel value="Action"/>
+                         </apex:outputPanel>
+                    </apex:facet>
+                    <apex:inputCheckbox id="inputId" value="{!item_to_approve.selected}" />
+                    <apex:outputLink value="/{!URLENCODE(item_to_approve.approvalid)}/e?et=REASSIGN">Reassign |</apex:outputLink>
+                    <apex:outputlink value="/p/process/ProcessInstanceWorkitemWizardStageManager?id={!URLENCODE(item_to_approve.approvalid)}"> Approve / Reject</apex:outputLink>
+                </apex:column>
+                
+                <apex:column headerValue="{!IF(or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), 'Related To', 'Deal')}" width="150 px"  >
+                    <apex:outputLink target="_top" value="/apex/DTNAConcessionLive?id={!item_to_approve.id}" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">{!item_to_approve.name}
+                      </apex:outputLink>
+                </apex:column>
+                
+                <apex:column headerValue="Date Submitted" width="150 px">
+                    <apex:outputtext >{!item_to_approve.DateSubmitted }
+                      </apex:outputtext>
+                </apex:column>
+                
+                <apex:column headerValue="Vehicle Model" width="150 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.vehicleModel }
+                      </apex:outputtext>
+                </apex:column>
+                
+                <apex:column headerValue="Customer" width="150 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.CustomerName }
+                      </apex:outputtext>
+                </apex:column>
+                
+                 <apex:column headerValue="Concession Status" width="100 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.ConcessionStatus }
+                      </apex:outputtext>
+                </apex:column>
+                
+                <apex:column headerValue="Contribution Margin" width="150 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.Contribution }
+                      </apex:outputtext>
+                </apex:column>
+            </apex:pageBlockTable>
+            
+            <apex:pageblockButtons location="bottom">
+                <apex:commandButton value="First Page" rerender="details" action="{!FirstPage}" disabled="{!prev}" />
+                <apex:commandButton value="Previous" rerender="details" action="{!previous}" disabled="{!prev}" />
+                <apex:commandButton value="Next" rerender="details" action="{!next}" disabled="{!nxt}" />
+                <apex:commandButton value="Last Page" rerender="details" action="{!LastPage}" disabled="{!nxt}" />
+            </apex:pageblockButtons>
+            
+        </apex:pageBlock>
+    </apex:form>
+    <script>
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");
+            for(var i=0; i<inputCheckBox.length; i++){         
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1) { 
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+</apex:page>

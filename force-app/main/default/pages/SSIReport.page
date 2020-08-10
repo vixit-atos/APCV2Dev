@@ -1,0 +1,68 @@
+<apex:page sidebar="false" showHeader="false" standardController="Account" standardStylesheets="true">
+    <style>
+    table, th, td {
+        border: 2px solid;
+        border-color:#f2f2f2;
+        border-collapse: collapse;
+        background-color:white;
+    }
+    th, td {
+         font-size: 8.5;
+        text-align: center;
+    }
+    th{
+    background-color:#e6e6e6;
+    }
+    body {
+      height: {!If(Account.SSI_LastAuditDate__c==null,'0px','110px')};
+    }
+    </style>
+    
+    <script>
+        window.parent.document.getElementById('066J00000007RZu').height = "{!If(Account.SSI_LastAuditDate__c==null,'0px','110px')}";
+    </script>
+    
+
+    <apex:variable var="Mobility1" value="{!If(Account.SSI_LastAuditDate__c==null,'0px','110px')}" />
+    <div id="my-timeline" style="height:{!Mobility1};">
+        <apex:pageBlock >
+            <apex:variable var="Mobility" value="{!If($User.UITheme=='Theme4t','none','')}" />
+            
+            <div style="overflow-x:auto;">
+            <table style="width:100%">
+              <tr>
+                <th style="display:{!Mobility};" rowspan="2">Dealer<br/>Code</th>
+                <th style="display:{!Mobility};" rowspan="2">Company Name</th>
+                <th style="display:{!If(Account.ShippingCity==null,'none',Mobility)};" rowspan="2">City,<br/>State</th>
+                <th rowspan="2">Detroit<br/>Engine<br/><span style="font-size: xx-small;"><br/>(G2/ARC)</span></th>
+                <th rowspan="2">Cummins<br/>Engine<br/><span style="font-size: xx-small;"><br/>(WWSP)</span></th>
+                <th rowspan="2">DTNA<br/>Vehicle<br/><span style="font-size: xx-small;"><br/>(TTC/ARC)</span></th>
+                <th colspan="2">Warranty ScoreCard</th>
+                <th rowspan="2">Cummins<br/>Warranty</th>
+                <th rowspan="2"><img id="Express" alt='Express' src="{!URLFOR($Resource.SSIStatusIcon,'/ExpressIcon.png')}" height="30"/></th>
+                <th rowspan="2"><img id="Express" alt='Express' src="{!URLFOR($Resource.SSIStatusIcon,'/EliteIcon.png')}" height="30"/></th>
+                <th rowspan="2">Last SSI<br/>Audit</th>
+              </tr>
+              <tr style="vertical-align: bottom;">
+                <th><span style="font-size: xx-small;">(Engine)</span></th>
+                <th><span style="font-size: xx-small;">(Vehicle)</span></th>
+              </tr>
+              <tr>
+                <td style="display:{!Mobility};"><apex:outputField value="{!Account.Dealer_Code__c}"/></td>
+                <td style="display:{!Mobility};"><apex:outputField value="{!Account.Name}"/></td>
+                <td style="display:{!If(Account.ShippingCity==null,'none',Mobility)};"><apex:outputField value="{!Account.ShippingCity}"/>,<br/><apex:outputField value="{!Account.ShippingState}"/></td>
+                <td><img id="DetroitEngine" alt='{!Account.SSI_DetroitEngine__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_DetroitEngine__c}.jpg" width="10" height="10"/></td>
+                <td><img id="CumminsEngine" alt='{!Account.SSI_CumminsEngine__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_CumminsEngine__c}.jpg" width="10" height="10"/></td>
+                <td><img id="DTNAVehicle" alt='{!Account.SSI_DTNAVehicle__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_DTNAVehicle__c}.jpg" width="10" height="10"/></td>
+                <td><img id="WarrantyScoreCardEngine" alt='{!Account.SSI_WarrantyScoreCardEngine__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_WarrantyScoreCardEngine__c}.jpg" width="10" height="10"/></td>
+                <td><img id="WarrantyScoreCardVehicle" alt='{!Account.SSI_WarrantyScoreCardVehicle__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_WarrantyScoreCardVehicle__c}.jpg" width="10" height="10"/></td>
+                <td><img id="CumminsWarranty" alt='{!Account.SSI_CumminsWarranty__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_CumminsWarranty__c}.jpg" width="10" height="10"/></td>
+                <td><img id="ExpressAssessmentStatus" alt='{!Account.SSI_ExpressAssessmentStatus__c}' src="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_ExpressAssessmentStatus__c}.jpg" width="10" height="10"/></td>
+                <td><apex:image alt="{!Account.SSI_EliteSupportStatus__c}" height="10" width="10" url="{!URLFOR($Resource.SSIStatusIcon,'/StatusIcon')}{!Account.SSI_EliteSupportStatus__c}.jpg" rendered="{!If(Account.SSI_EliteSupportStatus__c=='G',True,False)}"/></td>    
+                <td><apex:outputField value="{!Account.SSI_LastAuditDate__c}"/></td>
+              </tr>
+            </table>
+            </div>
+        </apex:pageBlock>
+    </div>
+</apex:page>

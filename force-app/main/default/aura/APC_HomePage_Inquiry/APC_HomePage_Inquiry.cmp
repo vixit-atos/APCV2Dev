@@ -1,0 +1,204 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" 
+                access="global" 
+                controller="APC_MasterController" >
+    
+    <aura:attribute name="caseobj" 
+                    type="Case" 
+                    access="global" 
+                    description="To create case creation package " 
+                    default="{'sobjectType': 'Case',
+                             'RecordTypeId':'',
+                             'Planner_Code__c':'',                             
+                             'Part_No__c':'',
+                             'VIN__c':'',
+                             'Vendor__c':'',
+                             'Reason__c':'',                                                                        
+                             'Description':'',
+                             'Additional_Contacts__c':'',
+                             'Request_Type__c':'',
+                             'Origin':'Web',
+                             'Status':'New',
+                             'Priority':'Medium',
+                             'ContactId':'',
+                             'AccountId':'',
+                             'APC_Source__c':'',
+                             'NSN_Number__c':'',
+                             'Quantity__c':'',
+                             'Lead_Time_Reason__c':'',
+                             'PDC_Location__c':'',
+                             'Multiple_Parts__c':'',
+                             'Disputing_Price__c':'',
+                             'Type_of_Request__c':'',
+                             'Invoice_Needed_For__c':'',
+                             'Date_Received__c':'',
+                             'Ship_Method__c':'',
+                             'Problem_Description__c':'',
+                             'Requested_Change__c':'',
+                             'Shipped_From__c':'',
+                             'Current_Location_of_Part__c':'',
+                             'Packaged_By__c':'',
+                             'Is_Part_Damaged__c':'',
+                             'Is_Part_Packaged__c':'',
+                             'Core_Invoice__c':'',
+                             'Core_Group__c':'',
+                             'Core_Program__c':'',
+                             'RPA__c':'',
+                             'Core_Part_Num__c':'',
+                             'Type_of_Return__c':'',
+                             'Ship_Date__c':'',
+                             'Credit_Type__c':'',
+                             'Return_Reason__c':'',
+                             'Weight__c':'',
+                             'Number_of_Pallets__c':'',
+                             'Body_Number__c':'',
+                             'Supplier__c':'',
+                             'Model_Year__c':'',
+                             'TBB_Part_Inquiry__c':'',
+                             'Part_Description__c':'',                                                                        
+                             'Return_Status__c':'',
+                             'Action__c':'',
+                             'Order_Status__c':'',
+                             'Part_Received_date__c':'',
+                             'SAP_Order_Number__c':''
+                             }"/>
+   
+    <aura:attribute name="maintext" type="String" default="My main Text"                  description="Main text of the tile"/>
+    <aura:attribute name="subtext" type="String" default="My Sub Text"                    description="Sub text of the tile"/>
+    <aura:attribute name="recordtypename" type="String" default=""                        description="To store record type name"/>   
+    <aura:attribute name="additionaldealercontactslist" type="list"                       description="To store Dealer contacts from Server" />
+    <aura:attribute name="additionaldealercontactsselected" type="String" default=""      description="To store Dealer contacts while case creation" />
+    <aura:attribute name="additionalRecipientList2" type="list" access="global"           description="To store additional recipient while case creation"/>
+    <aura:attribute name="bucketname" type="String" default=""                            description="To store which tile was clicked"/>
+    <aura:attribute name="whichbucket" type="String" default=""                           description="To idenity which tile was clicked"/>
+    <aura:attribute name="selectedDealerCode" type="object" access="global"                          description="To store selected Dealer code"
+                    default="{'Id':'','name':'','DealerCode':''}"/>
+    <aura:attribute name="caseobjlist" type="Case[]" access="global" default="[]"         description="To create list of Case object records"/>
+    <aura:attribute name="cases" type="List"                                              description="To store records received from paragon"/>
+    <aura:attribute name="isbucketclicked" type="boolean" access="global" default="false" description ="To Capture the tile clicked state"/>    
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global"  description ="To Capture the submit active  state"/>
+    <aura:attribute name="files" type="ContentDocument[]"                                 description ="To hold uploaded files"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]"                          description ="To hold pills of uploaded files"/>
+    <aura:attribute name="IsSpinner" type="Boolean" default="false"                       description ="To add or remove spinner"/>
+    
+    <aura:handler name="init" action="{!c.doinit}" value="{!this}" />
+ 
+    <lightning:navigation aura:id="navService" />
+<!-- UI Begins -->    
+    <lightning:layout multipleRows="true">     
+        
+        <lightning:layoutitem size="9"></lightning:layoutitem>
+        <lightning:layoutitem size="3" class="slds-p-bottom_x-small">
+            <a aura:id="tbb" data-id="tbb" onclick="{!c.openModal}" pagename="tbb" style="text-decoration: none;">
+                <button class="slds-text-heading_large slds-button slds-button_inverse btn-primary"> Thomas Built Bus (TBB)</button>  
+            </a>
+            
+        </lightning:layoutitem>
+        <lightning:layoutitem size="4" class="slds-p-right_x-small">
+            <a aura:id="tile1"  class="slds-text-align_center slds-has-blur-focus" >    
+                <div data-id="tile1" onclick="{!c.openModal}" aura:id="tile1" name="tile1">
+                    <c:APC_HomePage_Tile maintext="Order I'm Trying to Place" 
+                                         subtext="Pricing, Material Load or other issues prior to placing an order"
+                                         isbucketclicked="{!v.isbucketclicked}"/>
+                </div>
+            </a>
+        </lightning:layoutitem>
+        <lightning:layoutitem size="4" class="slds-p-right_x-small">
+            <a aura:id="tile2" class=" slds-text-align_center slds-has-blur-focus"  >
+                <div data-id="tile2" onclick="{!c.openModal}" aura:id="tile2" name="tile2">
+                    <c:APC_HomePage_Tile maintext="An Existing Order" 
+                                         subtext="Order Status, Estimated Ship Dates, Cancellation and Tracking"
+                                         isbucketclicked="{!v.isbucketclicked}"/>
+                </div>
+            </a>            
+        </lightning:layoutitem>
+        <lightning:layoutitem size="4" >
+            <a aura:id="tile3" class=" slds-text-align_center slds-has-blur-focus" >
+                <div data-id="tile3" onclick="{!c.openModal}" aura:id="tile3" name="tile3">
+                    <c:APC_HomePage_Tile maintext="An Order I Have Received" 
+                                         subtext="Invoice, Return, Core and other topics after you've received the part"
+                                         isbucketclicked="{!v.isbucketclicked}"/>
+                </div>
+            </a>
+        </lightning:layoutitem>        
+    </lightning:layout>      
+    <aura:if isTrue="{!v.isbucketclicked}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">                     
+                    <div class="slds-media">
+                        <div class="slds-media__figure">                                
+                            <span class="slds-icon_container slds-avatar_profile-image-large" title="Description of icon when needed">
+                                <img src ="{!$Resource.APCLogo}" onclick="{!c.closeModal}" height="200" width="200"/> 
+                            </span>
+                        </div>                        
+                        <div class="slds-media__body">
+                            <h2 id="modal-heading-01" class="slds-text-heading_large1">{!v.bucketname}</h2> 
+                            <p class="slds-m-top_medium slds-text-heading_medium">We just need you to answer a few questions to route your request.</p>                             
+                        </div>
+                    </div>
+                </header>                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!v.IsSpinner}">                
+                        <lightning:spinner aura:id="spinner" variant="brand" class="spins" />
+                    </aura:if>
+                    <aura:if isTrue="{! if(v.whichbucket == 'tile1', true, false) }">
+                        <c:APC_Ordercomponent_New aura:id="APC_Ordercomponent_New"
+                                                  caseobj="{!v.caseobj}"                                                   
+                                                  issubmitactive="{!v.issubmitactive}" 
+                                                  additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                                                  additionaldealercontactsselected="{!v.additionaldealercontactsselected}" 
+                                                  files="{!v.files}"
+                                                  pillsoffiles="{!v.pillsoffiles}"
+                                                  IsSpinner="{!v.IsSpinner}"
+                                                  additionalRecipientList2="{!v.additionalRecipientList2}"
+                                                  selectedDealerCode="{!v.selectedDealerCode}"/>
+                    </aura:if>                    
+                    <aura:if isTrue="{! if(v.whichbucket == 'tile2', true, false) }">
+                        <c:APC_OrderComponent_Existing caseobj="{!v.caseobj}"                                                         
+                                                       cases="{!v.cases}"
+                                                       issubmitactive="{!v.issubmitactive}" 
+                                                       additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                                                       additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                                       files="{!v.files}"
+                                                       pillsoffiles="{!v.pillsoffiles}"
+                                                       additionalRecipientList2="{!v.additionalRecipientList2}"
+                                                       selectedDealerCode="{!v.selectedDealerCode}"/>
+                    </aura:if>
+                    <aura:if isTrue="{! if(v.whichbucket == 'tile3', true, false) }">
+                        <c:APC_OrderComponent_Received aura:id="APC_OrderComponent_Received"
+                                                       caseobj="{!v.caseobj}" 
+                                                       issubmitactive="{!v.issubmitactive}" 
+                                                       cases="{!v.cases}" 
+                                                       additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                                                       additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                                       files="{!v.files}"
+                                                       pillsoffiles="{!v.pillsoffiles}"
+                                                       additionalRecipientList2="{!v.additionalRecipientList2}"
+                                                       selectedDealerCode="{!v.selectedDealerCode}"/>
+                    </aura:if>
+                    <aura:if isTrue="{! if(v.whichbucket == 'tbb', true, false) }">
+                        <c:APC_TBB aura:id="tbbvalidity"
+                                   selectedDealerCode="{!v.selectedDealerCode}"
+                                   caseobj="{!v.caseobj}" 
+                                   issubmitactive="{!v.issubmitactive}" 
+                                   additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                                   additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                   files="{!v.files}"
+                                   pillsoffiles="{!v.pillsoffiles}"
+                                   additionalRecipientList2="{!v.additionalRecipientList2}"/>
+                    </aura:if>                    
+                </div>
+                <div class= "slds-theme_default">
+                    <footer class="slds-modal__footer slds-align_absolute-center">
+                        <button class="oval-button slds-button slds-button_neutral" onclick="{!c.closeModal}">Cancel</button>                        
+                        <button class="oval-button slds-button slds-button_brand" disabled="{! !v.issubmitactive}" onclick="{!c.submitclicked}">Submit</button>                        
+                    </footer>
+                </div>
+            </div>
+        </section>
+        
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        
+    </aura:if> 
+<!-- UI Ends -->   
+</aura:component>

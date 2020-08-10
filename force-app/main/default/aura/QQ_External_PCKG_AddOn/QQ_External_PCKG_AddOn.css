@@ -1,0 +1,65 @@
+.THIS {
+}
+.THIS .vl {
+    border-left: 2px solid grey;
+    height: 500px;
+}
+.THIS .textcolor{
+    color:rgb(37, 99, 169);
+    font-size:14px;
+    font-weight:bold;
+}
+.slds.THIS{
+    
+} 
+
+.THIS .flip-container {
+	perspective: 1000px;
+} 
+/* hide back while swapping*/
+.THIS .front, .THIS .back {
+	backface-visibility: hidden; 
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.THIS.flip-container, .THIS .front, .THIS .back {
+	
+}
+.THIS .front {
+	z-index: 2;  
+}
+
+/* Flip Speed */
+.THIS .flipper {
+	transition: 10s;
+	transform-style: preserve-3d; 
+	position: relative; 
+} 
+
+.THIS.flip-container.horizontal:hover .flipper, .THIS.flip-container.horizontal.hover .flipper {
+		transform: rotateY(180deg);
+}
+
+.THIS.horizontal .front { 
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.THIS.horizontal .back {
+	transform: rotateY(180deg);
+}
+
+.THIS.flip-container.vertical:hover .flipper, .THIS.flip-container.vertical.hover .flipper {
+		transform: rotateX(180deg);
+}
+
+.THIS.rotate { 
+	transform: rotateY(180deg);
+}
+
+/* back, initially hidden pane */
+.THIS.vertical .back {
+	transform: rotateX(180deg);
+}

@@ -1,0 +1,96 @@
+[
+  {
+  "label": "-- NONE --",
+  "value": ""
+  },
+  {
+  "label": "Lead Time",
+  "value": "1"
+  },
+  {
+  "label": "PDC Stock Check",
+  "value": "2"
+  },
+  {
+  "label": "Weights & Dimensions", 
+  "value": "3"
+  },
+  {
+  "label": "Pack Size", 
+  "value": "4"
+  },
+  {
+  "label": "Re-activation", 
+  "value": "5"
+  },
+  {
+  "label": "Material Load", 
+  "value": "6"
+  },
+  {"label": "Existing Order", 
+  "value": "7"
+  },
+  {
+  "label": "Pricing discrepency", 
+  "value": "8"
+  },
+  {"label": "Invoice Needed", 
+  "value": "9"
+  },
+  {
+  "label": "Freight Charge Inquiry", 
+  "value": "10"
+  },
+  {
+  "label": "Excess/special Credit", 
+  "value": "11"
+  },
+  {
+  "label": "Excess/special Other", 
+  "value": "12"
+  },
+  {
+  "label": "Credit/Debit Request", 
+  "value": "13"
+  },
+  {
+  "label": "Core Inquiry", 
+  "value": "14"
+  },
+  {
+  "label": "TBB", 
+  "value": "15"
+  },
+  {
+  "label": "PDC Return", 
+  "value": "16"
+  },
+  {
+  "label": "Vendor Return", 
+  "value": "17"
+  },
+  {
+  "label": "Excess/special Allowance", 
+  "value": "18"
+  },
+  {
+  "label": "Excess/special Approval", 
+  "value": "19"
+  },
+  {
+  "label": "Excess/special Shipping", 
+  "value": "20"
+  },
+  {
+  "label": "Price Request", 
+  "value": "21"
+  },
+  {
+  "label": "Packaging Deficiency", 
+  "value": "22"
+  },
+  {
+  "label": "TBB", 
+  "value": "23"
+  }
+  ]

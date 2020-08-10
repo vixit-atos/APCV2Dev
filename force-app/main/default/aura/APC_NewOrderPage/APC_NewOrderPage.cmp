@@ -1,0 +1,78 @@
+<!--
+  @Component Name     : APC_NewOrderPage.cmp
+  @Description        : Order I'm Trying To Place
+  @Author             : Akhila
+
+-->
+
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global"  >
+    <aura:attribute name="RId" type="Id" access="global" />    
+    <aura:attribute name="recId" type="Id" access="global" />    
+    <aura:attribute name="value" type="String" access="global"/>
+    <aura:attribute name="selectedDealerCode" type="string" access="global"/>
+    <aura:attribute name="parentDealerCode" type="string" access="global"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object" access="global"/>
+    <aura:handler name="init" action="{!c.initHandler}" value="{!this}" access="global"/>   
+    
+    <lightning:card  title='te'>
+        <div class="slds-col slds-has-flexi-truncate" style="margin: 50px 0px 50px 0px;">
+            <!-- HEADING AREA -->
+            <h3 class="slds-page-header__title  slds-align_absolute-center divstyle1"  title="888" style="color:#265C79;">
+                Order I'm Trying to Place </h3>
+            <div class="slds-align_absolute-center">
+                <label class="slds-form-element__label" for="" style="margin-top:10px;margin-left: -1rem;font-size:16px;  font-family:arial;"> We just need you to answer a few questions to route your request.</label>
+            </div>                
+            <!-- / HEADING AREA -->
+        </div>
+        
+    </lightning:card> 
+    <lightning:card>
+        <form class="slds-form--inline">       
+            <div class="slds-form-element" style="margin-top:-3rem; margin-left: -14rem;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label class="slds-form-element__label" style="font-size:15px; font-family:arial;" for="dealerCode">Dealer Code</label>
+                
+                <div class="slds-form-element__control">		         
+                    <div class="slds-align_absolute-center" >
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <lightning:select aura:id="whoelse4" name="whoelse4" label="" onchange="{!c.setDealerCode}" value="{!v.selectedDealerCode}">
+                            <aura:iteration items="{!v.dealerCodePickListValues}" var="item">
+                                <option value="{!item}">{!item}</option>                                
+                            </aura:iteration>
+                            
+                        </lightning:select>
+                    </div>              
+                </div> 
+            </div>              
+        </form>       
+    </lightning:card>
+    <lightning:card>
+        <form class="slds-form--inline">       
+            <div class="slds-form-element" style="margin-top:-3rem; margin-left: -14rem;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <label class="slds-form-element__label" for="radio" style="font-size:15px; font-family:arial;">Were you able to find the part in Paragon?</label>
+                <div class="slds-form-element__control">
+                    <div class="slds-align_absolute-center">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ui:inputRadio aura:id="r0" name="others" label="" text="1" change="{!c.onGroup}"/> Yes &nbsp;  			             
+                        <ui:inputRadio aura:id="r1" name="others" label="" text="2" change="{!c.onGroup}"/> &nbsp; No
+                    </div> 
+                </div>
+            </div>
+        </form>
+        <!--
+        <aura:if isTrue="{!(v.value=='Yes')}">
+            <c:APC_NewOrder recordId = "{!v.recId}" dealerCode="{!v.parentDealerCode}" aura:id="newOrderComp"/>
+        </aura:if>             
+        <aura:if isTrue="{!(v.value=='No')}">
+            <c:APC_PartInParagon recordId = "{!v.recId}" dealerCode="{!v.parentDealerCode}" aura:id="partInParagonComp"/> 
+        </aura:if> -->          
+    </lightning:card> 
+</aura:component>

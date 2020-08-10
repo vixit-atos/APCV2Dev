@@ -1,0 +1,32 @@
+.THIS {
+}
+
+.THIS.my-button-text {
+   border-color: #F1F1F2;
+   background-color: #e6e6e6;
+}
+.THIS.my-button-text:hover {    
+    background-color: #F1F1F2;
+}
+.THIS.tilesize{
+	max-width: 45rem;
+    height:9rem;
+}
+/*.THIS .spntxtsub{    
+    font-size:1.3rem !important; 
+    
+}*/
+.THIS .spntxt1{
+    font-weight:bold;
+    font-size: 3 rem !important;   
+    line-height: 3 rem;
+    Font-family:Arial
+}
+.THIS .slds-text-heading_large {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.THIS .maintext{
+    /*color: rgb(62, 140, 182);*/
+    color: #004355;
+}

@@ -1,0 +1,6 @@
+<aura:component controller="QQ_Approval_Controller">
+	<aura:method name="getpillardata">
+      <aura:attribute name="quoteid" type="String"/>
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

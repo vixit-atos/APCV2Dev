@@ -1,0 +1,26 @@
+<aura:component access="global" implements="lightning:availableForFlowScreens">
+    <!-- Determine which actions are available -->
+    <aura:attribute name="canPause" type="Boolean" />
+    <aura:attribute name="canBack" type="Boolean" />
+    <aura:attribute name="canNext" type="Boolean" />
+    <aura:attribute name="canFinish" type="Boolean" />
+    <aura:attribute name="chattertext" type="String" access="global"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <lightning:tabset selectedTabId="one">
+        <lightning:tab label="Post" id="one">
+            <lightning:layout>
+                <lightning:layoutItem size="10">
+                    <lightning:input name="input1" placeholder="Share an update..." variant="label-hidden" value="{!v.chattertext}"/>
+                </lightning:layoutItem>
+                &nbsp;&nbsp;
+                <lightning:layoutItem size="1">
+                    <aura:if isTrue="{!v.canNext}">
+                        <lightning:button aura:id="NEXT" label="Share" 
+                                          variant="brand" onclick="{!c.onButtonPressed}" />
+                    </aura:if> 
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+        </lightning:tab>  
+    </lightning:tabset>
+</aura:component>

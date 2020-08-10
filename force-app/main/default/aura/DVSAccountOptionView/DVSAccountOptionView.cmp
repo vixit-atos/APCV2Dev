@@ -1,0 +1,32 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId"> <!--inherit recordId attribute-->
+    <aura:attribute name="record" type="Object" 
+      description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" 
+      description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" 
+      description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        mode="VIEW"/>
+        <!-- Display a lightning card with details about the record -->
+    <div class="Record Details"> 
+        <article class="slds-card">
+          <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                  <img  style="height: 37px;" align="left" id="DetroitEngine" src="{!$Resource.DVSAccountOption + '/Option' + if((v.simpleRecord.Status__c == 'Active'), 'G', if (v.simpleRecord.Status__c == 'Hibernate', 'Y', if(v.simpleRecord.Status__c == 'Closed', 'R', 'B') )) +  '.png'   }"/>       
+              </div>                
+            </header>
+          </div>
+        </article>  
+    </div>
+    <!-- Display Lightning Data Service errors, if any -->
+    <aura:if isTrue="{!not(empty(v.recordError))}">
+        <div class="recordError">
+            {!v.recordError}</div>
+    </aura:if>
+</aura:component>

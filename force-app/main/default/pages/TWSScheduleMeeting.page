@@ -1,0 +1,7 @@
+<apex:page standardController="TCMeeting__c" extensions="TWS_ICS_Generator_ControllerExtension">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  {!invitees}
+  This is your new Page: TWSScheduleMeeting
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

@@ -1,0 +1,44 @@
+[
+  {
+    "label": "Quote #",
+    "value": "QUOTE#",
+    "Field": "Name",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Customer Name",
+    "value": "CUSTOMER NAME",
+    "Field": "CustomerName",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Coverage Details",
+    "value": "Coverage Details",
+    "Field": "CoverageDetails",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Coverage",
+    "value": "COVERAGE",
+    "Field": "Coverage",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Duration",
+    "value": "DURATION",
+    "Field": "DurationFinal",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Modified By",
+    "value": "MODIFIED BY",
+    "Field": "Modifieddate",
+    "Search": "",
+    "Sort": "ASC"
+  }
+]

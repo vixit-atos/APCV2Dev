@@ -1,0 +1,115 @@
+<aura:component controller="EWRController" implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId"> 
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <aura:attribute name="remoteRecordId" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    
+    <aura:handler name="change" value="{!v.remoteRecordId}" action="{!c.getRecord}" />
+    
+    <force:recordData aura:id="displayrecord"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields ="{!v.simpleRecord}"
+                      mode="VIEW"/>
+    
+    <div class="Record Details">
+        <lightning:card title="{!'Serial: ' + v.simpleRecord.PREPROD_VEH_NO__c}">
+            <div class="slds-grid slds-wrap slds-gutters slds-p-left--small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">PWO_NO:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.PWO_NO__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">CUST_NAME_ABBR:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.CUST_NAME_ABBR__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">EF_BUILD_DT:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.EF_BUILD_DT__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">PREPROD_VEH_COMT:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.PREPROD_VEH_COMT__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap slds-gutters slds-p-left--small">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">PREPROD_VEH_INDC:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.PREPROD_VEH_INDC__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">TST_RND_NO:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.TST_RND_NO__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">LOC:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.LOC__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                            <div class="test-id__field-label-container slds-form-element__label">
+                                <span class="test-id__field-label">PREPROD_VEH_TYPE:</span>
+                            </div>
+                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                <lightning:formattedText title="ID" value="{!v.simpleRecord.PREPROD_VEH_TYPE__c}"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+    </div>
+</aura:component>

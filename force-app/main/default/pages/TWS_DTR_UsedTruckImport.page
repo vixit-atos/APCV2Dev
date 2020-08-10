@@ -1,0 +1,22 @@
+<apex:page showHeader="true" sidebar="true" standardController="Incoming_Used_Truck_Information__c" extensions="TWS_DTR_UsedTruckImporter">
+
+	
+<apex:form >
+
+	<apex:pageBlock >
+	<apex:pageBlockButtons >
+		<apex:commandButton value="Save" action="{!save}"/>
+		<apex:commandButton value="Cancel" action="{!cancel}"/>
+	</apex:pageBlockButtons>
+	
+	<apex:pageBlockSection columns="1">
+		<apex:inputField value="{!iuti.name}" required="true"/>
+		<!-- <apex:inputField value="{!iuti.RecordTypeId}"/> -->
+		<apex:inputField value="{!iuti.Agreement__c}"/>
+		
+	</apex:pageBlockSection>
+	</apex:pageBlock>
+	</apex:form>
+
+	
+</apex:page>

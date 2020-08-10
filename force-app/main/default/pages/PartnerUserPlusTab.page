@@ -1,0 +1,82 @@
+<apex:page controller="PartnerUserPlusTabController">
+<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">   
+<!-- Content for Desktop -->
+<apex:outputPanel rendered="{! $User.UITheme != 'Theme4t'}">
+<style  type="text/css">
+
+img.icon {
+   width: 24px;
+   height: 24px;
+}
+
+table.detailList.tabs{
+    font-weight:bold;
+}
+</style>
+  <!-- Begin Default Content REMOVE THIS -->
+<a name="skiplink"><img src="/img/s.gif" height="1" width="1" alt="Content Starts Here" class="skiplink skipLinkTargetInner zen-skipLinkTarget" title="Content Starts Here"></img></a>
+
+<div class="bPageTitle">
+    <div class="ptBody">
+        <div class="content">
+            <h5 style="font-size:180%; font-weight:normal;" >All Tabs</h5>
+            <div class="blank">&nbsp;</div>
+        </div>
+        <div class="links">
+             <a href="javascript:openPopupFocusEscapePounds(%27https://help.salesforce.com/apex/htdoor?loc=help&amp;target=user_alltabs.htm&amp;section=Personal_Setup&amp;language=en_US&amp;release=210.17.16&amp;instance=CS70%27, %27Help%27, 1024, 768, %27width=1024,height=768,resizable=yes,toolbar=yes,status=yes,scrollbars=yes,menubar=yes,directories=no,location=yes,dependant=no%27, false, false);" title="Help for this Page (New Window)">
+                <span class="helpLink">Help for this Page</span>
+                <img src="/img/s.gif" alt="" class="helpIcon"></img>
+             </a>
+        </div>
+    </div>
+    <div class="ptBreadcrumb"></div>
+</div>
+<apex:pageBlock >
+	<table class="detailList tabs">
+    	<apex:repeat value="{!ObjectLinkToShow}" var="a">
+        	<tr>
+       			<td><apex:outputlink value="{!a.leftObj.Url}"><apex:image style="padding-right: 10px;" width="20" height="20" value="{!a.leftObj.ImgUrl}"/><apex:outputText value="{!a.leftObj.objectName}" /></apex:outputlink></td>
+                <td><apex:outputlink value="{!a.rightObj.Url}"><apex:image style="padding-right: 10px;"  width="20" height="20" rendered="{!IF((a.rightObj.Url == ''), false,true)}" value="{!a.rightObj.ImgUrl}"/><apex:outputText value="{!a.rightObj.objectName}" /></apex:outputlink></td>
+            </tr>
+    	</apex:repeat>
+    </table>
+</apex:pageBlock>
+
+<!-- Body events -->
+<script type="text/javascript">function bodyOnLoad(){setFocusOnLoad();if (typeof(SessionTimer)!='undefined') {startSessionTimer(); };if (typeof(ActivityReminder)!='undefined') {ActivityReminder.initialize([], false, false);};if ((window.sfdcPage) && (sfdcPage.executeOnloadQueue)){sfdcPage.executeOnloadQueue();};Sfdc.Cookie.deleteCookie('setupopen');SearchClickLoggingUtil.setClickLoggingServletPath("/_ui/search/logging/SearchClickLoggingServlet");new UnifiedSearchAutoCompleteElement("phSearchInput","/_ui/common/search/client/ui/UnifiedSearchAutoCompleteServlet",1,{},true,null,"phSearchForm",["div","searchOwner","asPhrase","sen"],{},true,3,100);new UnifiedSearchButton("searchButtonContainer", "phSearchButton", "headerSearchRightRoundedCornerMouseOver", "phSearchForm");SfdcApp.MruHovers.global_data.url='retURL=%2Fhome%2FshowAllTabs.jsp&isAjaxRequest=1&renderMode=RETRO&nocache=1517523816652';if (document.getElementById('sidebarDiv')){ Sidebar.prototype.theSidebar = new Sidebar(document.getElementById('sidebarDiv'), true, true,false); };if(window.PreferenceBits){window.PreferenceBits.prototype.csrfToken="VmpFPSxNakF4T0Mwd01pMHdORlF5TWpveU16b3pOaTQyTlRkYSwtYnZ1R1RMZjJhMTZleHlPUjBhZ2dkLE1HVXdaalF3";};}function bodyOnBeforeUnload(){if ((window.sfdcPage) && (sfdcPage.executeOnBeforeUnloadQueue)){sfdcPage.executeOnBeforeUnloadQueue();};}function bodyOnFocus(){closePopupOnBodyFocus();}function bodyOnUnload(){}</script>
+</apex:outputPanel>
+<!-- End page content for desktop-->
+<apex:outputPanel rendered="{! $User.UITheme == 'Theme4t'}">
+<style>
+    div.mobile.box{
+        margin-left: 10%; 
+        width: 50%;
+    }
+    div.slds-col{
+        height:auto;
+        min-height:50px;
+    }
+
+</style>
+<apex:slds />    
+    <div class="slds-grid slds-grid_vertical slds-text-heading_small" style="font-weight: bold;">
+    	<div class = "slds-border_bottom"></div>
+    	<apex:repeat value="{!allObjectLink}" var="a">
+        	<div class = "slds-border_bottom   {!IF((a.mobile),  'slds-show', 'slds-hide')} ">
+                <div class="slds-col slds-align_absolute-center "> 
+                    <span class="slds-icon_container {!a.iconClass}">
+                        <svg class="slds-icon" aria-hidden="true">
+                        	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, a.iconUrl)}" />
+                        </svg>
+                    </span>
+                    <div class="mobile box">
+                        <span><a href="{!a.Url}" class="slds-text-link_reset">{!a.objectName}</a></span>
+                    </div>
+                </div>
+        	</div>
+    	</apex:repeat>
+    </div>
+    </apex:outputPanel>
+    <!-- End page content for Mobile-->
+</html>
+</apex:page>

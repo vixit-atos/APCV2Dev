@@ -1,0 +1,26 @@
+<aura:component controller="Note_Viewer_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.initialize}" />
+    <aura:attribute name="notes" type="List"/>
+    
+    <aura:attribute name="readonly" type="Boolean" default="true"/>
+    
+    <lightning:card title="Related Notes" class="slds-p-around--small">
+        <div class="slds-grid slds-wrap">
+            <aura:iteration items="{!v.notes}" var="note">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:textarea readonly="{!v.readonly}" value="{!note.Body}" label="{!note.Title}" class="slds-m-left_large"/>
+                </div>
+                <br/>
+            </aura:iteration>
+        </div>
+        <aura:if isTrue="{!(!v.readonly)}">
+            <lightning:button 
+                label="Update Notes" 
+                class="slds-float_right"
+                variant="brand"
+                onclick="{!c.save}"/>
+                <br/><br/>
+        </aura:if>
+    </lightning:card>
+
+</aura:component>

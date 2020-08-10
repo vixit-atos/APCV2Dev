@@ -1,0 +1,15 @@
+<apex:page showHeader="true" sidebar="false" standardController="Opportunity" extensions="TCMeetingController"  >
+    <!-- <apex:pageBlock rendered="{!IF(mysObject != null , true , false)}"  > -->
+    <apex:form style="overflow:hidden;">
+        <a id="s01" href="" style="font-size:20px" role="option" onclick="Navigareworksheer('{!Objectopportunity.id}')">
+                        Opportunity: {!Objectopportunity.name} 
+                    </a>
+    </apex:form><br/>
+    <apex:relatedList subject="{!Objectopportunity}" list="AttachedContentDocuments" />
+    <script>
+        function Navigareworksheer(oid){
+            sforce.one.navigateToSObject(oid, 'detail');
+        }
+    </script>
+    
+</apex:page>

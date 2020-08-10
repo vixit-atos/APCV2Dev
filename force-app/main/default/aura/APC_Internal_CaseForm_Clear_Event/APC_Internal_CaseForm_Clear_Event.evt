@@ -1,0 +1,5 @@
+<!-- APC_Internal_CaseForm_Clear_Event to clear all the values in Internal case creation component -->
+
+<aura:event type="COMPONENT" description="Event template" >
+    <aura:attribute name="clear" type="string" default="false"/>
+</aura:event>

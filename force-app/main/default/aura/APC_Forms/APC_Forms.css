@@ -1,0 +1,21 @@
+.THIS .slds-form-element__legend { 
+    font-weight: normal	;
+    float: left;
+}
+.THIS .slds-radio_button .slds-radio_faux{
+    padding-left: 3.59rem !important;
+    padding-right: 3.58rem !important;
+    font-size: 1.3rem !important;
+}
+.THIS .datepicker svg {
+    vertical-align: super!important;
+}
+.THIS [lightning-dualListbox_dualListbox-host] {
+    display: block;
+    min-width: 35rem !important;
+}
+.THIS .typeofreturnreason .slds-radio_faux {
+    padding-left: 4rem!important;
+    padding-right: 5.3rem!important;
+    font-size: 1.35rem !important;
+}

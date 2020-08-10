@@ -1,0 +1,8 @@
+<!--  APC_ListColumnService -->
+
+<aura:component >
+	<aura:method name="getListColumn">
+      <aura:attribute name="staticresource" type="String" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

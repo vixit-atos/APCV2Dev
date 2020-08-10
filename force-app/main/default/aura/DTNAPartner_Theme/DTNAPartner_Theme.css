@@ -1,0 +1,96 @@
+@font-face {
+    font-family		: "DaimlerCS-Demi";
+    src				: url(/resource/DaimlerCS/DaimlerCS-Demi);
+}
+
+.THIS{
+    background-color: #e6e6e6;
+}
+.THIS .header{
+    background: #ffffff;
+    line-height: 4.375rem;
+}
+.THIS .imageBackground{
+    background: #204d67;
+}
+.THIS .searchbar{
+    line-height: 4.375rem; 
+    background: #f6f6f6;
+}
+.THIS .menuBackground{
+    background: #204d67;
+}
+.THIS .profileMenu{
+    font-size: 1.5rem;
+}
+.THIS .list{
+    line-height: 1rem;
+}
+.THIS .headerTop {
+    height			: 3.4375rem;
+    width			: 100%;
+    background-color: #444444 !important;
+}
+
+.THIS.content{
+    min-height: 100vh;
+}
+ 	
+.THIS .headerAccent {
+    height			: 2.875rem;
+    background		: #707070;
+    border			: none;
+}
+
+.THIS .dtnaLogo {
+    position		: absolute;
+}
+
+.THIS .profilemenuclass {
+    font-size		: 1rem;
+    padding-top		: .675rem;
+    padding-right	: 2rem;
+}
+
+/*
+ * Mobile View Specific CSS
+ */ 
+.THIS .center {
+    display		: block;
+    margin-left	: auto;
+    margin-right: auto;
+    width		: 50%;
+}
+
+.THIS.copyrightInfo {
+    background: #204d67;
+    padding	  : 1.25rem 0;  
+    text-align: center;
+    font-size : 1rem;
+    color	  : rgb(255,255,255);
+    /*stick to the bottom of the view*/
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.THIS.copyrightText {
+    text-align: center;    
+    font-size : 1rem;
+}
+/*Gradient option
+ * .THIS .headerTopGradient{
+     background-image:linear-gradient(120deg, #444444, #e6e6e6);
+}
+/*Metal Brush Imitation
+ * Still Adjusting
+.THIS .metal {
+-webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%, .1) 7.5%),
+-webkit-repeating-linear-gradient(left, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%),
+-webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.15) 2.2%),
+
+linear-gradient(180deg, hsl(0,0%,78%)  0%, 
+hsl(0,0%,90%) 47%, 
+hsl(0,0%,78%) 53%,
+hsl(0,0%,70%)100%)
+}*/

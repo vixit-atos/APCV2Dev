@@ -1,0 +1,8 @@
+<aura:component controller="QQ_Approval_Controller">
+	<aura:method name="approvalmethod">
+      <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+      <aura:attribute name="quoteitemlst" type="ASP_QQ_Line_Item__c[]"/>
+      <aura:attribute name="noteslist" type="Note[]"/>
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

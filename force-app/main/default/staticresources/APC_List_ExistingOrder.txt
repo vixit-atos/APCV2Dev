@@ -1,0 +1,100 @@
+[
+  {
+    "label": "Case",
+    "value": "Case number",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Order",
+    "value": "SAPnumber",
+    "Field": "SalesOrderNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Item",
+    "value": "item",
+    "Field": "OrderLineNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Part Number",
+    "value": "Part number",
+    "Field": "Material",
+    "Search": "",
+    "Sort": "ASC"
+  }, 
+  {
+    "label": "PDC ",
+    "value": "PDC",
+    "Field": "Plant",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+   {
+    "label": "Status",
+    "value": "Order status",
+    "Field": "ShippingStatus",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Original Delivery",
+    "value": "orig delivery#",
+    "Field": "OriginalDelivery",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Delivery",
+    "value": "Delivery number",
+    "Field": "Delivery",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "ETA",
+    "value": "ETA",
+    "Field": "ETA",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Tracking",
+    "value": "Tracking Number",
+    "Field": "TrackingNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Shipping Condition",
+    "value": "Shipping Condition",
+    "Field": "ShippingCondition",
+    "Search": "",
+    "Sort": "ASC"
+  },  
+  {
+    "label": "Action",
+    "value": "Action",
+    "Field": "Actions",
+    "Search": "",
+    "Sort": "ASC"    
+  }, 
+  {
+    "label": "Additional Information",
+    "value": "Additional Info",
+    "Field": "Description",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Attachments",
+    "value": "Attach",
+    "Field": "Attachments",
+    "Search": "",
+    "Sort": "ASC"
+  }    
+]

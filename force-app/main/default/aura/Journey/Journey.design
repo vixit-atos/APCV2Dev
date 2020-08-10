@@ -1,0 +1,5 @@
+<design:component>
+        <design:attribute name="field" label="field" description="Name of the field you want to use" required="true"/>
+        <design:attribute name="transitionGroup" label="transitionGroup" description="The TransitionGroup you created with Journey_Transition__mtd records" />
+        <design:attribute name="readOnly" label="readOnly" description="If set to true, the buttons to change the value will not show" />
+</design:component>

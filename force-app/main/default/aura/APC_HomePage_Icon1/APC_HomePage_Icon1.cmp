@@ -1,0 +1,31 @@
+<!--
+  @Component Name     : APC_HomePage_Icon.cmp
+  @Description        : For re-usable APC HomePage icon at multiple pages.
+  @Author             : Chandrika
+-->
+
+
+<aura:component implements="forceCommunity:availableForAllPageTypes,force:hasRecordId,flexipage:availableForRecordHome" access="global" >
+    <aura:attribute name="heading" type="string" access="global"/>
+    <aura:attribute name="subtext" type="string" access="global"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="caseRecord" type="Object"/>
+    <aura:attribute name="recordLoadError" type="String"/>
+    <lightning:navigation aura:id="navService" />
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="CaseNumber"
+                      targetFields="{!v.caseRecord}"
+                      targetError="{!v.recordLoadError}"
+                      />
+    
+    
+        
+        <div class="slds-theme_default">
+            <a >
+                <img src ="{!$Resource.APCLogo}" onclick="{!c.backHomePage}" height="200" width="200"/> 
+            </a>
+        
+
+    </div>
+</aura:component>

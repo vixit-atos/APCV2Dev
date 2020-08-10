@@ -1,0 +1,6 @@
+<aura:component controller="QQ_customLookUpController">
+	<aura:method name="createQQcustomer">
+      <aura:attribute name="customername" type="String"/>
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

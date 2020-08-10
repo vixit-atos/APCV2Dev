@@ -1,0 +1,94 @@
+<aura:component controller="CI_AttachmentListController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="record" type="Object" 
+      description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" 
+      description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" 
+      description="An error message bound to force:recordData"/>
+    <force:recordData aura:id="record"
+        layoutType="FULL"
+        recordId="{!v.recordId}"
+        targetError="{!v.recordError}"
+        targetRecord="{!v.record}"
+        targetFields ="{!v.simpleRecord}"
+        mode="VIEW"/>
+    
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="relatedRecordID" type="id"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   
+	<article class="slds-card">
+	<div class="slds-card__header slds-grid">
+	<header class="slds-media slds-media_center slds-has-flexi-truncate">
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+            <span class="slds-text-heading_small">File</span>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body slds-card__body_inner">
+        <table  align="center" class="slds-table slds-table_bordered slds-table_resizable-cols slds-table_fixed-layout slds-no-cell-focus slds-table_edit" role="grid" style="width: 100%;">
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Name" scope="col" style="width: 25%;">
+              <div class="slds-th__action"  tabindex="-1">
+                <span class="slds-truncate" title="Title">Title</span>
+              </div>
+            </th>
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Close Date" scope="col" style="width: 25%;">
+              <div class="slds-th__action" tabindex="-1">
+                <span class="slds-truncate" title="Owner">Owner</span>
+              </div>
+            </th>
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Stage" scope="col" style="width: 25%;">
+              <div class="slds-th__action" tabindex="-1">
+                <span class="slds-truncate" title="Last Modified">Last Modified</span>                
+              </div>
+            </th>
+            <th aria-sort="none" class="slds-is-sortable slds-is-resizable slds-text-title_caps" aria-label="Confidence" scope="col" style="width: 25%;">
+              <div class="slds-th__action" tabindex="-1">
+              	<span class="slds-truncate" title="Size">Size</span>
+              </div>
+              <span class="slds-assistive-text" aria-live="assertive" aria-atomic="true">Sorted none</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.data}" var="obj">
+                <tr>
+                    <td class="slds-cell-edit" role="gridcell">
+                        <span class="slds-grid slds-grid_align-spread">
+                        <span class="slds-truncate" >
+                            <ui:outputURL value="{!'/sfc/servlet.shepherd/document/download/' + obj.id +'?operationContext=S1'}" label="{!obj.title}" aura:id="detailContURL" target="_blank"/>
+                       	</span>
+                      </span>
+                    </td>
+                    <td class="slds-cell-edit" role="gridcell">
+                        <span class="slds-grid slds-grid_align-spread">
+                        	<span class="slds-truncate" >
+                            	<ui:outputURL value="{!'https://dtna--stage.lightning.force.com/lightning/r/' + obj.ownerId  + '/view'}" label="{!obj.owner}" aura:id="detailContURL" target="_blank"/>
+                            </span>
+                        </span>
+                    </td>            
+                    <td aria-readonly="true" class="slds-cell-edit" role="gridcell">
+                      <span class="slds-grid slds-grid_align-spread">
+                        <span class="slds-truncate"> {!obj.lastModifiedDate}</span>
+                      </span>
+                    </td>
+                    <td class="slds-cell-edit" role="gridcell">
+                        <span class="slds-grid slds-grid_align-spread">  
+                            <span class="slds-truncate">{!obj.size}</span>
+                        </span>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+        </table>     
+  	</div>      
+    <footer class="slds-card__footer">
+          <ui:outputURL value="{!'https://dtna--stage.lightning.force.com/lightning/r/' + v.relatedRecordID + '/related/AttachedContentDocuments/view'}" label="View All" aura:id="detailContURL" target="_blank"/>
+    </footer>
+  </article>   
+</aura:component>

@@ -1,0 +1,120 @@
+<aura:component controller="FAB_VF_Controller" implements="force:hasRecordId,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="record" type="Object"/><!--Used to hold the Record ID-->
+    <aura:attribute name="imageId" type="String"/><!--Holds the single image ID for the base fab-->
+    <aura:attribute name="droppedSOP" type="String"/><!--Holds the Slippery SOP Date found from Milestone-->
+    <aura:attribute name="imageList" type="String"/><!--Holds the image list of other images associated to the Fab-->
+    <aura:attribute name="noteWhat" type="String"/><!--Holds the Note information for What is it?-->
+    <aura:attribute name="noteWhy" type="String"/><!--holds the note information for why is it important?-->
+    <aura:attribute name="noteCompatibility" type="String"/><!--holds the high-level compatibility information from the note-->
+    <aura:attribute name="noteDataCodes" type="String"/><!--holds the data code information from the note-->
+    <aura:attribute name="modelImages" type="List"/><!--holds the ids of the images associated to the models-->
+    <aura:attribute name="clickedBoolean" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initializeComponent}" />
+    <lightning:card>
+        <div class="slds-p-left_small">
+        <lightning:fileUpload
+                              name="fileUploader"
+                              multiple="true"
+                              accept=".jpg, .jpeg, .png, .gif, .svg"
+                              recordId="{!v.recordId}"
+                              tagcsv="fab"
+                              onuploadfinished="{!c.handleUploadFinished}" />
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-p-around--small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <lightning:button class="slds-size_full" label="Save" title="Save FAB" onclick="{! c.saveFAB }"/>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <lightning:button class="slds-size_full" label="Print" title="Print FAB" onclick="{! c.print }"/>
+            </div>
+            <!--Future Content
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <lightning:button class="slds-size_full" label="Publish" title="Publish FAB" onclick="{! c.publish }"/>
+            </div>
+			-->
+        </div>
+        <div class="slds-grid slds-wrap slds-gutters slds-p-around--small">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <aura:if isTrue="{!v.imageId}">
+                    <div class="slds-p-around_small">
+                        <img src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;versionId=' + v.imageId}"/>
+                    </div>
+                </aura:if>
+                <div class="slds-p-around_small slds-box">
+                    <b>Target SOP:</b><ui:outputText value="{!v.droppedSOP}"/>
+                    <lightning:textarea 
+                                        aura:id="codes"
+                                        name="codes" 
+                                        required="true" 
+                                        value="" 
+                                        placeholder="Enter text..." 
+                                        label="Data Codes" 
+                                        rows="3"
+                                        maxlength="1000" 
+                                        messageWhenTooLong="A maximum of 1000 characters are allowed." 
+                                        messageWhenValueMissing="For a FAB To be created, all entries must be made" />
+                </div>
+            </div>
+            <div class="slds-p-left_small slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <div class="slds-box slds-col">
+                    <div>
+                        <lightning:textarea 
+                                            aura:id="what"
+                                            name="what" 
+                                            required="true" 
+                                            value="" 
+                                            placeholder="Enter text..." 
+                                            label="What is it?" 
+                                            maxlength="1000" 
+                                            rows="3"
+                                            messageWhenTooLong="A maximum of 1000 characters are allowed." 
+                                            messageWhenValueMissing="For a FAB To be created, all entries must be made" />
+                        <lightning:textarea 
+                                            aura:id="why"
+                                            name="why" 
+                                            required="true" 
+                                            value="" 
+                                            placeholder="Enter text..." 
+                                            label="Why is it important?" 
+                                            maxlength="1000" 
+                                            rows="3"
+                                            messageWhenTooLong="A maximum of 1000 characters are allowed." 
+                                            messageWhenValueMissing="For a FAB To be created, all entries must be made" />
+                        <lightning:textarea 
+                                            aura:id="compatibility"
+                                            name="Compatibility" 
+                                            required="true" 
+                                            value="" 
+                                            placeholder="Enter text..." 
+                                            label="High-Level Compatibility" 
+                                            maxlength="1000"
+                                            rows="3"
+                                            messageWhenTooLong="A maximum of 1000 characters are allowed." 
+                                            messageWhenValueMissing="For a FAB To be created, all entries must be made" />
+                    </div>
+                    <div>
+                        <p><b>Models Impacted</b></p>
+                        <div class="slds-grid slds-wrap">
+                            <aura:iteration items="{!v.modelImages}" var="modelimg">
+                                <span class="slds-size_1-of-3">
+                                    <img src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;versionId=' + modelimg}"/>
+                                </span>
+                            </aura:iteration>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <lightning:card>
+            <div class="slds-grid slds-gutters slds-box">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                    <aura:iteration items="{!v.imageList}" var="imgId">
+                        <span><img src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;versionId=' + imgId}"/></span>
+                    </aura:iteration>
+                </div>
+            </div>
+        </lightning:card>
+        
+    </lightning:card>
+</aura:component>

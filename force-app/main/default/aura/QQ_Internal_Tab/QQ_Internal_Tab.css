@@ -1,0 +1,12 @@
+.THIS {
+}
+.THIS .width {
+    width:80%;
+}
+.THIS .newquote {
+    float: right !important;
+}
+.THIS .btn-primary {
+    background-color: #bfcc33 !important;
+    border-color: transparent;
+}

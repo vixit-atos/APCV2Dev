@@ -1,0 +1,4 @@
+<apex:page standardController="PricingProposal__c" extensions="PricingClone" action="{!newPrcingPropsal}">
+ <apex:pageMessages ></apex:pageMessages>
+    <apex:variable var="name" value="{!PricingProposal__c.Id}" />
+</apex:page>

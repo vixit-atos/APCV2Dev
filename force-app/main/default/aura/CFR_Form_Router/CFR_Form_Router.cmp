@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="opp" type="Object" description="A simplified view record object to be displayed"/>
+
+    <lightning:navigation aura:id="navService"/>
+
+    <force:recordData aura:id="LDS record"
+                      recordId="{!v.recordId}"
+                      targetFields ="{!v.opp}"
+                      fields="User_Can_Edit_Submitted_CFR__c,StageName"
+                      recordUpdated="{!c.handleRecordChanged}"
+                      mode="VIEW"/>
+</aura:component>

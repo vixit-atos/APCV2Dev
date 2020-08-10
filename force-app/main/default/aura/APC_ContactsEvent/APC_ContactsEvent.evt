@@ -1,0 +1,6 @@
+<!-- APC_ContactsEvent.evt -->
+<aura:event type="COMPONENT" description="by this event we are passing the selected contact list to parent component">
+    <aura:attribute name="contactList" type="List"/>
+    <aura:attribute name="contactdealerlist" type="List"/>
+    <aura:attribute name="accountDealerCode" type="String"/>    
+</aura:event>

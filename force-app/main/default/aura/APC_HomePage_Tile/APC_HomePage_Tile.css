@@ -1,0 +1,170 @@
+.THIS {
+}
+
+.THIS.my-button-text {
+    border-color: #F1F1F2;
+    background-color: 	hsl(201, 30%,80%);
+    
+}
+/*
+.THIS.my-button-text:hover {    
+background-color: hsl(201, 30%,80%); /*#F1F1F2;
+}*/
+.THIS.tilesize{
+    max-width: 45rem;
+    height:9rem;
+}
+.THIS .spntxtsub{    
+    font-size:1.2rem !important; 
+    
+}
+.THIS .spntxt1{
+    font-weight:bold;
+    font-size: 3 rem !important;   
+    line-height: 3 rem;
+    Font-family:Arial
+}
+.THIS .maintext{
+    /*color: rgb(62, 140, 182);*/
+    color: #004355;
+}
+.THIS .btn-primary1 {
+    border-color: transparent;
+    border-radius: 1.5rem;
+    border-color: white;
+    background-color: hsl(201, 30%,25%);
+    padding: 8px 15px 8px 15px!important;
+}
+.THIS .btn-primary1:hover {
+    border-color: transparent;
+    border-radius:  1.5rem; 
+    border-color:white;
+    background-color: 	hsl(201, 30%,45%);
+}
+@media (max-width: 1440px) {
+.THIS .btn-primary1 {
+        border-color: transparent;
+        border-radius: 1.5rem;
+        border-color: white;
+        background-color: hsl(201, 30%,25%);
+        padding: 0.5em!important;
+        font-weight: 150;
+        font-size: 1.5rem;
+}
+.THIS .btn-primary1:hover {
+        border-color: transparent;
+        border-radius:  1.5rem; 
+        border-color:white;
+        background-color: 	hsl(201, 30%,45%);
+}
+.THIS .spntxtsub{    
+        font-size:1.1rem !important; 
+        
+}
+}
+@media (max-width: 1200px) {
+.THIS .btn-primary1 {
+        border-color: transparent;
+        border-radius: 1.5rem;
+        border-color: white;
+        background-color: hsl(201, 30%,25%);
+        padding: 0.5em!important;
+        font-weight: 150;
+        font-size: 1.2rem;
+}
+.THIS .btn-primary1:hover {
+        border-color: transparent;
+        border-radius:  1.5rem; 
+        border-color:white;
+        background-color: 	hsl(201, 30%,45%);
+}
+.THIS .spntxtsub{    
+        font-size:0.9rem !important; 
+        
+}
+}
+@media (max-width: 1024px) {
+.THIS .btn-primary1 {
+        border-color: transparent;
+        border-radius: 1.5rem;
+        border-color: white;
+        background-color: hsl(201, 30%,25%);
+        padding: 0.5em!important;
+        font-weight: 150;
+        font-size: 1rem;
+}
+.THIS .btn-primary1:hover {
+        border-color: transparent;
+        border-radius:  1.5rem; 
+        border-color:white;
+        background-color: 	hsl(201, 30%,45%);
+}
+.THIS .spntxtsub{    
+        font-size:0.8rem !important; 
+        
+}
+}
+
+@media (max-width: 768px) {
+.THIS .btn-primary1 {
+        border-color: transparent;
+        border-radius: 1.5rem;
+        border-color: white;
+        background-color: hsl(201, 30%,25%);
+        padding: 0.5em!important;
+        font-weight: 150;
+        font-size: 1rem;
+}
+.THIS .btn-primary1:hover {
+        border-color: transparent;
+        border-radius:  1.5rem; 
+        border-color:white;
+        background-color: 	hsl(201, 30%,45%);
+}
+.THIS .spntxtsub{    
+        font-size:0.7rem !important; 
+        
+}
+}
+@media (max-width: 425px) {
+.THIS .btn-primary1 {
+        border-color: transparent;
+        border-radius: 1.5rem;
+        border-color: white;
+        background-color: hsl(201, 30%,25%);
+        padding: 0.5em!important;
+        font-weight: 150;
+        font-size: 0.7rem;
+}
+.THIS .btn-primary1:hover {
+        border-color: transparent;
+        border-radius:  1.5rem; 
+        border-color:white;
+        background-color: 	hsl(201, 30%,45%);
+}
+.THIS .spntxtsub{    
+        font-size:0.6rem !important; 
+        
+}
+}
+@media (max-width: 320px) {
+.THIS .btn-primary1 {
+        border-color: transparent;
+        border-radius: 1.5rem;
+        border-color: white;
+        background-color: hsl(201, 30%,25%);
+        padding: 0.5em!important;
+        font-weight: 150;
+        font-size: 0.5rem;
+}
+.THIS .btn-primary1:hover {
+        border-color: transparent;
+        border-radius:  1.5rem; 
+        border-color:white;
+        background-color: 	hsl(201, 30%,45%);
+}
+.THIS .spntxtsub{    
+        font-size:0.5rem !important; 
+        
+}
+}

@@ -1,0 +1,14 @@
+<apex:page standardController="Region__c" extensions="TableauReport">
+<apex:outputPanel rendered="{!!UserInGroup}">
+    <apex:iframe rendered="{!!UserInGroup}"  src="http://tableau-dtna.app.corpintra.net/#/views/DPMRegionReview/DPMRegionReview?:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no:&DPM={!Region__c.Name}&:toolbar=no"
+
+height="1110px" width="1160px"/>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!UserInGroup}">
+<apex:iframe rendered="{!UserInGroup}"   src="http://tableau-dtna.app.corpintra.net/#/views/NAMRegionReview/NAMRegionReview?:iid=1:embed=y&:showShareOptions=true&:display_count=no&:showVizHome=no:&NAM={!Region__c.Name}&:toolbar=no"
+
+height="1110px" width="1160px"/>
+</apex:outputPanel>
+
+</apex:page>

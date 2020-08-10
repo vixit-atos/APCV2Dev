@@ -1,0 +1,17 @@
+.THIS#container {
+    background-image: url('/resource/LeaderBoardBG_1');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.THIS .centered {
+    text-align:center;
+}
+
+.THIS #navArea {
+    filter: drop-shadow(0 0 30px #00daff);
+}
+
+.THIS #navArea:hover {
+    filter: drop-shadow(0 0 30px #ffffff);
+}

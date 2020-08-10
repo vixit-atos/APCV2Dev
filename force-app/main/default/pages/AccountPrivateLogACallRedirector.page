@@ -1,0 +1,69 @@
+<apex:page standardController="Account" extensions="Private_Activity_Redirector">
+    <apex:remoteObjects jsNamespace="RemoteObjectModel">
+        <apex:remoteObjectModel name="Private_Activity__c" jsShorthand="Private_Activity" 
+            fields="Name,Id">
+            <apex:remoteObjectField name="Account__c" jsShorthand="account"/>
+        </apex:remoteObjectModel>
+        <apex:remoteObjectModel name="Task" fields="WhatId,Id">
+          
+        </apex:remoteObjectModel>
+    </apex:remoteObjects>
+    <script>
+        
+        	var ct = new RemoteObjectModel.Private_Activity();
+        	var t = new RemoteObjectModel.Task();
+        	var ctDetails = { Account__c: '001J000001m7ccN' };
+        	var taskDetails = {WhatId:'a0FJ0000006f2PM'}; 
+        
+        
+        
+        
+        var previousOnload = window.onload; 
+    
+    
+    window.onload = function() { 
+        if (previousOnload) { 
+            previousOnload(); 
+        } 
+        
+        //create a container
+        //var pa=new sforce.SObject("Private_Activity__c");   
+        //pa.Ownerid='{!$User.Id}'; 
+        //pa.Account__c='{!Account.Id}'; 
+        //result=sforce.connection.create([pa]); 
+        
+        //create a task
+        //var task = new sforce.SObject("Task");    
+        //var t_result =  sforce.connection.create([task]);
+        //task.WhatId = pa_result.id;
+        //t_result = sforce.connection.update([task]);
+        t.create(taskDetails, function(err) {
+
+	    if(err) {
+
+	        console.log(err);
+
+	        alert(err.message);
+
+	    }
+
+	    else {
+
+	        // this is the contact
+	        console.log(t.log());     // Dump contact to log
+	        console.log(t.get('Id')); // Id is set when create completes
+            sforce.one.editRecord(t.get('Id'));
+            
+            console.log('done');
+	    }
+
+	});
+        //sforce.one.edit(t_result.id);
+        
+        
+    } 
+    
+    
+    </script>
+    <h>Hello world</h>
+</apex:page>

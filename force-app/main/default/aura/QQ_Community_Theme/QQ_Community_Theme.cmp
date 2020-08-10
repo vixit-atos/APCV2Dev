@@ -1,0 +1,28 @@
+<aura:component implements="forceCommunity:themeLayout">
+	<aura:attribute name="Footer" type="Aura.Component[]"/>
+	<aura:attribute name="profileMenu" type="Aura.Component[]"/>	
+	<header>
+		<nav id="light-navbar" class="navbar bootstrap-dtna" role="navigation">
+			<div class="">
+				<span class="slds-float_right profilemenuclass">
+					<br></br>{!v.profileMenu}               
+				</span>
+				<a onclick="{!c.handleClick}">
+					<div class="dtnaLogo">
+						<img src="{!$Resource.Daimleronelogo}"/>
+					</div>
+				</a>
+			</div>
+		</nav>
+		<div class="middle graident">
+			<div class="mainContainer" role="main"></div>
+		</div>
+		<div class="lower"></div>
+	</header>
+	<body>
+        {!v.body}
+    </body>
+	<footer>
+        {!v.Footer}
+    </footer>
+</aura:component>

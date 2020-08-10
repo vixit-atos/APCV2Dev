@@ -1,0 +1,13 @@
+.THIS.inner {
+ 	margin: 0 auto;
+    width: 40%;
+}
+
+.THIS.risk {
+ 	padding-right: 15px; 
+    width: 30px;
+}
+
+.THIS .wk_success {
+    background : #04844B !important;
+}

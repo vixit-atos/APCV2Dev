@@ -1,0 +1,13 @@
+<apex:page standardController="Private_Activity__c" extensions="Private_Activity_Redirector"   >  
+    <apex:form >
+        <apex:actionFunction action="{!redirectToAccount}" name="redirectToAccount"/>
+    </apex:form>
+        <script>  
+    	if ({!$User.UITheme=='Theme4t'}==true) {
+            sforce.one.navigateToURL('/'+'{!private_activity__c.Activity_ID__c}', true);
+            console.log('going to:'+'{!private_activity__c.Activity_ID__c}');
+        } else {
+        	redirectToAccount();
+        }  	
+    </script>
+</apex:page>

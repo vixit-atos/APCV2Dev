@@ -1,0 +1,28 @@
+.THIS #wrapAllTransitions {
+    display: flex;
+    padding-right: 10px;
+}
+
+.THIS .wrapTransition {
+    flex: 1;
+}
+
+.THIS .journeyTransition {
+    background-color: rgb(236, 235, 234);
+    color: black;
+}
+
+/* classes containing selected so we can use random number for selector in js to avoid cross-component selection */
+.THIS button[class*="selected"] {
+    box-shadow: 0px 10px 10px #888888;
+}
+
+.THIS .journeyTransition:hover { background-color: rgb(0, 95, 178) !important; }
+.THIS .slds-path__item:last-child { margin-right: 10px; }
+.THIS .slds-path__item:not(.grayJourneyPath) strong { color: black; }
+.THIS .grayJourneyPath strong { color: black; }
+.THIS .grayJourneyPath, .THIS .grayJourneyPath:before, .THIS .grayJourneyPath:after { background-color: rgb(236, 235, 234); }
+
+/* .THIS .completedJourneyPath strong::before { content: '✔ ' } */
+/* .THIS .greenJourneyPath, .THIS .greenJourneyPath:before, .THIS .greenJourneyPath:after { background-color: rgb(75, 202, 129); }
+.THIS .redJourneyPath, .THIS .redJourneyPath:before, .THIS .redJourneyPath:after { background-color:rgb(194, 57, 52); } */

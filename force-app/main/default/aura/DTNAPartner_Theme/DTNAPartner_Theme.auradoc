@@ -1,0 +1,12 @@
+<aura:documentation>
+    <aura:description>
+        <p>An <code>np:MyContactList</code> component represents an element that executes an action defined by a controller.</p>
+        <!--More markup here, such as <pre> for code samples-->
+    </aura:description>
+    <aura:example name="myComponentExample" ref="np:myComponentExample" label="Using the np:MyContactList Component">
+	<p>This example shows a simple setup of <code>MyContactList</code>.</p>
+    </aura:example>
+    <aura:example name="mySecondExample" ref="np:mySecondExample" label="Customizing the np:MyContactList Component">
+       <p>This example shows how you can customize <code>MyContactList</code>.</p>
+    </aura:example>
+</aura:documentation>

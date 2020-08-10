@@ -1,0 +1,250 @@
+<!--
+* @File Name          : APC_AdditionalInformation.cmp
+* @Description        : Displays Additional Information section in both Internal & External case detail pages.
+* @Developer          :	Akhila Putta.
+-->
+
+<aura:component controller="APC_AdditionalInformationController" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" >
+    <aura:attribute name="recordId" type="String" description="to store recordid"/>
+    <aura:attribute name="caseobj" type="Case" access="global" default="{
+                                                                        'Id':'',
+                                                                        'Description':'',
+                                                                        'Additional_Contacts__c':'',
+                                                                        'Dealercode' :''
+                                                                        }" 
+                    description="to store case object values"/>
+    <aura:attribute name="additionaldealercontacts" type="String" default="" description="to store additional dealer contacts"/>
+    <aura:attribute name="additionalRecipient" type="string" access="global" description="to store additional recipients"/>
+    <aura:attribute name="files" type="ContentDocument[]" description="to store files"/>
+    <aura:attribute name="contactsPicklistValues" type="List" access="global" default="[{'label': '-- select --', 'value': ''}]" description="to store contact picklist values"/> 
+    <aura:attribute name="isvalidrecipient" type="boolean" default="false" access="global" description="to check for valid recipients"/>
+    <aura:attribute name="additionalRecipientList" type="string[]" access="global" description="to store additional recipients list"/>
+    <aura:attribute name="selecteddealercontacts" type="List" default="[]" access="global" description="to select additional dealer contact"/>
+    <aura:attribute name="additionaldealercontactslist" type="List" default="[]" access="global" description="to store additional dealer contacts list"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object" access="global" description="to store additional dealer code values"/>
+    
+    <aura:attribute name="accept" type="List" default="['.jpg', '.jpeg', '.docx']" description="to accept the state of the file"/>
+    <aura:attribute name="multiple" type="Boolean" default="true" description="to store multiple files and recipients"/>
+    <aura:attribute name="disabled" type="Boolean" default="false" description="to state the status of the add button"/>
+    <aura:attribute name="readonly" type="Boolean" default="True" description="to state the status of the field"/>
+    <aura:attribute name="themedisplayed" type="string" access="global" description="to differentiate LEX AND notLEX"/>
+    <aura:attribute name="sectiontitleactioncss" type="string" access="global" description="to store section title styling"/>
+    <aura:attribute name="isLEX" type="Boolean" default="false" description="to state it is in lightning experience"/>
+    <aura:attribute name="isnotLEX" type="Boolean" default="false" description="to state it is not in lightning experience"/>
+    <aura:attribute name="isexpanded" type="Boolean" description="to state when the section to expand"/>
+    
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" access="global"/>
+    
+    
+    <lightning:card title="">
+        
+        <!-- Section-->
+        <aura:if isTrue="{!v.isLEX}">
+            <div class="slds-p-left_medium slds-p-right_medium">
+                <div class="slds-section slds-is-open" aura:id="InfoSection">                    
+                    <h3 class="slds-section__title">
+                        <span aria-controls="InfoList" class="slds-button slds-section__title-action unstyled-button11" aria-expanded="true">
+                            <button onclick="{!c.toggleSection}" data-auraId="InfoSection" class="slds-button slds-section__title-action unstyled-button11">
+                                <lightning:icon iconName="utility:switch"
+                                                size="x-small"
+                                                class="slds-section__title-action-icon slds-button__icon_left"
+                                                alternativeText="button icon"
+                                                />                                        
+                                <span class="slds-truncate" title="Additional Information" data-auraId="InfoSection">Additional Information </span>
+                            </button>
+                        </span>
+                    </h3>
+                    
+                    <!--section body-->
+                    
+                    <div class="slds-section__content" id="InfoList" aria-hidden="false">
+                        <lightning:layout multipleRows="true">   
+                            
+                            <!-- Additional Recipient -->
+                            
+                            <lightning:layoutItem size="10" >
+                                <div class="slds-form-element" >
+                                    <label class="slds-form-element__label" title="Additional Recipients">Additional Recipients</label> 
+                                    <lightning:input aura:id="additionalrecepient" 
+                                                     name="additionalrecepient" 
+                                                     type="email" 
+                                                     value="{!v.additionalRecipient}"  
+                                                     placeholder="--optional--"
+                                                     variant="label-hidden"  
+                                                     onchange="{!c.onrecipientchange}"
+                                                     messageWhenTypeMismatch="Please enter a valid email address"/>  
+                                </div>
+                            </lightning:layoutItem> 
+                            <lightning:layoutitem size="2">
+                                <br/>
+                                
+                                <div class="slds-p-top_xxx-small slds-p-left_large">
+                                    <lightning:buttonIcon iconName="utility:add" 
+                                                          variant="brand" 
+                                                          onclick="{!c.handleaddrecipient}" 
+                                                          disabled="{! !(v.isvalidrecipient)}"
+                                                          alternativeText="button icon" />   
+                                </div>    
+                                
+                            </lightning:layoutitem>
+                            
+                            <!-- Additional Recipients Pill -->
+                            
+                            <lightning:layoutItem size="10" >
+                                <aura:if isTrue="{!if(empty(v.additionalRecipientList), false, true)}">
+                                    <lightning:pillContainer items="{!v.additionalRecipientList}" 
+                                                             onitemremove="{!c.handlerecipientremove}"/>                   
+                                </aura:if>
+                            </lightning:layoutItem> 
+                            <lightning:layoutitem size="2"></lightning:layoutitem>
+                            
+                            <!-- Additional Contact --> 
+                            
+                            <lightning:layoutItem size="10">
+                                <div class="slds-p-top_x-small">                                
+                                    <div class="slds-form-element" > 
+                                        <lightning:dualListbox aura:id="dealercontacts"
+                                                               name="dealercontacts"
+                                                               label= "Additional Dealer Contacts"
+                                                               sourceLabel="Available"
+                                                               selectedLabel="Selected"
+                                                               fieldLevelHelp="Select contacts for notification"
+                                                               onchange="{! c.handleSaveAdditionalContactsData }"
+                                                               options="{!v.additionaldealercontactslist}"
+                                                               value="{!v.selecteddealercontacts}" >                                            
+                                        </lightning:dualListbox>              
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutitem size="2"></lightning:layoutitem>
+                            
+                            <!-- Attachment -->  
+                            
+                            <lightning:layoutitem size="10">  
+                                
+                                <aura:if isTrue="{!v.recordId != '' ? true: false}">                    
+                                    <aura:if isTrue="{!v.caseobj.Id != '' ? true: false}">
+                                        <c:APC_fileUpload aura:id="fileUpload"  
+                                                      multiple="true" 
+                                                      userId="{!v.recordId}" 
+                                                      recordId="{!v.recordId}" 
+                                                      caseid="{!v.caseobj.Id}" 
+                                                      files="{!v.files}"/> 
+                                    </aura:if>
+                                </aura:if> 
+                                
+                            </lightning:layoutitem>    
+                            <lightning:layoutitem size="2"></lightning:layoutitem>
+                            
+                        </lightning:layout>
+                    </div>
+                </div>                   
+            </div>   
+        </aura:if>    
+        <aura:if isTrue="{!v.isnotLEX}">   
+            <div class="slds-p-left_medium slds-p-right_medium">
+                <div class="slds-section slds-is-open" aura:id="InfoSection">                   
+                    <h3 class="slds-section__title">
+                        <span aria-controls="InfoList" class="slds-button slds-section__title-action unstyled-button External" aria-expanded="true">
+                            <button onclick="{!c.toggleSection}" data-auraId="InfoSection" class="slds-button slds-section__title-action External unstyled-button">
+                                <lightning:icon iconName="utility:switch"
+                                                size="x-small"
+                                                class="slds-section__title-action-icon slds-button__icon_left"
+                                                alternativeText="button icon"
+                                                />                                        
+                                <span class="slds-truncate" title="Additional Information" data-auraId="InfoSection">Additional Information</span>
+                            </button>
+                        </span>
+                    </h3>
+                    
+                    <!--section body-->
+                    
+                    <div class="slds-section__content" id="InfoList" aria-hidden="false">
+                        <lightning:layout multipleRows="true">   
+                            
+                            <!-- Additional Recipient -->
+                            
+                            <lightning:layoutItem size="10" >
+                                <div class="slds-form-element" >
+                                    <label class="slds-form-element__label" title="Additional Recipients">Additional Recipients</label> 
+                                    <lightning:input aura:id="additionalrecepient" 
+                                                     name="additionalrecepient" 
+                                                     type="email" 
+                                                     value="{!v.additionalRecipient}"  
+                                                     placeholder="--optional--"
+                                                     variant="label-hidden"  
+                                                     onchange="{!c.onrecipientchange}"
+                                                     messageWhenTypeMismatch="Please enter a valid email address"/>  
+                                </div>
+                            </lightning:layoutItem> 
+                            <lightning:layoutitem size="2">
+                                <br/>
+                                
+                                <div class="slds-p-top_xxx-small slds-p-left_large">
+                                    <lightning:buttonIcon iconName="utility:add" 
+                                                          variant="brand" 
+                                                          onclick="{!c.handleaddrecipient}" 
+                                                          disabled="{! !(v.isvalidrecipient)}"
+                                                          alternativeText="button icon" />   
+                                </div>    
+                                
+                            </lightning:layoutitem>
+                            
+                            <!-- Additional Recipients Pill -->
+                            
+                            <lightning:layoutItem size="10" >
+                                <aura:if isTrue="{!if(empty(v.additionalRecipientList), false, true)}">
+                                    <lightning:pillContainer items="{!v.additionalRecipientList}" 
+                                                             onitemremove="{!c.handlerecipientremove}"/>                   
+                                </aura:if>
+                            </lightning:layoutItem> 
+                            <lightning:layoutitem size="2"></lightning:layoutitem>
+                            
+                            <!-- Additional Contact --> 
+                            
+                            <lightning:layoutItem size="10">
+                                <div class="slds-p-top_x-small">                                
+                                    <div class="slds-form-element" > 
+                                        <lightning:dualListbox aura:id="dealercontacts"
+                                                               name="dealercontacts"
+                                                               label= "Additional Dealer Contacts"
+                                                               sourceLabel="Available"
+                                                               selectedLabel="Selected"
+                                                               fieldLevelHelp="Select contacts for notification"
+                                                               onchange="{! c.handleSaveAdditionalContactsData }"
+                                                               options="{!v.additionaldealercontactslist}"
+                                                               value="{!v.selecteddealercontacts}" >                                            
+                                        </lightning:dualListbox>              
+                                    </div>
+                                </div>
+                            </lightning:layoutItem>
+                            <lightning:layoutitem size="2"></lightning:layoutitem>
+                            
+                            <!-- Attachment -->  
+                            
+                            <lightning:layoutitem size="10"> 
+                                
+                                <aura:if isTrue="{!v.recordId != '' ? true: false}">                    
+                                    <aura:if isTrue="{!v.caseobj.Id != '' ? true: false}">
+                                        <c:APC_fileUpload aura:id="fileUpload"  
+                                                      multiple="true" 
+                                                      userId="{!v.recordId}" 
+                                                      recordId="{!v.recordId}" 
+                                                      caseid="{!v.caseobj.Id}" 
+                                                      files="{!v.files}"/>
+                                    </aura:if>
+                                </aura:if> 
+                                
+                            </lightning:layoutitem>    
+                            <lightning:layoutitem size="2"></lightning:layoutitem>
+                            
+                        </lightning:layout>
+                    </div>
+                </div>                   
+            </div> 
+        </aura:if>
+    </lightning:card>
+</aura:component>

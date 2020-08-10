@@ -1,0 +1,129 @@
+<aura:component >
+	 <aura:attribute name="quote" 
+                    type="ASP_QQ__c" />
+    
+    <aura:attribute name="quotecustomer" 
+                    type="String" 
+                    default=""/>
+    
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_PM_Line_Items__c[]" /> 
+    
+    <aura:attribute name="detroititem" type="Boolean"/>
+    <aura:attribute name="truckitem" type="Boolean"/>
+    <aura:attribute name="fccitem" type="Boolean"/>
+    <aura:attribute name="newquotenum" type="String" default=""/>
+    
+    <aura:attribute name="quoteid" type="String" default=""/>
+    
+   <!-- <c:QQ_Query_QuoteService aura:id="queryquoteservice" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />-->
+    
+    <br></br>
+    <div class="slds-text-heading_medium slds-float_left"> {!v.newquotenum =='' ? '' : 'QUOTE #:'}  {! v.newquotenum} </div>
+    <br></br><br></br><br></br>
+    <div class="slds-box slds-theme_shade">
+        <lightning:layout>
+            <lightning:layoutItem size="12">
+                {!v.quotecustomer} 
+            </lightning:layoutItem>                        
+            
+        </lightning:layout>
+    </div>
+    
+    
+
+    
+    
+   <!-- <aura:if isTrue = "{!v.detroititem }">-->
+        <div class="slds-box slds-theme_shade">
+            <div class="slds-text-heading_small slds-float_left">DETROIT COVERAGE</div><br></br>
+            <aura:iteration items="{!v.quoteitemlist}" var="item">
+                <aura:if isTrue="{! item.Coverage__c == 'DETROIT COVERAGE' ? true : false}">
+                    <div class="slds-box slds-box_x-small slds-theme_default">
+                        <div class="slds-float_left">Data Book Code:{!item.Databook_Code__c} </div>  <br></br>             
+                        <lightning:layout>
+                            <lightning:layoutItem size="2">
+                                {!item.Engine_Model__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2">
+                                 {!item.Duty_Cycle__c}
+                            </lightning:layoutItem >
+                            <lightning:layoutItem size="2">
+                                {!item.Package__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" >
+                                {!item.Name}            
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" >
+                                ${!item.Price__c} USD               
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </aura:if>
+            </aura:iteration>
+        </div> <!--
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.truckitem}">
+        <div class="slds-box slds-theme_shade"> 
+            <div class="slds-text-heading_small slds-float_left">TRUCK CHASSIS COVERAGE</div><br></br>           
+                <aura:iteration items="{!v.quoteitemlist}" var="item" >
+                    <aura:if isTrue="{! item.Coverage__c == 'TRUCK CHASSIS' ? true : false}">
+                    <div class="slds-box slds-box_x-small slds-theme_default">
+                        <div class="slds-float_left">Data Book Code:{!item.Databook_Code__c} </div>  <br></br>  
+                        <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Model__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Group__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Truck_Coverage_Package__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Duration_Final__c}                
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                             ${!item.Price__c} USD                
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    </div>
+                        </aura:if>
+                </aura:iteration>
+            
+        </div>
+    </aura:if><aura:if isTrue="{!v.fccitem}">
+        <div class="slds-box slds-theme_shade"> 
+            <div class="slds-text-heading_small slds-float_left">FCC COVERAGE</div><br></br>           
+                <aura:iteration items="{!v.quoteitemlist}" var="item" >
+                    <aura:if isTrue="{! item.Coverage__c == 'FCCC' ? true : false}">
+                    <div class="slds-box slds-box_x-small slds-theme_default">
+                        <div class="slds-float_left">Data Book Code:{!item.Databook_Code__c} </div>  <br></br>  
+                        <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Model__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Group__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Standalone_Coverage__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Duration_Final__c}                
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            ${!item.Price__c} USD                
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    </div>
+                        </aura:if>
+                </aura:iteration>
+            
+        </div>
+    </aura:if>-->
+    
+</aura:component>

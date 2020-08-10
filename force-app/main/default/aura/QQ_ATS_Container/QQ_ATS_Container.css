@@ -1,0 +1,63 @@
+.THIS .textcolor{
+    color:rgb(37, 99, 169);
+    font-size:1.25rem;
+    font-weight:bold;
+}
+.THIS .slds-form-element__label{
+    font-size:.9rem;
+    font-weight:bold;
+}
+.THIS .table__label{
+    font-size:.7rem;
+    font-weight:bold;
+}
+.THIS .table__data{
+    font-size:.7rem;
+    
+}
+
+.THIS .slds-form-element__control{
+    font-size:.8rem;
+}
+
+.THIS .slds-radio_faux{
+    width:1rem;
+    height:1rem;
+   
+}
+.THIS .slds-radio{
+   padding-bottom:.7rem; 
+}
+.THIS .slds-assistive-text{
+    background-color:red;
+}
+
+.THIS .tooltip {
+    display:inline-block;
+    position:relative;
+    border-bottom:0px dotted #FFFFFF;
+    text-align:left;
+}
+
+.THIS .tooltip .dutyinfo {
+    min-width:350px; 
+    max-width:600px;
+    top:-25px;
+    left:50%;
+    transform:translate(-50%, -90%);
+    padding:10px 20px;
+    color:#2E2E2E;
+    background-color:#9FCCE4;
+    font-weight:normal;
+    font-size:13px;
+    border-radius:8px;
+    position:absolute;
+    z-index:99999999;
+    box-sizing:border-box;
+    border:1px solid #999999;box-shadow:0 1px 8px rgba(0,0,0,0.5);
+    visibility:hidden; opacity:0; transition:opacity 0.8s;
+}
+
+.THIS .tooltip:hover .dutyinfo {
+    visibility:visible; opacity:1;
+}

@@ -1,0 +1,147 @@
+<aura:component controller="SMR_Bulk_TasksController" access="global" Implements="flexipage:availableForRecordHome,force:hasRecordId">
+     <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <!-- Attribute Declaration -->
+    
+    <!-- Atrribute used to store case id--> 
+    <aura:attribute name="recordId" type="String" />
+    <!-- Atrribute used to store case record data--> 
+    <aura:attribute name="caserecord" type="Object"/>
+    <aura:attribute name="caseOwner" type="Object"/>
+    <!-- Atrribute used to store task list--> 
+    <aura:attribute name="taskList" type="Task[]"/> 
+    <!-- Atrribute used to store logged-in userID--> 
+    <aura:attribute name="LoggedInUserID" type="String" default=""/>
+    <!-- Atrribute used to store SMR task recordtype ID--> 
+    <aura:attribute name="SMRtaskrecordTypeId" type="String" default=""/>
+    <!-- Atrribute used to store existing record count for a SMR case--> 
+    <aura:attribute name="SMRExistingRecordCount" type="String" default=""/>
+    <!-- Atrribute used to set rendering variable after setting the userID--> 
+    <aura:attribute name="isDoneRendering" type="Boolean" default="false"/>
+    <!-- Atrribute used to set loading image show/hide--> 
+    <aura:attribute name="showspinner" type="Boolean" default="false"/>
+    
+    <!-- Created handler to call Init event to load record typeid and populate the tasks list--> 
+    <aura:handler name="init" value="{! this }" action="{!c.doInit}"/>
+   <!-- Created handler to call doneRendering event to set the current logged in userID--> 
+    <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
+     <aura:handler event="force:showToast" action="{!c.refresh}"/>
+    <!-- Created handler to call navigateToSObject event to navigate new task window for the selected task link--> 
+    <aura:handler event="force:navigateToSObject" action="{!c.navigateToRecord}"/>
+    
+    <lightning:spinner class="{!v.showspinner ? 'slds-show' : 'slds-hide'}" alternativeText="Loading" size="large" />
+    
+    <!-- Query Case Record -->
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      fields="CaseNumber,Status,Subject,AccountId,Reason,OwnerId,Account.Name,Owner.Name"
+                      targetFields="{!v.caserecord}"
+                      />
+    
+    <div class="slds-m-around--xx-small slds-scrollable_x" style="width: 2330px;">
+            <div style="padding-bottom: 10px; padding-left: 10px;">
+                <div class="slds-truncate" style="font-size:120%"><b>Add new tasks or edit tasks assigned to me</b></div>
+            </div>
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-no-row-hover table table-striped table-fixed" style="width: 2060px;" frame="box" aura:id="tblTasksList"> 
+                <thead style="width: 2060px;">
+                    <tr class="slds-text-title_caps" style="width: 2060px;">
+                         <th scope="col" style="width: 30px;">
+                            <div class="slds-truncate">Action</div>
+                        </th>
+                        <th scope="col" style="width: 30px;">
+                            <div class="slds-truncate">#</div>
+                        </th>
+                        <th scope="col" style="width: 200px;">
+                            <div class="slds-truncate" title="Subject"><span style="color: red; font-size:larger" > * </span>Subject</div>
+                        </th>
+                        <th scope="col" style="width: 150px;">
+                            <div class="slds-truncate" title="Due Date"><span style="color: red; font-size:larger" > * </span>Due Date</div>
+                        </th>
+                        <th scope="col" style="width: 250px;">
+                            <div class="slds-truncate" title="Assigned To"><span style="color: red; font-size:larger" > * </span>Assigned To</div>
+                        </th>
+                        <th scope="col" style="width: 250px; padding-left: 15px;">
+                            <div class="slds-truncate" title="Contact Name"> Contact Name</div>
+                        </th>
+                        <th scope="col" style="width: 80px;">
+                            <div class="slds-truncate" title="% Complete"><span style="color: red; font-size:larger" > * </span>% Complete</div>
+                        </th>
+                        <th scope="col" style="width: 200px;">
+                            <div class="slds-truncate" title="Status"><span style="color: red; font-size:larger" > * </span>Status</div>
+                        </th>
+                        <th scope="col" style="width: 100px;">
+                            <div class="slds-truncate" title="Priority"><span style="color: red; font-size:larger" > * </span>Priority</div>
+                        </th>
+                        <th scope="col" style="width: 400px;">
+                            <div class="slds-truncate" title="Comments">Comments</div>
+                        </th>
+                    </tr>
+                </thead>   
+                <tbody>      
+                    <aura:iteration items="{!v.taskList}" var="tsk" indexVar="index" aura:id="tblIterate">
+                        	<tr style="width: 2060px;" id="{!index + 1}">
+                            <td style="width: 30px; padding-left: 35px;">
+                                <a onclick="{!c.removeRow}" data-record="{!index}">
+                                    <lightning:icon iconName="utility:delete" size="small" alternativeText="Delete" variant="error"/>
+                                    <span class="slds-assistive-text">Delete</span>
+                                </a>
+                            </td> 
+                            <td style="padding-left: 25px;width: 30px;">
+                                <a onclick="{!c.navigateToRecord}" style="width:100%;" title="Open in task window to edit" data-index="{!tsk.Id}">{!index + 1}</a>
+                            </td>
+                            <td style="width: 200px;"> 
+                                <lightning:input aura:id="plvSubject" name="tskSubject" type="text" value="{!tsk.Subject}" maxlength="255" />
+                            </td>
+                            <td style="width: 150px; padding-top: 18px;">
+                                  <ui:inputDate aura:id="dtDueDate" displayDatePicker="true" format="MM/dd/yy" 
+                                              class="slds-input" labelClass="slds-form-element__label" value="{!tsk.ActivityDate}" />
+                               
+                            </td>
+                            <td style="width: 250px; z-index: 100000px;">
+                                <c:singleSelectLookup objectAPIName="user" IconName="standard:user" selectedRecord="{!tsk.OwnerId}" />
+                            </td>
+                            <td style="width: 250px;" aria-disabled="true">
+                                <c:singleSelectLookup objectAPIName="contact" IconName="standard:contact" selectedRecord="{!tsk.Contact__c}"/>
+                            </td>
+                            <td style="width: 100px;" aria-disabled="true">
+                                <lightning:select name="ddlTAskCompl" value="{!tsk.Task_Completion__c}">
+                                    <option value="0%">0%</option>
+                                    <option value="25%">25%</option>
+                                    <option value="50%">50%</option>
+                                    <option value="75%">75%</option>
+                                    <option value="100%">100%</option>
+                                </lightning:select>
+                                <!--<c:PickListValues aura:id="plvTaskCompletion" sObjectName="Task" fieldName="Task_Completion__c" selectedValue="{!tsk.Task_Completion__c}" sRecordType="SMR Task" />-->
+                             </td>
+                            <td style="width: 200px;">
+                                <lightning:select name="ddlStatus" value="{!tsk.Status}">
+                                    <option value="Not Started">Not Started</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Waiting on someone else">Waiting on someone else</option>
+                                </lightning:select>
+                               <!-- <c:PickListValues aura:id="plvStatus" sObjectName="Task" fieldName="Status" selectedValue="{!tsk.Status}" sRecordType="SMR Task" />-->
+                            </td>
+                            <td style="width: 100px;">
+                                 <lightning:select name="ddlpriority" value="{!tsk.Priority}">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Low">Low</option>
+                                    <option value="High">High</option>
+                                </lightning:select>
+                                <!-- <c:PickListValues aura:id="plvPriority" sObjectName="Task" fieldName="Priority" selectedValue="{!tsk.Priority}" prePopulateValue="Normal" sRecordType="SMR Task" />-->
+                            </td>
+                            <td style="width: 400px;">
+                                <lightning:textarea aura:id="plvComments" class="tallTextArea" name="tskComments" value="{!tsk.Description}" maxlength="32000">
+                                </lightning:textarea>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            <div class="slds-align_absolute-center slds-p-top_small" style="padding-bottom: 2px;">
+                <lightning:button label="Add Rows" iconName="utility:add" onclick="{!c.addRow}" class="slds-button smr_button"></lightning:button>
+                <lightning:button aura:id="btnSave" label="Save" title="Save" onclick="{!c.save}" class="slds-button smr_save_button"/>
+                <lightning:button aura:id="btnCancel" label="Cancel" title="Cancel" onclick="{!c.cancel}" class="slds-button slds-button_neutral"/>
+            </div>
+    </div>
+</aura:component>

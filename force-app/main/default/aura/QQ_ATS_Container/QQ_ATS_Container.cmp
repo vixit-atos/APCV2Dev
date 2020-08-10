@@ -1,0 +1,205 @@
+<aura:component access="global">
+    <aura:attribute name="quoteitem" type="ASP_PM_Line_Items__c" default="{'sobjectType': 'ASP_PM_Line_Items__c'}"/> 
+    <aura:attribute name="quoteitemlist" type="ASP_PM_Line_Items__c[]"/>
+    <aura:attribute name="EngineModelList" type="List"/>
+    <aura:attribute name="dutycycleList" type="List"/>
+    <aura:attribute name="atsservice" type="List" />
+    <aura:attribute name="ServiceList" type="list"  />
+    <aura:attribute name="FilterList" type="list" />
+    <aura:attribute name="AirFilterList" type="list" />
+    <aura:attribute name="AddOns" type="list" />
+    <aura:attribute name="durationList" type="list" />
+    <aura:attribute name="disableaddbtn" type="boolean" default="true"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/> 
+    
+    <aura:attribute name="masterlineitems" type="List"/>
+    <aura:attribute name="enginemodelitems" type="List"/>
+    <aura:attribute name="dutylineitems" type="List"/>
+    <aura:attribute name="atsservicelineitems" type="List"/>
+    <aura:attribute name="optionslineitems" type="List"/>
+    <aura:attribute name="servicelisttable" type="list"  />
+    
+    <aura:attribute name="durationlineitems" type="List"/>    
+    <aura:attribute name="finallineitem" type="String"/>
+    
+    <aura:attribute name="servicelineitem" type="List"/>
+    <aura:attribute name="pricelineitem" type="List"/>
+    <aura:attribute name="pricelist" type="List"/>
+    <aura:attribute name="serviceintervallineitem" type="List"/>
+    <aura:attribute name="serviceintervallist" type="List"/>
+    
+    <!--<aura:attribute name="dutyinfo" type="string"/>-->
+    
+    <c:QQ_Pm_LineItem_DataService aura:id="Lineitemservice" />
+    <c:QQ_Query_OfferService_DataService aura:id="QueryOfferService_Srvc" />    
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    
+    <form class="slds-form slds-box slds-form_stacked slds-theme_shade">
+        <aura:iteration items="{!v.quoteitemlist}" var="item">
+            <aura:if isTrue="{!item.Program__c == 'ATS'}">
+                <div class="slds-box slds-box_x-small slds-theme_default">
+                    <a class="slds-text-title_bold">Data Book Code:</a> {!item.Databook_Code__c}
+                    <div class="slds-float_right slds-p-around_large">
+                        <lightning:buttonIcon
+                                              iconName="utility:delete" 
+                                              variant="bare"
+                                              size="large"
+                                              alternativeText="Settings" 
+                                              iconClass="dark"
+                                              onclick="{! c.removequoteitem}"
+                                              name="{!item.Offer_Master_Id__c}"/>
+                    </div>
+                    <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Engine_Model__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.ATS_Service__c}     
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Duration__c}    
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!item.Price__c}">
+                                <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                <aura:set attribute="else">
+                                    <ui:outputText value="$--.-- USD"/>
+                                </aura:set>
+                            </aura:if>     
+                        </lightning:layoutItem>
+                        
+                    </lightning:layout>
+                    
+                </div>
+            </aura:if>
+        </aura:iteration>
+        
+        
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="4" padding="around-small">
+                <lightning:combobox name="Engine_Model__c" 
+                                    label="Engine Model"                                   
+                                    value="{!v.quoteitem.Engine_Model__c}" 
+                                    placeholder="None" 
+                                    options="{! v.EngineModelList }" 
+                                    onchange="{!c.handlechange}"/>
+            </lightning:layoutItem>
+            
+            
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.Engine_Model__c}"  >
+                    <span class="slds-form-element__label">
+                        Duty Cycle
+                        <div class="tooltip">
+                            <lightning:buttonIcon variant="bare" iconName="utility:info" title="" iconClass="dark"/>
+                            <div class="dutyinfo slds-text-longform">
+                                <ul>
+                                    <li>Efficient Long Haul is xx miles/Km per year.</li>
+                                    <li>Long Haul is xx miles/Km per year.</li>
+                                    <li>On-Highway is xx miles/Km per year.</li>
+                                    <li>Severe is xx miles/Km per year.</li>
+                                    <li>Short Haul is xx miles/Km per year.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </span>
+                    <lightning:combobox name="Duty_Cycle__c" 
+                                        label="Duty Cycle" 
+                                        variant="label-hidden"
+                                        value="{!v.quoteitem.Duty_Cycle__c}" 
+                                        placeholder="" 
+                                        options="{! v.dutycycleList }" 
+                                        onchange="{!c.handlechange}"  />  
+                </aura:if>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="2" padding="around-small" >
+                <span class="textcolor slds-float_right">
+                    <br></br>
+                    <aura:if isTrue="{!v.quoteitem.Price__c}">
+                        <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> USD
+                        <aura:set attribute="else">
+                            <ui:outputText value="$--.-- USD"/>
+                        </aura:set>
+                    </aura:if>
+                </span>
+            </lightning:layoutItem>            
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="slds-float_right">
+                    <br></br> 
+                    <lightning:buttonIcon
+                                          iconName="utility:add"  
+                                          variant="brand"
+                                          size="large"
+                                          alternativeText="Add Item" 
+                                          disabled = "{!v.disableaddbtn}"
+                                          iconClass="dark"
+                                          onclick="{! c.addquoteitem}"
+                                          name="Add"/>
+                    
+                </div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="3" padding="around-small">                
+                <aura:if isTrue= "{!v.quoteitem.Duty_Cycle__c}"  >
+                    <lightning:RadioGroup name="ATS_Service__c" 
+                                          label="ATS Service"                                   
+                                          value="{!v.quoteitem.ATS_Service__c}" 
+                                          placeholder="None" 
+                                          options="{! v.atsservice }" 
+                                          onchange="{!c.handlechange}"
+                                          />
+                </aura:if>                
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.ATS_Service__c}"  >
+                    <lightning:RadioGroup name="Duration__c"
+                                          label="Duration"
+                                          options="{!v.durationList }"
+                                          placeholder="None" 
+                                          value="{!v.quoteitem.Duration__c }"
+                                          onchange="{!c.handlechange }"
+                                          />
+                    
+                </aura:if>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="5" padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.Duration__c }" >
+                    
+                    <div class="slds-m-top_xxx-small">
+                        <div class="slds-form-element__label">ATS Services Included</div>
+                        
+                        <Table border="1" class="slds-box slds-table slds-theme_alert-texture">
+                            
+                            <Thead>
+                                <tr></tr>
+                                <th class="slds-text-align_left table__label">ATS Service Type</th>
+                                <th class="slds-text-align_left table__label"># of Services</th>
+                                <th class="slds-text-align_left table__label">Interval (month)</th>
+                                <th class="slds-text-align_left table__label">Interval (miles)</th>
+                                
+                            </Thead>
+                            
+                            <Tbody>
+                                
+                                <aura:iteration items="{! v.servicelisttable }"  var="item" indexVar="index">
+                                    <tr>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Type__c}</td>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Frequency__c}</td>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Interval_Months__c}</td>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Interval_Miles__c}</td>
+                                        
+                                    </tr>
+                                </aura:iteration>
+                                
+                            </Tbody>
+                        </Table>
+                    </div>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </form>
+</aura:component>

@@ -1,0 +1,170 @@
+<!--
+  @Component Name     : APC_PartINParagon.cmp
+  @Description        : Order I'm Trying to Place
+  @Author             : Akhila  
+  
+ -->
+<aura:component controller="OrderController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="SelectedReasonValue" type="string" access="global" />  
+    <aura:attribute name="recId" type="Id" access="global"/>
+    <aura:attribute name="vendorname" type="string" access="global" />
+    <aura:attribute name="partnumber" type="string" access="global"/>
+    <aura:attribute name="vinnumber" type="string" access="global"/>
+    <aura:attribute name="addinfo" type="string" access="global"/>
+    <aura:attribute name="emailRecipient" type="string" access="global" />
+    <aura:attribute name="additionalRecipient" type="string" access="global"/>
+    <aura:attribute name="RecordforSave" type="List" access="global"/>
+    <aura:attribute name="IsModel" type="boolean" default="false" access="global"/>   
+    <aura:attribute name="dealerCode" type="string" access="global"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object" access="global"/>
+    <aura:attribute name="dealerContact" type="string" access="global"/>
+    <aura:attribute name="contactsPicklistValues" type="Object" access="global"/>    
+    <aura:attribute name="caseModal" type="Map" default="{'show':false}" access="global"/>
+    
+    <aura:handler name="init" action="{!c.initHandler}" value="{!this}" />
+    <aura:method name="refreshDealerData" action="{!c.initHandler}" access="PUBLIC"/> 
+    
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <lightning:navigation aura:id="navService" />
+    
+    <lightning:spinner aura:id="spinner" variant="brand" class="slds-hide" />
+    
+    <lightning:layout >
+        <lightning:layoutItem size="8" >
+            <div class="slds-form-element" style="margin-bottom: 7px; margin-left: 2.5rem;">
+                <label class="slds-form-element__label" style="font-size:15px; margin-bottom: 1px; margin-left: 18rem;" for="select-01">Enter Part Number<!--<abbr class="slds-required" title="required">*</abbr>--></label>
+                <div onkeyup="{!c.handleKeyup}" title="" > 
+                    <lightning:input class="field" variant="label-hidden"
+                                     aura:id="partnum"
+                                     value="{!v.partnumber}" 
+                                     label= ""
+                                     required="true"
+                                     maxlength=""
+                                     minlength=""
+                                     messageWhenValueMissing ="Part Number cannot be blank" style="width: 47%; margin-left: 18rem;"/>
+                </div></div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout >
+        <lightning:layoutItem size="8" >
+            <div class="slds-form-element" style="margin-bottom: 7px; margin-left: 2.5rem;">
+                <label class="slds-form-element__label" style="font-size:15px; margin-bottom: 1px; margin-left: 18rem;" for="select-01">Enter Vendor Name<!--<abbr class="slds-required" title="required">*</abbr>--></label>
+                <div onkeyup="{!c.handleKeyup}" title="" > 
+                    <lightning:input class="field" variant="label-hidden"
+                                     aura:id="venname"
+                                     value="{!v.vendorname}" 
+                                     label= ""
+                                     required="true"
+                                     maxlength=""
+                                     minlength=""
+                                     messageWhenValueMissing ="Vendor Name Cannot be blank" style="width: 47%; margin-left: 18rem;"/>
+                </div></div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layoutItem size="10" class="slds-p-around_xx-small">
+        <div class="slds-form-element" style="margin-bottom: 7px; margin-left: 20.4rem;">
+            <label style="font-size: 15px; font-family: arial;">Vin Number:<span style="font-style: italic;">(Optional)</span></label>
+            <lightning:input value="{!v.vinnumber}" label="" style="margin-top: -1.3rem; width: 56%;"/>
+        </div>
+    </lightning:layoutItem> 
+    <lightning:card>
+        <lightning:layoutItem size="8" >
+            <div class="slds-form-element" style="margin-top: -1rem; margin-left: 2.5rem;">
+                <label class="slds-form-element__label" style="font-size:15px; margin-bottom: 18px; margin-left: 18rem;" for="select-01">Reason<!--<abbr class="slds-required" title="required">*</abbr>--></label>
+                <div onkeyup="{!c.handleKeyup}" title="" style="width:48%;margin-left: 18rem;margin-top: -2.9rem;"> 
+                    <lightning:select aura:id="selectItemreason"  
+                                      name="selectItemreason" label="" required="true"                                             
+                                      messageWhenValueMissing ="Please select reason" onchange="{!c.onSingleSelectItemChange}">
+                        <option value="">--Select--</option>
+                        <option value="1">Need to Order</option>
+                        <option value="2">Customer Quote</option>
+                    </lightning:select>
+                </div></div>
+        </lightning:layoutItem>
+    </lightning:card>
+    <lightning:layoutItem size="10" class="slds-p-around_xx-small">
+        <div class="slds-form-element" style="margin-bottom: 7px; margin-left: 20.4rem;">
+            <label style="font-size: 15px; font-family: arial;">Additional Information:<span style="font-style: italic;">(Optional)</span></label>
+            <!--<lightning:input value="{!v.addinfo}" label="" style="margin-top: -1.3rem; width: 56%;"/>-->
+            <div style="width: 58%;margin-top: 0.1rem;"><ui:inputTextArea  class="slds-textarea" aura:id="Info" value="{!v.addinfo}"/></div>
+        </div>
+    </lightning:layoutItem>   
+    
+    <lightning:layoutItem size="10" class="slds-p-around_xx-small">
+        <div class="slds-form-element" style="margin-bottom: 7px; margin-left: 20.4rem;">
+            <label style="font-size: 15px; font-family: arial;">Additional Recipients <span style="font-style: italic;">(Optional)</span></label>
+            <lightning:input value="{!v.additionalRecipient}" label="" style="margin-top: -1.3rem; width: 58%;"/>
+            <!--  <div style="width: 58%;margin-top: 0.1rem;"><ui:inputTextArea  class="slds-textarea" aura:id="Info" value="{!v.additionalRecipient}"/></div>-->
+        </div>
+    </lightning:layoutItem> 
+    <lightning:card>
+         <lightning:layoutItem size="10" class="slds-p-around_xx-small">
+            <div class="slds-form-element" style="margin-bottom: 7px; width: 31%; margin-left: 29.6%;font-size:15px;">
+                <label class="slds-form-element__label" for="contacts">Additional Contact<i>(Optional)</i></label>
+                <lightning:select aura:id="contacts" name="contacts" class="label-hidden" onchange="" value="{!v.dealerContact}" > 
+                    <option value=""> -- None -- </option>
+                    <aura:iteration items="{!v.contactsPicklistValues}" var="item">
+                        <option value="{!item.Id}">{!item.FirstName+item.LastName+ '('+ item.Email+')'}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </div>    	
+        </lightning:layoutItem>
+    </lightning:card> 
+    <br />   
+    <lightning:card  title=''>         
+        <form class="slds-form--inline">
+            <div class="slds-align_absolute-center">
+                <div class="slds-form-element" style="margin-left: 140px;">     
+                    <div class="slds-form-element__control">     					
+                        <lightning:button aura:id="button" variant="brand" label="Submit" disabled="" onclick="{!c.SaveRecord}"/><!-- {!if(empty(v.partnumber),true,if(empty(v.vendorname),true,if(empty(v.SelectedReasonValue),true,false)))}-->
+                        <div style="margin-left: -27px;"><br/><p style="cursor:pointer;color:#19B1ED;" onclick="{!c.backHomePage}">Return To The Home Page</p></div>
+                    </div>      
+                </div>
+            </div>
+        </form>        
+        <aura:if isTrue="{!v.IsModel}">            
+            <div class="demo-only" style="height: 640px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <center>
+                                <p>New Case Created Sucessfully</p>
+                            </center>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <center>
+                                <button class="slds-button slds-button_brand" onclick="{!c.homePage}">Ok</button>
+                            </center>
+                        </footer> 
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>            
+        </aura:if> 
+    </lightning:card>
+    
+    <aura:if isTrue="{!v.caseModal.show}">
+        <div style="height:640px">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                            Case already exists
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>
+                            {!v.caseModal.message}
+                        </p>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}">No</button>
+                        <button class="slds-button slds-button_brand" onclick="{!c.goToCaseOrCreate}">Yes</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </aura:if>
+    
+</aura:component>

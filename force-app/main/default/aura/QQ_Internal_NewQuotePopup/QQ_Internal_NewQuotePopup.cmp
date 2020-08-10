@@ -1,0 +1,118 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <c:QQ_SubmitQuickQuote aura:id="SubmitQuickQuote" /> 
+    <aura:handler event="c:QQ_App_Event" action="{!c.handleEvent}"/>
+    <aura:registerEvent name="QQ_NQ_Submit_Save" type="c:QQ_NQ_Submit_Save_event"/>
+    
+    <aura:attribute name="QuoteNum" type="String" default=""/>
+    <aura:attribute name="editCoverage" type="boolean" default="false"/>
+    <aura:attribute name="saveFlag" type="boolean" default="false"/>
+    
+    
+    <aura:attribute name="qq_gen_completed" type="boolean" default="false"/>
+    <aura:attribute name="qq_odr_completed" type="boolean" default="false"/>
+    <aura:attribute name="qq_cvg_completed" type="boolean" default="false"/>    
+    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c',
+                                                           'Customer_Name__c':'',
+                                                           'Concession__c':'',
+                                                           'Sales_Outlet__c':'',
+                                                           'Request_Type__c':'',
+                                                           'Revision_Status__c':'',
+                                                           'TC_Date__c':''
+                                                           }" />
+    <aura:attribute name="quoteitem" 
+                    type="ASP_QQ_Line_Item__c" 
+                    default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <aura:attribute name="quoteitemlist" type="ASP_QQ_Line_Item__c[]" />     
+    <aura:attribute name="noteslist" type="note[]"/>    
+    
+    <!--  <aura:handler name="enablecontinue" event="c:EnableContinuePM" action="{!c.enablecontinue}"/> -->
+    <aura:attribute name="openpopup" type="boolean" default="true"/>
+    <aura:attribute name="closeform" type="boolean" default="false"/>    
+    <aura:attribute name="confirmclose" type="boolean" default="false"/>
+    
+    <div>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal__content slds-modal_large slds-modal_prompt slds-backdrop slds-modal slds-slide-down-cancel">
+            
+            <div class="slds-modal__container" >                
+                <header class="modalheader slds-box">                    
+                    <span>
+                        <button type="button"
+                                onclick="{!c.CancelQuote}" 
+                                class="close" 
+                                data-dismiss="modal" 
+                                aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                    </span>                    
+                    <div class="slds-media">
+                        <div class="slds-media__figure">                                
+                            <span class="slds-icon_container slds-avatar slds-avatar_medium" title="Description of icon when needed">
+                                <lightning:icon iconName="utility:edit_form" variant="inverse" alternativeText="Approved" class="fa" />
+                            </span>
+                        </div>                        
+                        <div class="slds-media__body">
+                            <div class="fa slds-page-header__title slds-truncate slds-align-middle" title="Extended Coverage">Extended Coverage</div>
+                            <p class="headingcolor slds-text-body_small slds-line-height_reset">Quote Request</p>
+                        </div>                        
+                    </div>
+                </header>
+                
+                <body class="modal-body" >
+                    <div class="slds-modal__content slds-p-around_large slds-box" id="modal-content-id-1">                        
+                        <span class="slds-text-title_bold">Status: </span> <span>Draft</span>
+                        <br></br><br></br>
+                        <aura:if isTrue="{!not(v.confirmclose)}">                                                          
+                            <c:QQ_Internal_NQ_Gen aura:id ="genform"
+                                                  quote="{!v.quote}" 
+                                                  qq_gen_completed ="{!v.qq_gen_completed}"/> 
+                            <br></br>
+                            <c:QQ_Internal_NQ_Odr aura:id ="odrform"
+                                                  quote="{!v.quote}" 
+                                                  qq_odr_completed ="{!v.qq_odr_completed}"/> 
+                            <br></br>
+                            <c:QQ_Internal_NQ_Cvg aura:id ="cvgform"
+                                                  quote = "{!v.quote}" 
+                                                  quoteitem = "{!v.quoteitem}" 
+                                                  qq_cvg_completed = "{!v.qq_cvg_completed}"/> 
+                            <br></br>
+                            <c:QQ_Internal_NQ_Notes noteslist="{!v.noteslist}"/>
+                        </aura:if>
+                    </div>
+                </body>
+                <footer class="slds-modal__footer">
+                    <span class="slds-float_right">
+                        <lightning:button class=""  
+                                          variant="brand" 
+                                          label="Cancel" 
+                                          iconName="utility:close"
+                                          title="CLICK TO CANCEL" 
+                                          onclick="{! c.CancelQuote }" />
+                        
+                        <lightning:button class=""  
+                                          variant="brand" 
+                                          label="Save For Later"
+                                          iconName="utility:save"
+                                          title="CLICK SAVE FOR LATER" 
+                                          onclick="{! c.SaveforlaterQuote }" />
+                        
+                        <lightning:button class=""
+                                          variant="brand" 
+                                          label="Submit" 
+                                          iconName="utility:send"
+                                          title="{!v.saveFlag? 'Click to Save' : 'Submit is disabled until duration is not filled'}"
+                                          disabled="{!v.saveFlag? false : true}"
+                                          onclick="{! c.SubmitQuote }" />
+                        
+                        
+                    </span>
+                </footer>                
+            </div>
+        </section>
+        <div class="slds-backdrop"></div>
+    </div>
+    <aura:if isTrue = "{!v.closeform}">    
+        <c:QQ_PopUp_Close_Prompt openpopup="{!v.openpopup}" closeform = "{!v.closeform}"/>
+    </aura:if>
+</aura:component>

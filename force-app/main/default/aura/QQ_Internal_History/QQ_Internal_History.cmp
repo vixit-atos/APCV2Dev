@@ -1,0 +1,23 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    
+    <ltng:require scripts="/resource/JqueryMin/" afterScriptsLoaded="{!c.doInit}"/>
+    
+        
+        <div class="">
+            <br></br>
+            <br></br>
+            <div class="">
+                <c:QQ_Internal_Tab/>
+            </div>
+        </div> 
+    
+    <footer class="footerstyle">
+        <div class="slds-theme_default" >        
+            <div class="copyrightInfo" ><div class="mainContainer">
+                <p class="copy" style="text-align: center;">Copyright © Daimler Trucks North America LLC.
+                    <a target="_blank" href="https://securestage.freightliner.com/accessfreightliner/docs/public/applications/privacy.asp">Privacy Statement, Legal Notices and Terms.</a> All rights reserved.</p>
+                <p style="text-align: center;">Daimler Trucks North America LLC is a Daimler company.</p>
+                </div></div>        
+        </div>
+    </footer>
+</aura:component>

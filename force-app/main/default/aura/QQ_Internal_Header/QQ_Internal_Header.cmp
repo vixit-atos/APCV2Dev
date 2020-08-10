@@ -1,0 +1,42 @@
+<aura:component>
+   <c:QQ_Get_CommunityUrl aura:id="QQ_getCommunitySrvc" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+     <aura:attribute name="geturlcomm" type="String"/>
+   <aura:attribute name="heading" type="String" default="All"/>
+    <aura:attribute name="subheading" type="String" default="Quotes"/>
+    <aura:attribute name="icon" type="String" default="DTNA_TRUCK_ICON"/>    
+    
+    <aura:attribute name="newQQclicked" type="boolean" default="false"/>
+    
+    <aura:attribute name="openpopup" type="boolean" default="false"/>
+          
+    <aura:if isTrue="{!v.openpopup }">
+    <c:QQ_Internal_NewQuotePopup openpopup = "{!v.openpopup}"/> 
+    </aura:if> 
+    <!-- PAGE HEADER -->
+    <div class="">
+        <!-- LAYOUT GRID -->
+        <div class="slds-media slds-no-space slds-grow">
+            <!-- GRID COL -->
+            <div class="slds-media__figure" >
+              <span class="slds-avatar slds-avatar_medium" >
+                  <img src="{!'/resource/'+v.icon}"/>
+            	</span> 
+            </div>
+            <div class="slds-media__body">
+                <!-- HEADING AREA -->
+                <p class="slds-page-header__title slds-truncate">{!v.heading}</p>
+                <p class="">{!v.subheading}</p>
+            </div>
+        
+        <div class="slds-clearfix">
+            <div class="slds-float_right">
+                <lightning:button class="btn-primary" label="New Quote" iconName="action:new" variant ="brand" iconPosition="left" onclick="{!c.newQuickQuote}" />
+                <lightning:button label="Standard Quotes" iconName="utility:link" variant ="brand" iconPosition="left" onclick="{!c.NavigateExQuote}" />
+                
+            </div>
+        </div>
+        </div>
+    </div>
+   
+</aura:component>

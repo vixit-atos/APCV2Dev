@@ -1,0 +1,17 @@
+<aura:component controller="APC_AgentAssignedControllers" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+     <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:attribute name="CaseId" type="String" />
+    <aura:attribute name="CaseRecId" type="String" />
+    <aura:attribute name="objContact" type="User" default="{'sobjectType':'User'}"/>
+  <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+  <div class="slds-m-around_">
+       
+<c:APC_Customlookup  CaseId="{!v.CaseId}" objectAPIName="GroupMember" IconName="standard:account" label="Agent Assigned" selectedRecord="{!v.selectedLookUpRecord}"/>
+      
+<br/> 
+      <lightning:button variant="Brand" label="Assign Agent" title="Assign Agent" onclick="{! c.SaveCaseAgent }"/>
+     <lightning:workspaceAPI aura:id="workspace"/>
+    <lightning:button label="Cancel" onclick="{!c.Cancel}"/>   
+  </div>       
+</aura:component>

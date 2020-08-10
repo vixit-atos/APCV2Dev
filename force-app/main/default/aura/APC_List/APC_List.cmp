@@ -1,0 +1,216 @@
+<!--
+  @Component Name     : APC_List.cmp
+  @Description        : For displaying the cases in the form of Datatable
+  @Author             : Sumit Datta
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" 
+                access="global" controller="APC_ListController" >
+    
+    
+    <aura:attribute name="caseobj" type="Case" access="global" description="To store case records fields"
+                    default="{'sobjectType': 'Case',
+                             'Planner_Code__c':'',
+                             'Vendor__c':'',
+                             'Part_No__c':'',
+                             'VIN__c':'',                             
+                             'Reason__c':'',
+                             'RecordTypeId':'',
+                             'Description':'',
+                             'Additional_Contacts__c':'',
+                             'Request_Type__c':'',
+                             'Origin':'Web',
+                             'Status':'New',
+                             'Priority':'Medium',
+                             'ContactId':'',
+                             'AccountId':'',
+                             'APC_Source__c':'',
+                             'NSN_Number__c':'',
+                             'Quantity__c':'',
+                             'Lead_Time_Reason__c':'',
+                             'PDC_Location__c':'',
+                             'Multiple_Parts__c':'',
+                             'Disputing_Price__c':'',
+                             'Invoice_Needed_For__c':'',
+                             'Date_Received__c':'',
+                             'Ship_Method__c':'',
+                             'Problem_Description__c':'',
+                             'Requested_Change__c':'',
+                             'Shipped_From__c':'',
+                             'Current_Location_of_Part__c':'',
+                             'Packaged_By__c':'',
+                             'Is_Part_Damaged__c':'',
+                             'Is_Part_Packaged__c':'',
+                             'Core_Invoice__c':'',
+                             'Core_Group__c':'',
+                             'Core_Program__c':'',
+                             'RPA__c':'',
+                             'Core_Part_Num__c':'',
+                             'Type_of_Return__c':'',
+                             'Ship_Date__c':'',
+                             'Credit_Type__c':'',
+                             'Weight__c':'',
+                             'Number_of_Pallets__c':'',
+                             'Body_Number__c':'',
+                             'Supplier__c':'',
+                             'Model_Year__c':'',
+                             'TBB_Part_Inquiry__c':'',
+                             'Part_Description__c':'',                                                                        
+                             'Return_Status__c':'',
+                             'Action__c':'',
+                             'Order_Status__c':'',
+                             'Part_Received_date__c':'',
+                             'SAP_Order_Number__c':'',
+                             'APC_Delivery__c':'',
+                             'APC_Original_Delivery__c':'',
+                             'APC_PO_Number__c':'',
+                             'APC_Shipping_Condition__c':'',
+                             'APC_DTNA_PO':'',
+                             'APC_Tracking_Number__c':'',
+                             'APC_Invoice_Number__c':'',
+                             'APC_Line_Number__c':''
+                             }"/>  
+    
+    <c:APC_ListColumnService aura:id="ListColumnservice" />
+    <c:APC_ListDataService aura:id="ListDataservice" 
+                           errormessage="{!v.errormessage}" 
+                           errorfound="{!v.errorfound}" 
+                           IsSpinner="{!v.IsSpinner}" />
+    
+
+    <aura:handler name="rowcheckevent" event="c:APC_rowselected" action="{!c.rowselectedaction}"/>
+    <aura:handler name="change" value="{!v.cases}" action="{!c.onallselected}" />  
+    
+    <aura:attribute name="errormessage" type="string" default=""                             description="To store error message text"/>
+    <aura:attribute name="errorfound" type="boolean" default="false"                         description="To store error message state"/>
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global"     description="To maintain state of submit button"/>
+    <aura:attribute name="IsSpinner" type="Boolean"                                          description="To maintain state of spinner"/>
+    <aura:attribute name="isallselected" type="Boolean" default="false" access="global"      description="To maintain state of selection of all records "/>
+    <aura:attribute name="isselectalldisable" type="Boolean" default="false" access="global" description="To maintaine the state of disability of select all checkbox"/> 
+    <aura:attribute name="cases" type="List"                                                 description="To store the list of order records received from paragon"/>
+    <aura:attribute name="orderfromparagon" type="List"                                      description="To store the records from paragon for pre processing"/>
+    <aura:attribute name="sort" type="String" default="ASC"                                  description="To store the sort order of the list"/>
+    <aura:attribute name="methodname" type="String" default="getCaseRecords"                 description="To store the method name required by List Data Service"/>    
+    <aura:attribute name="Static_resource_list" type="String" default="APC_Internal_List"    description="To Store the static resource name used by List Column Service"/>
+    <aura:attribute name="pageNumber" type="String" default="1"                              description="To store value of current page"/>
+    <aura:attribute name="totalPages" type="integer" default="0"                             description="To Store value of total pages"/>
+    <aura:attribute name="totalrecord" type="integer" default="0"                            description="To Store value oftotal number of records" />
+    <aura:attribute name="currentPage" type="integer" default="1"                            description="To store value of current page" />
+    <aura:attribute name="pagecounter" type="List"                                           description="To maintain page count"/>
+    <aura:attribute name="startrow" type="integer" default="0"                               description="To store starting row record number"/>
+    <aura:attribute name="endrow" type="integer" default="0"                                 description="To store last row record number"/>
+    <aura:attribute name="DSKpagesize" type="integer" default="10" />
+    <aura:attribute name="TABpagesize" type="integer" default="2" />
+    <aura:attribute name="pagesize" type="integer" default="{!($Browser.isTablet)|| ($Browser.isPhone) ? v.TABpagesize : v.DSKpagesize}" />
+    <aura:attribute name="pagequotes" type="List"                                            description="To store the list of records on each page"/>
+    
+    <aura:attribute name="Stagefilter" type="String" default=""                              description="Required for list data service"/>
+    <aura:attribute name="Statusfilter" type="String" default=""                             description="Required for list data service"/>    
+    <aura:attribute name="domain" type="String" default=""                                   description="Required for list row service"/>
+    <aura:attribute name="source" type="String" default=""                                   description="Required for list row service"/>
+    
+    <aura:attribute name="recordcount" type="integer" default=""                             description="To store value of total records"/>
+    <aura:attribute name="ListColumn" type="List" default="[]"                               description="To store label text for column"/>
+    <aura:attribute name="FieldNames" type="List" default="[]"                               description="To store fieldnames from static resource "/>
+    <aura:attribute name="globalid"  type="String"                                           description="To create global ids"/>    
+    <aura:attribute name="requestType" type="string" default=""                              description="To store request type from parent"/>
+    <aura:attribute name="requestNumber" type="string" default=""                            description="To store request number from parent"/>
+    <aura:attribute name="soldToParty" type="object" default=""                              description="To store Dealer code from parent" />    
+    <aura:attribute name="actionsMap" type="Map" default="{}"                                description="To create action map based on Order status returned"/>
+    <aura:attribute name="recordsfound" type="boolean" default="false"                       description="To maintain state if records found"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+       
+    <aura:if isTrue="{!v.errorfound}">
+        <div class="slds-text-color_error slds-p-left_small">{!v.errormessage}
+        </div>
+    </aura:if>
+    
+    <!-- removed slds-box -->   
+    <aura:if isTrue="{!and(v.recordsfound, !v.errorfound)}">
+        <!--  <div class="">
+            <lightning:spinner aura:id="spinner3" variant="brand" class="slds-hide" />
+        </div> -->
+        <div class="slds-theme_default slds-size_full tableheight">
+            <table id="{!concat(v.globalid , 'table')}" aura:id="{!concat(v.globalid , 'table')}" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols">    
+                <thead style="Tablehd">
+                    <tr class="slds-line-height--reset slds-p-bottom_large">
+                        <aura:iteration items = "{!v.ListColumn}" var="item">  
+                            <th class="slds-cell-shrink APCTablelabel slds-cell-wrap " scope="col" >
+                                <aura:if isTrue="{! if(item.label == 'Select All', true, false) }"> 
+                                    <lightning:input type="checkbox-button" 
+                                                     name="rowSelected" 
+                                                     aura:id="rowSelected"
+                                                     label="Select" 
+                                                     title="Select All"
+                                                     checked="{!v.isallselected}"
+                                                     onchange="{!c.onallselected}" 
+                                                     disabled="{!v.isselectalldisable}"
+                                                     />
+                                    <aura:set attribute="else">
+                                        <div class="slds-text-align_left APCLabeltext slds-truncate" title="{!item.label}">{!item.label}
+                                            <aura:if isTrue="{! (v.requestType == '') }"> 
+                                                <lightning:icon class="slds-float_right" 
+                                                                iconName="{!item.Sort == 'ASC' ? 'utility:sort' : 'utility:sort'}" 
+                                                                alternativeText="{!item.Field}" 
+                                                                variant="brand" 
+                                                                size="x-small" 
+                                                                onclick="{!c.handlesort }"/>
+                                            </aura:if>                                    
+                                        </div>
+                                    </aura:set>
+                                </aura:if>
+                                
+                                
+                            </th>
+                        </aura:iteration>
+                    </tr>
+                </thead>
+                <tbody id="{!concat(v.globalid , 'tbody')}">
+                    <aura:iteration items="{!v.pagequotes}" var="item">
+                        <tr aria-selected="false" class="slds-hint-parent" id="{!concat(v.globalid , item.Name)}">
+                            <c:APC_List_Row record="{!item}" 
+                                            fieldname="{#v.ListColumn}"                                            
+                                            source="{#v.source}" 
+                                            domain="{#v.domain}" 
+                                            actionsMap="{!item.Actions}"
+                                            issubmitactive="{!v.issubmitactive}" 
+                                            caseobj="{!v.caseobj}"
+                                            accountid="{!v.orderobj.AccountId}" 
+                                            isrowselected="{!item.isselected}"/> 
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+            
+            <!-- Chandrika added noteformat class to reduce the size of note  -->
+            
+            <lightning:layout>
+                <lightning:layoutItem padding="around-small" size="6">
+                    <div class="noteformat slds-float_left ">
+                        Showing {!v.startrow}  to {!v.endrow} ({!v.recordcount} entries) &nbsp; &nbsp; Note: All dates are in format of MM/DD/YYYY
+                    </div>
+                    <br/>
+                <!--     <aura:if isTrue="{! or(v.Static_resource_list =='APC_Internal_List',v.Static_resource_list =='APC_List_ExistingOrder' )}">
+                        <div class="noteformat slds-float_left">
+                            Note: All dates are in format of MM/DD/YYYY
+                        </div>
+                    </aura:if> -->
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="6">
+                    <div class="pagination slds-float_right">
+                        <lightning:button variant="base" iconPosition="left"  iconName="utility:left" label="Previous" onclick="{!c.goPrevPage}" disabled ="{!v.currentPage == 1 ? true : false}"/>
+                        
+                        <span class="pagination">
+                            <aura:iteration items = "{!v.pagecounter}" var="item">
+                                <lightning:button variant="base" label="{!item}"  class="{!item == v.currentPage ? 'active':'inactive'}" name="{!item}" onclick="{!c.gotoPage}" disabled="{!item=='...' ? true : false}"/>
+                            </aura:iteration>
+                        </span>
+                        <lightning:button variant="base" iconPosition="right"  iconName="utility:right" label="Next"  onclick="{!c.goNextPage}" disabled="{!v.currentPage == v.totalPages ? true:false}"/> 
+                    </div>
+                </lightning:layoutItem>
+                
+            </lightning:layout>
+        </div>
+    </aura:if>
+    
+</aura:component>

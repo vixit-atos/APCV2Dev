@@ -1,0 +1,17 @@
+.THIS {
+}
+
+.THIS .copyrightInfo {
+    background-color: white;
+    padding: 20px 0;  
+    bottom:0px;
+    position: absolute;
+}
+
+.THIS .copy {
+   
+    text-align: center;
+    font-size: 12px;
+    color: black;
+    margin: 0;
+}

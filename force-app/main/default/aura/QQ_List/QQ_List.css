@@ -1,0 +1,51 @@
+.THIS {
+}
+.THIS .tableheight {
+    min-height: 100%;
+}
+
+.THIS .QQTablehd{
+    background-color:#ECF3F3 !important;
+}
+.THIS .QQTablelabel{
+    background-color:#656565 !important;
+}
+.THIS .QQLabeltext{
+    font-weight: normal;
+    color:white;
+    font-size:.9rem;
+}
+
+.THIS .QQtext{
+    color:#656565;
+    font-style:Arial;
+    text-align: center;
+    font-size:16px;
+}
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}
+
+
+.THIS .pagination a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.THIS .active {
+    background-color: #337ab7;
+    color: white;
+    border-radius: 5px;
+    border-color: #337ab7;
+}
+.THIS .inactive {
+    color: #337ab7;;
+    border-radius: 5px;
+}
+
+
+.THIS .pagination a:hover:not(.active) {
+    background-color: #ddd;
+}

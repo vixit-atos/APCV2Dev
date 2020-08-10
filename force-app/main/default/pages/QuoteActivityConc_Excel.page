@@ -1,0 +1,65 @@
+<apex:page controller="DTNA_Quote_Activity_List" tabStyle="Concession__c" sidebar="false" applyBodyTag="false" showHeader="false" id="page1" contenttype="application/vnd.ms-excel#QuoteActivitySheet.xls" >
+
+  
+     <h4>Quote Activity:</h4>
+    <table border="1">
+        <apex:repeat value="{!ExcelTableHeaders}" var="key">
+            <th >{!key}</th>
+        </apex:repeat>
+              <apex:repeat value="{!OversizeDatamapkeys}" var="ke">
+         <apex:repeat value="{!OversizeDatamap[ke]}" var="varQAObj">
+            <tr>
+                <apex:repeat value="{!ExcelTableData}" var="key">
+                    <td> <apex:outputPanel rendered="{!if(AND(key != 'Date_Quoted__c',key != 'Create_Date__c',key != 'Approximate_Close_Date__c',key != 'EXPR_DATE__c',key != 'Miscellaneous_Comments__c',key != 'Stage_Activity_Date__c') ,true,false)}">
+                        {!varQAObj[key]}
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!if(OR(key == 'Date_Quoted__c',key == 'Create_Date__c',key == 'Approximate_Close_Date__c',key == 'EXPR_DATE__c', key == 'Stage_Activity_Date__c') ,true,false)}">
+                            <apex:outputText value="{0,date,short}">
+                                <apex:param value="{!varQAObj[key]}" /> 
+                            </apex:outputText>  
+                        </apex:outputPanel> 
+                        <apex:outputPanel rendered="{!if(key == 'Miscellaneous_Comments__c',true,false)}">
+                         <apex:outputText value="{!varQAObj[key]}" escape="false"/>
+                        </apex:outputPanel>
+                         <apex:outputPanel rendered="{!if(key == 'Competition_QA__c',true,false)}">
+                         <apex:outputText value="{!varQAObj[key]}" escape="false"/>
+                        </apex:outputPanel>
+                        
+                        <!--          <apex:outputPanel rendered="{!if(key == 'History',true,false)}">
+
+<apex:variable var="count" value="{!0}"/>
+<apex:repeat value="{!ConsMap[varQAObj.id]}" var="el">
+<apex:variable var="count" value="{!count + 1}"/>
+
+</apex:repeat>
+
+
+<apex:outputPanel rendered="{!count>0}"> 
+<table border="1">
+<tr>  <td>Created By:</td><td>Comment:</td> </tr>
+<apex:repeat var="conc" value="{!ConsMap[varQAObj.id]}">
+
+<tr>
+
+<td >
+<apex:outputField value="{!conc.CreatedBy.Name}"/>&nbsp; </td>
+<apex:outputPanel id="DOACommentsdata" rendered="{!CONTAINS(ProfileName,'DOA')}">
+<td bgcolor="#00655A">{!conc.RecordType.Name}</td> 
+</apex:outputPanel>
+<td >{!conc.Comment__c}</td> 
+
+</tr>
+
+</apex:repeat>
+
+</table>
+</apex:outputPanel> 
+</apex:outputPanel>--> 
+                    </td>
+                </apex:repeat>
+            </tr>
+        </apex:repeat></apex:repeat>
+      </table>  
+   
+ 
+</apex:page>

@@ -1,0 +1,74 @@
+<apex:page sidebar="false" showHeader="false" docType="html-5.0"  standardController="Event" extensions="EventEditPageControllerextension" standardStylesheets="true">
+    
+    <html lang="en">
+        <head>
+           <meta charset="utf-8"/> 
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          
+        <apex:pageMessages />
+     <script type="application/javascript">
+            <apex:includeScript value="{!$Resource.JqueryMingoogleapi}"/>
+                <apex:includeScript value="{!$Resource.JqueryTimepickerMinjs}"/>
+                    
+                                    </script>
+        <apex:stylesheet value="{!$Resource.JqueryTimepickerMincss}" />
+     
+     
+      <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script> -->
+        <script>
+        $(document).ready(function(){
+              $('.timepicker').timepicker({
+           });
+            });
+        
+        </script>            
+            
+        </head>
+        <body>
+            <apex:form >
+                <apex:pageBlock mode="edit">
+                    <apex:pageblockButtons >
+                        <apex:commandButton action="{!save}" value="Save"/ >
+                            
+                            
+                            <apex:commandButton action="{!cancel}" value="Cancel"/>
+                        </apex:pageblockButtons>
+                        <apex:pageBlockSection title="Calendar Details" columns="1" html-style="width:100%">
+                            
+                            
+                            
+                            
+                            <apex:inputField value="{!Event.OwnerId}"/>
+                            
+                            <apex:inputField value="{!Event.Location}"/>
+                            
+                            <apex:inputField value="{!Event.Subject}" />
+                            <!--<apex:inputfield value="{!Event.StartDateTime}" />-->
+                            <apex:inputField value="{!Event.WhatId}" />
+                            <apex:outputPanel >
+                             <b> Start</b> <apex:input type="date" value="{!StartDate}"/><apex:input type="time" value="{!StartTime}"/><br/>
+                              <b> End</b>  <apex:input type="date" value="{!EndDate}"/> <apex:input type="time" value="{!EndTime}"/>                          
+                             </apex:outputPanel>                
+                            <!--<apex:inputField value="{!Event.EndDateTime}" />-->
+                            <apex:inputField value="{!Event.IsAllDayEvent}"/>
+                        
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="Description Information" columns="1">
+                            
+                            <apex:inputField value="{!Event.Description}" />
+                        </apex:pageBlockSection>
+                        
+                    </apex:pageBlock>
+                    
+                </apex:form>
+                
+                
+                
+                
+            </body>
+            
+            
+        </html>
+    </apex:page>

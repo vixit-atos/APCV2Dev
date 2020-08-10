@@ -1,0 +1,39 @@
+<!--
+  @Component Name     : APC_HomePage_Icon.cmp
+  @Description        : For APC HomePage icon, Maintext, and Subtext.
+  @Author             : Chandrika, Sumit Datta 
+-->
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="heading" type="string" access="global"/>
+    <aura:attribute name="subtext" type="string" access="global"/>
+    
+    <lightning:navigation aura:id="navService" />    
+    <div class="slds-theme_default slds-p-around_xx-small">
+        
+        <lightning:layout multipleRows="true"   >
+            <lightning:layoutItem size="4" >
+                <a >
+                    <img src ="{!$Resource.APCLogo}" onclick="{!c.backHomePage}" height="200" width="200"/> 
+                </a>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="4" >            
+                <div class="slds-text-align_center"><h3 class="slds-page-header">{!v.heading}</h3></div>
+            </lightning:layoutItem>               
+            <lightning:layoutItem size="4" ></lightning:layoutItem>
+            
+            <lightning:layoutItem size="4" ></lightning:layoutItem>
+            <lightning:layoutItem size="4" >
+                <label class="slds-form-element" > {!v.subtext}</label>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="4" ></lightning:layoutItem>
+            
+        </lightning:layout> 
+        <c:APC_HomePage_Inquiry />   
+        <br></br>
+        
+       <c:APC_External_List_Header />
+        <div class="slds-p-top_medium slds-p-bottom_large"></div>
+
+    </div>
+   
+</aura:component>

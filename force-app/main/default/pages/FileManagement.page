@@ -1,0 +1,16 @@
+<apex:page extensions="FileManagementController" standardController="Folder__c">
+    <apex:form >
+        <apex:outputLabel id="folder">Current Folder ID : {!folderID}</apex:outputLabel>
+        <apex:pageMessages ></apex:pageMessages>
+        <apex:pageBlock title="AORA Report Management">
+            <apex:commandButton onclick="return confirm('Warning: This will delete ALL AORA Files and Private Notes. Please confirm this is what action you want to perform');" action="{!purgeAORA}" value="Purge AORA" id="purgeAORA" />
+            <apex:commandButton onclick="return confirm('Warning: This will create Private Notes and attach Private Notes to ALL Accounts that are related. Please confirm this is what action you want to perform.');" action="{!migrate}" value="Populate AORA" id="populateAORA">
+                <apex:param name="folderIDParam" value="{!folderID}"/>
+            </apex:commandButton>
+            <br/>
+            <apex:outputLabel value="{!currentProgress}" id="currentProgress"/>
+            <apex:actionPoller action="{!getProgress}" reRender="currentProgress" interval="5"/>
+            <br/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

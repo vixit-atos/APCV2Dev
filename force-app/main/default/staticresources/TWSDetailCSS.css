@@ -1,0 +1,742 @@
+.tws_borderTopStrong{
+  border-top: 2px solid #10274a;
+}
+
+.tws_borderBottomStrong{
+  border-bottom: 2px solid #10274a;
+}
+
+.tws_borderLeftStrong{
+  border-left: 2px solid #10274a;
+}
+
+.tws_borderRightStrong{
+  border-right: 2px solid #10274a;
+}
+
+.tws_borderAllStrong{
+  border: 2px solid #10274a;
+}
+
+.tws_borderTop{
+  border-top: 1px solid #c6cad0;
+}
+
+.tws_borderBottom{
+  border-bottom: 1px solid #c6cad0;
+}
+
+.tws_borderLeft{
+  border-left: 1px solid #c6cad0;
+}
+
+.tws_borderRight{
+  border-right: 1px solid #c6cad0;
+}
+
+.tws_borderAll{
+  border: 1px solid #c6cad0;
+}
+
+.tws_dealNumberText{
+  color: #0070d2;
+}
+
+.tws .slds-text-heading--medium#tws_headerOpptyName{
+  font-weight: bold !important;
+}
+
+.tws .slds-col--padded#tws_pricingTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded#tws_priceWalkTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  margin-top: 25px;
+}
+
+.tws .slds-col--padded#tws_priceWalk{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded.tws_proposalColumn{
+  background-color: #FFFBBF;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  border-bottom: 2px solid #10274a;
+}
+
+.tws .slds-col--padded.tws_referenceColumn{
+  background-color: #d7dde4;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  border-bottom: 2px solid #10274a;
+}
+
+.tws .slds-col--padded.proposalColumnContainer{
+  width:320px;
+}
+.tws .slds-col--padded.tws_proposalContribCalcColumn{
+  background-color: #FFFBBF;
+}
+
+.tws .slds-col--padded.tws_referenceContribCalcColumn{
+  background-color: #d7dde4;
+}
+
+.tws .slds-col--padded.tws_highlighted{
+  background-color: #FCF69D;;
+}
+
+.tws .slds-col--padded.tws_darkHighlighted{
+  background-color: #d7dde4;
+}
+
+.tws .slds-col--padded.tws_redText{
+  color:red;
+}
+
+span.tws_redText{
+  color:red;
+}
+
+.tws .slds-col--padded.tws_underlinedText{
+  text-decoration: underline;;
+}
+
+.tws .slds-col--padded.tws_strongText{
+  font-weight: bold;
+}
+
+.tws_strongText{
+  font-weight: bold;
+}
+
+.tws .slds-col--padded.tws_borderBottomWhiteStrong{
+  border-bottom: 2px solid #ffffff;
+}
+
+.tws .slds-col--padded.tws_borderTopWhiteStrong{
+  border-top: 2px solid #ffffff;
+}
+
+.tws .slds-col--padded.tws_borderBottomWhite{
+  border-bottom: 1px solid #ffffff;
+}
+
+.tws #tws_proposalHeader .tws_proposalTableColumn{
+  background-color: rgba(229, 193, 48, 0.37);
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  border-bottom: 2px solid #10274a;
+  width: 25%;
+  text-align: center;
+}
+
+.tws #tws_proposalHeader .tws_referenceTableColumn{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  border-bottom: 2px solid #10274a;
+  width: 25%;
+  text-align: center;
+  background-color: #d7dde4;
+}
+
+#tws_insideMainContainer{
+  width: calc(100vw - 20px);
+}
+
+.tws .slds-col--padded #tws_priceWalkContainer{
+  margin-top: 23px;
+}
+
+.tws .slds-col--padded#tws_contributionCalcTitleContainer #tws_contributionCalcTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded#tws_contributionCalcTitleContainer{
+}
+
+.tws .slds-col--padded#tws_OutgoingResidualsTitleContainer #tws_OutgoingResidualsTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  position:absolute;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded#tws_OutgoingResidualsTitleContainer{
+  position:relative;
+  margin-top: 30px;
+  margin-bottom: 44px;
+}
+
+.tws .slds-col--padded#tws_OutgoingResidualsQuestionContainer #tws_OutgoingResidualsQuestion{
+  color: #16325c;
+  font-size: 14px;
+  position:absolute;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded#tws_OutgoingResidualsQuestionContainer{
+  position:relative;
+  margin-top: 0px;
+  margin-bottom: 44px;
+}
+
+.tws .slds-col--padded#tws_OutgoingResidualsQuestionContainer #tws_OutgoingResidualsAnswer{
+  display: inline-block;
+  border-bottom: 1px solid;
+  width: 100px;
+  margin-left: 20px;
+}
+
+.tws .slds-col--padded .tws_walkPriceColumnContainer{
+  background-color: #CAFFBF;
+  width: 290px;
+}
+
+.tws .slds-col--padded .tws_walkPriceColumnContainer.tws_noContent{
+  background-color: #FFFFFF;
+}
+
+.tws .slds-col--padded #tws_ContributionCalcContainer{
+  margin-top: 200px;
+}
+
+.tws .slds-col--padded .tws_ContributionCalcColumnContainer{
+  width: 320px;
+}
+
+.tws .slds-col--padded#tws_OutgoingResidualsTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  margin-top: 50px;
+}
+
+.tws .slds-col--padded #tws_OutgoingResInfoContainer{
+  margin-top: 124px;
+}
+
+.tws .slds-col--padded .tws_outgoingResInfoColumnContainer{
+  width: 320px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTruckInfoTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  margin-top: 18px;
+  border-top: 2px solid #10274a;
+}
+
+.tws .slds-col--padded #tws_extendedWarrantyTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  margin-top: 18px;
+}
+
+.tws .slds-col--padded#tws_dealSummaryContainer #tws_dealSummaryTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded#tws_dealSummaryContainer{
+}
+
+.tws .slds-col--padded #tws_dealSummaryValue{
+  min-height: 50px;
+  background-color: #FCF69D;
+  width: calc(100vw - 60px);
+  padding: 4px;
+}
+
+.tws .slds-col--padded#tws_escalatorsContainer #tws_escalatorsTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded#tws_escalatorsContainer{
+}
+
+.tws .slds-col--padded #tws_escalatorsValue{
+  min-height: 50px;
+  background-color: #FCF69D;
+  width: calc(100vw - 60px);
+  padding: 4px;
+}
+
+.tws .slds-col--padded#tws_residualQuoteCommentsContainer #tws_residualQuoteCommentsTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded#tws_residualQuoteCommentsContainer #tws_residualQuoteCommentsValue{
+  background-color: #FCF69D;
+  min-height: 50px;
+  padding: 4px;
+}
+
+.tws .slds-col--padded#tws_contribCalcMethod{
+  margin-top: 14px;
+}
+
+.tws .slds-col--padded.tws_highlightedGreen{
+  background-color: #CAFFBF;
+}
+
+.tws .slds-col--padded.tws_highlightedRed{
+  background-color: #edcbd2;
+}
+
+.tws .slds-col--padded#tws_ContributionAndCostCommentsContainer{
+  margin-top: 15px;
+}
+
+.tws .slds-col--padded#tws_ContributionAndCostCommentsContainer #tws_ContributionAndCostCommentsTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  width: calc(100vw - 60px);
+  text-transform: uppercase;
+}
+
+.tws .slds-col--padded#tws_ContributionAndCostCommentsContainer #tws_ContributionAndCostCommentsValue{
+  background-color: #FCF69D;
+  min-height: 50px;
+  padding: 4px;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded#tws_commitmentsContainer{
+  margin-top: 15px;
+}
+
+.tws .slds-col--padded#tws_commitmentsContainer #tws_commitmentsTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  width: calc(100vw - 60px);
+  text-transform: uppercase;
+}
+
+.tws .slds-col--padded#tws_commitmentsContainer #tws_commitmentsValue{
+  background-color: #FCF69D;
+  min-height: 50px;
+  padding: 4px;
+  width: calc(100vw - 60px);
+}
+
+.tws .slds-col--padded #tws_chassisWarrantyQuoteNumberLabel #tws_chassisWarrantyQuoteNumberValue{
+  display: inline-block;
+  border: 1px solid rgb(198, 202, 208);;
+  width: 200px;
+  margin-left: 30px;
+  background-color: #FCF69D;
+}
+
+.tws .slds-col--padded.tws_controllingCell{
+  padding-left:0;
+}
+
+.tws .slds-col--padded.tws_proposalChassisWarrantyColumn{
+  background-color: #FFFBBF;
+  height: 57px;
+  width: 80px;
+}
+
+.tws .slds-col--padded.tws_referenceChassisWarrantyColumn{
+  background-color: #d7dde4;
+  height: 57px;
+  width: 80px;
+}
+
+.tws .slds-col--padded.tws_extendedWarrantyColumn{
+  width: 164px;
+}
+
+.tws .slds-col--padded#tws_chassisWarrantyCommentsContainer #tws_chassisWarrantyCommentsTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded#tws_chassisWarrantyCommentsContainer #tws_chassisWarrantyCommentsValue{
+  background-color: #FCF69D;
+  min-height: 50px;
+  padding: 4px;
+}
+
+.tws .slds-col--padded#tws_chassisWarrantyCommentsContainer{
+  margin-top: 30px;
+}
+
+.tws .slds-col--padded#tws_residualQuoteCommentsContainer{
+  margin-top: 20px;
+}
+
+.tws .slds-col--padded #tws_engineWarrantyTitle{
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+  margin-top: 18px;
+}
+
+.tws .slds-col--padded #tws_engineWarrantyQuoteNumberLabel #tws_engineWarrantyQuoteNumberValue{
+  display: inline-block;
+  border: 1px solid rgb(198, 202, 208);;
+  width: 200px;
+  margin-left: 30px;
+  background-color: #FCF69D;
+}
+
+.tws .slds-col--padded.tws_engineWarrantyLargeColumn{
+  width:150px;
+  border-right: 1px solid #c6cad0;
+  border-bottom: 1px solid #c6cad0;
+  font-size: 13px;
+}
+
+.tws .slds-col--padded.tws_engineWarrantySmallColumn{
+  width:65px;
+  border-right: 1px solid #c6cad0;
+  border-bottom: 1px solid #c6cad0;
+  font-size: 11px;
+}
+
+.tws .slds-col--padded.tws_engineWarrantyMediumColumn{
+  width:80px;
+  border-right: 1px solid #c6cad0;
+  border-bottom: 1px solid #c6cad0;
+  font-size: 11px;
+}
+
+.tws .slds-col--padded#tws_engineWarrantyCommentsContainer #tws_engineWarrantyCommentsTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded#tws_engineWarrantyCommentsContainer #tws_engineWarrantyCommentsValue{
+  background-color: #FCF69D;
+  min-height: 50px;
+  padding: 4px;
+}
+
+.tws .slds-col--padded#tws_engineWarrantyCommentsContainer{
+  margin-top: 30px;
+}
+
+.tws .slds-col--padded.tws_engineWarrantyProposalRow{
+  background-color: #FCF69D;
+  font-size: 13px;
+}
+
+
+.tws .slds-col--padded.tws_engineWarrantyProposalReferenceRow{
+  background-color: #d7dde4;
+  font-size: 13px;
+}
+
+.tws .slds-col--padded #tws_engineWarrantyRowsContainer{
+  width: 1407px;
+}
+
+.tws .slds-col--padded #tws_engineWarrantyHeaderContainer{
+  width: 1407px;
+}
+
+.tws .slds-col--padded #tws_engineWarrantyTableContainer{
+  width: 1407px;
+}
+
+.tws .slds-col--padded .tws_incomingUsedTruckHeader{
+  margin-top: 20px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTrackLargeColumn{
+  width:130px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTrackSmallColumn{
+  width:45px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTruckCommentsContainer .tws_incomingUsedTruckCommentsTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTruckCommentsContainer .tws_incomingUsedTruckCommentsValue{
+  background-color: #FCF69D;
+  min-height: 50px;
+  padding: 4px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTruckCommentsContainer{
+  margin-top: 30px;
+}
+
+
+.tws .slds-col--padded .tws_incomingUsedTruckHeaderValue{
+  border-bottom: 1px solid #10274a;
+  width: 100px;
+  display: inline-block;
+  padding-left: 10px;
+}
+
+.tws .slds-col--padded .tws_incomingUsedTruckHeader{
+  width: 1380px;
+}
+
+.tws .slds-col--padded .tws_incomingUsedTruckRow{
+  width: 1380px;
+}
+
+.tws .slds-col--padded.tws_incomingUsedTrackSummaryColumn{
+  width:303px;
+}
+
+.tws .slds-col--padded.tws_engineWarrantyHeaderNumber{
+  width:34px;
+}
+
+.tws .slds-col--padded .tws_footerTitle{
+  font-weight: bold;
+  color: #16325c;
+  font-size: 14px;
+}
+
+.tws .slds-col--padded .tws_footerBody{
+  min-height: 50px;
+  padding: 4px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.tws .slds-col--padded .tws_footerHeaderValue{
+  border-bottom: 1px solid #10274a;
+  width: 100px;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.tws .slds-col--padded .tws_rmsFooterTitle{
+  width: 200px;
+  display: inline;
+  margin-right:120px;
+}
+
+.tws .slds-col--padded .tws_footerHeaderLabel{
+  display: inline;
+  margin-right: 80px;
+}
+
+.tws .slds-col--padded .tws_comparisonTOOpColumn{
+  width: 400px;
+  float: left;
+  margin-left: 20px;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionColumnLabel{
+
+}
+
+.tws .slds-col--padded .tws_priceEvolutionColumnValue{
+  border: 1px solid #10274a;
+  text-align: center;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionColumnHeader{
+  text-align: center;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionColumnSubTotalLabel{
+  font-weight: bold;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionColumnSubTotalValue{
+  text-align: center;
+  font-weight: bold;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionTotalLabel{
+}
+
+.tws .slds-col--padded .tws_priceEvolutionTotalValue{
+
+}
+
+.tws .slds-col--padded .tws_priceEvolutionRatioLabel{
+  border-top: 1px solid #10274a;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionRatioValue{
+  border-top: 1px solid #10274a;
+}
+
+.tws .slds-col--padded .tws_priceEvolutionColumn{
+  width: 400px;
+  float: left;
+  margin-left: 20px;
+}
+
+.tws .slds-col--padded .tws_comparisonTOOpColumnValue{
+  border: 1px solid #10274a;
+  text-align: center;
+}
+
+.tws .slds-col--padded.tws_domesticSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded.tws_canadaSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded .tws_domesticSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded .tws_canadaSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded .tws_canadianNote{
+  color:blue;
+}
+
+.tws .slds-col--padded .tws_nationalSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded.tws_nationalSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded .tws_internationalSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded.tws_internationalSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded .tws_domesticSalesProposalSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded.tws_domesticSalesProposalSpecific{
+  display:none;
+}
+
+.tws .slds-col--padded.tws_highlightedBlue{
+  background-color:#acdce4;
+}
+
+.tws_1LineHeight{
+  height: 20px;
+}
+
+@media screen and (min-width: 1000px){
+  .tws_2LineHeight{
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 1000px){
+  .tws_2LineHeight{
+    height: 40px;
+  }
+}
+
+@media screen and (min-width: 1000px){
+  .tws_3LineHeight{
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 1000px){
+  .tws_3LineHeight{
+    height: 60px;
+  }
+}
+
+.tws_headerSection1 td, .tws_headerSection2 td, .tws_headerSection3 td, .tws_headerSection4 td{
+  padding:3px
+}
+
+.tws_engineWarrantyTable th{
+  text-align: center;
+  font-size: 13px;
+  font-weight: normal;
+  white-space: normal;
+}
+
+.tws .tws_engineWarrantyTable{
+  width: calc(100vw - 20px);
+}
+
+.tws_engineWarrantyLabel th{
+  border-right: 1px solid #c6cad0;
+  padding: 4px;
+}
+
+.tws_incomingUsedTruckLabel th{
+  padding: 8px;
+}
+
+.tws .tws_engineWarrantyTable tr.tws_engineWarrantyProposalRow{
+  background-color: #FCF69D;
+  font-size: 13px;
+}
+
+.tws .tws_engineWarrantyTable td{
+  border-right: 1px solid #c6cad0;
+  padding: 2px;
+  text-align: center;
+}
+
+.tws_incomingUsedTruckTable{
+  margin-top: 20px;
+}
+
+.tws_incomingUsedTruckTable td, .tws_incomingUsedTruckTable th{
+  text-align:center;
+}
+
+.tws_incomingTruckSummaryRow td{
+  text-align: left;
+}

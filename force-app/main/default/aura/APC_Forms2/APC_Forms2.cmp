@@ -1,0 +1,1266 @@
+<!--
+  @File Name          : APC_Forms2.cmp
+  @Description        : 
+  @Author             : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Group              : 
+  @Last Modified By   : VIXIT BHARDWAJ - ATOS SYNTEL INC
+  @Last Modified On   : 4/23/2020, 4:40:10 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    4/23/2020   VIXIT BHARDWAJ - ATOS SYNTEL INC     Initial Version
+-->
+
+<aura:component implements= "lightning:actionOverride,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="APC_MasterController">
+    
+    <aura:attribute name="dealerCode" type="string" access="global" description="To store dealer code" />
+    <aura:attribute name="selectedDealerCode" type="string" access="global"  default="" description="To pass dealer code to List2 component" />
+    <aura:attribute name="partNumberLabel"  type="String" description="To set a lable for Partnumber field" />
+    <aura:attribute name="staticHeader" type="String" description="To set header value for List data table"  />
+    <aura:attribute name="requestType_Field" type="String" description="To store Request type field value" />
+    <aura:attribute name="partnumber" type="string" access="global" default="" description="To Store Part number"/> 
+    
+    <aura:attribute name="credittypelist" type="List" default="[]" description="To store list of values for Excess/special credit request "  />
+    <aura:attribute name="creditdebitreasonlist" type="List" default="[]" description="To store picklist values for Credit bedit request"  />
+    <aura:attribute name="pdclocationList" type="List" access="global" default="[]" description="To store picklist values for PDC stock check request"  />
+    <aura:attribute name="leadtimereasonList" type="List" default="[]" description="To store the list of values for Leadtime reason"  />
+
+    <aura:attribute name="caseobj" type="Case" access="global" default="{'sobjectType': 'Case',
+                                                                        'Planner_Code__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Part_No__c':'',
+                                                                        'VIN__c':'',
+                                                                        'Reason__c':'',
+                                                                        'RecordTypeId':'',
+                                                                        'Description':'',
+                                                                        'Additional_Contacts__c':'',
+                                                                        'Request_Type__c':'',
+                                                                        'Origin':'',
+                                                                        'Status':'New',
+                                                                        'Priority':'',
+                                                                        'ContactId':'',
+                                                                        'AccountId':'',
+                                                                        'APC_Source__c':'',
+                                                                        'NSN_Number__c':'',
+                                                                        'Quantity__c':'',
+                                                                        'Lead_Time_Reason__c':'',
+                                                                        'PDC_Location__c':'',
+                                                                        'Multiple_Parts__c':'',                                                                        
+                                                                        'Disputing_Price__c':'',
+                                                                        'Invoice_Needed_For__c':'',
+                                                                        'Date_Received__c':'',
+                                                                        'Ship_Method__c':'',
+                                                                        'Problem_Description__c':'',
+                                                                        'Requested_Change__c':'',
+                                                                        'Shipped_From__c':'',
+                                                                        'Current_Location_of_Part__c':'',
+                                                                        'Packaged_By__c':'',
+                                                                        'Is_Part_Damaged__c':'',
+                                                                        'Is_Part_Packaged__c':'',
+                                                                        'Core_Invoice__c':'',
+                                                                        'Core_Group__c':'',
+                                                                        'Core_Program__c':'',
+                                                                        'RPA__c':'',
+                                                                        'Core_Part_Num__c':'',
+                                                                        'Type_of_Return__c':'',
+                                                                        'Ship_Date__c':'',
+                                                                        'Credit_Type__c':'',
+                                                                        'Return_Reason__c':'',
+                                                                        'Weight__c':'',
+                                                                        'Number_of_Pallets__c':'',
+                                                                        'Supplier__c':'',
+                                                                        'Model_Year__c':'',
+                                                                        'TBB_Part_Inquiry__c':'',
+                                                                        'Part_Description__c':'',
+                                                                        'Type_of_Reason__c':'',
+                                                                        'Return_Status__c':'',
+                                                                        'Action__c':'',
+                                                                        'Order_Status__c':'',
+                                                                        'Part_Received_date__c':'',
+                                                                        'SAP_Order_Number__c':'',
+                                                                        'APC_Delivery__c':'',
+                                                                        'APC_Original_Delivery__c':'',
+                                                                        'APC_PO_Number__c':'',
+                                                                        'APC_Shipping_Condition__c':'',
+                                                                        'APC_DTNA_PO':'',
+                                                                        'APC_Tracking_Number__c':'',
+                                                                        'APC_Invoice_Number__c':'',
+                                                                        'APC_Line_Number__c':'',
+                                                                        'APC_DTNA_PO__c':'',
+                                                                        }"/>
+   
+    <aura:attribute name="invoiceneededreasonlist" type="List" default="[]" description="To store picklist values for invoiceneeded for request type"  /> 
+    <aura:attribute name="requestTypeList" type="List" default="[]" description="To set the list of options for Order status radio-button group"  />
+    <aura:attribute name="typeofreturnlist" type="List" default="[]" description="To set the list of options for return type radio-button group for multiple request types" />
+    <aura:attribute name="packagedbylist" type="List" default="[]" description="To set the list of packaging items for packaging deficiency request type"  />
+    <aura:attribute name="ispartdamagelist" type="List" default="[]" description="To store the value of part damaged" />
+    <aura:attribute name="shipcarrierbyOptions" type="List" default="[]" description="To set the list of options for ship by carrier feid-invoice needed for request type   "  />
+    <aura:attribute name="cases" type="List" description="To fetch the list of cases from list2 component" />
+    <aura:attribute name="contactsPicklistValues" type="list" access="global" default="[]" description="To store the contact picklist values" /> 
+    
+    <aura:attribute name="credittypeselected" type="string" access="global" default="" description="To set picklist values for Credit Type field, for Excess/Special Credit" />
+    <aura:attribute name="creditdebitreasonselected" type="string" access="global" description="To set the value of reason selected in credit debit request type" />
+    <aura:attribute name="typeofreturnselected" type="string" access="global" description="To set the value of return type selected" />
+    <aura:attribute name="returnreason" type="string" access="global" default="" description="To set the value for return reason field"  />
+    <aura:attribute name="pdclocationselected" type="string" access="global" description="To capture the value of pdc location selected" />
+    <aura:attribute name="APCreasonselected"  type="string"  access="global" default=""  description="To capture the value of request type selected" />
+    <aura:attribute name="isleadtimereasonselected" type="string" access="global" description="To capture the value of leadtime reason selected"/>
+    <aura:attribute name="trackingnumber" type="string" access="global"  description="To capture the value of tracking number for invoice needed for requets type"  />
+    <aura:attribute name="bucket3additional" type="string" access="global" default="" description="for fields realting to Core Inquiry request type "/>
+    <aura:attribute name="leadtimereasonselected" type="string" access="global" default="" description="To set the value of leadtime reason picklist field"/>
+    <aura:attribute name="caseobjlist" type="Case[]" access="global" default="[]" description="To create list of Case object records"/>
+    
+    <aura:attribute name="shipmethodrequested" type="string" access="global" description="To set the value of Ship Method Requested field in Freight charge inquiry request type" />
+    <aura:attribute name="shippedfrom" type="string" access="global" description="To set the value of shipped from in Packaging Deficiency"/>
+    <aura:attribute name="typeofrequestlistselected" type="string" access="global" description="To set the value of action requested field in Core Inquiry"/>
+    <aura:attribute name="userId" type="String" description="To store the record id for file upload"/>
+    <aura:attribute name="requestType" type="string" default="" description="To store request type for Order status" />
+    <aura:attribute name="requestNumber" type="string" description="To store request number value forOrder status" />
+    
+    <aura:attribute name="APCreasonChanged" type="boolean" access="global" default="false" description="To identify apc request type changed"/>
+    <aura:attribute name="isIRC1" type="boolean" access="global" default="false" description="To identify if IRC1 was needed in this version of form"/>
+    <aura:attribute name="isIARC" type="boolean" access="global" default="false" description="To identify if IARC was needed in this version of form" />
+    <aura:attribute name="isIRC" type="boolean" access="global" default="false" description="To identify if IRC was needed in this version of form"/>
+    <aura:attribute name="isbucket1" type="boolean" access="global" default="false" description="To identify fields related to bucket 1 was clicked"/>
+    <aura:attribute name="isbucket2" type="boolean" access="global" default="false" description="To identify fields related to bucket 2 was clicked"/>
+    <aura:attribute name="isbucket3" type="boolean" access="global" default="false" description="To identify fields related to bucket 3 was clicked"/>
+    <aura:attribute name="isgoclicked" type="Boolean" default="false" description="To identify submit button clicked for 3rd bucket request types "/>
+    <aura:attribute name="ispricingrequest" type="boolean" access="global" default="false" description="To identify if pricing request selected" />
+    <aura:attribute name="isactionrequest" type="boolean" access="global" default="false" description="To identify which request was clicked"/>
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global" description="To maintain state of submit button"/>
+    <aura:attribute name="isinternalcasecreation" type="boolean" access="global" default="false" description="To identify internalcasecreation"/>
+    <aura:attribute name="internalcasecreationadditional" type="boolean" access="global" default="false"/>
+    <aura:attribute name="buttonstate" type="Boolean" default="false" description="To store the state of the button"/>
+    <aura:attribute name="issubmitrequestclicked" type="Boolean" default="false" description="To identify if submitrequest was clicked"/>
+    <aura:attribute name="istypeofreturnselected" type="boolean" default="false" access="global"  description="To maintain state of type return selection" />
+    <aura:attribute name="recordsfound" type="boolean" access="global" default="false" description="To set boolean when records are found from list"/>
+    <aura:attribute name="IsSpinner" type="Boolean" description="To set boolean for spinner"/>
+    <aura:attribute name="isformsdisable" type="boolean" access="global" default="false" description="To disable forms when there is no case selected at row level"/>
+    <aura:attribute name="ispartnumbersearchdisabled" type="boolean" access="global" default="true"  description="To maintain part number search button state"/>   
+    
+    <aura:attribute name="errorfound" type="boolean" default="false" description="To maintain state of error found"/>
+    <aura:attribute name="errormessage" type="string" default="" description="To store error messages texts" />
+    
+    <aura:attribute name="isvalidrecipient" type="boolean" default="false" access="global" description="To check valid recipients added"/>
+    <aura:attribute name="additionalRecipientList2" type="list" access="global" description="To store additional recipient values"/>  
+    <aura:attribute name="additionaldealercontactslist" type="list"  description="To store selected additional contacts picklist value"/>
+    <aura:attribute name="additionaldealercontactsselected" type="String"  description="To store selected additional contacts picklist value" />
+    <aura:attribute name="additionalRecipientList" type="string[]" access="global" description="To store aadditional recipients picklist values" />   
+    <aura:attribute name="additionalRecipient" type="string" access="global" description="To store additional recipients" />
+    <aura:attribute name="additionaldealercontacts" type="string" description="To store additional dealer contacts" />
+    
+    <aura:attribute name="files" type="ContentDocument[]" description="To maintain files uploaded"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]" description="To maintain pills of files uploaded"  /> 
+    <aura:attribute name="picklistValues" type="Object" />
+    
+    
+    <aura:handler name="init" action="{!c.initHandler}" value="{!this}" />
+    <lightning:navigation aura:id="navService" />
+    
+    <aura:if isTrue="{!v.IsSpinner}">
+        <lightning:spinner aura:id="spinner4" variant="brand"  class="spins" />
+    </aura:if>
+    
+    <lightning:layout multipleRows="true">
+        
+        <aura:if isTrue="{!v.isbucket1}">
+            <aura:if isTrue="{! and(not(v.ispricingrequest),not(v.isactionrequest))}">
+                <!-- Part Number -->
+                <lightning:layoutItem size="6">
+                    <div class="slds-form-element slds-form-element_horizontal" >   
+                        <lightning:input aura:id="partnum"
+                                         value="{!v.caseobj.Part_No__c}" 
+                                         label= "Enter Part Number"
+                                         autocomplete="off"
+                                         required="true"
+                                         maxlength="30"
+                                         messageWhenValueMissing ="Part Number cannot be blank"                                                                        
+                                         onchange="{!c.validatepartnumber}"/>
+                        
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6"></lightning:layoutItem>    
+                
+                <aura:if isTrue="{! and( v.duplicatecaseexist, v.errorfound)}">
+                    <div class="slds-text-color_error slds-p-left_small">{!v.errormessage}
+                    </div>
+                </aura:if>
+                
+                <!-- Vendor Name -->
+                <lightning:layoutItem size="6" >
+                    <div class="slds-form-element slds-form-element_horizontal" >
+                        <lightning:input aura:id="venname"
+                                         name="venname"
+                                         value="{!v.caseobj.Supplier__c}" 
+                                         label= "Enter Vendor Name"
+                                         autocomplete="off"
+                                         required="true"
+                                         maxlength="30"
+                                         messageWhenValueMissing ="Vendor Name cannot be blank" 
+                                         onchange="{!c.checkForValidVendorName}"/>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutitem size="6"></lightning:layoutitem>
+                
+                <!-- Vin Number -->
+                <lightning:layoutItem size="6" >
+                    <div class="slds-form-element slds-form-element_horizontal slds-p-top_small" >
+                        <label class="slds-form-element__label slds-form-element_horizontal">Vin Number</label>
+                        <div onkeyup="{}" title="" >
+                            <lightning:input aura:id="vinnumber"
+                                             value="{!v.caseobj.VIN__c}" 
+                                             variant="label-hidden"
+                                             autocomplete="off"
+                                             maxlength="17"
+                                             lable="Vin Number"
+                                             placeholder="--optional--"
+                                             pattern="[a-zA-Z0-9]*"
+                                             messageWhenPatternMismatch="No special characters allowed"
+                                             onchange="{!c.onvinnumberchange}"/> <!--added pattern validation   -->
+                            
+                        </div>
+                    </div>
+                </lightning:layoutItem>   
+                <lightning:layoutitem size="6"></lightning:layoutitem>
+            </aura:if>
+        </aura:if>
+        
+        <!-- Bucket 1 -->
+        <aura:if isTrue="{! v.isinternalcasecreation}" >
+            <aura:if isTrue="{!if (v.internalcasecreationadditional == 'Lead Time', true, false)}">
+                <lightning:layoutitem size="6" class="leadtimebutton slds-form-element_horizontal">
+                    <lightning:radioGroup name="radioButtonGroupRequired"
+                                          required="true"
+                                          class=""
+                                          label="Reason"
+                                          options="{!v.leadtimereasonList }"
+                                          value="{!v.leadtimereasonselected }"
+                                          onchange="{!c.onleadtimereasonchanged}"
+                                          type="button"/>
+                </lightning:layoutitem>
+                <lightning:layoutitem size="6"></lightning:layoutitem>
+                
+                <!-- Quantity -->
+                <aura:if isTrue="{!v.isleadtimereasonselected}">
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal" >
+                        <lightning:input value="{!v.caseobj.Quantity__c}" 
+                                         label = "Quantity" 
+                                         maxlength="18"
+                                         type="number" 
+                                         messageWhenBadInput="Enter numeric value only"
+                                         messageWhenValueMissing="Quantity cannot be blank"
+                                         required="true"
+                                         autocomplete="off"
+                                         onchange="{!c.QuantityChange}"/>   
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                </aura:if>
+                
+            </aura:if>
+            
+            <!-- PDC Location-->
+            <aura:if isTrue="{!if (v.internalcasecreationadditional == 'PDC Stock Check', true, false)}">
+                <lightning:layoutitem size="6">                                    
+                    <lightning:select aura:id="locationrequested" 
+                                      required="true" 
+                                      name="locationrequested" 
+                                      class="slds-form-element slds-form-element_horizontal" 
+                                      messageWhenValueMissing ="Location cannot be blank" 
+                                      onchange="{!c.onpdclocationchange}" 
+                                      label="PDC Location" 
+                                      value="{!v.caseobj.PDC_Location__c}">
+                        <option value="">--select--</option>
+                        <aura:iteration items="{!v.pdclocationList}" var="item" >                               
+                            <option value="{!item.value}">{!item.label}</option>
+                        </aura:iteration>
+                    </lightning:select>                    
+                </lightning:layoutitem>
+                <lightning:layoutitem size="6"></lightning:layoutitem>
+            </aura:if>
+            
+            <aura:if isTrue="{!if (v.internalcasecreationadditional == 'Pack Size', true, false)}">
+                <!-- Quantity -->
+                <lightning:layoutitem size="6">
+                    <div class="slds-form-element slds-form-element_horizontal">                
+                        <lightning:input value="{!v.caseobj.Quantity__c}" 
+                                         label = "Quantity" 
+                                         type="number" 
+                                         maxlength="18"
+                                         messageWhenBadInput="Enter numeric value only"
+                                         messageWhenValueMissing="Quantity cannot be blank"
+                                         required="true" 
+                                         autocomplete="off"
+                                         onchange="{!c.QuantityChange}"/>                    
+                    </div>
+                </lightning:layoutitem>
+                <lightning:layoutitem size="6"></lightning:layoutitem>
+            </aura:if>
+            <aura:if isTrue="{!if (v.internalcasecreationadditional == 'Reactivation', true, false)}">
+                <!--  Reason -->
+                <lightning:layoutItem size="6" class="slds-form-element_horizontal"> 
+                    <lightning:select aura:id="selectItemreason"  
+                                      label="Reason" 
+                                      required="true" 
+                                      value="{!v.caseobj.Reason__c}"
+                                      name="selectItemreason" 
+                                      onchange="{!c.ReasonChange}"
+                                      messageWhenValueMissing ="Reason cannot be blank" >
+                        <option value="">--select--</option>
+                        <option value="Need to Order">Need to Order</option>
+                        <option value="Customer Quote">Customer Quote</option>
+                    </lightning:select>
+                </lightning:layoutItem>
+                <lightning:layoutitem size="6"></lightning:layoutitem>     
+            </aura:if>                
+            
+        </aura:if>
+        
+        <!--  Bucket 1- "Price Request"-->
+        <aura:if isTrue="{! and(v.ispricingrequest, v.isbucket1)}">
+            <!-- SAP Order Number -->
+            <lightning:layoutItem size="6">
+                <div class="slds-form-element slds-form-element_horizontal" >                
+                    <div onkeyup="{}" title="" class="field" > 
+                        <lightning:input aura:id="sapnum"
+                                         value="{!v.caseobj.SAP_Order_Number__c}" 
+                                         label= "If part has already been ordered, enter SAP order number" 
+                                         placeholder="--optional--"
+                                         maxlength="10"
+                                         autocomplete="off"
+                                         pattern="[0-9]*"
+                                         messageWhenPatternMismatch="No special characters allowed" />
+                    </div>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6"></lightning:layoutItem>
+            
+            <!-- NSN Number -->
+            <lightning:layoutItem size="6">
+                <div class="slds-form-element slds-form-element_horizontal" >                
+                    <div onkeyup="{}" title="" class="field" > 
+                        <lightning:input aura:id="nsnnum"
+                                         value="{!v.caseobj.NSN_Number__c}" 
+                                         label= "For a government quote, please add NSN number"   
+                                         placeholder="--optional--"
+                                         autocomplete="off"
+                                         maxlength="30"
+                                         />
+                    </div></div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6"></lightning:layoutItem>                        
+            
+        </aura:if>
+        
+        <!-- Bucket 2 -Order Status -->
+        <!-- Input field -->
+        <aura:if isTrue="{!if( v.APCreasonselected == 'Order Status', true)}">
+            <lightning:layoutItem size="6" class="orderstatusbutton slds-p-top_small slds-form-element_horizontal">
+                <lightning:radioGroup name="radioButtonGroupRequired"                                                                                   
+                                      options="{!v.requestTypeList }"
+                                      value="{!v.requestType }"
+                                      type="button"
+                                      onchange="{!c.requesttypechange}"/>                    
+            </lightning:layoutItem>   
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <aura:if isTrue="{! v.requestType != ''  }">
+                <lightning:layoutItem size="6" class="slds-p-top_large slds-form-element_horizontal"> 
+                    <aura:renderIf isTrue="{!v.requestType == 'orderNumber'}">
+                          <span onkeypress="{!c.onkeypress}" >
+                        <lightning:input aura:id="requestNumberId"                                 
+                                         class="field" 
+                                         value="{!v.requestNumber}" 
+                                         required="true"
+                                         placeholder = "Enter SAP Order Number"                              
+                                         variant= "label-hidden"
+                                         pattern= "[0-9]*"
+                                         onchange= "{!c.resetData}"
+                                         autocomplete="off"
+                                         messageWhenValueMissing= "SAP Order Number cannot be blank"
+                                         messageWhenPatternMismatch="Only numeric values allowed"
+                                         />
+                        </span>
+                    </aura:renderIf>
+                    <aura:renderIf isTrue="{!v.requestType == 'customerPoNo'}">
+                         <span onkeypress="{!c.onkeypress}" >
+                        <lightning:input aura:id="requestNumberId"                                 
+                                         class="field" 
+                                         value="{!v.requestNumber}" 
+                                         required="true"
+                                         placeholder = "Enter Customer PO Number"
+                                         variant= "label-hidden"
+                                         onchange= "{!c.resetData}"
+                                         autocomplete="off"
+                                         messageWhenValueMissing="Customer PO Number cannot be blank"
+                                         />
+                        </span>
+                    </aura:renderIf>
+                    
+                </lightning:layoutItem>                    
+                <lightning:layoutItem size="6" class="slds-p-left_large slds-p-top_xx-small">
+                    <lightning:buttonIcon iconName="utility:send" 
+                                          type="submit"
+                                          alternativeText="Submit" 
+                                          disabled="{!v.ispartnumbersearchdisabled}"
+                                          variant="brand" 
+                                          onclick="{!c.getOrderRecords}" /> 
+                </lightning:layoutItem>
+                
+                <aura:if isTrue="{! v.issubmitrequestclicked}" >
+                    <div class="slds-p-top_medium">
+                        <c:APC_List2 Static_resource_list="APC_List_ExistingOrder" 
+                                     methodname="getAllValues" 
+                                     soldToParty="{!v.caseobj.AccountId}" 
+                                     requestType="{#v.requestType}" 
+                                     requestNumber="{#v.requestNumber}" 
+                                     recordsfound="{!v.recordsfound}" 
+                                     issubmitactive="{!v.issubmitactive}"
+                                     caseobj="{!v.caseobj}" 
+                                     IsSpinner="{!v.IsSpinner}" 
+                                     errorfound="{!v.errorfound}"
+                                     errormessage="{!v.errormessage}"
+                                     cases="{!v.cases}" 
+                                     issubmitrequestclicked="{!v.issubmitrequestclicked}"/>
+                    </div>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.recordsfound}">
+                    <!-- Additional Recipient -->
+                    <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                        <div class="slds-form-element" >
+                            <label class="slds-form-element__label">Additional Recipients</label> 
+                            <lightning:input aura:id="additionalrecepient1" 
+                                             name="additionalrecepient1" 
+                                             type="email" 
+                                             value="{!v.additionalRecipient}"  
+                                             placeholder="--optional--"
+                                             variant="label-hidden"  
+                                             onchange="{!c.onrecipientchange}"
+                                             autocomplete="off"
+                                             messageWhenTypeMismatch="Please enter a valid email address"/>  
+                        </div>
+                    </lightning:layoutItem> 
+                    <lightning:layoutitem size="6">
+                        <div class="slds-p-left_x-small slds-p-top_xx-small">
+                            <lightning:buttonIcon iconName="utility:add" 
+                                                  variant="brand" 
+                                                  alternativeText="Add Recipient " 
+                                                  onclick="{!c.handleaddrecipient}" 
+                                                  disabled="{! !(v.isvalidrecipient)}" />   
+                        </div>    
+                        
+                    </lightning:layoutitem>
+                    
+                    <!-- Additional Recipients Pill -->
+                    <lightning:layoutItem size="2"> </lightning:layoutItem>
+                    <lightning:layoutItem size="4">
+                        <aura:if isTrue="{!if(empty(v.additionalRecipientList2), false, true)}">                    
+                            <lightning:pillContainer items="{!v.additionalRecipientList2}" 
+                                                     onitemremove="{!c.handlerecipientremove}"/> 
+                        </aura:if>
+                    </lightning:layoutItem> 
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <!-- Additional Contact -->
+                    <lightning:layoutItem size="6" >
+                        <div class="slds-form-element slds-form-element_horizontal" >   
+                            <label class="slds-form-element__label">Additional Dealer Contacts</label>
+                            <lightning:dualListbox aura:id="dealercontacts"
+                                                   name="dealercontacts"
+                                                   label= ""
+                                                   sourceLabel="Available"
+                                                   selectedLabel="Selected"
+                                                   fieldLevelHelp="Select contacts for notification"                           
+                                                   onchange="{! c.additionaldealercontactselected }"
+                                                   options="{!v.additionaldealercontactslist}">
+                            </lightning:dualListbox>                 
+                        </div>
+                    </lightning:layoutItem>         
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    
+                    <lightning:layoutitem size="4"></lightning:layoutitem>
+                    <lightning:layoutitem size="4"></lightning:layoutitem>        
+                    <lightning:layoutitem size="4"></lightning:layoutitem>
+                    
+                </aura:if>     
+            </aura:if> 
+        </aura:if>
+        
+        <!-- Bucket 3- all request types List & Forms   -->
+        <aura:if isTrue="{! v.isbucket3 }">
+            <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal">
+                   <span onkeypress="{!c.keyPressLogic}" >
+                <lightning:input aura:id="partnum"
+                                 value="{!v.caseobj.SAP_Order_Number__c}" 
+                                 label="{! v.partNumberLabel}" 
+                                 placeholder=  "{! 'Enter ' +  v.partNumberLabel }" 
+                                 required="true"
+                                 onchange ="{!c.resetfeild}"
+                                 maxlength="20"
+                                 autocomplete="off"
+                                 messageWhenValueMissing ="{! v.partNumberLabel+ ' cannot be blank'}" />
+                </span>
+            </lightning:layoutItem> 
+            <lightning:layoutItem size="6" class="slds-p-left_large slds-p-top_xx-small" >                    
+                <lightning:buttonIcon iconName="utility:send" 
+                                      type="submit" 
+                                      alternativeText="Submit" 
+                                      disabled="{!v.ispartnumbersearchdisabled}"
+                                      variant="brand" 
+                                      onclick="{!c.requestReceivedOrderFromParagon}" 
+                                      />                     
+            </lightning:layoutItem>
+        </aura:if>
+        
+        <lightning:layoutItem size="2"> </lightning:layoutItem>
+        <lightning:layoutItem size="4">
+            <aura:if isTrue="{!v.errorfound}">
+                <div class="slds-text-color_error slds-p-right_small">{!v.errormessage}
+                </div>
+            </aura:if>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6"> </lightning:layoutItem>
+        
+        <!--List2 -->
+        <aura:if isTrue="{! and(v.isgoclicked, !v.APCreasonChanged)}"> 
+            <lightning:layout multipleRows="true" class="slds-p-top_small">
+                <c:APC_List2 Static_resource_list="{! v.staticHeader}" 
+                             methodname="getAllValues1" 
+                             soldToParty="{!v.caseobj.AccountId}" 
+                             requestType="{! v.requestType_Field }" 
+                             requestNumber="{!v.caseobj.SAP_Order_Number__c}" 
+                             recordsfound="{!v.recordsfound}" 
+                             IsSpinner="{!v.IsSpinner}"
+                             caseobj="{!v.caseobj}" 
+                             cases="{!v.cases}" 
+                             errorfound="{!v.errorfound}"
+                             errormessage="{!v.errormessage}"
+                             issubmitactive="{!v.issubmitactive}"
+                             isformsdisable="{!v.isformsdisable}" 
+                             creditdebitreasonselected="{!v.creditdebitreasonselected}"
+                             typeofreturnselected= "{!v.typeofreturnselected}"
+                             credittypeselected="{!v.credittypeselected}"
+                             files="{!v.files}"
+                             pillsoffiles="{!v.pillsoffiles}"
+                             additionalRecipient="{!v.additionalRecipient}"
+                             additionalRecipientList2="{!v.additionalRecipientList2}"
+                             additionalRecipientList="{!v.additionalRecipientList}"
+                             />
+            </lightning:layout>
+            
+            <!-- On click of "Go"and only if "records found" -->
+            <aura:If isTrue="{!(!v.isformsdisable)}"> 
+                <!--  SAP Number START -->
+                <!--  On selection of APC reason- Pricing discrepency in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Pricing Discrepancy')}">
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input aura:id="pricediscrepencybucket3"
+                                             value="{!v.caseobj.Credit_Request__c}" 
+                                             label = "Credit Request Number" 
+                                             pattern="[a-z0-9A-Z_\s\-]*"
+                                             type="text" 
+                                             maxlength="30"
+                                             autocomplete="off"
+                                             messageWhenPatternMismatch="No special characters allowed"
+                                             placeholder="--optional--" />                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input aura:id="pricediscrepencybucket3"
+                                             value="{!v.caseobj.Comparable_Part__c}" 
+                                             label = "Comparable part number" 
+                                             pattern="[a-z0-9A-Z_\s\-]*"
+                                             maxlength="30"
+                                             autocomplete="off"
+                                             placeholder="--optional--"
+                                             messageWhenPatternMismatch="No special characters allowed" />                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input value="{!v.caseobj.Disputing_Price__c}" 
+                                             label = "Price you are disputing" 
+                                             type="number"
+                                             step="0.01"
+                                             formatter="currency"
+                                             required="true" 
+                                             maxlength="30"
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="Price you are disputing cannot be blank" 
+                                             onchange="{!c.onpricedisputedchange}"
+                                             />                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                </aura:if>
+                
+                <!--  On selection of APC reason- Invoice needed in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Invoice Needed')}">
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:select aura:id="invoiceneededforreason" 
+                                          label="Invoice Needed for" 
+                                          required="true"
+                                          name="invoiceneededforreason" 
+                                          messageWhenValueMissing ="Invoice Needed for cannot be blank"
+                                          value="{!v.caseobj.Invoice_Needed_For__c}" 
+                                          onchange="{!c.oninvoiceneededforchange}" >
+                            <option value="">--select--</option>
+                            <aura:iteration items="{!v.invoiceneededreasonlist}" var="item" >                               
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:input aura:id="receiveddate"                                             
+                                         value="{!v.caseobj.Part_Received_date__c}"
+                                         type="date"
+                                         required="true"
+                                         autocomplete="off"
+                                         placeholder="--select--"
+                                         label="Part Received Date" 
+                                         class="datepicker"
+                                         onchange="{!c.ondatereceivedchange}"
+                                         messageWhenValueMissing ="Part Received Date cannot be blank"/>
+                        
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input aura:id="invoicetrackingnumber"
+                                             value="{!v.caseobj.APC_Tracking_Number__c}" 
+                                             label = "Tracking Number" 
+                                             maxlength="20"  
+                                             autocomplete="off"
+                                             placeholder="--optional--"
+                                             pattern="[a-zA-Z0-9_\s\-]*"
+                                             />                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                </aura:if>
+                
+                <!--  On selection of APC reason- Freight Charge Inquiry in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Freight Charge Inquiry')}">
+                    <!-- Quantity -->
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal">                
+                            <lightning:input value="{!v.caseobj.Quantity__c}" 
+                                             label = "Quantity" 
+                                             type="number" 
+                                             maxlength="18"  
+                                             autocomplete="off"
+                                             messageWhenBadInput="Enter numeric value only"
+                                             messageWhenValueMissing="Quantity cannot be blank"
+                                             required="true" 
+                                             onchange="{!c.QuantityChange}"/>   
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:select aura:id="shipmethodrequested" 
+                                          label="Ship Method Requested" 
+                                          required="true"
+                                          name="shipmethodrequested" 
+                                          messageWhenValueMissing ="Ship Method cannot be blank"
+                                          value="{!v.caseobj.Ship_Method__c}" 
+                                          onchange="{!c.onshipmethodchange}">
+                           <option value="">--select--</option>
+                            <aura:iteration items="{!v.shipcarrierbyOptions}" var="item" >                               
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                </aura:if>
+                
+                <!--  On selection of APC reason- Packaging Deficiency in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Packaging Deficiency')}">
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <div class="slds-form-element" >                
+                            <lightning:input value="{!v.caseobj.Problem_Description__c}" 
+                                             label = "Problem Description" 
+                                             type="String"
+                                             required="true" 
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="Problem description cannot be blank"
+                                             onchange="{!c.onproblemdescriptionchange}"/>                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <div class="slds-form-element" >                
+                            <lightning:input value="{!v.caseobj.Requested_Change__c}" 
+                                             label = "Requested Change" 
+                                             type="String"
+                                             maxlength="300"
+                                             required="true" 
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="Requested change cannot be blank"
+                                             onchange="{!c.onrequestedchangechange}"/>                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input value="{!v.caseobj.Shipped_From__c}" 
+                                             label = "Shipped From" 
+                                             type="String"
+                                             required="true" 
+                                             maxlength="30"
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="Shipped From cannot be blank"
+                                             onchange="{!c.onshippedfromchange}"/>      
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input value="{!v.caseobj.Current_Location_of_Part__c}" 
+                                             label = "Current Location Of Part" 
+                                             type="String"
+                                             required="true" 
+                                             maxlength="80"
+                                             messageWhenValueMissing ="Current Location Of Part cannot be blank"
+                                             autocomplete="off"
+                                             onchange="{!c.oncurrentlocationofpartchange}"/>                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:input aura:id="receiveddate"                                             
+                                         value="{!v.caseobj.Date_Received__c}"
+                                         type="date"
+                                         required="true"
+                                         label="Date Received" 
+                                         autocomplete="off"
+                                         messageWhenValueMissing ="Part Received Date cannot be blank"
+                                         onchange="{!c.ondatereceivedchange}"/>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:select aura:id="packagedby" 
+                                          label="Packaged by" 
+                                          required="true"
+                                          name="packagedby"
+                                          messageWhenValueMissing ="Packaged by cannot be blank"
+                                          value="{!v.caseobj.Packaged_By__c}"
+                                          onchange="{!c.onpackagedbychange}">
+                            <option value="">--select--</option>
+                            <aura:iteration items="{!v.packagedbylist}" var="item" >                               
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:select aura:id="ispartdamage" 
+                                          label="Is Part Damaged?" 
+                                          required="true"
+                                          name="ispartdamage" 
+                                          messageWhenValueMissing ="Part Damaged cannot be blank"
+                                          value="{!v.caseobj.Is_Part_Damaged__c}"
+                                          onchange="{!c.onispartdamagedchange}"> 
+                            <option value="">--select--</option>
+                            <aura:iteration items="{!v.ispartdamagelist}" var="item" >                               
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:select aura:id="ispartpackaged" 
+                                          label="Is Part Packaged?" 
+                                          required="true"
+                                          name="ispartpackaged" 
+                                          messageWhenValueMissing ="Is Part Packaged cannot be blank"
+                                          value="{!v.caseobj.Is_Part_Packaged__c}"
+                                          onchange="{!c.onispartpackagedchange}">      
+                            <option value="">--select--</option>
+                            <aura:iteration items="{!v.ispartdamagelist}" var="item" >                               
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    
+                </aura:if>
+                
+                <!-- "Return Number" START-->
+                <!-- Common Radio button group for 19, 11 & 20 reasons -->
+                <aura:if isTrue="{! or( or(v.APCreasonselected == 'Excess/Special Credit',v.APCreasonselected == 'Excess/Special Approval Status'), or(v.APCreasonselected == 'Excess/Special Shipping'))}">
+                    <lightning:layoutitem size="6">
+                        <div class="returntypebutton slds-form-element slds-form-element_horizontal" >
+                            <lightning:radioGroup aura:id="typeofreturn"
+                                                  name="typeofreturn"
+                                                  options="{! v.typeofreturnlist }"
+                                                  value="{! v.typeofreturnselected }"
+                                                  type="button"
+                                                  label="Return Type"
+                                                  required="true"
+                                                  messageWhenValueMissing="Return Type cannot be blank"
+                                                  onchange="{!c.ontypeofreturnchange}" />
+                        </div>
+                    </lightning:layoutitem> 
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                </aura:if>
+                
+                <!--  On selection of APC reason- Excess/Special Credit in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Excess/Special Credit')}">    
+                    <aura:if isTrue="{!v.istypeofreturnselected}">
+                        <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                            <lightning:select name="select1" 
+                                              label="Credit Type" 
+                                              required="true"  
+                                              value="{! v.credittypeselected }" 
+                                              onchange="{!c.oncredittypechange}">
+                                <option value="">--select--</option>
+                                <aura:iteration items="{! v.credittypelist }" 
+                                                var="option">
+                                    <option text="{!option.label}" 
+                                            value="{!option.id}" 
+                                            selected="{!option.selected}"/>
+                                </aura:iteration>                        
+                            </lightning:select>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="6"></lightning:layoutitem>
+                        
+                        <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                            <lightning:input aura:id="returnreason" 
+                                             name="returnreason" 
+                                             value="{!v.caseobj.Return_Reason__c}" 
+                                             required="true"
+                                             autocomplete="off"
+                                             label="Return Reason"  
+                                             messageWhenValueMissing ="Return Reason cannot be blank" 
+                                             onchange="{!c.onreturnreasonchange}"/>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="6"></lightning:layoutitem>
+                    </aura:if>  
+                </aura:if>
+                
+                <!--  On selection of APC reason- Excess/Special Approvalstatus in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Excess/Special Approval Status')}">   
+                    <aura:if isTrue="{!v.istypeofreturnselected}">
+                        <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                            <lightning:input aura:id="receiveddate"                                             
+                                             value="{!v.caseobj.Ship_Date__c}"
+                                             type="date"
+                                             required="true"
+                                             label="Ship date:" 
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="Received Date cannot be blank"
+                                             onchange="{!c.onshipdatechange}"/>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="6"></lightning:layoutitem>    
+                    </aura:if>
+                </aura:if>
+                
+                <!--  On selection of APC reason- Excess/Special Shipping in Internal Case creation.cmp-->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Excess/Special Shipping')}">   
+                    <aura:if isTrue="{!v.istypeofreturnselected}">
+                        <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                            <lightning:input aura:id="returnweight" 
+                                             name="weight" 
+                                             value="{!v.caseobj.Weight__c}"  
+                                             label="Weight" 
+                                             autocomplete="off"
+                                             placeholder="--optional--"/>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="6"></lightning:layoutitem>
+                        
+                        <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                            <lightning:input aura:id="noofpalletes" 
+                                             name="noofpalletes" 
+                                             value="{!v.caseobj.Number_of_Pallets__c}" 
+                                             type="number"
+                                             required="true" 
+                                             label="No of Palletes"  
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="No of Palletes cannot be blank"
+                                             onchange="{!c.onnoofpalletschange}"/>
+                        </lightning:layoutitem>
+                        <lightning:layoutitem size="6"></lightning:layoutitem>
+                    </aura:if>
+                </aura:if>
+                <!--"Return Number" END -->
+                
+                <!-- Cr/DB Number START -->
+                <aura:if isTrue="{! and(v.APCreasonselected == 'Credit/Debit Request')}">   
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <lightning:select aura:id="creditdebitreason" 
+                                          label="Reason" 
+                                          required="true"
+                                          name="creditdebitreason" 
+                                          messageWhenValueMissing ="Reason cannot be blank"
+                                          onchange="{!c.oncreditreasonchange}" 
+                                          value="{!v.creditdebitreasonselected}">
+                            <option value="">--select--</option>
+                            <aura:iteration items="{!v.creditdebitreasonlist}" 
+                                            var="item" >                               
+                                <option value="{!item.value}">{!item.label}</option>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                </aura:if>
+               
+                
+                <!-- Additional Information/IRC1 section for 3rd bucket -->
+                <aura:if isTrue="{! v.isIRC1}"> 
+                    <!-- Additional Information -->
+                    <lightning:layoutItem size="6" >
+                        <div class="slds-form-element slds-form-element_horizontal" >
+                            <label class="slds-form-element__label">Additional Information</label> 
+                            <span>
+                                <lightning:textarea name="input1"  
+                                                    variant="label-hidden" 
+                                                    label="Additional Information" 
+                                                    placeholder="--optional--" 
+                                                    value="{!v.caseobj.Description}"/>
+                            </span>
+                        </div>
+                    </lightning:layoutItem>   
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <!-- Additional Recipient -->
+                    <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                        <div class="slds-form-element" >
+                            <label class="slds-form-element__label">Additional Recipients </label> 
+                            <lightning:input aura:id="additionalrecepient1" 
+                                             name="additionalrecepient1" 
+                                             type="email" 
+                                             value="{!v.additionalRecipient}"  
+                                             placeholder="--optional--"
+                                             variant="label-hidden"  
+                                             onchange="{!c.onrecipientchange}"
+                                             autocomplete="off"
+                                             messageWhenTypeMismatch="Please enter a valid email address"/>  
+                        </div>
+                    </lightning:layoutItem> 
+                    <lightning:layoutitem size="6">
+                        <div class="slds-p-left_x-small slds-p-top_xx-small">
+                            <lightning:buttonIcon iconName="utility:add" 
+                                                  variant="brand" 
+                                                  onclick="{!c.handleaddrecipient}" 
+                                                  disabled="{! !(v.isvalidrecipient)}" />   
+                        </div>    
+                    </lightning:layoutitem>
+                    
+                    <!-- Additional Recipients Pill -->
+                    <lightning:layoutItem size="2"> </lightning:layoutItem>
+                    <lightning:layoutItem size="4">
+                        <aura:if isTrue="{!if(empty(v.additionalRecipientList2), false, true)}">                    
+                            <lightning:pillContainer items="{!v.additionalRecipientList2}" 
+                                                     onitemremove="{!c.handlerecipientremove}"/> 
+                        </aura:if>
+                    </lightning:layoutItem> 
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <!-- Additional Contact -->
+                    <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                        <label class="slds-form-element__label">Additional Dealer Contacts</label>
+                        <div class="slds-form-element slds-form-element_horizontal" > 
+                            <lightning:dualListbox aura:id="dealercontacts"
+                                                   name="dealercontacts"
+                                                   label= ""
+                                                   sourceLabel="Available"
+                                                   selectedLabel="Selected"
+                                                   fieldLevelHelp="Select contacts for notification"                           
+                                                   onchange="{! c.additionaldealercontactselected }"
+                                                   options="{!v.additionaldealercontactslist}">
+                            </lightning:dualListbox>         
+                        </div>
+                    </lightning:layoutItem>         
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                        <label class="slds-form-element__label slds-form-element_horizontal">Attachments</label>
+                        <c:APC_ExternalFileUpload aura:id="fileUpload"  
+                                                  multiple="true" 
+                                                  files="{!v.files}"
+                                                  pillsoffiles="{!v.pillsoffiles}"/>
+                    </lightning:layoutitem>  
+                    <lightning:layoutitem size="6"></lightning:layoutitem>       
+                    
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>        
+                </aura:if>          
+                
+            </aura:If>
+        </aura:if>
+        
+        <!-- On selection of Core Inquiry   -->
+        <aura:if isTrue="{! if(v.bucket3additional == '4', true, false)}">
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:select aura:id="actionrequested"  
+                                  label="Action Requested" 
+                                  required="true" 
+                                  name="actionrequested"                                              
+                                  messageWhenValueMissing ="Action Requested cannot be blank" 
+                                  value="{! v.typeofrequestlistselected }"
+                                  onchange="{!c.ontypeofrequestchange}"
+                                  >
+                    <option value="">--select--</option>
+                    <option value="Core RPA Status">Core RPA Status</option>
+                    <option value="Credit Inquiry">Credit Inquiry</option>
+                    <option value="Eligibility Inquiry">Eligibility Inquiry</option>                        
+                </lightning:select>
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:input aura:id="coreinquiryfields"
+                                 value="{!v.caseobj.Part_No__c}" 
+                                 label = "Core Part Number"  
+                                 placeholder="--optional--"
+                                 maxlength="30"
+                                 pattern= "[a-z0-9A-Z_\s\-\/]*"
+                                 autocomplete="off"
+                                 messageWhenPatternMismatch="No special characters allowed"/>      
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:input aura:id="coreinquiryfields"
+                                 value="{!v.caseobj.RPA__c}" 
+                                 label = "RPA Number"  
+                                 placeholder="--optional--"
+                                 pattern= "[a-z0-9A-Z_\s\-]*"
+                                 maxlength="10"
+                                 autocomplete="off"
+                                 messageWhenPatternMismatch="No special characters allowed"/>     
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:input aura:id="coreinquiryfields"
+                                 value="{!v.caseobj.Core_Program__c}" 
+                                 label = "Program"                                           
+                                 placeholder="--optional--"
+                                 maxlength="30"
+                                 pattern= "[a-z0-9A-Z_\s\-]*"
+                                 autocomplete="off"
+                                 messageWhenPatternMismatch="No special characters allowed"/>           
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:input aura:id="coreinquiryfields"
+                                 value="{!v.caseobj.Core_Group__c}" 
+                                 label = "Group" 
+                                 placeholder="--optional--"
+                                 pattern= "[a-z0-9A-Z_\s\]*"
+                                 autocomplete="off"
+                                 maxlength="30"
+                                 messageWhenPatternMismatch="No special characters allowed"/>                
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:input aura:id="coreinquiryfields"
+                                 value="{!v.caseobj.Core_Invoice__c}" 
+                                 label = "Core Invoice Number" 
+                                 placeholder="--optional--"
+                                 pattern= "[0-9]*"                                         
+                                 maxlength="10"       
+                                 autocomplete="off"                                 
+                                 messageWhenPatternMismatch="Only numeric values allowed"/>           
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+        </aura:if>
+        
+        <!-- IARC-->
+        <aura:if isTrue="{! v.isIARC}"> 
+            <!-- Additional Information -->
+            <lightning:layoutItem size="6" >
+                <div class="slds-form-element slds-form-element_horizontal" >
+                    <label class="slds-form-element__label">Additional Information </label>
+                    <span > 
+                        <lightning:textarea name="input1" 
+                                            label= "Additional Information"
+                                            variant="label-hidden"
+                                            placeholder="--optional--"
+                                            value="{!v.caseobj.Description}"/>
+                    </span>
+                </div>
+            </lightning:layoutItem>   
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <!-- Additional Recipient -->
+            <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                <div class="slds-form-element" >
+                    <label class="slds-form-element__label">Additional Recipients </label> 
+                    <lightning:input aura:id="additionalrecepient1" 
+                                     name="additionalrecepient1" 
+                                     type="email" 
+                                     value="{!v.additionalRecipient}"  
+                                     placeholder="--optional--"
+                                     variant="label-hidden"  
+                                     autocomplete="off"
+                                     onchange="{!c.onrecipientchange}"
+                                     messageWhenTypeMismatch="Please enter a valid email address"/>  
+                </div>
+            </lightning:layoutItem> 
+            <lightning:layoutitem size="6">
+                <div class="slds-p-left_x-small slds-p-top_xx-small">
+                    <lightning:buttonIcon iconName="utility:add" 
+                                          variant="brand" 
+                                          onclick="{!c.handleaddrecipient}" 
+                                          disabled="{! !(v.isvalidrecipient)}" />   
+                </div>    
+            </lightning:layoutitem>
+            
+            <!-- Additional Recipients Pill -->
+            <lightning:layoutItem size="2"> </lightning:layoutItem>
+            <lightning:layoutItem size="4">
+                <aura:if isTrue="{!if(empty(v.additionalRecipientList2), false, true)}">                    
+                    <lightning:pillContainer items="{!v.additionalRecipientList2}" onitemremove="{!c.handlerecipientremove}"/> 
+                </aura:if>
+            </lightning:layoutItem> 
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <!-- Additional Contact -->
+            <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                <label class="slds-form-element__label">Additional Dealer Contacts</label>
+                <div class="slds-form-element slds-form-element_horizontal" > 
+                    <lightning:dualListbox aura:id="dealercontacts"
+                                           name="dealercontacts"
+                                           label= ""
+                                           sourceLabel="Available"
+                                           selectedLabel="Selected"
+                                           fieldLevelHelp="Select contacts for notification"                           
+                                           onchange="{! c.additionaldealercontactselected }"
+                                           options="{!v.additionaldealercontactslist}">
+                    </lightning:dualListbox>         
+                </div>
+            </lightning:layoutItem>         
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <label class="slds-form-element__label slds-form-element_horizontal">Attachments</label>
+                <c:APC_ExternalFileUpload aura:id="fileUpload"  
+                                          multiple="true" 
+                                          files="{!v.files}"
+                                          pillsoffiles="{!v.pillsoffiles}"/>
+            </lightning:layoutitem>  
+            
+            <lightning:layoutitem size="0"></lightning:layoutitem>
+            <lightning:layoutitem size="4"></lightning:layoutitem>        
+            <lightning:layoutitem size="8"></lightning:layoutitem>
+        </aura:if>   
+        
+        <!-- Bucket 1- Material Load  -->
+        <aura:if isTrue="{! v.isIRC}">    
+            <!--  Material Load/Price Request Reason -->
+            <lightning:layoutItem size="6"> 
+                <lightning:select class="slds-form-element slds-form-element_horizontal" 
+                                  aura:id="selectItemreasonIRC"  
+                                  label="Reason" 
+                                  required="true"
+                                  value="{!v.caseobj.Reason__c}" 
+                                  name="selectItemreason"                                              
+                                  messageWhenValueMissing ="Reason cannot be blank" 
+                                  onchange="{!c.onIRCreasonchange}" >
+                    
+                    <option value="">--select--</option>
+                    <option value="Need to Order">Need to Order</option>
+                    <option value="Customer Quote">Customer Quote</option>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>    
+            
+            <!-- Additional Information -->
+            <lightning:layoutItem size="6" > 
+                <div class="slds-form-element slds-form-element_horizontal slds-p-top_small" >
+                    <label class="slds-form-element__label slds-form-element slds-form-element_horizontal">Additional Information </label>
+                    <span>
+                        <lightning:textarea name="input1"  
+                                            variant="label-hidden" 
+                                            label="Additional Information"
+                                            placeholder="--optional--" 
+                                            value="{!v.caseobj.Description}"/>
+                    </span>
+                </div>
+            </lightning:layoutItem>   
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <!-- Additional Recipient -->
+            <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                <div class="slds-form-element" >
+                    <label class="slds-form-element__label">Additional Recipients</label> 
+                    <lightning:input aura:id="additionalrecepient1" 
+                                     name="additionalrecepient1" 
+                                     type="email" 
+                                     value="{!v.additionalRecipient}"  
+                                     placeholder="--optional--"
+                                     variant="label-hidden"  
+                                     autocomplete="off"
+                                     onchange="{!c.onrecipientchange}"
+                                     messageWhenTypeMismatch="Please enter a valid email address"/>  
+                </div>
+            </lightning:layoutItem> 
+            <lightning:layoutitem size="6">
+                <div class="slds-p-left_x-small slds-p-top_xx-small">
+                    <lightning:buttonIcon iconName="utility:add" 
+                                          variant="brand" 
+                                          onclick="{!c.handleaddrecipient}" 
+                                          disabled="{! !(v.isvalidrecipient)}" />   
+                </div>    
+                
+            </lightning:layoutitem>
+            
+            <!-- Additional Recipients Pill -->
+            <lightning:layoutItem size="2"> </lightning:layoutItem>
+            <lightning:layoutItem size="4">
+                <aura:if isTrue="{!if(empty(v.additionalRecipientList2), false, true)}">                    
+                    <lightning:pillContainer items="{!v.additionalRecipientList2}"
+                                             onitemremove="{!c.handlerecipientremove}"/> 
+                </aura:if>
+            </lightning:layoutItem> 
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <!-- Additional Contact -->
+            <lightning:layoutItem size="6" class="slds-form-element slds-form-element_horizontal" >
+                <label class="slds-form-element__label">Additional Dealer Contacts</label>
+                
+                <div class="slds-form-element slds-form-element_horizontal" > 
+                    <lightning:dualListbox aura:id="dealercontacts"
+                                           name="dealercontacts"
+                                           label= ""
+                                           sourceLabel="Available"
+                                           selectedLabel="Selected"
+                                           fieldLevelHelp="Select contacts for notification"                           
+                                           onchange="{! c.additionaldealercontactselected }"
+                                           options="{!v.additionaldealercontactslist}">
+                    </lightning:dualListbox>         
+                </div>
+            </lightning:layoutItem>         
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6"></lightning:layoutitem>        
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+        </aura:if>
+    </lightning:layout>
+</aura:component>

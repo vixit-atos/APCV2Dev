@@ -1,0 +1,556 @@
+<aura:component controller="EWRController" implements="flexipage:availableForRecordHome,force:lightningQuickActionWithoutHeader,force:hasRecordId"> 
+    <aura:attribute name="record" type="Object" description="The record object to be displayed"/>
+    <aura:attribute name="simpleRecord" type="Object" description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String" description="An error message bound to force:recordData"/>
+    <aura:attribute name="remoteRecordId" type="String"/>
+    <aura:attribute name="listOfDetails" type="List"/>
+    <aura:attribute name="workOrders" type="List"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="buttonstate" type="Boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.initializeComponent}" />
+    <aura:handler name="change" value="{!v.remoteRecordId}" action="{!c.getRecord}" />
+    
+    <force:recordData aura:id="displayrecord"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields ="{!v.simpleRecord}"
+                      mode="VIEW"/>
+    
+    <div class="Record Details">
+        <lightning:card class="slds-card_boundary slds-p-left--small">
+            <div class="slds-p-around--small">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_9-of-12">
+                        <p class="slds-page-header__title"><a onclick="{!c.redirectToEWR}">{!v.simpleRecord.Job_No__c} - {!v.simpleRecord.Job_Desc__c}</a></p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_3-of-12">
+                        <lightning:buttonStateful
+                                                  labelWhenOff="Expand"
+                                                  labelWhenOn="Collapse"
+                                                  iconNameWhenOff="utility:down"
+                                                  iconNameWhenOn="utility:up"
+                                                  state="{! v.buttonstate }"
+                                                  onclick="{! c.toggle }"
+                                                  />
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                            <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                <div class="test-id__field-label-container slds-form-element__label">
+                                    <span class="test-id__field-label">Job Condition:</span>
+                                </div>
+                                <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                    <lightning:formattedText title="ID" value="{!v.simpleRecord.Job_Cond__c}" /></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                            <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                <div class="test-id__field-label-container slds-form-element__label">
+                                    <span class="test-id__field-label">Job Request Date:</span>
+                                </div>
+                                <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                    <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_RQST_DATE__c}" /></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                            <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                <div class="test-id__field-label-container slds-form-element__label">
+                                    <span class="test-id__field-label">Job Scheduled Packet Date:</span>
+                                </div>
+                                <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                    <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_SCH_PKT_DATE__c}" /></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                        <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                            <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                <div class="test-id__field-label-container slds-form-element__label">
+                                    <span class="test-id__field-label">Job Engineer:</span>
+                                </div>
+                                <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                    <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ENGR__c}" /></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div aura:id="ewrDetails" class="slds-hide">
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Original Design Hours:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ORIG_DSGN_HRS__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Estimated Design Hours:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_EST_DSGN_HRS__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Tooling Impacted Indicator:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.TOOL_IMPCT_INDC__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">MIP Category ID:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.MIP_CAT_ID__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Original Start Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ORIG_STA_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">MIP Status Code:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.MIP_STS_CD__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">MIP Number:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.MIP_NO__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">MIP Status Comment:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.MIP_STS_COMT__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Original Design Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ORIG_DSGN_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Scheduled Design Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_SCH_DSGN_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Preliminary Packet Issued Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.PRELM_PKT_ISS_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Design Release Complete:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Design_Release_Complete__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Original Changeover Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ORIG_COVR_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Targeted Implementation Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.TRGT_IMPL_DATE__c}"/></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Changeover Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_CHGOVR_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">C/O Complete:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.C_O_Complete__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Status Code C/O:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Status_Code_C_O__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Changeover Comments:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Changeover_Comments__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Original Packet Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ORIG_PKT_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Final Packet Release Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.FNL_PKT_RLSE_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Final Packet Complete:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Final_Packet_Complete__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Days Late(DR):</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Days_Late_DR__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Days Late(C/O):</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Days_Late_C_O__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Days Late(FP):</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.Days_Late_FP__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Design Approver Name:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_DSGN_APPR_NAME__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Engineering Manager Approver Name:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.ENGR_MGR_APPR_NAME__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job Engineer:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_ENGR__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job PSC Approver Name:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_PSC_APPR_NAME__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                            <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                    <div class="test-id__field-label-container slds-form-element__label">
+                                        <span class="test-id__field-label">Job PSC Approval Date:</span>
+                                    </div>
+                                    <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                        <lightning:formattedText title="ID" value="{!v.simpleRecord.JOB_PSC_APPR_DATE__c}" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <b>Estimates:</b>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                    <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                        <div class="test-id__field-label-container slds-form-element__label">
+                                            <span class="test-id__field-label">Cab:</span>
+                                        </div>
+                                        <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                            <lightning:formattedText value="{!v.simpleRecord.Cab_Estimate__c}"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                    <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                        <div class="test-id__field-label-container slds-form-element__label">
+                                            <span class="test-id__field-label">Chassis:</span>
+                                        </div>
+                                        <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                            <lightning:formattedText value="{!v.simpleRecord.Chassis_Estimate__c}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                    <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                        <div class="test-id__field-label-container slds-form-element__label">
+                                            <span class="test-id__field-label">Mechatronics:</span>
+                                        </div>
+                                        <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                            <lightning:formattedText value="{!v.simpleRecord.Mechatronics_Estimate__c}"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                    <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                        <div class="test-id__field-label-container slds-form-element__label">
+                                            <span class="test-id__field-label">Eve:</span>
+                                        </div>
+                                        <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                            <lightning:formattedText value="{!v.simpleRecord.Eve_Estimate__c}"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                    <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                        <div class="test-id__field-label-container slds-form-element__label">
+                                            <span class="test-id__field-label">Other Estimates:</span>
+                                        </div>
+                                        <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                            <lightning:formattedText value="{!v.simpleRecord.Other_Estimates__c}"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <b>Expenses:</b>
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                            <div class="test-id__field-label-container slds-form-element__label">
+                                                <span class="test-id__field-label">Tooling:</span>
+                                            </div>
+                                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                                <lightning:formattedText value="{!v.simpleRecord.Tooling_Expense__c}"/></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1">
+                                    <div class="flexipageComponent" data-aura-class="flexipageComponent">
+                                        <div class="slds-form-element slds-form-element_readonly slds-grow slds-hint-parent override--slds-form-element">
+                                            <div class="test-id__field-label-container slds-form-element__label">
+                                                <span class="test-id__field-label">Other Expenses:</span>
+                                            </div>
+                                            <p class="test-id__field-value slds-form-element__static slds-grow is-read-only">
+                                                <lightning:formattedText value="{!v.simpleRecord.Other_Expenses__c}"/></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    
+                <br/>
+                
+                <p class="test-id__field-label-container slds-form-element__label slds-p-left--small">Models:</p>
+                <aura:iteration items="{!v.listOfDetails}" var="detail">
+                    <aura:if isTrue="{!(detail.PROD_TYPE_CD__c != null)}">
+                        <lightning:avatar src="/bad/image/url.jpg" initials="{!detail.PROD_TYPE_CD__c}" fallbackIconName="standard:avatar" class="slds-m-right_small"/> 
+                    </aura:if>
+                </aura:iteration>
+                <br/><br/>
+                
+                <p class="test-id__field-label-container slds-form-element__label slds-p-left--small">Modules:</p>
+                <aura:iteration items="{!v.listOfDetails}" var="detail"> 
+                    <aura:if isTrue="{!(detail.MODULE_NO__c != null)}">
+                        <lightning:avatar src="/bad/image/url.jpg" initials="{!detail.MODULE_NO__c}" fallbackIconName="standard:account" class="slds-m-right_small"/>
+                    </aura:if>
+                </aura:iteration>
+                <br/><br/>
+                
+                <p class="test-id__field-label-container slds-form-element__label slds-p-left--small">Work Orders:</p>
+                <aura:iteration items="{!v.workOrders}" var="workOrder">
+                    <c:Work_Order_Summary recordId="{!workOrder.Id}"/>
+                </aura:iteration>
+                </div>
+            </div>
+        </lightning:card>
+    </div>
+    <!-- Display Lightning Data Service errors, if any -->
+    <aura:if isTrue="{!not(empty(v.recordError))}">
+        <div class="recordError">
+            {!v.recordError}</div>
+    </aura:if>
+</aura:component>

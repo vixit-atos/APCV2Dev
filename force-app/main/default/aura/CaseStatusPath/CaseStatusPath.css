@@ -1,0 +1,475 @@
+.THIS .slds-path.slds-is-expanded {
+	padding-bottom: .75rem;
+	border-color: #dddbda
+}
+
+.THIS .slds-path__track {
+	flex-wrap: wrap;
+	align-items: flex-start
+}
+
+@media (min-width:64em) {
+	.THIS .slds-path__track {
+		flex-wrap: nowrap;
+		align-items: stretch
+	}
+}
+
+.THIS .slds-path__track.slds-has-overflow .slds-path__scroller_inner {
+	display: flex;
+	width: 100%;
+	overflow: hidden
+}
+
+.THIS .slds-path__track.slds-has-overflow .slds-path__scroll-controls {
+	display: inline-flex;
+	flex-shrink: 0;
+	padding-left: .5rem
+}
+
+@media (pointer:coarse) and (hover:none) {
+	.THIS .slds-path__track.slds-has-overflow .slds-path__scroll-controls {
+		display: none
+	}
+}
+
+.THIS .slds-path__scroller {
+	flex: 1;
+	max-width: 100%;
+	overflow: hidden
+}
+
+.THIS .slds-path__scroll-controls {
+	display: none
+}
+
+.THIS .slds-path__stage-name {
+	display: block;
+	font-weight: 700;
+	margin: .75rem 0
+}
+
+@media (min-width:48em) {
+	.THIS .slds-path__stage-name {
+		margin: 0
+	}
+}
+
+@media (min-width:64em) {
+	.THIS .slds-path__stage-name {
+		display: none
+	}
+}
+
+.THIS .slds-path__scroller-container {
+	flex: 1;
+	flex-basis: 100%;
+	overflow: hidden
+}
+
+@media (min-width:64em) {
+	.THIS .slds-path__scroller-container {
+		flex-basis: auto
+	}
+}
+
+@media (min-width:48em) {
+	.THIS .slds-path_has-coaching .slds-path__action {
+		padding-left: 2.75rem
+	}
+}
+
+@media (min-width:64em) {
+	.THIS .slds-path_has-coaching .slds-path__action {
+		padding-left: 0
+	}
+}
+
+.THIS .slds-path__action {
+	flex-grow: 1;
+	flex-basis: 100%;
+	margin-left: 0;
+	align-items: center;
+	flex-shrink: 0;
+	flex-direction: column
+}
+
+@media (min-width:48em) {
+.THIS .slds-path__action {
+		max-width: 100%;
+		justify-content: space-between;
+		margin-top: 1rem;
+		flex-direction: row
+	}
+}
+
+@media (min-width:64em) {
+	.THIS .slds-path__action {
+		flex-basis: auto;
+		flex-grow: 0;
+		align-items: normal;
+		margin-top: 0;
+		margin-left: 1.5rem
+	}
+}
+
+.THIS .slds-path__nav {
+	display: flex;
+	align-items: flex-start;
+	overflow: hidden
+}
+
+.THIS .slds-path__nav .slds-is-incomplete,
+.THIS .slds-path__nav .slds-is-incomplete:after,
+.THIS .slds-path__nav .slds-is-incomplete:before {
+	background: #ecebea
+}
+
+.THIS .slds-path__nav .slds-is-incomplete .slds-path__link {
+	color: #080707 !important
+}
+
+.THIS .slds-path__nav .slds-is-incomplete:hover,
+.THIS .slds-path__nav .slds-is-incomplete:hover:after,
+.THIS .slds-path__nav .slds-is-incomplete:hover:before {
+	background: #dddbda !important
+}
+
+.THIS .slds-path__nav .slds-is-complete,
+.THIS .slds-path__nav .slds-is-complete:after,
+.THIS .slds-path__nav .slds-is-complete:before {
+	background: #4bca81 !important
+}
+
+.THIS .slds-path__nav .slds-is-complete .slds-path__stage {
+	transform: translate(-50%, -50%) rotateX(0deg)
+}
+
+.THIS .slds-path__nav .slds-is-complete .slds-path__title {
+	transform: rotateX(180deg)
+}
+
+.THIS .slds-path__nav .slds-is-complete .slds-path__link {
+	color: #fff
+}
+
+.THIS .slds-path__nav .slds-is-complete:hover,
+.THIS .slds-path__nav .slds-is-complete:hover:after,
+.THIS .slds-path__nav .slds-is-complete:hover:before {
+	background: #04844b 
+}
+
+.THIS .slds-path__nav .slds-is-complete:hover .slds-path__stage {
+	transform: translate(-50%, -50%) rotateX(-180deg)
+}
+
+.THIS .slds-path__nav .slds-is-complete:hover .slds-path__title {
+	transform: rotateX(0deg)
+}
+
+.THIS .slds-path__nav .slds-is-current {
+	background-color: #fff
+}
+
+.THIS .slds-path__nav .slds-is-current:after,
+.THIS .slds-path__nav .slds-is-current:before {
+	background-color: #fff;
+	background-image: linear-gradient(90deg, #005fb2, #005fb2 .125rem, transparent 0), linear-gradient(90deg, #005fb2, #005fb2 .125rem, transparent 0), linear-gradient(#005fb2, #005fb2 .125rem, transparent 0);
+	background-repeat: no-repeat;
+	background-size: .125rem 100%, .125rem 100%, 100% .125rem
+}
+
+.THIS .slds-path__nav .slds-is-current:before {
+	background-position: 100% 0, 0 0, 0 0
+}
+
+.THIS .slds-path__nav .slds-is-current:after {
+	background-position: 100% 0, 0 0, 0 100%
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child {
+	border: 2px solid #005fb2;
+	border-right: 0
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child:after,
+.THIS .slds-path__nav .slds-is-current:first-child:before {
+	background-color: transparent;
+	background-image: linear-gradient(90deg, #005fb2, #005fb2 .125rem, transparent 0)
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child:before {
+	top: -.125rem
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child:after {
+	bottom: -.125rem
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child:hover {
+	border-color: #00396b
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child:hover:after,
+.THIS .slds-path__nav .slds-is-current:first-child:hover:before {
+	background-image: linear-gradient(90deg, #00396b, #00396b .125rem, transparent 0)
+}
+
+.THIS .slds-path__nav .slds-is-current:first-child .slds-path__link {
+	height: 1.75rem
+}
+
+.THIS .slds-path__nav .slds-is-current .slds-path__link {
+	color: #005fb2 !important
+}
+
+.THIS .slds-path__nav .slds-is-current:hover:after,
+.THIS .slds-path__nav .slds-is-current:hover:before {
+	background-image: linear-gradient(90deg, #00396b, #00396b .125rem, transparent 0), linear-gradient(90deg, #00396b, #00396b .125rem, transparent 0), linear-gradient(#00396b, #00396b .125rem, transparent 0)
+}
+
+.THIS .slds-path__nav .slds-is-current:hover .slds-path__link {
+	color: #00396b
+}
+
+.THIS .slds-path__nav .slds-is-active,
+.THIS .slds-path__nav .slds-is-active:after,
+.THIS .slds-path__nav .slds-is-active:before {
+	background: #005fb2 !important
+}
+
+.THIS .slds-path__nav .slds-is-active:first-child {
+	border: 0
+}
+
+.THIS .slds-path__nav .slds-is-active:first-child:after,
+.THIS .slds-path__nav .slds-is-active:first-child:before {
+	background: #005fb2 !important
+}
+
+.THIS .slds-path__nav .slds-is-active:first-child:before {
+	top: 0
+}
+
+.THIS .slds-path__nav .slds-is-active:first-child:after {
+	bottom: 0
+}
+
+.THIS .slds-path__nav .slds-is-active:first-child .slds-path__link {
+	height: 2rem
+}
+
+.THIS .slds-path__nav .slds-is-active .slds-path__stage {
+	transform: translateY(-50%) rotateX(-180deg)
+}
+
+.THIS .slds-path__nav .slds-is-active .slds-path__title {
+	transform: rotateX(0deg)
+}
+
+.THIS .slds-path__nav .slds-is-active .slds-path__link {
+	color: #fff !important
+}
+
+.THIS .slds-path__nav .slds-is-active:hover,
+.THIS .slds-path__nav .slds-is-active:hover:after,
+.THIS .slds-path__nav .slds-is-active:hover:before {
+	background: #00396b !important
+}
+
+.THIS .slds-path__nav .slds-is-active:hover .slds-path__link {
+	color: #fff !important
+}
+
+.THIS .slds-path__nav .slds-is-lost,
+.THIS .slds-path__nav .slds-is-lost:after,
+.THIS .slds-path__nav .slds-is-lost:before,
+.THIS .slds-path__nav .slds-is-lost:hover,
+.THIS .slds-path__nav .slds-is-lost:hover:after,
+.THIS .slds-path__nav .slds-is-lost:hover:before {
+	background: #c23934 !important
+}
+
+.THIS .slds-path.slds-is-won .slds-path__item.slds-is-current,
+.THIS .slds-path.slds-is-won .slds-path__item.slds-is-current:after,
+.THIS .slds-path.slds-is-won .slds-path__item.slds-is-current:before,
+.THIS .slds-path.slds-is-won .slds-path__item.slds-is-current:hover,
+.THIS .slds-path.slds-is-won .slds-path__item.slds-is-current:hover:after,
+.THIS .slds-path.slds-is-won .slds-path__item.slds-is-current:hover:before,
+.THIS .slds-path__nav .slds-is-won,
+.THIS .slds-path__nav .slds-is-won:after,
+.THIS .slds-path__nav .slds-is-won:before,
+.THIS .slds-path__nav .slds-is-won:hover,
+.THIS .slds-path__nav .slds-is-won:hover:after,
+.THIS .slds-path__nav .slds-is-won:hover:before {
+	background: #04844b !important
+}
+
+.THIS .slds-path.slds-is-lost .slds-path__item.slds-is-current,
+.THIS .slds-path.slds-is-lost .slds-path__item.slds-is-current:after,
+.THIS .slds-path.slds-is-lost .slds-path__item.slds-is-current:before,
+.THIS .slds-path.slds-is-lost .slds-path__item.slds-is-current:hover,
+.THIS .slds-path.slds-is-lost .slds-path__item.slds-is-current:hover:after,
+.THIS .slds-path.slds-is-lost .slds-path__item.slds-is-current:hover:before {
+	background: #c23934 !important
+}
+
+.THIS .slds-path__item {
+	position: relative;
+	flex: 1;
+	margin-left: .375rem;
+	margin-right: .4375rem;
+	min-width: 5rem;
+	text-align: center
+}
+
+.THIS .slds-path__item:after,
+.THIS .slds-path__item:before {
+	content: "";
+	position: absolute;
+	left: -.25rem;
+	right: -.3125rem;
+	cursor: pointer
+}
+
+.THIS .slds-path__item:before {
+	top: 0;
+	height: 1.0625rem;
+	transform: skew(28deg) translateZ(0)
+}
+
+.THIS .slds-path__item:after {
+	bottom: 0;
+	height: 1rem;
+	transform: skew(-30deg) translateZ(0)
+}
+
+.THIS .slds-path__item:first-child {
+	margin-left: 0;
+	border-top-left-radius: 2rem;
+	border-bottom-left-radius: 2rem;
+	padding-left: .625rem
+}
+
+.THIS .slds-path__item:first-child:after,
+.THIS .slds-path__item:first-child:before {
+	left: 1.125rem
+}
+
+.THIS .slds-path__item:last-child {
+	margin-right: 0;
+	border-top-right-radius: 2rem;
+	border-bottom-right-radius: 2rem;
+	padding-right: .625rem
+}
+
+.THIS .slds-path__item:last-child .slds-path__link {
+	padding-left: .25rem
+}
+
+.THIS .slds-path__item:last-child:after,
+.THIS .slds-path__item:last-child:before {
+	right: .625rem
+}
+
+.THIS [dir=rtl] .slds-path__item:before {
+	transform: skew(-30deg) translateZ(0)
+}
+
+.THIS [dir=rtl] .slds-path__item:after {
+	transform: skew(28deg) translateZ(0)
+}
+
+.THIS .slds-path__title {
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap
+}
+
+.THIS .slds-path__stage {
+	position: absolute;
+	top: 50%;
+	/*! @noflip */
+	left: 50%;
+	transform: translate(-50%, -50%) rotateX(-180deg)
+}
+
+.THIS .slds-path__link {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 2rem;
+	padding: .5rem .25rem .5rem .5rem;
+	z-index: 5;
+	cursor: pointer
+}
+
+.THIS .slds-path__link,
+.THIS .slds-path__link:hover {
+	text-decoration: none
+}
+
+.THIS .slds-path__link:focus {
+	outline: 0
+}
+
+.THIS .slds-path__stage,
+.THIS .slds-path__title {
+	display: block;
+	transition: transform .2s linear;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden
+}
+
+.THIS .slds-path .slds-path__trigger {
+	margin-right: .75rem;
+	transition: transform .4s ease-in-out;
+	display: none
+}
+
+@media (min-width:48em) {
+.THIS .slds-path .slds-path__trigger {
+		display: block
+	}
+}
+
+
+
+.THIS .slds-path .slds-path__mark-complete {
+	width: 100%;
+	min-width: 13rem;
+	margin-right: 0
+}
+
+@media (min-width:48em) {
+	.THIS .slds-path .slds-path__mark-complete {
+		width: auto
+	}
+}
+
+.THIS .slds-path__mark-current {
+	border-color: #0070d2 !important;
+	background-color: #0070d2 !important
+}
+
+.THIS .slds-path__mark-current:focus,
+.THIS .slds-path__mark-current:hover {
+	background-color: #005fb2 !important
+}
+.THIS .slds-path .slds-path__mark-complete {
+	width: 100%;
+	min-width: 13rem;
+	margin-right: 0
+}
+
+.THIS .slds-path__mark-current {
+	border-color: #0070d2 !important;
+	background-color: #0070d2 !important
+}
+
+.THIS .slds-path__mark-current:focus,
+.THIS .slds-path__mark-current:hover {
+	background-color: #005fb2 !important
+}

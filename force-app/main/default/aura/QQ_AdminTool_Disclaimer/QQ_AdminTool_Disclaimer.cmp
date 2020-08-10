@@ -1,0 +1,62 @@
+<aura:component controller="QQ_AdminTool_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="recordType" type="string" default=""/>
+    <aura:attribute name="recordId" type="string" />
+            
+    <aura:attribute name="QuoteTypes" type="List" default="[]"/>
+    
+    <aura:attribute name="AdminTool" type="Administrative_Tool__c" default="{'sobjectType':'Administrative_Tool__c'}"/>
+    
+    <c:QQ_AdminTool_Submit aura:id="SubmitAdminTool" />
+    
+    <aura:method name="saveDisclaimer" action="{!c.saveDisclaimer}">
+        <!--<aura:attribute name="callback" type="Function" />-->
+    </aura:method>
+    
+    <div class="slds-box slds-box_xx-small">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:combobox aura:id="UID_QuoteType"
+                                    name="QuoteType" 
+                                    label="Quote Type" 
+                                    required="true"
+                                    options="{!v.QuoteTypes}"
+                                    value="{!v.AdminTool.Quote_Type__c}"
+                                    onchange="" />
+            </lightning:layoutItem>
+        </lightning:layout>        
+        
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:inputRichText aura:id="UID_Disclaimer"
+                                         label="Disclaimers"
+                                         placeholder="Type disclaimers here"
+                                         value="{!v.AdminTool.Disclaimers__c}" />
+            </lightning:layoutItem>
+        </lightning:layout>        
+        
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small" size="6">
+                <lightning:input type="DateTime"
+                                 aura:id="UID_FromDate"
+                                 name="FromDate"
+                                 required="true"
+                                 label="From"
+                                 timeZone="{!$Locale.timezone}"
+                                 value="{!v.AdminTool.Disclaimer_From_Date__c}"/>
+            </lightning:layoutItem>
+<!--            
+            <lightning:layoutItem padding="around-small" size="6">
+                <lightning:input type="DateTime"
+                                 aura:id="UID_ToDate"
+                                 name="ToDate"
+                                 required="false"
+                                 label="To"
+                                 timeZone="{!$Locale.timezone}"
+                                 value="{!v.AdminTool.Disclaimer_To_Date__c}"/>
+            </lightning:layoutItem>
+-->
+        </lightning:layout>
+    </div>
+</aura:component>

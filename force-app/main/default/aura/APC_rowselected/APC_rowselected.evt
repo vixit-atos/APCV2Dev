@@ -1,0 +1,6 @@
+<aura:event type="COMPONENT" description="Fired on row selected" >
+    <aura:attribute name="rowid" type="String"/>
+    <aura:attribute name="isselected" type="boolean"/>
+    <aura:attribute name="actionselected" type="String"/>
+    <aura:attribute name="documentids" type="List"/>
+</aura:event>

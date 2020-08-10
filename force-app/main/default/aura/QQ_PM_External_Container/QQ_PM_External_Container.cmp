@@ -1,0 +1,161 @@
+<aura:component access="global">
+    <aura:attribute name="quoteitem" type="ASP_PM_Line_Items__c" default="{'sobjectType': 'ASP_PM_Line_Items__c'}"/>
+    <aura:attribute name="PMsection" type="String" default="PM" />
+    <aura:attribute name="ATSsection" type="String" default="ATS" />
+    <aura:attribute name="TMsection" type="String" default="TM" />
+    
+    <aura:attribute name="quote" 
+                    type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c'}" />
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_PM_Line_Items__c[]" /> 
+    <aura:attribute name="addonitems" 
+                    type="PM_Line_Item_AddOn__c[]"/>
+    <aura:attribute name="ContainerType" type="List" default="[
+                                                              {'label': 'Prventive Maintenance', 'value': 'PREVENTIVE MAINTENANCE'},
+                                                              {'label': 'ATS', 'value': 'ATS'},
+                                                              {'label': 'Transmission', 'value': 'TRANSMISSION'}
+                                                              ]" />
+    
+    
+    <aura:attribute name="concession_TWS" type="string"/>
+    <aura:attribute name="A85Code" type="List"/>  
+    <aura:attribute name="VocationList" type="List"/>
+    <aura:attribute name="openpopup" type="boolean" default="true"/>
+    <aura:attribute name="showPackage" type="boolean" default=""/> 
+    <aura:attribute name="showATS" type="boolean" default=""/>
+    <aura:attribute name="showTransmission" type="boolean" default=""/>
+    <aura:attribute name="quotecustomer" type="String" default=""/>
+    <aura:attribute name="accountkeyword" type="string"/>
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    
+    <aura:handler name="change" value="{!v.selectedLookUpRecord}" action="{!c.UpdateCustomer}"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:registerEvent name="oSelectedRecordEvent" type="c:QQ_selectedsObjectRecordEvent"/>
+    
+    
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    <c:QQ_Insert_Customer_Service aura:id="InsertCustomerSrvc" />
+    <c:QQ_Get_FMV_Expirydate_Service aura:id="dateSrvc" />
+    
+    
+    <br></br> 
+    <div class="slds-box slds-theme_shade">
+        <div class="sectionheading">General Information</div>
+        <div class="c-container">
+            <lightning:layout multipleRows="true" >
+                
+                <lightning:layoutItem size="8"
+                                      smallDeviceSize="8" 
+                                      mediumDeviceSize="8" 
+                                      largeDeviceSize="8" padding="around-small">
+                    
+                    <c:QQ_customLookup 
+                                       objectAPIName="account" 
+                                       IconName="standard:account" 
+                                       selectedRecord="{!v.selectedLookUpRecord}" 
+                                       label="Customer"
+                                       SearchKeyWord = "{!v.accountkeyword}"/>
+                </lightning:layoutItem> 
+                <lightning:layoutItem size="12"
+                                      smallDeviceSize="12" 
+                                      mediumDeviceSize="12" 
+                                      largeDeviceSize="2" padding="">    
+                    
+                    <br></br><br></br>
+                    <lightning:button
+                                      iconName="utility:add" 
+                                      variant="brand"
+                                      label="New"
+                                      disabled="{!v.quote.Customer_Name__c}"
+                                      onclick="{!c.addcustomer}"
+                                      name="ADD CUSTOMER"/>
+                    
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+            
+        </div></div> 
+    <aura:if isTrue="{!v.quotecustomer}">
+        
+        
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small">
+                <span class="slds-p-top_medium slds-text-title_bold">Select Available Option: </span>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        
+        <lightning:layout multipleRows="true" >
+            
+            
+            <span class="slds-p-around_small">
+                <lightning:button label="Preventive Maintenance" 
+                                  name = "PM"
+                                  iconName="{!v.showPackage ? 'utility:ban' : 'utility:add'}" 
+                                  variant="{!v.showPackage ? 'neutral' : 'brand'}" 
+                                  iconPosition="left"
+                                  onclick="{!v.showPackage ? c.removeCoverage : c.handleChange }"  />
+             </span>   
+            
+            
+            <span class="slds-p-around_small">
+
+                <lightning:button label="ATS" 
+                                  name = "ATS"
+                                  iconName="{!v.showATS ? 'utility:ban' : 'utility:add'}" 
+                                  variant="{!v.showATS ? 'neutral' : 'brand'}" 
+                                  iconPosition="left"
+                                  onclick="{!v.showATS ? c.removeCoverage : c.handleChange }" />
+             </span>   
+            <span class="slds-p-around_small">
+                <lightning:button label="Transmission" 
+                                  name="TRANSMISSION"
+                                  iconName="{!v.showTransmission ? 'utility:ban' : 'utility:add'}" 
+                                  variant="{!v.showTransmission ? 'neutral' : 'brand'}" 
+                                  iconPosition="left"
+                                  onclick="{!v.showTransmission ? c.removeCoverage : c.handleChange }"/>
+                
+            </span> 
+            
+        </lightning:layout>
+    </aura:if>
+    
+  
+    <aura:if isTrue= "{!v.showPackage}">
+        
+        <lightning:accordion  aura:id="accordiond" allowMultipleSectionsOpen="true" activeSectionName="{!v.PMsection}">
+            <div class="slds-card">
+                <lightning:accordionSection class="slds-card" name="PM" label="Preventive Maintenance">
+                    <c:QQ_Package_Container quoteitemlist = "{!v.quoteitemlist}" addonitems="{!v.addonitems}"/>
+                </lightning:accordionSection>
+            </div>   
+        </lightning:accordion> 
+        
+        
+            
+    </aura:if>
+    <aura:if isTrue= "{!v.showATS}">
+        <lightning:accordion  aura:id="accordiond" allowMultipleSectionsOpen="true" activeSectionName="{!v.ATSsection}">
+            <div class="slds-card">
+                <lightning:accordionSection class="slds-card" name="ATS" label="ATS">
+                    <c:QQ_ATS_Container quoteitemlist = "{!v.quoteitemlist}"/>
+                </lightning:accordionSection>
+            </div>   
+        </lightning:accordion>       
+           
+    </aura:if>
+    <aura:if isTrue= "{!v.showTransmission}">
+        
+        <lightning:accordion  aura:id="accordiond" allowMultipleSectionsOpen="true" activeSectionName="{!v.TMsection}">
+            <div class="slds-card">
+                <lightning:accordionSection class="slds-card" name="TM" label="Transmission">
+                       <c:QQ_Transmission_Container quoteitemlist = "{!v.quoteitemlist}" />
+                </lightning:accordionSection>
+            </div>   
+        </lightning:accordion>
+        
+             
+            
+    </aura:if>
+</aura:component>

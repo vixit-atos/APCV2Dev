@@ -1,0 +1,256 @@
+<!--
+  @Component Name     : APC_TBB2.cmp
+  @Description        : For Thomas Built Bus
+  @Author             : Chandrika G
+-->
+
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global"  controller="APC_MasterController">
+    
+    <aura:attribute name="caseobj" type="Case" access="global" default="{'sobjectType': 'Case',
+                                                                        'RecordTypeId':'',
+                                                                        'Planner_Code__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Part_No__c':'',
+                                                                        'VIN__c':'',
+                                                                        'Vendor__c':'',
+                                                                        'Reason__c':'',                                                                        
+                                                                        'Description':'',
+                                                                        'Additional_Contacts__c':'',
+                                                                        'Request_Type__c':'',
+                                                                        'Origin':'Web',
+                                                                        'Status':'New',
+                                                                        'Priority':'Medium',
+                                                                        'ContactId':'',
+                                                                        'AccountId':'',
+                                                                        'APC_Source__c':'',
+                                                                        'NSN_Number__c':'',
+                                                                        'Quantity__c':'',
+                                                                        'Lead_Time_Reason__c':'',
+                                                                        'PDC_Location__c':'',
+                                                                        'Multiple_Parts__c':'',
+                                                                        'Disputing_Price__c':'',
+                                                                        'Type_of_Request__c':'',
+                                                                        'Invoice_Needed_For__c':'',
+                                                                        'Date_Received__c':'',
+                                                                        'Ship_Method__c':'',
+                                                                        'Problem_Description__c':'',
+                                                                        'Requested_Change__c':'',
+                                                                        'Shipped_From__c':'',
+                                                                        'Current_Location_of_Part__c':'',
+                                                                        'Packaged_By__c':'',
+                                                                        'Is_Part_Damaged__c':'',
+                                                                        'Is_Part_Packaged__c':'',
+                                                                        'Core_Invoice__c':'',
+                                                                        'Core_Group__c':'',
+                                                                        'Core_Program__c':'',
+                                                                        'RPA__c':'',
+                                                                        'Core_Part_Num__c':'',
+                                                                        'Type_of_Return__c':'',
+                                                                        'Ship_Date__c':'',
+                                                                        'Credit_Type__c':'',
+                                                                        'Return_Reason__c':'',
+                                                                        'Weight__c':'',
+                                                                        'Number_of_Pallets__c':'',
+                                                                        'Body_Number__c':'',
+                                                                        'Model_Year__c':'',
+                                                                        'TBB_Part_Inquiry__c':'',
+                                                                        'Part_Description__c':'',
+                                                                        'Type_of_Reason__c':'',
+                                                                        'Return_Status__c':'',
+                                                                        'Action__c':'',
+                                                                        'Order_Status__c':'',
+                                                                        'Part_Received_date__c':'',
+                                                                        'SAP_Order_Number__c':'',
+                                                                        'APC_Delivery__c':'',
+                                                                        'APC_Original_Delivery__c':'',
+                                                                        'APC_PO_Number__c':'',
+                                                                        'APC_Shipping_Condition__c':'',
+                                                                        'APC_DTNA_PO':'',
+                                                                        'APC_Tracking_Number__c':'',
+                                                                        'APC_Invoice_Number__c':'',
+                                                                        'APC_Line_Number__c':''
+                                                                        }"/>
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global"  description="To maintain submit button state"/>
+    <aura:attribute name="additionaldealercontactslist" type="list" description="To store additional contacts picklist value"  />
+    <aura:attribute name="additionaldealercontactsselected" type="String" description="To store selected additional contacts picklist value" />
+    <aura:attribute name="additionalRecipientList2" type="list" access="global" description="To store additional recipient values"/>
+    
+    <aura:attribute name="selectedDealerCode" type="string" access="global" description="To store selected Dealer code"/>
+    <aura:attribute name="dealerCode" type="string" access="global" description="To store dealer code"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object" access="global" description="To set the picklist values for dealer code field"/>   
+    <aura:attribute name="typeofreasonselected" type="string" access="global" description="To store type of reason selected"/>
+    <aura:attribute name="partinquiryselected" type="string" access="global" description="To store part inquiry value selected"/>
+    
+    <aura:attribute name="bodynumber" type="string" access="global" description="To store body number"/>
+    <aura:attribute name="dispVinModRsn" type="boolean" access="global" default="false" description="To display vinumber, model-year and reason fields "/>
+    <aura:attribute name="vinnumber" type="string" access="global" description="To store VIN number"/>
+    <aura:attribute name="modelyear" type="string" access="global" description="To store modelyear"/>
+    <aura:attribute name="partnumber" type="string" access="global" description="To store partnumber"/>
+    <aura:attribute name="partdescription" type="string" access="global" description="To store part description"/>
+    
+    <aura:attribute name="isinternalcasecreation" type="boolean" access="global" default="false" description="To identify internalcasecreation"/>
+    <!--<aura:attribute name="isreasonpartinquiry" type="boolean" access="global" default="true"/> -->
+    <aura:attribute name="isbodynumberfound" type="boolean" access="global" default="false" description="To identify if body number was found"/>
+    <aura:attribute name="typeofreasonChanged" type="boolean" access="global" default="false" description="To store value for type of reason changed "/>
+    <aura:attribute name="isIARC" type="boolean" access="global" default="false" description="To identify if IARC was needed in this version of form"/>
+    <aura:attribute name="IsSpinner" type="Boolean" description="To set boolean for spinner"/>
+    <aura:attribute name="ispartnumbersearchdisabled" type="boolean" access="global" default="true"  description="To maintain part number search button state"/>   
+    
+    <aura:attribute name="typeofreasonlist" type="List" default="[]" description="To display type of reason picklist values"/>
+    <aura:attribute name="modelyearlist" type="list" description="To display model year picklist values" />
+    <aura:attribute name="partinquiryreasonList" type="List" default="[]" description="To display part inquiry reason picklist values" />
+    
+    <aura:attribute name="files" type="ContentDocument[]"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]" />
+    
+    <aura:handler name="init" action="{!c.initHandler}" value="{!this}" access="global"/>
+    
+    <aura:if isTrue="{!v.IsSpinner}">
+        <lightning:spinner aura:id="spinner4" variant="brand"  class="spins" />
+    </aura:if>
+    
+    <lightning:layout multipleRows="true">            
+        <Aura:if isTrue="{!( !v.isinternalcasecreation )}"> 
+            <lightning:layoutItem size="6"> 
+                <lightning:select aura:id="selectDealerCode"  
+                                  label="Dealer Code" 
+                                  required="false"
+                                  name="selectDealerCode"                                              
+                                  messageWhenValueMissing ="Please select Dealer Code" 
+                                  onchange="{!c.setDealerCode}" 
+                                  value="{!v.selectedDealerCode}">
+                    <aura:iteration items="{!v.dealerCodePickListValues}" var="item">
+                        <option value="{!item}">{!item}</option>                                
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>            
+        </Aura:if>
+        
+        <Aura:if isTrue="{! or(and(v.selectedDealerCode != '--select--' , v.selectedDealerCode != ''), v.isinternalcasecreation )}">
+            <lightning:layoutitem size="6" class="slds-form-element_horizontal">
+                <span onkeypress="{!c.keyPressLogic}" >
+                    <lightning:input aura:id="bodynum"
+                                     value="{!v.caseobj.Body_Number__c}" 
+                                     label = "Body Number"
+                                     placeholder="Enter Body Number"
+                                     pattern= "[a-z0-9A-Z-]*"
+                                     minlength="5"  
+                                     maxlength="9"  
+                                     messageWhenValueMissing ="Body Number cannot be blank"
+                                     messageWhenPatternMismatch="Enter valid Body Number"
+                                     messageWhenTooShort="Enter valid Body Number"
+                                     required="true"
+                                     autocomplete="off"
+                                     onchange ="{!c.resetfield}"/>    
+                </span>
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            
+            <lightning:layoutitem size="6">
+                <div class="slds-form-element slds-form-element_horizontal" >                
+                    <lightning:input aura:id="vinnumber"
+                                     value="{!v.caseobj.VIN__c}" 
+                                     label="Vin Number"
+                                     placeholder="--optional--"
+                                     pattern="[a-zA-Z0-9]*"
+                                     maxlength="17"
+                                     autocomplete="off"
+                                     messageWhenPatternMismatch="No special characters allowed" /> <!--added pattern validation   -->       
+                </div>
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            <lightning:layoutitem size="6">
+                <div class="slds-form-element slds-form-element_horizontal" >                
+                    <lightning:select name="select" 
+                                      label="Model Year" 
+                                      value="{!v.caseobj.Model_Year__c}"
+                                      onchange="{!c.modelyearchange}">
+                        <option value="">--select--</option>
+                        <aura:iteration items="{!v.modelyearlist}" var="option">
+                            <option text="{!option}" value="{!option}" />
+                        </aura:iteration>
+                    </lightning:select>              
+                </div>            
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>
+            
+            
+            <lightning:layoutitem size="6" class="slds-form-element slds-form-element_horizontal">
+                <lightning:select aura:id="typeofreason" 
+                                  label="Type of Reason" 
+                                  required="true"
+                                  name="typeofreason" 
+                                  messageWhenValueMissing ="Type of Reason cannot be blank"
+                                  onchange="{!c.ontypeofreasonchange}" 
+                                  value="{!v.typeofreasonselected}">
+                    <option value="">--select--</option>
+                    <aura:iteration items="{!v.typeofreasonlist}" var="item" >                               
+                        <option value="{!item.value}">{!item.label}</option>
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutitem>
+            <lightning:layoutitem size="6"></lightning:layoutitem>       
+            <!--  </aura:if> -->
+            
+            <aura:if isTrue="{!v.typeofreasonChanged}">    
+                <aura:if isTrue="{!if(v.typeofreasonselected == 'Part Inquiry', true, false)}">
+                    <lightning:layoutitem size="6" class= "slds-p-top_x-small slds-form-element_horizontal">
+                        <lightning:radioGroup name="radioButtonGroupRequired"     
+                                              label="Reason for Inquiry"
+                                              options="{!v.partinquiryreasonList }"
+                                              value="{!v.partinquiryselected }"
+                                              type="button"
+                                              onchange="{!c.onpartinquirychange}"/>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                </aura:if>
+                
+                <aura:if isTrue="{!if(v.typeofreasonselected == 'Material Load', true, false)}">
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input value="{!v.caseobj.Part_No__c}"
+                                             label = "Part Number"
+                                             required="true"
+                                             maxlength="30"
+                                             messageWhenValueMissing ="Part Number cannot be blank"                                             
+                                             autocomplete="off"
+                                             onchange="{!c.onpartnumberchange}"/>          
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                    
+                    <lightning:layoutitem size="6">
+                        <div class="slds-form-element slds-form-element_horizontal" >                
+                            <lightning:input value="{!v.caseobj.Part_Description__c}" 
+                                             label = "Part Description" 
+                                             required="true" 
+                                             maxlength="50"
+                                             autocomplete="off"
+                                             messageWhenValueMissing ="Part Description cannot be blank"  
+                                             onchange="{!c.onpartdescriptionchange}"/>                
+                        </div>
+                    </lightning:layoutitem>
+                    <lightning:layoutitem size="6"></lightning:layoutitem>
+                </aura:if>
+            </aura:if>
+        </Aura:if>
+    </lightning:layout>
+    
+    <aura:if isTrue="{! v.isIARC}"> 
+        <c:APC_Forms2 recordId = "{!v.recId}" 
+                      isIARC="true"  
+                      dealerCode="{!v.selectedDealerCode}" 
+                      aura:id="partInParagonComp"
+                      issubmitactive="{!v.issubmitactive}" 
+                      caseobj="{!v.caseobj}"
+                      additionaldealercontactslist="{!v.additionaldealercontactslist}" 
+                      additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                      files="{!v.files}"
+                      additionalRecipientList2="{!v.additionalRecipientList2}"
+                      pillsoffiles="{!v.pillsoffiles}"/>                                            
+    </aura:if>
+</aura:component>

@@ -1,0 +1,19 @@
+<aura:documentation>
+	<aura:description>Documentation</aura:description>
+	<aura:example name="ExampleName" ref="exampleComponentName" label="Label">
+		Lightning DataTable that is able to display sObject based on a SOQL query.
+        Allows In-line Edit, infinite scrolling.
+        
+        Design Attributes:
+        SOQL
+        Current Limitations: 
+        
+        Column minimum and maximum widths are bugged. See bug report below.
+        https://success.salesforce.com/issues_view?id=a1p3A0000018C5BQAU
+        
+        Picklist In-line edit doesn't populate values.
+        
+        
+        Horizontal Scroll requires Pixel measurements for width to have a scrollbar displayed.
+	</aura:example>
+</aura:documentation>

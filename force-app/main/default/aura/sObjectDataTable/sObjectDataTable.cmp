@@ -1,0 +1,45 @@
+<aura:component controller='sObjectServerController' extensible="false" implements="flexipage:availableForRecordHome,force:hasRecordId,force:appHostable,force:lightningQuickAction">
+    <!--Design Attributes-->
+    <aura:attribute name="sObjectQuery" type="String" default="SELECT ID FROM ACCOUNT"/>
+    <aura:attribute name="currencyDisplay" type="String" default="USD"/>
+    <aura:attribute name="initialLoad" type="Integer" default="50"/>
+    <aura:attribute name="loadMoreOffset" type="Integer" default="20"/>
+    
+    <!--Component-Only Attributes-->
+    <aura:attribute name="requestName" type="String" default="sObjectListView"/>
+    <aura:attribute name="sObjectType" type="String"/>
+    
+    <!--Server Attributes-->
+    <aura:attribute name="fieldMetadata" type="Object"/>
+    
+    <!--DataTable Attributes-->
+    <aura:attribute name="initialData" type="List"/>
+    <aura:attribute name="remainingData" type="List"/>
+    <aura:attribute name="currentData" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="errors" type="Object" default="[]"/>
+    <aura:attribute name="draftValues" type="Object" default="[]"/>
+    <aura:attribute name="selectedRowIds" type="List" default="[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:handler name="change" value="{!v.columns}" action="{!c.onColumnsComplete}"/>
+    <aura:handler name="change" value="{!v.fieldMetadata}" action="{!c.onFieldsComplete}"/>  
+    <aura:handler name="change" value="{!v.initialData}" action="{!c.buildData}"/>
+    <c:sObjectServerControllerUtilityMethods aura:id="callApexMethod"/>
+    <lightning:card>
+        <div style="height: 300px; width: inherit;">
+            <lightning:datatable
+                                 columns="{!v.columns}"
+                                 data="{!v.currentData}"
+                                 keyField="id"
+                                 errors="{!v.errors}"
+                                 onrowselection="{!c.updateSelectedText}"
+                                 enableInfiniteLoading="true"
+                                 loadMoreOffset="{!v.loadMoreOffset}"
+                                 draftValues="{!v.draftValues}"
+                                 onloadmore="{!c.loadMoreData}"
+                                 onsave="{!c.handleSaveEdition}"
+                                 />
+        </div>
+    </lightning:card>
+</aura:component>

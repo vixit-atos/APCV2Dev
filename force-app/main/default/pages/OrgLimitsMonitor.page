@@ -1,0 +1,53 @@
+<!-- Created by Anto 6/21/2018-->
+
+<apex:page docType="html-5.0" sidebar="false">
+  <apex:stylesheet value="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"/>
+
+  <script>
+    jQuery(document).ready(function($) {
+      $.ajax('/services/data/v38.0/limits',
+        {
+          beforeSend: function(xhr) {
+            // Set the OAuth header from the session ID
+            xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+          },
+          success: function(json) {
+            var tbody = $('#tableData');
+            for(key in json) {
+              // alert(key + ":" + json[key].Remaining + ":" + json[key].Max);
+              var usage = json[key].Max-json[key].Remaining;
+              var ratio = (json[key].Max-json[key].Remaining)/json[key].Max*100;
+              if (ratio < 80) {
+                var color = "progress-bar-success";
+              } else if (ratio < 90) {
+                var color = "progress-bar-warning";
+              } else {
+                var color = "progress-bar-danger";
+              }
+              var td = $('<tr>')
+              .append('<td>' + key + '</td>')
+              .append('<td class="text-right">' + usage + '</td>')
+              .append('<td class="text-right">' + json[key].Max + '</td>')
+              .append('<td><div class="progress"><div class="progress-bar ' + color + '" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + ratio + '" style="width:' + ratio + '%"></div></div></td></tr>')
+              tbody.append(td);
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            // Oops - what went wrong?
+            alert(jqXHR.status + ': ' + errorThrown);
+          }
+        }
+      );
+    });
+  </script>
+
+  <h1>Org Limits</h1>
+  <table class="table table-condensed">
+    <thead>
+      <tr><th class="col-sm-6"></th><th class="text-right col-sm-2">Usage</th><th class="text-right col-sm-2">Max</th><th class="text-center col-sm-2">Percentage</th></tr>
+    </thead>
+    <tbody id="tableData">
+    </tbody>
+  </table>
+</apex:page>

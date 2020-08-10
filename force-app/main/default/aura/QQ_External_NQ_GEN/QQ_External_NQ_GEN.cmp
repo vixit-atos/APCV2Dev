@@ -1,0 +1,131 @@
+<aura:component controller="QQ_ListController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.selectedLookUpRecord}" action="{!c.UpdateCustomer}"/>
+    <aura:registerEvent name="oSelectedRecordEvent" type="c:QQ_selectedsObjectRecordEvent"/>
+    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quoteitemlist" type="ASP_QQ_Line_Item__c[]"/>
+    
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    <c:QQ_Insert_Customer_Service aura:id="InsertCustomerSrvc" />
+        
+    <aura:attribute name="detroitsection" type="String" default="detroit" />
+    <aura:attribute name="trucksection" type="String" default="truck" />
+    <aura:attribute name="fcccsection" type="String" default="fccc" />
+    <aura:attribute name="fccctbbsection" type="String" default="fccctbb" />
+    
+    <aura:attribute name="A85_codeOptions" type="List"/>
+    <aura:attribute name="CoverageOptions" type="List"/>
+    
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="quotecustomer" type="String" default=""/>
+    <aura:attribute name="accountkeyword" type="string"/>
+    <aura:attribute name="A85value" type="String" default=""/>
+    
+    <aura:attribute name="showDetroit" type="boolean" default=""/> 
+    <aura:attribute name="showTruck" type="boolean" default=""/>
+    <aura:attribute name="showFCCC" type="boolean" default=""/>
+    <aura:attribute name="showFCCCTBB" type="boolean" default=""/>
+    
+    <c:LightningPicklistComponent sObjectName="ASP_QQ_Line_Item__c" 
+                                  fieldName="A85_Code__c" 
+                                  picklistValues="{!v.A85_codeOptions}" />
+    
+    
+    <div class="slds-box slds-theme_shade">
+        <div class="sectionheading">General Information</div>
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="6"
+                                  smallDeviceSize="12" mediumDeviceSize="12"
+                                  largeDeviceSize="5" padding="around-small">
+                <div>
+                    <c:QQ_customLookup 
+                                       objectAPIName="account" 
+                                       IconName="standard:account" 
+                                       selectedRecord="{!v.selectedLookUpRecord}" 
+                                       label="Customer"
+                                       SearchKeyWord = "{!v.accountkeyword}"/>
+                </div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="12"
+                                  smallDeviceSize="12" 
+                                  mediumDeviceSize="12" 
+                                  largeDeviceSize="2" padding="">    
+                
+                <br></br><br></br>
+                <lightning:button
+                                  iconName="utility:add" 
+                                  variant="brand"
+                                  label="New"
+                                  disabled="{!v.quote.Customer_Name__c}"
+                                  onclick="{!c.addcustomer}"
+                                  name="ADD CUSTOMER"/>
+                
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="4" smallDeviceSize="12" mediumDeviceSize="12" largeDeviceSize="5" padding="around-small">
+                <lightning:combobox name="A85 CODE" 
+                                    label="A85 Code" 
+                                    value="{!v.quote.A85_Code__c}" 
+                                    placeholder="None" 
+                                    options="{! v.A85_codeOptions }" 
+                                    onchange="{!c.handleChange}"/>
+                
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+    <aura:if isTrue="{!and(v.quote.A85_Code__c,v.quotecustomer)}">
+        <lightning:layout>
+            <lightning:layoutItem padding="around-small">
+                <span class="slds-p-top_medium slds-text-title_bold">Select Coverage Type for: </span>{!v.quote.A85_Code__c}
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <lightning:layout>            
+            <aura:iteration items="{! v.CoverageOptions }"  var="item">
+                <aura:if isTrue = "{!item.label == 'DETROIT COVERAGE'}">
+                    <lightning:layoutItem size="3" padding="around-small">
+                        <lightning:button label="{!item.label}" 
+                                          iconName="{!v.showDetroit ? 'utility:ban' : 'utility:add'}" 
+                                          variant="{!v.showDetroit ? 'neutral' : 'brand'}" 
+                                          iconPosition="left"
+                                          onclick="{!v.showDetroit ? c.removeCoverage : c.handleChange }" />            
+                    </lightning:layoutItem>
+                </aura:if>
+                <aura:if isTrue = "{!item.label == 'TRUCK CHASSIS'}">
+                    <lightning:layoutItem size="2" padding="around-small" class="left-align">
+                        <lightning:button label="{!item.label}" 
+                                          iconName="{!v.showTruck ? 'utility:ban' : 'utility:add'}" 
+                                          variant="{!v.showTruck ? 'neutral' : 'brand'}" 
+                                          iconPosition="left"
+                                          onclick="{! v.showTruck ? c.removeCoverage : c.handleChange  }" />            
+                    </lightning:layoutItem>
+                </aura:if>                                
+            </aura:iteration>
+        </lightning:layout>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.showDetroit}">        
+        <lightning:accordion  aura:id="accordiond" allowMultipleSectionsOpen="true" activeSectionName="{!v.detroitsection}">
+            <div class="slds-card">
+                <lightning:accordionSection class="slds-card" name="detroit" label="Detroit Coverage">
+                    <c:QQ_External_Detroit_CVG quote="{!v.quote}" 
+                                               quoteitemlist="{!v.quoteitemlist}"/>
+                </lightning:accordionSection>
+            </div>   
+        </lightning:accordion>
+    </aura:if>
+    
+    
+    <aura:if isTrue="{!v.showTruck}">
+        <lightning:accordion aura:id="accordiont" allowMultipleSectionsOpen="true" activeSectionName="{!v.trucksection}">
+            <lightning:accordionSection name="truck" label="Truck Chassis Coverage">
+                <c:QQ_External_Truck_CVG quote="{!v.quote}" 
+                                         quoteitemlist="{!v.quoteitemlist}"/>
+            </lightning:accordionSection>
+        </lightning:accordion> 
+        
+    </aura:if>
+</aura:component>

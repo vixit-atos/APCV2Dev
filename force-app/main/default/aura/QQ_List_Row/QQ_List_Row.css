@@ -1,0 +1,13 @@
+.THIS {
+}
+
+.THIS .QQtext {
+    color:black;
+    font-style:Arial;
+    font-size:30px !important;
+}
+
+.THIS .myCheckbox{
+  display: inline-block;
+  float: left;
+}

@@ -1,0 +1,27 @@
+.THIS {
+}
+.THIS .labelbold{
+    font-weight:bold;
+}
+.THIS .customButton{
+   background-color: #514f4d;
+   color: #fff; 
+}
+.THIS .textcolor{
+    color:rgb(37, 99, 169);
+    font-size:1.875rem;
+    font-weight:bold;
+}
+.THIS .slds-form-element__label{
+    font-size:.9rem;
+    font-weight:bold;
+}
+
+.THIS .slds-form-element__control{
+    font-size:.8rem;
+}
+
+.THIS .sectionheading {
+    font-size:1rem;
+    font-weight:bold;
+}

@@ -1,0 +1,61 @@
+<aura:component access="global">
+    <aura:attribute name="record" type="ASP_QQ__c" />
+    <aura:attribute name="fieldname" type="List" />
+    <aura:attribute name="recorddata" type="List" />
+    <aura:attribute name="globalid"  type="String"/>
+    <aura:attribute name="InternalQQ" type="String" />
+    <aura:attribute name="check" type="boolean" default="false" />
+    <aura:attribute name="domain" type="String" default="Extended Warranty"/>
+    <aura:attribute name="source" type="String" default="Internal"/>
+    
+    <aura:attribute name="showpreview" type="boolean" default="false" />
+    
+    <aura:attribute name="openpopup" type="boolean" default="false" />
+    
+    <aura:registerEvent name="qq_rowcheckevent" type="c:QQ_rowcheckevent"/>
+    
+    
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+   
+    
+    <aura:iteration items="{!v.recorddata}" var="item">
+        <td data-label="{!item.label}" class="QQtext" id="{!concat(v.globalid , item.label)}">
+            <aura:if isTrue="{!item.label=='Quote #'}">
+                <a href="javascript:void(0)" onclick="{!c.quotenumclicked}" name="{!item.value}">
+                    <div class="slds-float_left" style="color:#005fb2"> {!item.value} </div>
+                </a>
+                <aura:set attribute="else">
+                    <div class="slds-float_left"> {!item.value} </div>
+                </aura:set>
+            </aura:if>
+        </td>
+        
+    </aura:iteration>
+      
+    <aura:if isTrue="{!v.openpopup }">
+        <aura:if isTrue="{!and(v.showpreview , v.source=='Internal')}">
+            <c:QQ_Internal_ApprovalPopup quoteid="{!v.record.Id}" 
+                                         quotestatus="{!v.record.Status}"
+                                         quotenum = "{!v.record.Name}"
+                                         openpopup = "{!v.openpopup}"/>
+        </aura:if>
+        <aura:if isTrue="{!and(and(v.showpreview , v.source=='External') , v.domain=='Extended Warranty')}">
+            <c:QQ_External_EW_NewQuotePopup 
+                                            qq_previewmode="true" 
+                                            quoteid="{!v.record.Id}" 
+                                            qq_submitted="True"
+                                            openpopup = "{!v.openpopup}"/>
+        </aura:if>
+        <aura:if isTrue="{!and(and(v.showpreview , v.source=='External') , v.domain=='Preventive Maintenance')}">
+            <c:QQ_External_PM_NewQuotePopup 
+                                            qq_previewmode="true" 
+                                            quoteid="{!v.record.Id}" 
+                                            qq_submitted="True"
+                                            openpopup = "{!v.openpopup}"/>
+        </aura:if>
+    </aura:if>
+    
+</aura:component>

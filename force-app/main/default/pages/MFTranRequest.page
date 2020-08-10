@@ -1,0 +1,22 @@
+<apex:page controller="MFTranRequest">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Congratulations</h1>
+  This is your new Page: MFTranRequest
+  <apex:form >
+      <apex:pageBlock >
+          <apex:pageBlockSection columns="1" >
+              <apex:inputText title="Tran Name" value="{!MFTranName}" />
+              <apex:inputText size="60" title="Request" value="{!MFReqTranString}" />
+              <apex:commandButton value="Submit" action="{!MFTranSubmit}"/>
+              <apex:outputText >{!MFResponseTranString}</apex:outputText>
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Log" columns="1">
+              <Apex:repeat value="{!MFListTranString}" var="Log">
+                  <Apex:outputText >{!Log}</Apex:outputText>
+              </Apex:repeat>
+              
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+  </apex:form>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

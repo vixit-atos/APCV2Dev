@@ -1,0 +1,25 @@
+<apex:component controller="TWS_AgendaFinalised_TCMeeting_DealList" access="global">
+  <apex:attribute name="TC_Meeting_Id" type="Id" description="Id of the TCMeeting" assignTo="{!TCMeetingId}"/>
+  <apex:dataTable value="{!TheWeeksTCMDeals}" var="x">
+   <apex:column >
+   <div style="font-size: 12;font-family: verdana;">
+    <apex:facet name="header"></apex:facet>
+    <br>_______________________________________________________________________</br><br/>
+    <b>Deal Name: </b>
+    <br> 
+    <apex:outputLink value="{!$Setup.EventInviteURLPrefix__c.Value__c}06A?rlid=RelatedFileList&id={!x.TWS_TC_Deal__r.Id}" id="dealLink">
+        <apex:outputField value="{!x.TWS_TC_Deal__r.Name}" />
+    </apex:outputLink>
+    </br><br></br>
+    <b>Stage: </b>
+    <br><apex:outputField value="{!x.TWS_TC_Deal__r.StageName}" /></br><br></br>
+  <!--  <div style="display: {!If((x.TWS_TC_Deal__r.RecordType.DeveloperName=='National' || x.TWS_TC_Deal__r.RecordType.DeveloperName=='TWS_TC_Canadian_Deal' || x.TWS_TC_Deal__r.RecordType.DeveloperName=='TWS_TC_Deal'),'block','none')};">
+        <b>Deal worksheet: </b>
+        <br><a href="{!x.TCM_Link_to_Related_Oppty__c}">{!x.TWS_TC_Deal_Name__c}</a></br><br></br>
+    </div> -->
+    <b>Description:</b>
+    <apex:outputField value="{!x.TWS_TC_Deal__r.Description__c}" />
+    </div>
+   </apex:column>
+ </apex:dataTable> 
+</apex:component>

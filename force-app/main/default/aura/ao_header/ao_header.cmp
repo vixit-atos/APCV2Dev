@@ -1,0 +1,6 @@
+<aura:component implements="flexipage:availableForRecordHome">
+    <aura:attribute name='displayText' type='String' default='AgileOps'/>
+    <div style="background: rgb(255, 255, 255); border-radius: .25rem; border: 1px solid rgb(221, 219, 218); padding: .5rem; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10)">
+        <h1 class="slds-text-heading_medium" style="color: rgb(196, 105, 0); font-weight: bold;">{!v.displayText}</h1>
+    </div>
+</aura:component>

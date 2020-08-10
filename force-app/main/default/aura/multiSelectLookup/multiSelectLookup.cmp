@@ -1,0 +1,109 @@
+<aura:component controller="multiSelectLookupCtrl">
+    
+    <!-- Required -->
+    <aura:attribute name="objectAPIName" type="string" default="" description="Sobject type. i.e. Account"/>
+    <!-- Not technically required, but what's the point without output? -->
+    <aura:attribute name="selectedRecords" type="List" default="[]" description="List of the selected values"/>
+    <!-- Generally wanted -->
+    <aura:attribute name="label" type="string" default="The title displayed above the search bar"/>
+    <aura:attribute name="iconName" type="string" default="" description="The icons displayed with the results. i.e. standard:account or custom:custom98"/>
+    <!-- Search through something other than sobjects -->
+    <aura:attribute name="fieldName" type="string" default="" description="Make this the name of a picklist on objectAPIName"/>
+    <aura:attribute name="customList" type="List" default="[]" description="Set objectAPIName to 'Custom List' and pass in a list of strings or objects that have a Name attribute to search from"/>
+    <!-- For single value picklists -->
+    <aura:attribute name="singleValueOnly" type="Boolean" default="false" description="Prevents multiple options from being selected. Use this if you use fieldName with a single value picklist"/>
+    <!-- To prevent editing -->
+    <aura:attribute name="readOnly" type="Boolean" default="false" description="Prevents you from editing the values"/>
+    <!-- To alter the query Apex uses for sobjects -->
+    <aura:attribute name="queryFields" type="string" default="" description="If you want more than just Id and Name, enter fields separated by commas"/>
+    <aura:attribute name="queryWhere" type="string" default="" description="If you want to limit results, add extra conditions"/>
+    <aura:attribute name="queryOrder" type="string" default="CreatedDate DESC" description="Cannot be blank"/>
+    <aura:attribute name="queryLimit" type="string" default="5" description="enter a number or an empty string for no limit"/>
+    <!-- Exclude some values in addition to selectedRecords from showing up in results -->
+    <aura:attribute name="excluded" type="List" default="[]" description="List of strings or objects with a Name you want excluded"/>
+    <!-- Allows you to create a new sobject and immediately add it to selectedRecords -->
+    <aura:attribute name="createNew" type="Boolean" default="false" description="Adds a New button that allows you to create an sobject with the name entered in the search field"/>
+    <aura:attribute name="createFields" type="Object" description="Can be either object or stringified object. Only used if createNew is true"/>
+    <!-- For internal use -->
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordsEvent" action="{!c.handleComponentEvent}"/>
+    <aura:attribute name="searchResults" type="List" description="Stores the list of records returned from the Apex class"/>
+    <aura:attribute name="message" type="String" default=""/>
+    <aura:attribute name="userInput" type="string" description="The value the user enters into the search box"/>
+    <aura:attribute name="spinner" type="boolean" default="false" description="Spinner is active when this is true"/>
+    <aura:handler name="change" value="{!v.selectedRecords}" action="{!c.toggle}"/>
+
+    <aura:if isTrue="{!not(v.readOnly)}">
+        <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close">
+            <label class="slds-form-element__label">{!v.label}</label>
+            <!--Display search bar for lookup-->  
+            <div class="slds-form-element__control">
+                <!-- Don't show if singleValueOnly is true and an item has been selected -->
+                <aura:if isTrue="{!or(not(v.singleValueOnly), empty(v.selectedRecords))}">
+                    <div class="slds-input-has-icon slds-input-has-icon--right">
+                        <ui:inputText click="{!c.onfocus}"
+                                    updateOn="keyup"
+                                    keyup="{!c.keyPressController}"
+                                    class="slds-lookup__search-input slds-input inputSize"
+                                    value="{!v.userInput}"
+                                    placeholder="search..."/>
+                    
+                        <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                            <lightning:icon iconName="utility:search" size="x-small" alternativeText="icon"/>
+                        </span>
+                    </div>
+                </aura:if>
+
+                <!--Selected Records Pills Section-->
+                <div aura:id="lookup-pill" class="slds-hide slds-pill-container">
+                    <lightning:card title="">
+                        <aura:iteration items="{!v.selectedRecords}" var="sr">
+                            <lightning:pill class="" label="{!sr.Name}" name="{!sr.Name}" onremove="{! c.removeSelected }">
+                                <aura:set attribute="media">
+                                    <lightning:icon iconName="{!v.iconName}" size="x-small" alternativeText="icon"/>
+                                </aura:set>
+                            </lightning:pill>
+                        </aura:iteration>
+                    </lightning:card>
+                </div>
+            </div>
+            
+            <!-- Don't show if singleValueOnly is true and an item has been selected -->
+            <aura:if isTrue="{!or(not(v.singleValueOnly), empty(v.selectedRecords))}">
+            <!--Lookup result List-->  
+                <ul style="min-height:40px;margin-top:0px !important" class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds" role="listbox">
+                    <aura:if isTrue="{!v.spinner}">
+                        <lightning:spinner variant="brand" size="small" alternativeText="loading"/>
+                    </aura:if>
+                    <aura:if isTrue="{!and(v.createNew,not(empty(v.userInput)))}">
+                        <lightning:button 
+                            label="Add" 
+                            variant="neutral"
+                            class="slds-size_1-of-1"
+                            onclick="{!c.createNew}"/>
+                    </aura:if>
+                    <center> {!v.message}</center>
+                    <aura:iteration items="{!v.searchResults}" var="singleRec">
+                        <c:multiSelectLookupResult oRecord="{!singleRec}" iconName="{!v.iconName}"/> <!--Child Component--> 
+                    </aura:iteration>
+                </ul>
+            </aura:if>
+        </div>
+
+        <aura:set attribute="else">
+            <!-- Show readOnly area -->
+            <!-- Couldn't get close button to hide dynamically so manually creating the elements that make up pills -->
+            <label class="slds-form-element__label">{!v.label}</label><br/>
+            <aura:iteration items="{!v.selectedRecords}" var="sr">
+                    <span class="slds-pill slds-pill_link">
+                        <span class="slds-pill__icon_container">
+                            <lightning:icon iconName="{!v.iconName}" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                        </span>
+                        <span class="slds-pill__action">
+                            <span class="slds-pill__label">{!sr.Name}</span>
+                        </span>
+                    </span>
+            </aura:iteration>
+            <br/><br/>
+        </aura:set>
+    </aura:if>
+</aura:component>

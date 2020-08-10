@@ -1,0 +1,5 @@
+<aura:component controller="QQ_Query_dates">
+	<aura:method name="getdates">
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

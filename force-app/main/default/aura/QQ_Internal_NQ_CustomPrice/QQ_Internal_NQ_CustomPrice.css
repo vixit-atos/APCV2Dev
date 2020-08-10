@@ -1,0 +1,27 @@
+.THIS {
+}
+.THIS .labelbold {
+    font-weight:bold;
+}
+.THIS .custom-price__merge-graphic {
+    width: 100%;
+    height: auto;
+    max-height: 15.12px;
+    max-height: 1.08rem;
+    stroke: #000;
+    stroke-width: 2;
+}
+.THIS .custom-price__pillar-total {
+    text-align: center;
+    font-size: 16.8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15.12px;
+    margin-bottom: 1.08rem;
+}
+
+.THIS .td1
+{
+    border-left: none;
+    border-right: none;
+}

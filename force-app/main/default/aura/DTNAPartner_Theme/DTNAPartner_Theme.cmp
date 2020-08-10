@@ -1,0 +1,36 @@
+<aura:component implements="forceCommunity:themeLayout" access="global">
+    <aura:attribute name="Footer" type="Aura.Component[]"/>
+    <aura:attribute name="search" type="Aura.Component[]" required="false"/>
+    <aura:attribute name="profileMenu" type="Aura.Component[]"/>
+    <aura:attribute name="isMobile" type="Boolean"/>
+    <header>
+        <section id="notMobile">
+            <article class="slds-grid slds-gutters slds-align_absolute-center header">
+                <figure class="sdls-col slds-size_2-of-12 imageBackground">
+                    <a onclick="{!c.handleClick}">
+                        <img src="{!$Resource.DTNAPartnerLogo}" class="slds-p-around_medium" onclick="{!handleClick}"/>
+                    </a>
+                </figure>
+                <article class="sdls-col slds-size_6-of-12 searchBar" >
+                    <span>{!v.search}</span>
+                </article>
+                <article class="sdls-col slds-size_1-of-12" id="notifications">
+                    <div class="slds-align_absolute-center">
+                        <forceCommunity:notifications/>
+                    </div>
+                </article>
+                <article class="sdls-col slds-size_3-of-12 menuBackground" id="profileMenu" >
+                    <span class="profileMenu">{!v.profileMenu}</span>
+                </article>
+            </article>
+        </section>
+	</header>
+	<body class='content'>
+        {!v.body}
+    </body>
+    <footer class='copyrightInfo'>
+        <p class='copyrightText'>Copyright © Daimler Trucks North America LLC. <a href="https://daimler-trucksnorthamerica.com/privacy-policy">Privacy Statement, Legal Notices and Terms</a>.<br/>
+            All rights reserved. Daimler Trucks North America LLC is a <a href="http://www.daimler.com/">Daimler</a> company.
+        </p>
+    </footer>
+</aura:component>

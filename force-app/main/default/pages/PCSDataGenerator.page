@@ -1,0 +1,21 @@
+<apex:page lightningStylesheets="true" docType="html-5.0" controller="PCSController">
+    <apex:slds />
+    <apex:pagemessages />
+    <apex:form >
+        <apex:pageBlock title="Data Generator">
+            <apex:pageBlockSection >
+            	<apex:outputLabel value="Number of Account Contact Relationships: "></apex:outputLabel>
+                <apex:input html-min="0" id="accountContact" type="number" value="{!accountContactCount}"/>
+                <apex:outputLabel value="Number of Account Concession Relationships: "></apex:outputLabel>
+                <apex:input html-min="0" id="accountConcession" type="number" value="{!accountConcessionCount}"/>
+                <apex:outputLabel value="Number of Bare Opportunities: "></apex:outputLabel>
+                <apex:input html-min="0" id="bareOpportunities" type="number" value="{!bareOpportunityCount}"/>
+                <apex:outputLabel value="Number of Full Opportunities: "></apex:outputLabel>
+                <apex:input html-min="0" id="fullOpportunities" type="number" value="{!fullOpportunityCount}"/>
+                <apex:commandButton onclick="return confirm('Warning! This will create Dummy data within your server! Are you sure you want to do this?');" action="{!generate}" value="Generate Dummy Data" id="generate" /><br/>
+                <apex:outputLabel value="{!currentProgress}" id="currentProgress"/>
+                <apex:actionPoller action="{!getProgress}" reRender="currentProgress" interval="5"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

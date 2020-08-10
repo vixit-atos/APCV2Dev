@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Event template" >
+    <aura:attribute name="recordid" type="String"/>
+    <aura:attribute name="checkvalue" type="Boolean"/>
+</aura:event>

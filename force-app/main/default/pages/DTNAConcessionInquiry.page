@@ -1,0 +1,96 @@
+<apex:page docType="html-5.0" standardcontroller="Concession__c" extensions="DTNA_INQ_Inquiry_List" action="{!RCUInquiryRequest}" tabStyle="Concession__c" recordSetVar="risks">
+<style>
+
+.MBT-readmore{ 
+background:#6aafa2; 
+text-align:right; 
+cursor:pointer; 
+color:#Fff; 
+margin:5px 0; 
+float:right; 
+border:2px solid #ddd; 
+padding:5px; 
+-moz-border-radius:6px; 
+-webkit-border-radius:6px; 
+font:bold 11px sans-serif; 
+} 
+.MBT-readmore:hover{ 
+background:#FFf; 
+font:bold 11px sans-serif; 
+color:#6aafa2; 
+border:3px dotted #ddd; 
+} 
+.MBT-readmore a { 
+color:#fff; 
+text-decoration:none; 
+}
+.MBT-readmore a:hover { 
+color:#fff; 
+text-decoration:none; 
+}
+
+</style>
+    <apex:form >
+        <apex:sectionHeader title="Concessions"/>
+        <apex:actionStatus startText="(Processing...)"  id="counterStatus"/>
+        
+           <apex:pageBlock title="Concessions" >
+           <apex:pageMessages id="pMessage" ></apex:pageMessages> 
+                <apex:pageBlockButtons >
+                    <apex:commandButton action="{!LoadLiveConcessionData}" value="Reload" rendered="False"/>
+                    <apex:commandButton action="{!RCUInquiryQueryRequest}" value="Query"/>
+                    <apex:commandButton id="update" action="{!quicksave}" value="Update"  styleclass="updateButton" rendered="False"/>
+                </apex:pageBlockButtons>
+                <apex:actionFunction name="showMore" action="{!LoadLiveConcessionData}"  reRender="MFPageBlockSec,pMessage,pMessage2,rcudebug,MFdebug" status="MFStatus"/>
+                <apex:PageBlockSection columns="{!If($User.UITheme=='Theme4t',1,2)}"  collapsible="true" >
+                    <apex:inputText value="{!obj_Conc.Name}"  onchange="CalcOnChangedConc()" />
+                    <apex:inputText value="{!obj_Conc.LEAD_CONC_NO__c}" />
+                    <apex:inputText value="{!obj_Conc.SLS_RGN_CD__c}" />
+                    <apex:inputText value="{!obj_Conc.SLS_DIST_CD__c}" />
+                    <apex:inputText value="{!obj_Conc.Dealer_Code__c}" />
+                    <apex:inputText value="{!obj_Conc.CUST_NAME_50__c}" />
+                    <apex:selectList value="{!obj_Conc.CONC_STATUS_CD__c}" required="true" size="1">
+                        <apex:selectOptions value="{!ConcStatus}"/>
+                    </apex:selectList>
+                    <apex:inputText value="{!obj_Conc.DATE_APPR__c}" />
+                    <apex:input type="date" value="{!ConcCreatedDateFrom}" label="Date Created From"/>
+                    <apex:input type="date" value="{!ConcCreatedDateTo}" label="To"/>
+                    <apex:inputText value="{!obj_Conc.VEH_BASE_MDL_NO__c}" />
+                    <apex:inputText value="{!obj_Conc.CONCMCDB_ENGINE__c}" />
+                    
+                </apex:PageBlockSection> 
+                
+               <apex:PageBlockSection columns="1" collapsible="true" title="Mainframe INQ Screen" id="MFPageBlockSec" rendered="{!If(strTranFlag=='NO',false,true)}">
+                <apex:pageBlockTable value="{!lst_INQ_Conc}" var="varConc">
+                    <apex:column title="Concession Number" headerValue="Concession Number">
+                        <apex:outputLink value="DTNAConcessionLive?Id={!varConc.Id}" target="_blank">{!varConc.Name}</apex:outputLink>
+                    </apex:column>
+                    <apex:column value="{!varConc.LEAD_CONC_NO__c}"/>
+                    <apex:column value="{!varConc.CUST_NAME_50__c}"/>
+                    <apex:column value="{!varConc.Dealer_Code__c}"/>
+                    <apex:column value="{!varConc.CITY__c}"/>
+                    <apex:column value="{!varConc.RQST_MIN_UNITS__c}"/>
+                    <apex:column value="{!varConc.DLR_NET_PRC__c}"/>
+                    <apex:column value="{!varConc.VEH_BASE_MDL_NO__c}"/>
+                    <apex:column value="{!varConc.CONC_STATUS_CD__c}"/>
+                    <apex:column value="{!varConc.APPR_CONC_PCT__c}"/>
+                </apex:pageBlockTable>
+                <input type='button' id="MFMOREButton" class='MBT-readmore' value ='More Data' onclick="this.style.display = 'none';showMore()" style="display: {! If(strTranFlag=='MORE' ,'block','none') };"/>
+                <apex:actionStatus id="MFStatus" rendered="{!If(strTranFlag=='NO',false,true)}">
+                    <apex:facet name="start">
+                        <img class='MBT-readmore' style="background:none;" src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif" />
+                    </apex:facet>
+                </apex:actionStatus>
+                </apex:PageBlockSection> 
+                <apex:pageMessages id="pMessage2"></apex:pageMessages> 
+                
+           <div style="display:{!If(profileName=='System Administrator','block','none')};">     
+             <apex:PageBlockSection columns="1" collapsible="true" title="INQDeBug" id="INQDeBug" >          
+                <apex:repeat value="{!lst_log }" var="string" id="theRepeat">
+                    <apex:outputText value="{!string}" id="theValue"/><br/>
+                </apex:repeat>                                                                                     
+            </apex:PageBlockSection> 
+           </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

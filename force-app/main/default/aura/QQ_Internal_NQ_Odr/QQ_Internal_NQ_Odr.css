@@ -1,0 +1,15 @@
+.THIS {
+}
+
+.THIS .labelbold {
+    font-weight:bold;
+}
+.THIS .labelDate {
+    font-weight:bold;
+    border: 0px;
+    border-top-style: 0px;
+    border-right-style: 0px;
+    border-bottom-style: 0px;
+    border-left-style: 0px;
+    position: relative;
+}

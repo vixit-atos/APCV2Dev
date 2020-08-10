@@ -1,0 +1,61 @@
+<apex:page controller="ChangeRecOwnerController"> 
+<style>
+.objectClass {
+   background-color: white;
+}
+.fieldClass {
+    background-color: white;
+}
+.userClass {
+    background-color: white;
+}
+</style>    
+    <apex:form >
+        <apex:pageBlock title="Change Record Owner" > 
+            <apex:pageBlockSection >          
+                <apex:selectList required="true" multiselect="false" size="1" label="Change Option"  value="{!selectedChangeOption}">
+                   <apex:selectOptions value="{!changeOwnerOption}"></apex:selectOptions>
+                </apex:selectList> 
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" >
+                <apex:selectCheckboxes label="Object To Change" value="{!selectedObjects}" layout="pageDirection" id="objectlist" >
+                    <apex:selectOptions value="{!ObjectList}"/>
+                    <apex:actionSupport event="onchange" action="{!updateOptionListForSpecialCase}" reRender="objectlist"/>
+                </apex:selectCheckboxes>
+           </apex:pageBlockSection>
+           <div align="center">
+                <apex:commandButton value="Change" onclick="return confirm('Do you want to proceed?');" action="{!changeRecOwner}" status="status"/>
+                <apex:commandButton value="Clear"  action="{!init}" status="status" /> 
+           </div>
+            <apex:pageBlockSection columns="2" title="Details">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="User with Standard and Partner license"/>
+                    <apex:outputPanel layout="block" style="overflow:auto;width:40%;height:300px; border:1px solid grey" styleClass="userClass">
+                        <apex:repeat value="{!userMapDisplay}" var="user">
+                            <apex:outputText value="{!user.name}"/><br/>
+                        </apex:repeat>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Involved Object and Field"/>
+                    <apex:dataTable value="{!ObjectsAndFieldsForDisplay}" var="fieldKey" rowClasses="odd,even" border="1px" >         
+                    <apex:column width="40%" styleClass="objectClass" >
+                        <apex:facet name="header">Object Name</apex:facet>
+                        <apex:outputText value="{!fieldKey}"/>
+                    </apex:column>    
+                    <apex:column styleClass="fieldClass">
+                        <apex:facet name="header">Field Name</apex:facet>
+                        <apex:variable var="idx" value="{!0}"/>
+                        <apex:repeat value="{!ObjectsAndFieldsForDisplay[fieldKey]}" var="field">
+                            <apex:outputText rendered="{!NOT(idx == 0)}" value=", "/>
+                            <apex:outputText escape="false" value="{!field}"/>
+                            <apex:variable var="idx" value="{!idx + 1}" />
+                        </apex:repeat>            
+                    </apex:column>
+                    </apex:dataTable>
+                </apex:pageBlockSectionItem>
+                 <apex:outputText escape="false" value="*Note: <b>Task can be only selected with itself due to SOQL limit.</b>"/>
+           </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

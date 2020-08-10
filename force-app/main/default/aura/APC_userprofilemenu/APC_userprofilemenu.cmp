@@ -1,0 +1,21 @@
+<aura:component implements="forceCommunity:profileMenuInterface"
+                controller="APC_MasterController"
+                access="global" >
+	<aura:attribute name="options" type="String[]" default="Home,My Account,Contacts,Log out"/>
+    <aura:attribute name="username" type="String"/> 
+    <aura:handler name="init" value="this" action="{!c.init}"/>
+
+    <lightning:navigation aura:id="navService" />
+    <ui:menu >
+        
+        <ui:menuTriggerLink aura:id="trigger" label="Profile Menu">           
+            <lightning:icon iconName="utility:user" alternativeText="Approved" title="{!v.username}" ></lightning:icon>
+             {!v.username}
+        </ui:menuTriggerLink>
+        <ui:menuList class="actionMenu" aura:id="actionMenu">
+            <aura:iteration items="{!v.options}" var="itemLabel">
+                <ui:actionMenuItem label="{!itemLabel}" click="{!c.handleClick}"/>
+            </aura:iteration>
+        </ui:menuList>
+    </ui:menu>
+</aura:component>

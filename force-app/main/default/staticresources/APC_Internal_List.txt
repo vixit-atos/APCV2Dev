@@ -1,0 +1,65 @@
+[
+  {
+    "label": "Case",
+    "value": "Casenumber",
+    "Field": "CaseNumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Part Number",
+    "value": "PARTNUMBER",
+    "Field": "partnumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "SAP Order",
+    "value": "SAPOrder",
+    "Field": "sapordernumber",
+    "Search": "",
+    "Sort": "ASC"
+  },
+   {
+    "label": "Customer PO",
+    "value": "CustomerPO#",
+    "Field": "customerpo",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Request Type",
+    "value": "Actionrequested",
+    "Field": "actionrequested",
+    "Search": "",
+    "Sort": "ASC"
+  },
+   {
+    "label": "Status",
+    "value": "Status",
+    "Field": "status",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Date Created",
+    "value": "Datecreated",
+    "Field": "CreatedDate",
+    "Search": "",
+    "Sort": "ASC"
+  },
+  {
+    "label": "Created By",
+    "value": "Created By",
+    "Field": "createdByNm",
+    "Search": "",
+    "Sort": "ASC"
+  },
+   {
+    "label": "Last Updated",
+    "value": "Lastresponse",
+    "Field": "lastresponse",
+    "Search": "",
+    "Sort": "ASC"
+  }
+]

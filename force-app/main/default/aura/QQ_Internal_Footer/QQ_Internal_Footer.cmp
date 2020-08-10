@@ -1,0 +1,11 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    
+        <div class="copyrightInfo">
+            <div class="mainContainer">
+                <p class="copy">Copyright © Daimler Trucks North America LLC.
+                    <a class="copy" target="_blank" href="">Privacy Statement, Legal Notices and Terms.</a> All rights reserved.</p> <p class="copy">Daimler Trucks North America LLC is a Daimler company.</p>
+            </div>
+        </div>
+    
+       
+</aura:component>

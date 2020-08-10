@@ -1,0 +1,75 @@
+<aura:component >
+    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c' }" />
+    
+    <aura:attribute name="quoteitem" type="ASP_QQ_Line_Item__c" default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <form>
+        <div class="slds-box slds-box_x-small slds-theme_default">
+            <div class="slds-text-heading_small slds-float_left labelbold"> Margin </div><br></br><br></br>
+            <aura:if isTrue="{!v.quote.Quote_Type__c == 'Custom'}">                
+                <div class="slds-text-align_left">The cost and price have already been set by previous reviewers. If there are any errors in these numbers, 
+                    you can revise the quote to send it back to the cost and price reviewers.</div>
+                <lightning:layout>
+                    <lightning:layoutItem size="2">
+                        <div class="slds-float--left">
+                            Databook Code : {!v.quoteitem.Data_Book_Code__c}
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <lightning:layout>
+                    <lightning:layoutItem size="2"> 
+                        <div class="slds-float--left">
+                            Margin : {!v.quoteitem.Margin__c}%
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                
+                <lightning:layout>
+                    <lightning:layoutItem size="2">
+                        <div class="slds-float--left">
+                            Cost : <ui:outputCurrency value="{!v.quoteitem.Cost__c}"/> USD
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <lightning:layout>
+                    <lightning:layoutItem size="2">
+                        <div class="slds-float--left">
+                            Price: <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> USD
+                            
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <aura:set attribute="else">
+                    
+                    <div class="slds-text-align_left">The creator of this quote has selected a standard or second price point line item with a standard cost. 
+                        If there are errors in the numbers below, you may revise the quote and let the pricing approver know that a different coverage is required.
+                    </div>
+                    <lightning:layout>
+                    <lightning:layoutItem size="2"> 
+                        <div class="slds-float--left">
+                            Margin : {!v.quoteitem.Margin__c}%
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                
+                <lightning:layout>
+                    <lightning:layoutItem size="2">
+                        <div class="slds-float--left">
+                            Cost : <ui:outputCurrency value="{!v.quoteitem.Cost__c}"/> USD
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <lightning:layout>
+                    <lightning:layoutItem size="2">
+                        <div class="slds-float--left">
+                            Price : <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> USD
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                </aura:set>    
+            </aura:if> 
+        </div>
+        
+    </form> 
+</aura:component>

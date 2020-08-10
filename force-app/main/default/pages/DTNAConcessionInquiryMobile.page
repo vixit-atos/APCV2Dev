@@ -1,0 +1,178 @@
+<apex:page docType="html-5.0" standardcontroller="Concession__c"  lightningStylesheets="true" extensions="DTNA_INQ_Inquiry_List" action="{!RCUInquiryRequest}" recordSetVar="risks" showHeader="true" standardStylesheets="false" sidebar="true"  tabStyle="Concession_Inquiry__tab">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <title>Concessions Inquiry</title>
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS103, 'assets/styles/salesforce-lightning-design-system-vf.min.css')}" />
+            
+            
+            <style>
+                
+                .MBT-readmore{ 
+                background:#6aafa2; 
+                text-align:right; 
+                cursor:pointer; 
+                color:#Fff; 
+                margin:5px 0; 
+                float:right; 
+                border:2px solid #ddd; 
+                padding:5px; 
+                -moz-border-radius:6px; 
+                -webkit-border-radius:6px; 
+                font:bold 11px sans-serif; 
+                } 
+                .MBT-readmore:hover{ 
+                background:#FFf; 
+                font:bold 11px sans-serif; 
+                color:#6aafa2; 
+                border:3px dotted #ddd; 
+                } 
+                .MBT-readmore a { 
+                color:#fff; 
+                text-decoration:none; 
+                }
+                .MBT-readmore a:hover { 
+                color:#fff; 
+                text-decoration:none; 
+                }
+                
+            </style>
+            
+            
+        </head>
+        
+        
+        <body>
+            <!-- REQUIRED SLDS WRAPPER -->
+            <div class="{!If($User.UITheme=='Theme4t','slds','')}">
+                
+                <!-- PRIMARY CONTENT WRAPPER -->
+                <div class="{!If($User.UITheme=='Theme4t','myapp','')}">
+                    
+                    <apex:form id="concform">
+                        <apex:sectionHeader title="Concessions"/>
+                        <apex:actionStatus id="counterStatus">
+                            <apex:facet name="start">
+                                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.75; z-index: 1000; background-color: black;">
+                                    &nbsp;
+                                </div>
+                                <div style="position: fixed; left: 50%; top: 200px; z-index: 1001;">
+                                    <!--<img width="75" height="75"  src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Gray_circles_rotate.gif" />-->
+                                    <img width="75" height="75"  src="{!URLFOR($Resource.SLDS103, '/assets/images/spinners/slds_spinner_brand.gif')}" />
+                                </div>
+                            </apex:facet>
+                        </apex:actionStatus>
+                        
+                        <apex:pageBlock title="{!If($User.UITheme=='Theme4t','','Concessions')}" >
+                            <apex:pageMessages id="pMessage" ></apex:pageMessages> 
+                            <apex:pageBlockButtons >
+                                <apex:commandButton status="counterStatus" reRender="concform" action="{!LoadLiveConcessionData}" value="Reload" rendered="False"/>
+                                <apex:commandButton status="counterStatus" reRender="concform" action="{!RCUInquiryQueryRequest}" value="Query"/>
+                                <apex:commandButton status="counterStatus" reRender="concform" action="{!AddConcession}" value="Add Concession" rendered="{!isFCC}"/>
+                                <apex:commandButton id="update" status="counterStatus" reRender="concform" action="{!quicksave}" value="Update"  styleclass="updateButton" rendered="False"/>
+                            </apex:pageBlockButtons>
+                            <apex:actionFunction status="counterStatus" reRender="MFPageBlockSec,pMessage,pMessage2,rcudebug,MFdebug" name="showMore" action="{!LoadLiveConcessionData}" />
+                            <apex:PageBlockSection columns="{!If($User.UITheme=='Theme4t',1,2)}"  collapsible="true" >
+                                <apex:inputText value="{!obj_Conc.Name}"  onchange="CalcOnChangedConc()" />
+                                <apex:inputText value="{!obj_Conc.LEAD_CONC_NO__c}" label="Lead CONC"  />
+                                <apex:inputText value="{!obj_Conc.SLS_RGN_CD__c}" />
+                                <apex:inputText value="{!obj_Conc.SLS_DIST_CD__c}" />
+                                <apex:inputText value="{!obj_Conc.Dealer_Code__c}" />
+                                <apex:inputText value="{!obj_Conc.CUST_NAME_50__c}" />
+                                <apex:selectList value="{!obj_Conc.CONC_STATUS_CD__c}" required="true" size="1">
+                                    <apex:selectOptions value="{!ConcStatus}"/>
+                                </apex:selectList>
+                                <apex:input type="date" value="{!ConcDateApproved}" label="Date Concession Approved"/>
+                                <apex:input type="date" value="{!ConcCreatedDateFrom}" label="Date Created From"/>
+                                <apex:input type="date" value="{!ConcCreatedDateTo}" label="To"/>
+                                <apex:inputText value="{!obj_Conc.VEH_BASE_MDL_NO__c}" />
+                                <apex:inputText value="{!obj_Conc.CONCMCDB_ENGINE__c}" />
+                                <apex:inputText value="{!obj_Conc.CONCMCDB_TRANS_TYPE__c}" label="Transmission" maxlength="7" />
+                                <apex:selectList value="{!obj_Conc.TOP_CUST_INDC__c}" label="TP" size="1" >
+                                    <apex:selectOption itemValue=" " itemLabel="ALL"/>
+                                    <apex:selectOption itemValue="Y" itemLabel="Y"/>
+                                    <apex:selectOption itemValue="N" itemLabel="N"/>
+                                </apex:selectList>
+                                                                
+                            </apex:PageBlockSection>
+                           <!--Deepak -->
+                            
+                            <div style="display:{!IF(CONTAINS(strCountryTitle, 'COUNTRY CD:'),'block', 'none')};"> 
+                            
+                                <apex:pageBlockSection >
+                                    <apex:selectList label="Country code" value="{!strCountryFilter}" size="1" >
+                                    
+                                    <apex:selectOption itemValue="USA" itemLabel="USA"/>
+                                    <apex:selectOption itemValue="CAN" itemLabel="CAN"/>
+                                    <apex:selectOption itemValue="ALL" itemLabel="ALL"/>
+                                    
+                                </apex:selectList>
+                            </apex:PageBlockSection>    
+                            </div>    
+                           
+                           <!--Deepak -->
+                            
+                            <apex:PageBlockSection columns="1" collapsible="true" title="Mainframe INQ Screen" id="MFPageBlockSec" rendered="{!If(strTranFlag=='NO',false,true)}">
+                                <apex:pageBlockTable value="{!lst_INQ_Conc}" var="varConc">
+                                    <apex:column title="Conc No" headerValue="Conc No">
+                                        <apex:outputLink onclick="sforce.one.navigateToURL('/apex/DTNAConcessionLiveMobile?Concname={!varConc.Name}',true);"   rendered="{!If($User.UITheme=='Theme4t',true,false)}">{!varConc.Name}</apex:outputLink>
+                                        <apex:outputLink value="DTNAConcessionLive?Concname={!varConc.Name}" rendered="{!If($User.UITheme=='Theme4t',false,true)}" target="_blank">{!varConc.Name}</apex:outputLink> 
+                                        {!varConc.OrderFlag__c}
+                                    </apex:column>
+                                    
+                                    <apex:column value="{!varConc.LEAD_CONC_NO__c} {!varConc.Replaced_Flag__c}" headerValue="Lead CONC" /> 
+                                    <apex:column value="{!varConc.Create_Date__c}" />
+                                    <apex:column value="{!varConc.CUST_NAME_50__c}"/>
+                                    <apex:column value="{!varConc.Dealer_Code__c}"/>
+                                    <apex:column value="{!varConc.CITY__c}" />
+                                    <apex:column value="{!varConc.RQST_MIN_UNITS__c}" />
+                                    <apex:column value="{!varConc.DLR_NET_PRC__c}" />
+                                    <apex:column value="{!varConc.VEH_BASE_MDL_NO__c}" />
+                                    <apex:column value="{!varConc.CONC_STATUS_CD__c} {!varConc.Note_Flag__c}" headerValue=" Conc Status"/>
+                                    <Apex:column headerValue=" Appr Amt / %">
+                                     <apex:OutputText rendered="{!NOT(ISBLANK(varConc.APPR_CONC_PCT__c))}" value="{!varConc.APPR_CONC_PCT__c}%"/>
+                                     <apex:OutputText rendered="{!ISBLANK(varConc.APPR_CONC_PCT__c)}" value="{!FLOOR(varConc.APPR_CONC_AMT__c)}"/>
+                                    </apex:column>
+                                    
+                                    
+                                </apex:pageBlockTable>
+                                <input type='button' id="MFMOREButton" class='MBT-readmore' value ='More Data' onclick="this.style.display = 'none';showMore()" style="display:{!If(strTranFlag=='MORE' ,'block','none')};"/>
+                                <apex:actionStatus id="MFStatus" rendered="{!If(strTranFlag=='NO',false,true)}">
+                                    <apex:facet name="start">
+                                        <img class='MBT-readmore' style="background:none;" src="http://upload.wikimedia.org/wikipedia/commons/e/ed/Cursor_Windows_Vista.gif"/>
+                                    </apex:facet>
+                                </apex:actionStatus>
+                            </apex:PageBlockSection>
+                            <apex:pageMessages id="pMessage2"></apex:pageMessages>
+                            
+                            <div style="display:{!If(profileName=='System Administrator','block','none')};">
+                                <apex:PageBlockSection columns="1" collapsible="true" title="INQDeBug" id="INQDeBug">
+                                    <apex:repeat value="{!lst_log }" var="string" id="theRepeat">
+                                        <apex:outputText value="{!string}" id="theValue"/><br/>
+                                    </apex:repeat>                                                                                     
+                                </apex:PageBlockSection> 
+                            </div>
+                        </apex:pageBlock>
+                    </apex:form>
+                    
+                </div>
+                <!-- / PRIMARY CONTENT WRAPPER -->
+                
+            </div>
+            <!-- / REQUIRED SLDS WRAPPER -->
+            
+        </body>
+    </html>
+    
+    <script>
+    var a = navigator.userAgent; 
+    if ((a.indexOf('Salesforce') != -1) && (a.indexOf('iPhone') != -1 || a.indexOf('iPad') != -1) && (a.indexOf('Safari') == -1)) { 
+        var s = document.createElement('style'); 
+        s.innerHTML = "html,html body{overflow:scroll;-webkit-overflow-scrolling:touch;z-index:0;}body{position:absolute;left:0;right:0;top:0;bottom:0;}"; 
+        document.getElementsByTagName('head')[0].appendChild(s); 
+    }
+    </script>
+    
+</apex:page>

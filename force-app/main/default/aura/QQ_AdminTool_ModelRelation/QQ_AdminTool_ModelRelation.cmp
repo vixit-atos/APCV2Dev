@@ -1,0 +1,53 @@
+<aura:component controller="QQ_AdminTool_Controller" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>    
+    
+    <aura:attribute name="recordType" type="string" default=""/>
+    <aura:attribute name="recordId" type="String" />
+    
+    <aura:attribute name="Models" type="List" default="[]"/>
+    <aura:attribute name="Groups" type="List" default="[]"/>
+    <aura:attribute name="A85Codes" type="List" default="[]"/>
+    <aura:attribute name="selectedCodes" type="List" default="[]"/>
+    
+    <aura:attribute name="AdminTool" type="Administrative_Tool__c" default="{'sobjectType':'Administrative_Tool__c'}"/>
+    
+    <aura:method name="checkMandatory" action="{!c.checkMandatory}">
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+    
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:combobox aura:id="UID_Model"
+                                name="Model" 
+                                label="Model" 
+                                required="true"
+                                options="{!v.Models}"
+                                value="{!v.AdminTool.Model__c}"
+                                onchange="" />
+            
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:combobox aura:id="UID_Group"
+                                name="Group" 
+                                label="Group" 
+                                required="true"
+                                options="{!v.Groups}"
+                                value="{!v.AdminTool.Group__c}"
+                                onchange="" />
+        </lightning:layoutItem>
+    </lightning:layout>
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="10">
+            <lightning:dualListbox aura:id="UID_A85Code"
+                                   name="A85Code"
+                                   label="A85 Code"
+                                   size="8"
+                                   sourceLabel="Available"
+                                   selectedLabel="Selected"
+                                   options="{!v.A85Codes}"
+                                   required="true"
+                                   value="{!v.selectedCodes}"
+                                   onchange="{!c.codeChange}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

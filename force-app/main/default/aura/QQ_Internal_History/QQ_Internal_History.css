@@ -1,0 +1,23 @@
+.THIS {
+    
+}
+.THIS .toggle {
+    display: none !important;
+}
+
+.THIS .footerstyle {
+   position: fixed;
+   bottom: 0;
+}
+.THIS .body1{    
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: table;
+}
+
+.THIS .body 
+{   min-height:100%; 
+    position:relative; 
+    min-width:800px; 
+}

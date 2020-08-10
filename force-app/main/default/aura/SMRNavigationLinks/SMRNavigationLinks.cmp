@@ -1,0 +1,17 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+	<div>
+          <lightning:card >
+              <aura:set attribute="title">
+                  <lightning:icon iconName="action:share_link" size="small"/>
+                  Navigation Links
+              </aura:set>
+              <lightning:verticalNavigationSection  >
+                  
+                  <lightning:verticalNavigationItem label="Materials Work Tools (MWT)" name="mwt" href="https://mwt-dtna.e.corpintra.net/MaterialsWorkTools/MWT/Main.aspx" />
+                  <lightning:verticalNavigationItem label="Cognos Reports" name="sol" href="https://ca-dtna.app.corpintra.net/ibmcognos/bi/?perspective=home" />
+                  <lightning:verticalNavigationItem label="Supplier Management Reports" name="tabl" href="https://tableau-dtna.app.corpintra.net/views/SM-MaterialsDashboardsOFMKPIs/E-STATOfflineTrucks" />
+                  
+              </lightning:verticalNavigationSection>
+  		</lightning:card>
+    </div>
+</aura:component>

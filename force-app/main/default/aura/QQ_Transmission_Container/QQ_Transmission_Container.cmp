@@ -1,0 +1,158 @@
+<aura:component access="global">
+    <aura:attribute name="quoteitem" type="ASP_PM_Line_Items__c" default="{'sobjectType': 'ASP_PM_Line_Items__c'}"/> 
+    <aura:attribute name="quoteitemlist" type="ASP_PM_Line_Items__c[]"/>
+    <aura:attribute name="manufacturelist" type="List"/>
+    <aura:attribute name="transmissionmodellist" type="List"/>
+    <aura:attribute name="dutycycleList" type="List"/>    
+    
+    <aura:attribute name="durationList" type="list" />
+    <aura:attribute name="disableaddbtn" type="boolean" default="true"/>    
+    
+    <aura:attribute name="masterlineitems" type="List"/>
+    <aura:attribute name="manufacturelineitem" type="List"/>
+    <aura:attribute name="transmissionmodellineitem" type="List"/>
+    <aura:attribute name="dutylineitems" type="List"/>
+    <aura:attribute name="servicelisttable" type="list"  />    
+    
+    <aura:attribute name="buttonstate" type="Boolean" default="true"/>
+    
+    <c:QQ_Pm_LineItem_DataService aura:id="Lineitemservice" />
+    <c:QQ_DependentPicklistComponent aura:id="DependentPicklstSrvc" />
+    <c:QQ_Query_OfferService_DataService aura:id="QueryOfferService_Srvc" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}"/> 
+    
+    <form class="slds-form slds-box slds-form_stacked slds-theme_shade">
+        <aura:iteration items="{!v.quoteitemlist}" var="item">
+            <aura:if isTrue="{!item.Program__c == 'TRANSMISSION'}">
+                
+                <div class="slds-box slds-box_x-small slds-theme_default">
+                    <a class="slds-text-title_bold">Data Book Code:</a> {!item.Databook_Code__c}
+                    <div class="slds-float_right slds-p-around_large">
+                        <lightning:buttonIcon
+                                              iconName="utility:delete" 
+                                              variant="bare"
+                                              size="large"
+                                              alternativeText="Settings" 
+                                              iconClass="dark"
+                                              onclick="{! c.removequoteitem}"
+                                              name="{!item.Offer_Master_Id__c}"/>
+                    </div>
+                    
+                    
+                    <lightning:layout >
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Manufacturer__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Transmission_Model__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Duration__c}     
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!item.Price__c}">
+                                <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                <aura:set attribute="else">
+                                    <ui:outputText value="$--.-- USD"/>
+                                </aura:set>
+                            </aura:if>     
+                        </lightning:layoutItem>
+                    </lightning:layout>                    
+                </div> 
+            </aura:if>
+        </aura:iteration>
+        
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="4" padding="around-small">
+                <lightning:combobox name="Manufacturer__c"
+                                    label="Manufacturer"                                   
+                                    value="{!v.quoteitem.Manufacturer__c}" 
+                                    placeholder="None" 
+                                    options="{! v.manufacturelist }" 
+                                    onchange="{!c.handlechange}"/>
+                
+                
+            </lightning:layoutItem>            
+            
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.Manufacturer__c}"  >
+                    <lightning:combobox name="Transmission_Model__c"
+                                        label="Model" 
+                                        value="{!v.quoteitem.Transmission_Model__c}" 
+                                        placeholder="" 
+                                        options="{! v.transmissionmodellist }" 
+                                        onchange="{!c.handlechange}"  />                    
+                </aura:if>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem size="2" padding="around-small" >
+                <span class="textcolor slds-float_right">
+                    <br></br>
+                    <aura:if isTrue="{!v.quoteitem.Price__c}">
+                        <ui:outputCurrency value="{!v.quoteitem.Price__c}"/> USD
+                        <aura:set attribute="else">
+                            <ui:outputText value="$--.-- USD"/>
+                        </aura:set>
+                    </aura:if>
+                </span>
+            </lightning:layoutItem>            
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="slds-float_right slds-p-around_large">
+                    <lightning:buttonIcon
+                                          iconName="utility:add"  
+                                          variant="brand"
+                                          size="large"
+                                          alternativeText="Add Item" 
+                                          disabled = "{!v.disableaddbtn}"
+                                          iconClass="dark"
+                                          onclick="{! c.addquoteitem}"
+                                          name="Add"/>
+                </div>
+            </lightning:layoutItem>            
+        </lightning:layout>
+        
+        <lightning:layout>            
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.Transmission_Model__c}"  >
+                    <lightning:RadioGroup name="Duration__c" 
+                                          label="Duration"
+                                          options="{!v.durationList }"
+                                          placeholder="None" 
+                                          value="{!v.quoteitem.Duration__c}"
+                                          onchange="{!c.handlechange}"
+                                          />
+                </aura:if>
+                
+            </lightning:layoutItem>
+            <lightning:layoutItem size="4" padding="around-small">
+                <aura:if isTrue= "{!v.quoteitem.Duration__c }" >                    
+                    <div class="slds-m-top_xxx-small">
+                        <div class="slds-form-element__label">Transmission Services Included</div>                        
+                        <Table border="1" class="slds-box slds-table slds-theme_alert-texture">                            
+                            <Thead>
+                                <tr></tr>
+                                <th class="slds-text-align_left table__label">Transmission Service Type</th>
+                                <th class="slds-text-align_left table__label"># of Services</th>
+                                <th class="slds-text-align_left table__label">Interval (month)</th>
+                                <th class="slds-text-align_left table__label">Interval (miles)</th>
+                                
+                            </Thead>
+                            
+                            <Tbody>                                
+                                <aura:iteration items="{! v.servicelisttable }"  var="item" indexVar="index">
+                                    <tr>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Type__c}</td>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Frequency__c}</td>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Interval_Months__c}</td>
+                                        <td class="table__data slds-text-align_left">{!item.Service_Interval_Miles__c}</td>
+                                    </tr>
+                                </aura:iteration>                                
+                            </Tbody>
+                        </Table>
+                    </div>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </form>
+</aura:component>

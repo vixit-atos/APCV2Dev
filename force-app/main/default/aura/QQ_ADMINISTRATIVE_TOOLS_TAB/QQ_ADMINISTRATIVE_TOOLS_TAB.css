@@ -1,0 +1,6 @@
+.THIS .container {
+   background-color: #FFFFFF;
+   width: 80em;
+   height: 50em;
+   overflow-x: scroll;
+}

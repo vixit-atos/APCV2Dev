@@ -1,0 +1,36 @@
+<apex:page title="event.ics" contentType="text/calendar" cache="false" standardcontroller="TCMeeting__c" extensions="TWS_ICS_Generator_ControllerExtension">
+BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 15.0 MIMEDIR//EN
+VERSION:15.0
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VEVENT
+URL:Site Url
+DTSTART;TZID=GMT:<apex:outputText value="{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(TEXT(startTime),':',''),'-',''),' ','T'),' ','Z')}"/>
+METHOD:REQUEST
+STATUS: CONFIRMED
+DTEND;TZID=GMT:<apex:outputText value="{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(TEXT(endTime),':',''),'-',''),' ','T'),' ','Z')}"/>
+SUMMARY:<apex:outputText value="Transaction Council – New Series"/>
+DESCRIPTION: 
+<apex:outputText escape="false">     Dial In : 503-745-3050 </apex:outputText> \n
+<apex:outputText escape="false">     Press 1 to join then # </apex:outputText> \n
+<apex:outputText escape="false">     Enter meeting ID : 2319</apex:outputText> \n
+<apex:outputText escape="false">     Press 1 to confirm ID  </apex:outputText> \n
+<apex:outputText escape="false">     Say your name then #   </apex:outputText> \n\n
+<apex:outputText escape="false"> You will be placed on hold until the leader starts the conference call.</apex:outputText> \n\n \n
+<apex:outputText value="To view the agenda for this week’s TC Meeting please go to" escape="false" > </apex:outputText> 
+<apex:outputText escape="false"> the Next TC Meeting tab in SalesForce: </apex:outputText>\n\n 
+<apex:outputText escape="false"> {!URLFOR("/apex/TWC_ThisWeekTCMeeting")} </apex:outputText>\n\n
+LOCATION:<apex:outputText value="Cascadia Conference Room FM/Martin’s Office"/> 
+ORGANIZER;CN={!$User.FirstName} {!$User.LastName} D:MAILTO:{!$User.Email} 
+<apex:repeat value="{!invitees}" var="u">
+ATTENDEE;CN=<apex:outputText value="{!u.Name}"/>;RSVP=TRUE:MAILTO:<apex:outputText value="{!u.Email}"/> 
+</apex:repeat>  
+PRIORITY:5
+SEQUENCE:0
+SUMMARY;LANGUAGE=en-us:Message
+TRANSP:OPAQUE
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+X-MICROSOFT-CDO-IMPORTANCE:1
+END:VEVENT
+END:VCALENDAR
+</apex:page>

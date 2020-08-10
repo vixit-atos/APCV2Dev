@@ -1,0 +1,18 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global">
+    <aura:attribute name="oAccount" type="Account" />
+    <aura:registerEvent name="oSelectedAccountEvent" type="c:APC_Lookupevent"/>
+   
+    <li role="presentation">
+        <span class="slds-lookup__item-action slds-media slds-media--center" id="lookup-option-350" role="option">
+            <div class="slds-media__body">
+                <div class="slds-input-has-icon slds-input-has-icon--right">
+                    <div class="slds-lookup__result-text">
+                        <a onclick="{!c.selectAccount}">{!v.oAccount.Name}</a>
+                    </div>
+                </div>
+            </div>    
+        </span>
+    </li>
+    
+</aura:component>

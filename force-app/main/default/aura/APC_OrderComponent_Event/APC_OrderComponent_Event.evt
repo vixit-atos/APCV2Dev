@@ -1,0 +1,17 @@
+<!--
+  @Component Name     : APC_OrderComponent_Event.cmp
+  @Description        : OrderComponent Event
+  @Author             : Anuhya Mandapati
+  @Group              : 
+  @Last Modified By   :bhargabi mohanty
+  @Last Modified On   :04/30/2019
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0          05/30/2019                Anuhya Mandapati  	   Initial Version
+-->
+
+<aura:event type="COMPONENT" description="Event template" >
+    <aura:attribute name="detail" type="Map" />
+</aura:event>

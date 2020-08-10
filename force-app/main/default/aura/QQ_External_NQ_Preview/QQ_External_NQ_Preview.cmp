@@ -1,0 +1,186 @@
+<aura:component >
+    
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    
+    <aura:attribute name="quotecustomer" 
+                    type="String" 
+                    default=""/>
+    
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_QQ_Line_Item__c[]" /> 
+    
+    <aura:attribute name="detroititem" type="Boolean"/>
+    <aura:attribute name="truckitem" type="Boolean"/>
+    <aura:attribute name="fccitem" type="Boolean"/>
+    <aura:attribute name="fcctbbitem" type="Boolean"/>
+    <aura:attribute name="newquotenum" type="String" default=""/>
+    <aura:attribute name="A85value" type="String" default=""/>
+    
+    <aura:attribute name="quoteid" type="String" default=""/>
+    
+    <c:QQ_Query_QuoteService aura:id="queryquoteservice" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doinit}" />
+    
+    
+    
+    <br></br>
+    <span class="slds-text-heading_medium slds-float_left labelbold"> {!v.newquotenum =='' ? '' : 'Quote #'}</span> <span class="slds-text-heading_medium slds-float_left">{! v.newquotenum} </span>
+    <br></br>
+    <br></br>
+    <div class="slds-box slds-theme_shade">
+        
+        <div class="slds-text-heading_small  labelbold">General Information</div>
+        <div class="slds-text-align_left slds-m-top_medium">{!v.quotecustomer} / {!v.A85value == '' ? v.quote.A85_Code__c :v.A85value }</div>
+           
+    </div>
+    
+    
+    <aura:if isTrue = "{!v.detroititem }">
+        <div class="slds-box slds-theme_shade">
+            <div class="slds-text-heading_small slds-float_left labelbold">Detroit Coverage</div><br></br>
+            <aura:iteration items="{!v.quoteitemlist}" var="item">
+                <aura:if isTrue="{! item.Coverage__c == 'DETROIT COVERAGE' ? true : false}">
+                    <div class="slds-box slds-box_x-small slds-theme_default">
+                        <span class="slds-float_left labelbold">Data Book Code:</span><span class="slds-float_left">{!item.Databook_Code__c} </span> 
+                        <br></br>
+                        <lightning:layout>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!item.Engine_Component_1__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!item.Coverage_Type_1__c}
+                            </lightning:layoutItem >
+                            <lightning:layoutItem size="3" padding="around-small">
+                                {!item.Option_1__c}
+                            </lightning:layoutItem>
+                            
+                            <lightning:layoutItem size="3" padding="around-small">
+                                {!item.Duration_Final__c}                
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                <aura:if isTrue="{!item.Price__c}">
+                                    <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                    <aura:set attribute="else">
+                                        <ui:outputText value="$--.-- USD"/>
+                                    </aura:set>
+                                </aura:if>               
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </aura:if>
+            </aura:iteration>
+        </div> 
+    </aura:if> 
+    
+    <aura:if isTrue="{!v.truckitem}">
+        <div class="slds-box slds-theme_shade"> 
+            <div class="slds-text-heading_small slds-float_left labelbold">Truck Chassis Coverage</div><br></br>           
+            <aura:iteration items="{!v.quoteitemlist}" var="item" >
+                <aura:if isTrue="{! item.Coverage__c == 'TRUCK CHASSIS' ? true : false}">
+                    <div class="slds-box slds-box_x-small slds-theme_default">
+                        <span class="slds-float_left labelbold">Data Book Code:</span><span class="slds-float_left">{!item.Databook_Code__c} </span> 
+                        <br></br>
+                        <lightning:layout>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!item.Model__c}
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!item.Group__c}
+                            </lightning:layoutItem >
+                            <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Standalone_Package_1__c}
+                                {!item.Truck_Coverage_Package_1__c}
+                        </lightning:layoutItem>
+                            
+                            <lightning:layoutItem size="2" padding="around-small">
+                                {!item.Duration_Final__c}                
+                            </lightning:layoutItem>
+                           <lightning:layoutItem size="2" padding="around-small">
+                                <aura:if isTrue="{!item.Price__c}">
+                                    <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                    <aura:set attribute="else">
+                                        <ui:outputText value="$--.-- USD"/>
+                                    </aura:set>
+                                </aura:if>               
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </aura:if>
+            </aura:iteration>
+            
+        </div>
+    </aura:if><aura:if isTrue="{!v.fccitem}">
+    <div class="slds-box slds-theme_shade"> 
+        <div class="slds-text-heading_small slds-float_left labelbold">FCC Coverage</div><br></br>           
+        <aura:iteration items="{!v.quoteitemlist}" var="item" >
+            <aura:if isTrue="{! item.Coverage__c == 'FCCC' ? true : false}">
+                <div class="slds-box slds-box_x-small slds-theme_default">
+                    <span class="slds-float_left labelbold">Data Book Code:</span><span class="slds-float_left">{!item.Databook_Code__c} </span> 
+                    <br></br>
+                    <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Model__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Group__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="3" padding="around-small">
+                            {!item.Standalone_Package_1__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            {!item.Duration_Final__c}                
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!item.Price__c}">
+                                <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                <aura:set attribute="else">
+                                    <ui:outputText value="$--.-- USD"/>
+                                </aura:set>
+                            </aura:if>                
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+            </aura:if>
+        </aura:iteration>
+        
+    </div>
+    </aura:if>
+    <aura:if isTrue="{!v.fcctbbitem}">
+    <div class="slds-box slds-theme_shade"> 
+        <div class="slds-text-heading_small slds-float_left labelbold">FCCC-TBB Coverage</div><br></br>           
+        <aura:iteration items="{!v.quoteitemlist}" var="item" >
+            <aura:if isTrue="{! item.Coverage__c == 'FCCC-TBB' ? true : false}">
+                <div class="slds-box slds-box_x-small slds-theme_default">
+                    <span class="slds-float_left labelbold">Data Book Code:</span><span class="slds-float_left">{!item.Databook_Code__c} </span> 
+                    <br></br>
+                    <lightning:layout>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Model__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            {!item.Group__c}
+                        </lightning:layoutItem >
+                        <lightning:layoutItem size="3" padding="around-small">
+                            {!item.Standalone_Package_1__c}
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            {!item.Duration_Final__c}                
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="2" padding="around-small">
+                            <aura:if isTrue="{!item.Price__c}">
+                                <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                <aura:set attribute="else">
+                                    <ui:outputText value="$--.-- USD"/>
+                                </aura:set>
+                            </aura:if>                
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </div>
+            </aura:if>
+        </aura:iteration>
+        
+    </div>
+    </aura:if>
+    
+</aura:component>

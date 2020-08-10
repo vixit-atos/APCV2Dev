@@ -1,0 +1,26 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <lightning:navigation aura:id="navService" />
+    
+    <div class="slds-p-bottom_medium">
+        <div class="slds-float_right slds-p-bottom_small">
+            <lightning:button class="btn-primary slds-is-selected-clicked slds-is-selected" 
+                              label="All Cases" title="Click to view all cases" 
+                              iconName="utility:search" 
+                              variant ="brand"  
+                              iconPosition="left"
+                              onclick ="{!c.navtoviewall}"/>
+      <!--      <lightning:button class="btn-primary slds-is-selected-clicked slds-is-selected" 
+                              label="Contacts" title="Click to view all contacts" 
+                              iconName="utility:groups" 
+                              variant ="brand"  
+                              iconPosition="left"
+                              onclick ="{!c.navtoviewallcontacts}"/>  -->
+            <aura:if isTrue= "{!$Browser.formFactor == 'DESKTOP' || $Browser.formFactor == 'TABLET'}">
+            </aura:if>
+        </div>       
+    </div>
+    <div class="slds-p-bottom_medium">
+        <c:APC_List	 Static_resource_list="APC_Internal_List" 
+                    recordsfound="true" />
+    </div>   
+</aura:component>

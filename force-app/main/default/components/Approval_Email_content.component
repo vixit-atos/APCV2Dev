@@ -1,0 +1,22 @@
+<apex:component controller="IspApproverNotification" access="global">
+<apex:attribute name="approverUserId"
+                    assignTo="{!approverId}"
+                    description="Approver Id"
+                    type="Id"/>
+  <table border="0" >
+    <apex:variable var="srno" value="{!1}"/>
+    <apex:repeat var="wrapObj" value="{!approvalOppList}">
+      <tr>
+        <td>{!srno}) </td>
+        <td><a href="{!baseUrl}/{!wrapObj.oppId}" target="_blank">{!wrapObj.opportunityName}<font color="black"><i>{!wrapObj.PPNotify }</i></font></a></td>
+        <td><a href="{!wrapObj.workItemUrl}&status=approved" target="_blank"><button>Approve</button></a> &nbsp;&nbsp; <a href="{!wrapObj.workItemUrl}&status=reject" target="_blank"><button>Reject</button></a></td>
+      </tr>
+      <apex:variable var="srno" value="{!srno+1}"/>
+    </apex:repeat> 
+    </table>
+    <br/>
+    <a href="{!baseUrl}/apex/ApproveRejectVF?status=approved" target="_blank"><button>Approve All</button></a>
+    <a href="{!baseUrl}/apex/ApproveRejectVF?status=Reject" target="_blank"><button>Reject All</button></a>
+    
+
+</apex:component>

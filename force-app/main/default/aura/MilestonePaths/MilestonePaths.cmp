@@ -1,0 +1,44 @@
+<aura:component controller="MilestonePathController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="result" type="Object" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <article class="slds-card">
+        <div class="slds-grid slds-wrap" style="margin:9px 12px 12px 12px;">
+            <div class="slds-col">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="form-element-01">CFR Approval</label>
+                    <div class="slds-form-element__control">
+                        <lightning:formattedDateTime value="{!v.result.CFRApprovalDate}" year="numeric" month="2-digit" day="2-digit" />
+                    </div>
+                </div>   
+            </div>
+            
+            <div class="slds-col">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="form-element-01">Design Release</label>
+                    <div class="slds-form-element__control">
+                        <lightning:input type="checkbox" checked="{!v.result.DesignRelease}" disabled="true" />
+                    </div>
+                </div>   
+            </div>
+            
+            <div class="slds-col">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="form-element-01">Final Packet</label>
+                    <div class="slds-form-element__control">
+                        <lightning:input type="checkbox" checked="{!v.result.FinalPacket}" disabled="true" />
+                    </div>
+                </div>   
+            </div>
+            
+            <div class="slds-col">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="form-element-01">SOP</label>
+                    <div class="slds-form-element__control">
+                        <lightning:formattedDateTime value="{!v.result.SOP}" year="numeric" month="2-digit" day="2-digit" />
+                    </div>
+                </div>   
+            </div>
+        </div>
+    </article>
+</aura:component>

@@ -1,0 +1,73 @@
+.THIS .customButton{
+    background-color: #2574a9;
+    color: #fff; 
+}
+.THIS.border { 
+    border-width : 5px
+}
+.THIS .slds-textarea{
+    
+}
+/*.THIS .slds-select_container .slds-select:focus{
+background-color: rgb(255, 255, 255);
+border-color: rgb(194, 57, 52);
+box-shadow: rgb(194, 57, 52) 0 0 0 1px inset;
+background-clip: padding-box;
+}
+.THIS .slds-select_container .slds-select:active {
+background-color: rgb(255, 255, 255);
+border-color: rgb(194, 57, 52);
+box-shadow: rgb(194, 57, 52) 0 0 0 1px inset;
+background-clip: padding-box;
+}*/
+.THIS .slds-button_brand:disabled{
+    background: rgb(19, 18, 18);
+    border-color: rgb(21, 20, 20);
+}
+.THIS .uiInput--input.input{
+    
+}
+.THIS .uiInput--textarea.textarea{
+    
+}
+
+.THIS .slds-form-element{
+    font-family: Arial;        
+}
+
+/* Commented as to restore Salesforce Styling.
+ 
+.THIS .slds-button_brand{
+    background-color: #19B1ED;
+    border-radius: 16px;
+    font-family: arial;
+    font-weight: 500;
+    height: auto;
+    width: 71px;
+    text-align: center;
+    border: 1px solid transparent;    
+}*/
+
+.THIS .slds-button_brand:disabled {  
+    background: #19b1ed;
+    border-color: #19b1ed;
+}
+.THIS .slds-form-element__label
+{
+    font-size:15px;
+}
+.THIS .error-text {
+    display:none;
+}
+
+.THIS .show {
+    display:flex;
+    color:red;
+}
+.THIS .label-hidden > label {
+    display: none;
+}
+.THIS .slds-required{
+    color: rgb(250, 250, 249);
+    margin: 0px -0.8rem;
+}

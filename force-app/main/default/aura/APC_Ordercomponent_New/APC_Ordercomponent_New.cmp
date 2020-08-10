@@ -1,0 +1,230 @@
+<!--
+  @Component Name     : APC_OrderComponent_New.cmp
+  @Description        : For an Order I'm trying to Place
+  @Author             : Sumit Datta, Akhila Putta.
+-->
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global"  
+                controller="APC_MasterController">
+    <aura:attribute name="caseobj" 
+                    type="Case"
+                    access="global" 
+                    description="To create case creation package " 
+                    default="{'sobjectType': 'Case',
+                             'Planner_Code__c':'',
+                             'Vendor__c':'',
+                             'Part_No__c':'',
+                             'VIN__c':'',                            
+                             'Reason__c':'',
+                             'RecordTypeId':'',
+                             'Description':'',
+                             'Additional_Contacts__c':'',
+                             'Request_Type__c':'',
+                             'Origin':'Web',
+                             'Status':'New',
+                             'Priority':'Medium',
+                             'ContactId':'',
+                             'AccountId':'',
+                             'APC_Source__c':'',
+                             'NSN_Number__c':'',
+                             'Quantity__c':'',
+                             'Lead_Time_Reason__c':'',
+                             'PDC_Location__c':'',
+                             'Supplier__c':'',
+                             'Model_Year__c':'',
+                             'TBB_Part_Inquiry__c':'',
+                             'Part_Description__c':'',                                                                        
+                             'Return_Status__c':'',
+                             'Action__c':'',
+                             'Order_Status__c':'',
+                             'Part_Received_date__c':'',
+                             'SAP_Order_Number__c':'',
+                             'APC_Delivery__c':'',
+                             'APC_Original_Delivery__c':'',
+                             'APC_PO_Number__c':'',
+                             'APC_Shipping_Condition__c':'',
+                             'APC_DTNA_PO':'',
+                             'APC_Tracking_Number__c':'',
+                             'APC_Invoice_Number__c':'',
+                             'APC_Line_Number__c':''
+                             }"/>    
+    
+    <aura:attribute name="recId" type="Id" access="global"                                           description="To store the record id for file upload" />  
+    <aura:attribute name="selectedDealerCode" type="object" access="global"                          description="To store selected Dealer code"
+                    default="{'Id':'','name':'','DealerCode':''}"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object" access="global"                    description="To store Dealer code picklist values"/>
+    <aura:attribute name="isPartFound" type="boolean" access="global" default="false"                description="To identify if part is found at paragon"/>
+    <aura:attribute name="partnumber" type="string" access="global"                                  description="To Store Part number"/>    
+    <aura:attribute name="ispricingrequest" type="string" access="global"                            description="To identify pricing request"/>    
+    <aura:attribute name="issubmitactive" type="boolean" default="false" access="global"             description="To maintain submit button state"/>   
+    <aura:attribute name="findParagonList" type="List" default="[]"                                  description="To Store find paragon picklist values"/>
+    <aura:attribute name="findParagonBool" type="string" default=""                                  description="To maintain state of Part found in paragon"/>
+    <aura:attribute name="testbool" type="boolean" access="global"                                   description="helper to maintain state of Part found in paragon"/>
+    <aura:attribute name="ispartnumbersearchdisabled" type="boolean" access="global" default="true"  description="To maintain part number search button state"/>    
+    <aura:attribute name="pricingReqList" type="List" default="[]"                                   description="To Store price request picklist values"/>
+    <aura:attribute name="pricingReqSlctd" type="string" default=""                                  description="To Store select option from price request picklist values"/>
+    <aura:attribute name="additionaldealercontactslist" type="list"                                  description="To store additional contacts picklist value"/>
+    <aura:attribute name="additionaldealercontactslistvisible" type="list"                           description="To store additional dealer contact list"/>
+    <aura:attribute name="additionaldealercontactsselected" type="String"                            description="To store selected additional contacts picklist value"/>
+    <aura:attribute name="additionalRecipientList2" type="list" access="global"                      description="To store additional recipient values"/>
+    <aura:attribute name="files" type="ContentDocument[]"                                            description="To maintain files uploaded"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]"                                     description="To maintain pills of files uploaded"/>    
+    <aura:attribute name="errormessage" type="string" default=""                                     description="To store error messages texts"/>
+    <aura:attribute name="errorfound" type="boolean" default="false"                                 description="To maintain state of error found"/>
+    <aura:attribute name="IsSpinner" type="Boolean"                                                  description="To Maintain state of Spinner"/>
+    <aura:attribute name="isdealercodeselected" type="boolean" access="global" default="false"       description="To maintain the state of Dealer Code selected "/>
+
+    <aura:handler name="init" action="{!c.initHandler}" value="{!this}" access="global"/>
+  <!-- UI Begins -->  
+    <lightning:card title='' class="slds-p-left_x-large">  
+        <lightning:layout multipleRows="true">            
+            <lightning:layoutItem size="4"> 
+                <lightning:select aura:id="selectDealerCode"  
+                                  label="Dealer Code" 
+                                  required="true"
+                                  name="selectDealerCode"                                              
+                                  messageWhenValueMissing ="Dealer Code cannot be blank" 
+                                  onchange="{!c.setDealerCode}" 
+                                  value="{!v.selectedDealerCode}">
+                    <aura:iteration items="{!v.dealerCodePickListValues}" var="item">
+                        <option value="{!item.Id}">{!item.DealerCode}</option>                                
+                    </aura:iteration>
+                </lightning:select>
+            </lightning:layoutItem>
+            <lightning:layoutitem size="4"></lightning:layoutitem>            
+            <lightning:layoutitem size="4"></lightning:layoutitem>
+        </lightning:layout>         
+         <Aura:if isTrue="{!v.isdealercodeselected}">
+            
+            <lightning:layout multipleRows="true"> 
+                <lightning:layoutItem size="4" class="slds-p-top_medium" > 
+                    <div class="slds-text-heading_large">Were you able to find the part in Paragon?</div>
+                </lightning:layoutItem>                
+                <lightning:layoutitem size="4">
+                    <div class="slds-p-left_large slds-p-top_medium">
+                        <lightning:radioGroup name="radioButtonGroupRequired"                                                                                   
+                                              options="{! v.findParagonList }"
+                                              value="{! v.findParagonBool }"
+                                              type="button"
+                                              onchange="{!c.disableSubmitButton}"
+                                              />
+                    </div>
+                </lightning:layoutitem>
+                <lightning:layoutitem size="4"></lightning:layoutitem>
+            </lightning:layout> 
+            <aura:if isTrue="{! if(v.testbool == false, true, false)}">
+                <c:APC_Forms aura:id="formmaterialload"
+                             caseobj="{!v.caseobj}" 
+                             recordId = "{!v.recId}" 
+                             additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                             isbucket1="true"  
+                             isIRC="true"                             
+                             issubmitactive="{!v.issubmitactive}" 
+                             additionaldealercontactsselected="{!v.additionaldealercontactsselected}" 
+                             files="{!v.files}"
+                             pillsoffiles="{!v.pillsoffiles}"
+                             additionalRecipientList2="{!v.additionalRecipientList2}"
+                             additionaldealercontactslistvisible = "{!v.additionaldealercontactslistvisible}"/> 
+            </aura:if>  
+            <div class="">
+                <lightning:spinner aura:id="spinner2" variant="brand" class="slds-hide spins" />
+            </div>  
+            
+            <aura:if isTrue="{! if(v.testbool==true, true, false)}">               
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="4" class="slds-p-top_small" >
+                        <span onkeypress="{!c.keyPressLogic}" >
+                            <lightning:input aura:id="partnum"
+                                             value="{!v.caseobj.Part_No__c}" 
+                                             placeholder="Enter Part Number"
+                                             variant= "label-hidden"
+                                             required="true"
+                                             maxlength="40"
+                                             minlength="2"  
+                                             pattern= "[0-9A-Z_\s\-]*"
+                                             messageWhenPatternMismatch="No special characters allowed"
+                                             messageWhenValueMissing ="Part Number cannot be blank"
+                                             message-when-value-missing = "Part number cannot be blank"
+                                             onchange ="{!c.keyPressLogic}"/>                            
+                        </span>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="4">
+                        <div class="slds-p-top_small slds-p-left_large">
+                            <lightning:buttonIcon iconName="utility:send" 
+                                                  type="submit" 
+                                                  variant="brand"
+                                                  disabled="{!v.ispartnumbersearchdisabled}"
+                                                  onclick="{!c.getInput}" /> 
+                        </div>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="4"></lightning:layoutItem>
+                    
+                    
+                    <aura:if isTrue="{!v.errorfound}">
+                        <div class="slds-text-color_error slds-p-left_small">{!v.errormessage}
+                        </div>
+                    </aura:if>
+                </lightning:layout>
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="4"></lightning:layoutItem>          
+                    <lightning:layoutItem size="4"></lightning:layoutItem>                
+                    <lightning:layoutitem size="4"></lightning:layoutitem>
+                </lightning:layout>
+                <aura:if isTrue="{!(v.isPartFound)}">
+                    <lightning:layout multipleRows="true">
+                        <lightning:layoutItem size="4" >
+                            <div class="slds-p-top_large">  
+                                <div class="slds-text-heading_large">Is this a pricing request?</div>
+                            </div>
+                        </lightning:layoutItem>                        
+                        <lightning:layoutitem size="4">
+                            <div class="slds-p-top_large slds-p-left_large">
+                                <lightning:radioGroup name="pricingBtnGrpReq"                                                                                   
+                                                      options="{! v.pricingReqList }"
+                                                      value="{! v.pricingReqSlctd }"
+                                                      type="button"
+                                                      onchange="{!c.disableSubmitButton1}"
+                                                      />
+                            </div>
+                        </lightning:layoutitem>
+                        <lightning:layoutItem size="4"></lightning:layoutItem>
+                    </lightning:layout>                    
+                    <div class="slds-p-top_x-small"></div>
+                    <aura:if isTrue="{! if(v.pricingReqSlctd == 'yes', true, false) }">                   
+                        <c:APC_Forms aura:id="formpricerequest"
+                                     caseobj="{!v.caseobj}" 
+                                     recordId = "{!v.recId}" 
+                                     isbucket1="true" 
+                                     ispricingrequest="true" 
+                                     isIRC="true" 
+                                     dealerCode="{!v.selectedDealerCode}"                                     
+                                     issubmitactive="{!v.issubmitactive}" 
+                                     additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                                     additionaldealercontactsselected="{!v.additionaldealercontactsselected}" 
+                                     files="{!v.files}"
+                                     pillsoffiles="{!v.pillsoffiles}"
+                                     additionalRecipientList2="{!v.additionalRecipientList2}"
+                                     additionaldealercontactslistvisible = "{!v.additionaldealercontactslistvisible}"/>                                             
+                    </aura:if>  
+                    <aura:if isTrue="{! if(v.pricingReqSlctd == 'no', true, false)}">
+                        <c:APC_Forms caseobj="{!v.caseobj}" 
+                                     recordId = "{!v.recId}" 
+                                     isbucket1="true" 
+                                     isactionrequest="true" 
+                                     isIARC="false"  
+                                     dealerCode="{!v.selectedDealerCode}" 
+                                     aura:id="partInParagonComp" 
+                                     issubmitactive="{!v.issubmitactive}" 
+                                     additionaldealercontactslist="{!v.additionaldealercontactslist}"
+                                     additionaldealercontactsselected="{!v.additionaldealercontactsselected}" 
+                                     files="{!v.files}" 
+                                     pillsoffiles="{!v.pillsoffiles}"
+                                     additionalRecipientList2="{!v.additionalRecipientList2}"
+                                     additionaldealercontactslistvisible = "{!v.additionaldealercontactslistvisible}"/>                                             
+                    </aura:if>                    
+                </aura:if>
+            </aura:if>   
+        </Aura:if>        
+    </lightning:card>
+    <!-- UI Ends --> 
+</aura:component>

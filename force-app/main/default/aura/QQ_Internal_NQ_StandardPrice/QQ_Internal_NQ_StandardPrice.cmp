@@ -1,0 +1,155 @@
+<aura:component controller="QQ_Approval_Controller" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <c:QQ_Standard_PriceDataService aura:id="standardpriceservice"/>
+    <c:QQ_Internal_updatePrice aura:id="masterupdatesrvc"/>
+    
+    <aura:attribute name="quoteid" type="Id"/>
+    <aura:attribute name="selectedmasterid" type="Id"/>
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c' }" />
+    
+    <aura:attribute name="quoteitem" 
+                    type="ASP_QQ_Line_Item__c" 
+                    default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_QQ_Line_Item__c[]" /> 
+    
+    <aura:attribute name="noteslist" 
+                    type="note[]"/>    
+    
+    <aura:attribute name="columnlist" 
+                    type="List" default="['Select','Databook Code','Databook Control','Pricing Type','Deductible','Price','Price Control']"/>
+    
+    
+    
+    <aura:attribute name="pricelist" type="list"/>
+    <aura:attribute name="originalpricelist" type="list"/>
+    <aura:attribute name="enableDBedit" type="boolean"/>
+    <aura:attribute name="enablePriceedit" type="boolean"/>
+    
+    <aura:attribute name="editid" type="string"/>
+    <aura:attribute name="oldcost" type="string"/>
+    
+    <aura:attribute name="saved" type="boolean" default="false"/>
+    
+    <aura:attribute name="showsavebutton" type="boolean" default="false"/>
+    
+    
+    <form class="slds-theme_shade slds-form--stacked slds-box">
+        
+        <div class="slds-text-heading_small slds-float_left labelbold">Price</div><br></br>
+        <table>
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <aura:iteration items="{!v.columnlist}" var="item">
+                        <th class="td1 labelbold" scope="col" style="width: 3.25rem;">
+                            <div class="slds-truncate">{!item}</div>
+                        </th>
+                    </aura:iteration>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.pricelist}" var="item">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Select" class="td1">
+                            <lightning:input type="radio" name="options" value="{!item.Id}" 
+                                             onchange="{!c.handlecheck}"/> 
+                        </td>
+                        <td data-label="Select" class="td1">
+                            <aura:if isTrue="{!item.Id == v.editid ? v.enableDBedit : false}">
+                                <div class="slds-p-right_small">
+                                    <ui:inputText  value="{!item.Name}"/>
+                                </div>
+                                <aura:set attribute="else">
+                                    {!item.Name }
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                        <td data-label="Select" class="td1">
+                            <aura:if isTrue="{!item.Id == v.editid ? v.enableDBedit : false}">
+                                <lightning:button variant="brand" 
+                                                  label="Save" 
+                                                  name = "{!item.Id}"
+                                                  disabled = ""
+                                                  iconName = "utility:save"
+                                                  title="Edit Price"
+                                                  onclick="{!c.updatemaster}" />
+                                <aura:set attribute="else">
+                                    <lightning:button variant="brand" 
+                                                      label="Edit" 
+                                                      name = "{!item.Id}"
+                                                      disabled = ""
+                                                      iconName = "utility:edit"
+                                                      title="Edit Databook Code"
+                                                      onclick="{!c.editmaster}" />
+                                </aura:set>
+                                
+                            </aura:if>
+                            <aura:if isTrue="{!item.Id == v.editid ? v.enableDBedit : false}">
+                                <lightning:button variant="brand" 
+                                                  label="Cancel" 
+                                                  name = ""
+                                                  disabled = ""
+                                                  iconName = "utility:cancel"
+                                                  title="Edit Databook Code"
+                                                  onclick="{!c.cancelmaster}" />
+                            </aura:if>
+                        </td>
+                        <td data-label="Select" class="td1">
+                            {!item.Pricing_Types__c} 
+                        </td>
+                        <td data-label="Select" class="td1">
+                            <ui:outputCurrency value="{!item.Deductible__c}"/> 
+                        </td>
+                        <td data-label="Select" class="td1">
+                            <aura:if isTrue="{!item.Id == v.editid ? v.enablePriceedit : false}">
+                                <div class="slds-p-right_small">
+                                    <ui:inputText value="{!item.Price__c }"/>
+                                </div>
+                                <aura:set attribute="else">
+                                    
+                                    <ui:outputCurrency value="{!item.Price__c}"/> USD
+                                    
+                                </aura:set></aura:if>
+                            
+                        </td>
+                        <td data-label="Select" class="td1">
+                            <aura:if isTrue="{!item.Id == v.editid ? v.enablePriceedit : false}">
+                                <lightning:button variant="brand" 
+                                                  label="Save" 
+                                                  name = "{!item.Id}"
+                                                  disabled = ""
+                                                  iconName = "utility:save"
+                                                  title="Edit Price"
+                                                  onclick="{!c.updatemaster}" />
+                                
+                                <aura:set attribute="else">
+                                    <lightning:button variant="brand" 
+                                                      label="Edit" 
+                                                      name = "{!item.Id}"
+                                                      disabled = ""
+                                                      iconName = "utility:edit"
+                                                      title="Edit Price"
+                                                      onclick="{! c.editmaster }" /> 
+                                </aura:set>
+                            </aura:if>
+                            <aura:if isTrue="{!item.Id == v.editid ? v.enablePriceedit : false}">
+                                <lightning:button variant="brand" 
+                                                  label="Cancel" 
+                                                  name = ""
+                                                  disabled = ""
+                                                  iconName = "utility:cancel"
+                                                  title="Edit Databook Code"
+                                                  onclick="{!c.cancelmaster}" />
+                                
+                            </aura:if>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        
+    </form> 
+</aura:component>

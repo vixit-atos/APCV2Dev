@@ -1,0 +1,6 @@
+<aura:component controller="QQ_AdminTool_Controller">
+	<aura:method name="submitAdminData" action="{!c.submitAdminRecord}">
+        <aura:attribute name="AdminTool" type="Administrative_Tool__c" default="{'sobjectType': 'Administrative_Tool__c'}"/>
+        <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

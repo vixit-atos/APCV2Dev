@@ -1,0 +1,57 @@
+<apex:page standardController="Opportunity" extensions="FAB_VF_Controller" applyBodyTag="false" standardStylesheets="false" renderAs="pdf">
+    <head>
+        <style>
+            @page { size:landscape;}
+            
+        </style>
+    </head>
+    
+    <body>
+        <apex:form id="form">
+            <table style="width:100%; vertical-align: top;">
+                <td style="width:60%">
+                    <!--Image Block-->
+                    <div style="width: 90%; outline: 1px solid black;min-width: 500px; object-fit: contain; padding: 5px">
+                        <apex:repeat value="{!image}" var="imageId">
+                            <img src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&versionId=' + imageId + '&operationContext=CHATTER'}" alt="" width="100%" />
+                        </apex:repeat>
+                    </div>
+                    <br/>
+                    <!--End Image Block-->
+                    <div style="width:90%; border: 1px solid black; box-shadow: 5px 10px; min-width: 500px;padding-left: 5px">
+                        <p><b>Availability:</b><br/>
+                            Target SOP: <apex:outputText value="{!droppedSOP}"></apex:outputText>
+                        </p>
+                        <p><b>Data Codes:</b><br/>
+                            <apex:outputtext style="white-space:pre-wrap;text-decoration: none" value="{!noteDataCodes}"></apex:outputtext>
+                        </p>
+                    </div>
+                </td>
+                <td class="col-2" style="width:1%"></td>
+                <td class="col-1 border" style="width:49.5%; vertical-align: top; border: 1px solid black;padding: 5px; writing-mode: vertical-rl;">
+                    <div style="min-width:400px">
+                        <p style="text-decoration: underline;"><b>What is it?</b></p> 
+                        <apex:outputText style="width:100%; font-style: italic" value="{!noteWhat}"/><p/><br/>
+                        <p style="text-decoration: underline;"><b>Why is it important?</b></p> 
+                        <apex:outputText style="width:100%; font-style: italic" value="{!noteWhy}"/><p/><br/>
+                        <p style="text-decoration: underline;"><b>High-Level Compatibility:</b></p> 
+                        <apex:outputText style="width:100%; font-style: italic" value="{!noteCompatibility}"/><p/><br/>
+                    </div>
+                    <p style="background-color: navy; color: white;"><b>Models Impacted:</b></p> 
+                    <table>
+                        <apex:repeat value="{!modelImages}" var="imageId">
+                            <p style="width:49%; display:inline"><img src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&versionId=' + imageId + '&operationContext=CHATTER'}" alt="" width="32%" /></p>
+                        </apex:repeat><br/>
+                        <span>{!trueModelsList}</span>
+                    </table>
+                </td>
+            </table>
+            <div style="{!IF(pbFlag='True', 'display:block; page-break: inherit', 'display:none')}">
+                <apex:repeat value="{!imageFiles}" var="imageId">
+                    <img src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&versionId=' + imageId + '&operationContext=CHATTER'}" alt="" width="100%" />
+                </apex:repeat>   
+            </div>
+            
+        </apex:form>
+    </body>
+</apex:page>

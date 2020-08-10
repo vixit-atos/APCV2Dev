@@ -1,0 +1,20 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <!--Picklist Field Attribute-->
+    <aura:attribute name="picklistField" type="object"/>
+    <!--Force Record Data to update picklist value-->
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.picklistField}"
+                      mode="EDIT"/>
+     
+
+    <div dir="ltr">
+        <!--Lightning Picklist Path For Applicatin Status-->
+        <lightning:picklistPath recordId="{!v.recordId}"
+                                variant="linear"
+                                picklistFieldApiName="Status"
+                                onselect="{!c.handleSelect}" />
+    </div>
+</aura:component>

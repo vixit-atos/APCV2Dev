@@ -1,0 +1,141 @@
+<aura:component controller="QQ_ListController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{'sobjectType': 'ASP_QQ__c'}"/>
+    <aura:attribute name="quotestatus" type="String"/>    
+    
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="multiyearlist" type="List" default="[{'label': 'No', 'value': 'False'},
+                                                              {'label': 'Yes', 'value': 'True'} ]"/>
+    
+    <aura:attribute name="qq_odr_completed" type="boolean" />
+    
+    <aura:attribute name="editmode" type="boolean" default="true"/>
+    <aura:attribute name="haseditaccess" type="boolean" default="false"/>
+    <aura:attribute name="openpopup" type="boolean" default="false" />    
+    
+    <aura:if isTrue="{!v.openpopup }">
+        <c:QQ_Internal_Edit_Order openpopup = "{!v.openpopup}"
+                                  quoteid="{!v.quote.Id}" 
+                                  quotestatus ="{!v.quotestatus}"
+                                  quotenum = "{!v.quote.Name}"/>
+    </aura:if>
+    
+    <form class="slds-form--stacked slds-box">
+        <div class="slds-text-heading_small slds-float_left labelbold">
+            Order Details
+        </div>
+        <br></br>        
+        <aura:if isTrue="{!v.haseditaccess}">
+            <div class="slds-float_right">
+                <lightning:buttonIcon iconName="{!v.editmode ? 'utility:save' : 'utility:edit'}" 
+                                      variant="brand"
+                                      size="large"
+                                      alternativeText="Settings" 
+                                      iconClass="dark"
+                                      onclick="{! v.editmode  ? c.saveform : c.editform}"
+                                      name="Edit"/> 
+            </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.editmode}">
+            &nbsp;<h4>All fields are required</h4><Br></Br>
+            <Br></Br>
+            <lightning:layout>            
+                <lightning:layoutItem size="12" largeDeviceSize="4" padding="around-small">
+                    <lightning:input aura:id="quoteform"
+                                     type="date"
+                                     class="slds-dropdown slds-dropdown_left labelDate"  
+                                     max="{!v.quote.Till_Date__c}" 
+                                     name="ORDER DATE FROM" 
+                                     label="Order Date From" 
+                                     autocomplete="off"
+                                     value="{!v.quote.From_Date__c}"
+                                     onchange = "{!c.handlechange}"
+                                     required="true"/>
+                </lightning:layoutItem>            
+                <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">
+                </lightning:layoutItem>            
+                <lightning:layoutItem size="12" largeDeviceSize="4" padding="around-small">
+                    <lightning:input aura:id="quoteform"
+                                     type="date" 
+                                     class="slds-dropdown slds-dropdown_left labelDate" 
+                                     min="{!v.quote.From_Date__c}"
+                                     name="ORDER DATE TO" 
+                                     autocomplete="off"
+                                     label="Order Date To"
+                                     value="{!v.quote.Till_Date__c}" 
+                                     onchange = "{!c.handlechange}"
+                                     required="true"/>
+                </lightning:layoutItem>            
+            </lightning:layout>
+            
+            <lightning:layout>
+                <lightning:layoutItem size="12" largeDeviceSize="4" padding="around-small">
+                    <lightning:input aura:id="quoteform"
+                                     type="number"
+                                     class="labelbold" 
+                                     min="0" 
+                                     name="TOTAL UNITS" 
+                                     label="Total Units" 
+                                     value="{!v.quote.Total_Units__c}" 
+                                     onchange = "{!c.handlechange}"
+                                     required="true"/>
+                </lightning:layoutItem> 
+                <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="12" largeDeviceSize="2" padding="around-small">
+                    <lightning:radioGroup
+                                          aura:id="quoteform"
+                                          name="Usage__c"
+                                          class="labelbold"
+                                          label="Multi Year Deal"
+                                          options="{! v.multiyearlist }"
+                                          value="{! v.quote.Multi_Year_Deal__c}"
+                                          required="true" 
+                                          onchange = "{!c.handlechange}"
+                                          />     
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" largeDeviceSize="4" padding="around-small">
+                    <lightning:input aura:id="quoteform"
+                                     type="date" 
+                                     class="labelDate"
+                                     name="FMV date" 
+                                     label="Fair Market Value" 
+                                     value="{!v.quote.FMV_Date__c}" 
+                                     disabled="true"
+                                     required="true"/>
+                </lightning:layoutItem>
+            </lightning:layout> 
+            
+            <aura:set attribute="else">
+                <br></br>
+                <br></br>
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        Order Date From: {!v.quote.From_Date__c}
+                    </lightning:layoutItem> 
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        Order Date To:  {!v.quote.Till_Date__c}
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        Expiration:  {!v.quote.Expiration_Date__c}
+                    </lightning:layoutItem>                    
+                </lightning:layout>
+                
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        Total Units:   {!v.quote.Total_Units__c}
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        Multi Year Deal:   {!v.quote.Multi_Year_Deal__c ? 'Yes' : 'No'}
+                    </lightning:layoutItem> 
+                    
+                    <lightning:layoutItem size="12" smallDeviceSize="12" mediumDeviceSize="4" largeDeviceSize="4" padding="around-small">
+                        Fair Market Value:  {!v.quote.FMV_Date__c}
+                    </lightning:layoutItem>                    
+                </lightning:layout>
+            </aura:set>            
+        </aura:if>
+    </form>
+</aura:component>

@@ -1,0 +1,30 @@
+<aura:component>
+    <aura:attribute name="type" type="String" required="true"/>
+    <aura:attribute name="label" type="String"/>
+    <aura:attribute name="placeholder" type="String"/>
+    <aura:attribute name="style" type="String"/>
+    <aura:attribute name="value" type="String"/>
+    <aura:attribute name="possibleValues" type="List"/>
+    <aura:attribute name="required" type="Boolean" default="false"/>
+    
+    <aura:attribute name="dropdownOptions" type="Boolean" default="false"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+
+    <aura:if isTrue="{!v.type == 'STRING'}">
+        <lightning:input type="Text" value="{!v.value}" label="{!v.label}" placeholder="{!v.placeholder}" required="{v.required}" style="{!v.style}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.type == 'DOUBLE'}">
+        <lightning:input type="Number" value="{!v.value}" label="{!v.label}" placeholder="{!v.placeholder}" required="{v.required}" style="{!v.style}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.type == 'PICKLIST'}">
+        <div style="{!v.style}">
+            <lightning:select aura:id="dropdown" label="{!v.label}" required="{v.required}" value="{!v.value}">
+                <option value="" selected="true" disabled="false" text="{!v.placeholder}"/>
+                    <aura:iteration items="{!v.dropdownOptions}" var="option">
+                    <option text="{!option}"/>
+                </aura:iteration>
+            </lightning:select>
+        </div>
+    </aura:if>
+</aura:component>

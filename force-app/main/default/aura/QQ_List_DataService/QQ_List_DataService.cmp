@@ -1,0 +1,9 @@
+<aura:component controller="QQ_ListController">
+	<aura:method name="getListData">
+      <aura:attribute name="Stagefilter" type="String" />
+      <aura:attribute name="Statusfilter" type="String" />
+      <aura:attribute name="domain" type="String" />
+      <aura:attribute name="source" type="String" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

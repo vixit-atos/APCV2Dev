@@ -1,0 +1,74 @@
+.THIS { 
+}
+.THIS .tableheight {
+    min-height: 100%;
+    border-radius: .25rem;
+    
+}
+.THIS .slds-table thead th{
+    background-color: rgb(255, 255, 255);
+    color: rgb(81, 79, 77);
+   /* padding: .5rem;*/
+    font-weight: 7;
+    line-height: normal
+}
+.THIS .APCTablehd{
+    background-color:#2a8fc6 !important;
+    
+}
+.THIS .APCTablelabel{
+    background-color:#DADEE0 !important;
+    /* border-left: 1px solid white;*/
+    padding: .7rem !important; 
+    width:3.25rem;
+  
+}
+.THIS .APCLabeltext{
+    font-weight: normal;
+    color: black !important;
+    background-color: #dadee0!important;
+    /*font-size: 1rem;*/
+    line-height: 100%;
+    text-align: left;
+    letter-spacing: 3%;
+}
+
+.THIS .APCtext{
+    color:#191919;
+    text-align: left;
+    /*font-size:0.8rem;*/
+    background-color: #F1F1F2;
+    padding-left: .7rem;
+}
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}
+.THIS .noteformat{
+    font-size:0.75rem;
+}
+.THIS .pagination{
+    background-color: white !important;
+    border-radius:  1.25rem;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+.THIS .active {
+    border-radius: 3rem;
+
+}
+.THIS .inactive {
+    border-radius: 3rem;
+}
+
+
+.THIS .pagination a:hover.active {
+    background-color:  black !Important;
+} 
+
+.THIS .slds-box {
+    padding: 1rem;
+    border-radius: .25rem;
+    border: 0px;
+}

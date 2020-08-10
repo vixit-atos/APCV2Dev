@@ -1,0 +1,86 @@
+<apex:page title="ViewAllButtonOnContact " controller="ViewAllButtonOnContactController">
+  <br/><br/>
+  <style>
+  .customnotabBlock .brandSecondaryBrd {
+  border-top:3px solid #236fbd!important;
+  }
+  </style>
+  <h1 style="font-size:2.5em;font-weight:500;">View All Private Activities</h1>
+            <br/>
+            
+            
+            <br/>
+            <apex:form >
+            
+            <apex:commandButton value="Cancel" action="{!CancelClick}" style="display: block; margin: 0 auto 5px auto;font-size:1.2em;"/>
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:repeat value="{!PrivateActivitesTask}" var="P">
+           
+               <apex:pageBlock >
+                           
+                           
+                           <apex:pageBlockSection >
+                                  
+                                  <apex:outputText value="{!P.Subject}"/>
+                                  <br/>
+                                  <apex:outputText label="Name" value="{!Name}"/>
+                                  <br/>
+                                  <apex:outputText label="Related To" value="{!P.What.Name}"/>
+                                  <br/>
+                                  <apex:outputText label="Task" value="{!P.TaskSubtype}"/>
+                                  <br/>
+                               
+                                  <apex:outputText label="Due Date" value="{0,date,MM/dd/yyyy}" >
+                                  <apex:param value="{!P.ActivityDate}" />
+                                  </apex:outputText>
+                                  
+                                  <br/>
+                                  <apex:outputText label="Assigned To" value="{!P.Owner.Name}"/>
+                                  <br/>
+                                  <apex:outputText value="{!P.LastModifiedDate}"/>
+                                  <br/>
+                                  <apex:outputText value="{!P.Description}"/>
+                                  <br/>
+                                  
+                                  
+                             
+                           </apex:pageBlockSection>
+                                         
+                  </apex:pageBlock>
+              
+              </apex:repeat>
+              </apex:form> 
+             
+              <apex:form >
+              <apex:repeat value="{!PrivateActivitesEvents}" var="P">
+           
+                   <apex:pageBlock >
+                           
+                           <apex:pageBlockSection >
+                                
+                                <apex:outputText value="{!P.Subject}"/>
+                                <br/>
+                                <apex:outputText label="Name" value="{!Name}"/>
+                                <br/>
+                                <apex:outputText label="Due Date" value="{0,date,MM/dd/yyyy}" >
+                                <apex:param value="{!P.ActivityDate}" />
+                                </apex:outputText>
+                                <br/>
+                                
+                                <apex:outputText label="Duration" value="{!P.DurationInMinutes} mins"/>
+                                <br/>
+                                <apex:outputText value="{!P.Location}"/>
+                                <br/>
+                                <apex:outputText value="{!P.Description}"/>
+                                <br/>
+                                
+                             
+                           </apex:pageBlockSection>
+                                         
+                  </apex:pageBlock>
+              
+              </apex:repeat>
+              <br/>
+              <apex:commandButton value="Cancel" action="{!CancelClick}" style="display: block; margin: 0 auto 5px auto;font-size:1.2em;"/>
+              </apex:form>    
+</apex:page>

@@ -1,0 +1,4 @@
+<apex:page standardController="TCMeeting__c" >
+   Click <a href="{!$Setup.EventInviteURLPrefix__c.Value__c}apex/TWC_ThisWeekTCMeeting?sfdc.tabName=01r210000008dBU">here</a> to view to this week's meeting agenda at a glance.
+
+</apex:page>

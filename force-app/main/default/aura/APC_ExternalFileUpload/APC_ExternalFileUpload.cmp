@@ -1,0 +1,84 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global"
+                controller="APC_Fileuploadcontroller">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="userId" type="String" />
+    <aura:attribute name="caseid" type="String" />
+    <aura:attribute name="rowid" type="String" />
+    <aura:attribute name="label" type="String" default="" />
+    <aura:attribute name="multiple" type="Boolean" default="true" />
+    <aura:attribute name="files" type="List" default="ContentDocument[]" />
+    <aura:attribute name="pillsoffiles" type="List" default="[]" />
+    <aura:attribute name="fileids" type="List" default="[]" />
+    <aura:attribute name="hasfileuploaded" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="hasModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="selectedDocumentId" type="string"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="refresh" event="c:APC_fileUpload_Event" action="{!c.refreshFiles}" />
+    <aura:handler name="deleteFile" event="c:APC_fileUpload_Event" action="{!c.handleDeleteFile}" />
+    <lightning:navigation aura:id="navService" />
+    
+    <aura:registerEvent name="uploadToRecordDone" type="c:APC_fileUpload_Event"/>
+    <aura:registerEvent name="rowcheckevent" type="c:APC_rowselected"/>
+    
+    <aura:method name="uploadToRecord" action="{!c.uploadToRecord}" > 
+        <aura:attribute name="recordId" type="String" />
+    </aura:method>
+    <aura:method name="getFiles" action="{!c.getFilesList}" >
+    </aura:method>
+    
+    <div class="slds-is-relative" >
+        <lightning:spinner aura:id="spinner" size="small" class="slds-hide" />
+        
+        <aura:if isTrue="{!not(empty(v.userId))}">            
+            <lightning:fileUpload label=""
+                                  name="fileUploader"
+                                  recordId="{!v.userId}"
+                                  multiple="{!v.multiple}"
+                                  onuploadfinished="{!c.handleUploadFinished}">
+            </lightning:fileUpload>
+            <!--
+            <aura:if isTrue="{!not(empty(v.pillsoffiles))}">
+                <lightning:pillContainer items="{!v.pillsoffiles}" onitemremove="{!c.handlefileremove}"/>   
+            </aura:if>   -->
+            <div class="slds-p-top_medium">
+                <aura:if isTrue="{!not(empty(v.pillsoffiles))}">
+                    <div class="dynamicOverflow">
+                        <aura:iteration items="{!v.pillsoffiles}" var="pill">
+                            <lightning:pill aura:id="attachments"                                         
+                                            name="{!pill.file.Id}" 
+                                            label="{!pill.label}"
+                                            title="{!pill.label}"
+                                            onremove="{! c.handlefileremove }"
+                                            onclick="{! c.handlepillclick }">
+                                <aura:set attribute="media">
+                                    <lightning:icon iconName="{!pill.iconName}"  
+                                                    alternativeText="Attachment"/>
+                                </aura:set>
+                            </lightning:pill>
+                        </aura:iteration>
+                    </div>
+                    <aura:if isTrue="{!v.hasModalOpen}">
+                        <section onclick="{!c.closeModel}"
+                                 role="dialog"
+                                 aria-modal="true"
+                                 class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__content slds-p-around_medium slds-text-align_center"
+                                     style="background: transparent;">
+                                    <div style="width: 50%; margin: 0 auto; text-align: left">
+                                        <!--<lightning:fileCard> to preview file using content document Id -->
+                                        <lightning:fileCard fileId="{!v.selectedDocumentId}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </aura:if>
+                    
+                </aura:if>  
+            </div>
+        </aura:if>
+    </div>
+    
+</aura:component>

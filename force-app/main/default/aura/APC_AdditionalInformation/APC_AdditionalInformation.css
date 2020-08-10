@@ -1,0 +1,24 @@
+.THIS .slds-form-element__label{
+}
+.THIS .slds-form-element__legend{ 
+    font-weight : normal !important;
+}
+.THIS .unstyled-button {
+  border: none;
+  padding: 0;
+ /*font-size: 1.265em !important;*/
+}
+.THIS .unstyled-button11 {
+  border: none;
+  padding: 0;  
+}
+.THIS .slds-section__title-action {
+    background: rgb(243, 242, 242);
+    
+}
+.THIS .External{
+    background: rgb(230, 230, 230) !important;
+}
+.THIS.External:hover {    
+    background-color: #F1F1F2;
+}

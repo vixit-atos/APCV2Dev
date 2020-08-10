@@ -1,0 +1,15 @@
+<aura:event type="APPLICATION" description="Event template">
+    
+    <aura:attribute name="additionalRecipientList2" type="list" access="global"/>  
+    <aura:attribute name="additionalRecipientList" type="string" access="global"/>   
+    <aura:attribute name="additionalRecipient" type="string" access="global"/>
+    
+    <aura:attribute name="files" type="ContentDocument[]"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]" /> 
+    
+    <aura:attribute name="typeofreturnselected" type="string" access="global"/>
+    <aura:attribute name="creditdebitreasonselected" type="string" access="global"/>
+    <aura:attribute name="trackingnumber" type="string" access="global" />
+    <aura:attribute name="credittypeselected" type="string" access="global" default=""/>
+    
+</aura:event>

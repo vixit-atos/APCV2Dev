@@ -1,0 +1,6 @@
+<aura:component controller="QQ_community_userinfo">
+	<aura:method name="geturlcommunity">
+      <aura:attribute name="communityname" type="String" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

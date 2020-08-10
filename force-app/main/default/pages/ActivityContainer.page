@@ -1,0 +1,4 @@
+<apex:page standardController="Account" >
+    <apex:relatedList subject="{!account.Private_Activity_cont__c}" 
+                      list="OpenActivities" />
+</apex:page>

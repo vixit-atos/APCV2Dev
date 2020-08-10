@@ -1,0 +1,6 @@
+<aura:component controller="QQ_ListController">
+	<aura:method name="archiveListData">
+      <aura:attribute name="qqlst" type="List" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

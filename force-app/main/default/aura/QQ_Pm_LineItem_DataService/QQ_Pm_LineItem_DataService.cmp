@@ -1,0 +1,6 @@
+<aura:component controller="QQ_PM_Ext_Controller">
+	<aura:method name="getLineitemData">
+      <aura:attribute name="packagename" type="String" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

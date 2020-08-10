@@ -1,0 +1,16 @@
+<aura:component access="global"
+                controller="APC_Custom_ChatterRelated">
+    <aura:attribute name="commentbody" type="String" />
+    <aura:attribute name="FeedItemId" type="String" />
+    <aura:attribute name="caseId" type="String" />
+    <aura:attribute name="feeds" type="List" default="[]"                              description="To store feeds of case"/>
+    
+    <div class="slds-publisher slds-publisher_comment slds-is-active">       
+        <lightning:inputRichText variant="bottom-toolbar" value="{!v.commentbody}" placeholder="Write a comment"/>        	
+        <div class="slds-clearfix slds-p-top_small">            
+            <div class="slds-float_right">
+                <lightning:button variant="brand"  label="Comment" onclick="{!c.insertcomment}"/>  
+            </div>
+        </div>
+    </div>	
+</aura:component>

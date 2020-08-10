@@ -1,0 +1,16 @@
+<aura:event type="APPLICATION" description="Event template" >
+    <aura:attribute name="Action" type="string" />
+    <aura:attribute name="PartNumber" type="string" />
+    <aura:attribute name="OrderStatus" type="string" />
+    <aura:attribute name="PONumber" type="string" />
+    <aura:attribute name="OriginalDelivery" type="string" />
+    <aura:attribute name="PDC" type="string" />
+    <aura:attribute name="SC" type="string" />
+    <aura:attribute name="TN" type="string" />
+    <aura:attribute name="AI" type="string" />
+    <aura:attribute name="BICRecordTF" type="boolean" default="false" />
+    <aura:attribute name="PO_NumberTF" type="boolean" default="false" />
+    <aura:attribute name="Original_Delivery_PDCTF" type="boolean" default="false" />
+    
+    
+</aura:event>

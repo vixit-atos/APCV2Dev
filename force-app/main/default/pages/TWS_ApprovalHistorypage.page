@@ -1,0 +1,65 @@
+<apex:page standardController="opportunity" extensions="TCMeetingController" showHeader="true" >
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+   
+     <script>
+        $(document).ready(function(){
+        $('#Childs a').attr('target','_self');
+    });
+    </script>
+    
+    <style>
+        .pbButton{
+        display:none;
+        }
+        .actionColumn{
+        display:none;
+        }
+    </style>
+    <apex:form >
+   <apex:sectionHeader title="Approval Request" subtitle="{!Objectopportunity.name}">
+       <apex:outputLink value="/{!Objectopportunity.Id}">« Back to Opportunity: {!Objectopportunity.name}</apex:outputLink>
+       <br/><br/>
+       </apex:sectionHeader>
+
+   <apex:pageBlock title="Approve/Reject Approval Request">
+     
+       <apex:pageBlockButtons location="bottom"> 
+           <apex:commandButton value="Approve" action="{!approve}" >
+            <apex:param name="AccountID" value="{!Objectopportunity.Id}"/>
+              </apex:commandButton>
+           <apex:commandButton value="Reject" action="{!reject}">
+           <apex:param name="AccountID" value="{!Objectopportunity.Id}"/>
+                        </apex:commandButton>
+
+           <apex:commandButton value="Cancel" action="{!doCancel}"/>
+       </apex:pageBlockButtons> 
+         <!-- <apex:pageBlockTable var="Oppy" value="{!mysObject.Deal_Meeting_Associations__r}" border="1" cellpadding="5"> -->
+       <apex:pageBlockSection columns="1">
+           <apex:pageBlockSectionItem >
+               Opportunity Name <apex:outputField value="{!Objectopportunity.name}"/>
+           </apex:pageBlockSectionItem>
+           <apex:pageBlockSectionItem >
+               Opportunity Owner <apex:outputField value="{!Objectopportunity.Owner.Name}"/>
+           </apex:pageBlockSectionItem>
+           <apex:pageBlockSectionItem >
+               Opportunity WorkSheet<apex:outputField value="{!Objectopportunity.TWSdealLinktoWS__c}"/>
+           </apex:pageBlockSectionItem>
+           <apex:pageBlockSectionItem >
+               TC Meeting Notes<apex:outputField value="{!Objectopportunity.TC_Meeting_Notes__c}"/>
+           </apex:pageBlockSectionItem>
+           <apex:pageBlockSectionItem >
+               [ PLEASE READ ]<apex:outputField value="{!Objectopportunity.PLEASE_READ__c}"/>
+           </apex:pageBlockSectionItem>
+           <apex:pageBlockSectionItem >
+              Comments  <apex:inputTextArea value="{!Objectopportunity.Deal_Comments__c}" rows="5" cols="100"/>
+           </apex:pageBlockSectionItem> 
+       </apex:pageBlockSection>
+         <!-- </apex:pageBlockTable> -->
+   </apex:pageBlock>
+               
+   </apex:form>
+   <Div id="Childs" >
+        <apex:relatedList list="ProcessSteps" ></apex:relatedList>
+</Div >
+</apex:page>

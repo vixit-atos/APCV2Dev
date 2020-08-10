@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>40.0</apiVersion>
+    <availableInTouch>true</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>Used for few new fields used only in ISP right now --won or lost deal and comments regarding it</description>
+    <label>Isp Won or lost on opportunity vf page</label>
+</ApexPage>

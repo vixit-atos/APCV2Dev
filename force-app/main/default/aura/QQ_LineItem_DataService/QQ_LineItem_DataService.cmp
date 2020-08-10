@@ -1,0 +1,6 @@
+<aura:component controller="QQ_ListController">
+	<aura:method name="getLineitemData">
+      <aura:attribute name="coverage" type="String" />
+      <aura:attribute name="callback" type="Function" />
+    </aura:method>
+</aura:component>

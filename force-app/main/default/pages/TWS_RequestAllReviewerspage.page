@@ -1,0 +1,128 @@
+<apex:page controller="TWS_RequestAllReviewerscontrollerext" tabStyle="Task"  >
+    <apex:form id="form1">
+        <apex:pageMessages ></apex:pageMessages>
+        <apex:pageBlock id="EA" >
+            <apex:sectionHeader title="Task" subtitle="New Task"  />
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!SaveNewTask}" />
+                <apex:commandButton value="Cancel" action="{!Cancel}" />
+            </apex:pageBlockButtons>
+            
+            
+            
+            <apex:pageBlockSection title="Please select groups for review request" collapsible="true" columns="1"   >
+                <font color="#ff0000"><apex:facet name="header">
+                    <span style="color:Black">Please select groups for review request</span>
+                    </apex:facet>     </font> 
+                <apex:pageblocksectionitem >
+                    <apex:actionregion > 
+                        <apex:outputLabel value="Controlling  Review" for="Controlling"/> &nbsp;&nbsp;
+                        <apex:inputCheckbox value="{!blnContolling}" id="Controlling"   >
+                            <apex:actionSupport event="onchange" reRender="conop" action="{!updateBooleanvaalues}"  />
+                        </apex:inputCheckbox>  
+                    </apex:actionregion>
+                </apex:pageblocksectionitem>
+                <apex:pageblocksectionitem >
+                    <apex:actionregion >
+                        <apex:outputLabel value="DTR  review" for="DTR"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:inputCheckbox value="{!blnDTR}" id="DTR"   >
+                            <apex:actionSupport event="onchange"  reRender="DTRop" action="{!updateBooleanvaalues}"  />
+                        </apex:inputCheckbox>
+                    </apex:actionregion> 
+                </apex:pageblocksectionitem>
+                <apex:pageblocksectionitem >    
+                    <apex:actionregion >
+                        <apex:outputLabel value="ASP  review" for="ASP"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:inputCheckbox value="{!blnASP}" id="ASP"   >
+                            <apex:actionSupport event="onchange" reRender="ASPop" action="{!updateBooleanvaalues}"  />
+                        </apex:inputCheckbox> 
+                    </apex:actionregion>
+                </apex:pageblocksectionitem>
+                
+                
+                
+            </apex:pageBlockSection>
+            
+            
+            <apex:outputpanel id="conop" >
+                <apex:pageBlockSection collapsible="true"   rendered="{!blndisplayContolling== true}" >
+                    <font color="#ff0000"><apex:facet name="header">
+                        <span style="color:Black">Controlling  Task Information</span>
+                        </apex:facet>     </font> 
+                    <!--   <apex:inputField value="{!objcontrolingtask.ownerid}"/> -->
+                    <apex:inputField value="{!objcontrolingtask.ActivityDate}" onfocus="DatePicker.pickDate(false, 'DueDate', false);"/>
+                    <apex:inputField value="{!objcontrolingtask.WhatId}"/>
+                    <apex:inputField value="{!objcontrolingtask.Status}"/>
+                    <apex:inputField value="{!objcontrolingtask.Subject}"/>
+                    <apex:inputField value="{!objcontrolingtask.Description}  " style="width: 360px; height: 40px" />
+                    <apex:inputField value="{!objcontrolingtask.Priority}"/>
+                </apex:pageBlockSection>
+            </apex:outputpanel>
+            <apex:outputpanel id="DTRop"  >
+                <apex:pageBlockSection title="DTR Task Information" collapsible="true"  rendered="{!blndisplayDTR==true}">
+                    <font color="#ff0000"><apex:facet name="header">
+                        <span style="color:Black">DTR Task Information</span>
+                        </apex:facet>     </font> 
+                    <apex:inputField value="{!objDTRtask.ActivityDate}" onfocus="DatePicker.pickDate(false, 'DueDate', false);"/>
+                    <apex:inputField value="{!objDTRtask.WhatId}"/>
+                    <apex:inputField value="{!objDTRtask.Status}"/>
+                    <apex:inputField value="{!objDTRtask.Subject}"/>
+                    <apex:inputField value="{!objDTRtask.Description}  " style="width: 360px; height: 40px" />
+                    <apex:inputField value="{!objDTRtask.Priority}"/>
+                    
+                </apex:pageBlockSection>
+            </apex:outputpanel>
+            <apex:outputpanel id="ASPop" >
+                
+                <apex:pageBlockSection title="ASP Task Information" collapsible="true" rendered="{!blndisplayASP==true}"  >
+                    <font color="#ff0000"><apex:facet name="header">
+                        <span style="color:Black">ASP Task Information</span>
+                        </apex:facet>     </font> 
+                    <apex:inputField value="{!objASPtask.ActivityDate}" onfocus="DatePicker.pickDate(false, 'DueDate', false);"/>
+                    <apex:inputField value="{!objASPtask.WhatId}"/>
+                    <apex:inputField value="{!objASPtask.Status}"/>
+                    <apex:inputField value="{!objASPtask.Subject}"/>
+                    <apex:inputField value="{!objASPtask.Description}  " style="width: 360px; height: 40px" />
+                    <apex:inputField value="{!objASPtask.Priority}"/>
+                </apex:pageBlockSection>
+            </apex:outputpanel>
+            
+        </apex:pageBlock>
+          <apex:sectionHeader title="Task Attachments"   />
+         <apex:pageBlock title="Upload Multiple Attachment to Task" id="fileps">  
+            
+            <apex:actionFunction name="ChangeCount" action="{!ChangeCount}"  />
+           
+            <apex:pageblocksection >
+                            
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="How many files you want to upload?"/>
+                    <apex:selectList onchange="ChangeCount() ;" multiselect="false" size="1" value="{!FileCount}" >
+                     <apex:actionSupport event="onchange" reRender="fileps"   />
+
+                        <apex:selectOption itemLabel="--None--" itemValue="" >
+                        </apex:selectOption>
+                        <apex:selectOptions value="{!filesCountList}">
+                         </apex:selectOptions>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+            
+            </apex:pageblocksection>
+                  <apex:outputPanel id="SectionID" >
+ 
+           
+            <apex:pageBlockSection title="Select Files" rendered="{!IF(FileCount != null && FileCount != '', true , false)}" >
+                 <apex:actionRegion >
+                <apex:repeat value="{!allFileList}" var="AFL">
+                    <apex:inputfile value="{!AFL.body}" filename="{!AFL.Name}" />
+                    <br/>
+                </apex:repeat>
+                     </apex:actionRegion>
+            </apex:pageBlockSection>
+                
+             </apex:outputPanel>            
+        </apex:pageBlock>
+        
+    </apex:form>  
+    
+</apex:page>

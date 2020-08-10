@@ -1,0 +1,90 @@
+<aura:component >
+    <c:QQ_ApprovalService aura:id="ApprovalService" />
+    <c:QQ_Approval_Mail_Service aura:id="emailService"/>
+    <aura:attribute name="quote" type="ASP_QQ__c" default="{ 'sobjectType': 'ASP_QQ__c' }" />
+    
+    <aura:attribute name="quoteitem" 
+                    type="ASP_QQ_Line_Item__c" 
+                    default="{'sobjectType': 'ASP_QQ_Line_Item__c'}"/> 
+    
+    <aura:attribute name="quoteitemlist" 
+                    type="ASP_QQ_Line_Item__c[]" /> 
+    
+    <aura:attribute name="noteslist" 
+                    type="note[]"/>
+    
+    <aura:attribute name="noteitem" 
+                    type="note" 
+                    default="{'sobjectType': 'Note'}"/>
+    
+    <aura:attribute name="groupooptions" type="list"/>
+    
+    
+    <aura:attribute name="group" type="String"/>
+    
+    <aura:attribute name="showreject" type="boolean" default="false"/>
+    <aura:attribute name="openpopup" type="boolean" default="true"/>
+    
+    <aura:attribute name="cancelreason" type="String"/>
+    
+    
+    <div class="slds-box">
+        <div class="demo-only" style="height: 20rem;">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                <div class="slds-modal__container abc">
+                    <header class="slds-modal__header slds-theme_error slds-theme_alert-texture modalheader ">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium" id="prompt-heading-id">Reject Quote Request</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">  
+                        
+                        
+                        
+                        
+                        <lightning:layout>
+                            
+                            <lightning:layoutItem size="12" padding="around-small">
+                                
+                                <lightning:textarea 
+                                                    aura:id="rej"
+                                                    class="labelbold slds-text-align_left"
+                                                    name="Reason" 
+                                                    disabled="false"
+                                                    placeholder="Reason"
+                                                    value="{!v.noteitem.Body}" 
+                                                    label="Please Leave A Reason For This Action" 
+                                                    required="true"/> 
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                   
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <div class="slds-float_right slds-p-right_small">
+                            <lightning:button class=""  
+                                              variant="brand" 
+                                              label="Cancel"
+                                              disabled=""
+                                              iconName=""
+                                              title="CLICK TO CANCEL" 
+                                              onclick="{! c.CancelSend }" /> 
+                            
+                            
+                            <lightning:button 
+                                              variant="brand" 
+                                              label="Send" 
+                                              iconName="utility:send"
+                                              title="CLICK TO SEND" 
+                                              onclick="{! c.SendtoGroup }" />
+                            
+                        </div>
+                        
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+</aura:component>

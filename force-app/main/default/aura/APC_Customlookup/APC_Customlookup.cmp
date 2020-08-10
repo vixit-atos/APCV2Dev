@@ -1,0 +1,80 @@
+<!--
+  @Component Name     : APC_Customlookup.cmp
+  @Description        : To dsiplay custom lookup functionality for account field- in Internal case creation.
+  @Developer          : Chandrika
+-->
+
+<aura:component controller="APC_Lookupcontroller" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    
+    <aura:attribute name="selectedRecord" type="Account" default="{}" description="Used,for storing SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="Account[]" description="Used,for storing the list of search records which returns from apex class"/>
+    <aura:attribute name="contactNamesList" type="List" default="" description="To store contact picklist values"/>
+    <aura:attribute name="additionaldealercontactslist" type="list" description="To store additional contacts picklist value"  />
+    <aura:attribute name="SearchKeyWord" type="string" description="To set the value of searched dealer code"/>
+    <aura:attribute name="iconname" type="string" default="" description="To set the icon name"/>
+    <aura:attribute name="Message" type="String" />
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+    <aura:attribute name="CaseId" type="string"/>
+    <!-- default="Search Result.." -->
+    <aura:attribute name="label" type="string" default=""/>
+    <aura:handler name="oSelectedAccountEvent" event="c:APC_Lookupevent" action="{!c.handleComponentEvent}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:registerEvent name="contactsListEvnt" type="c:APC_ContactsEvent"/>
+    <aura:registerEvent name="ClearCaseForm" type="c:APC_Internal_CaseForm_Clear_Event"/>
+    
+    <div aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close slds-form-element_horizontal" data-select="single">
+        <label class="slds-form-element__label" for="horizontal-input-id-01">
+            <abbr class="slds-required" title="required" data-aura-rendered-by="1647:0">*</abbr>Account
+        </label>
+        <div class="slds-form-element__control">
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                    {!v.selectedRecord.Name}  
+                    <span class="slds-pill__label ">&nbsp;&nbsp;&nbsp;&nbsp;
+                        <lightning:buttonIcon class="slds-button slds-button icon slds-pill__remove" 
+                                              iconName="utility:close" 
+                                              type="submit" 
+                                              variant="base" onclick="{!c.clear}" /> 
+                    </span>
+                </div>
+                <div aura:id="lookupField" class="slds-show">
+                    <lightning:input aura:id="dealerCode"
+                                     value="{!v.SearchKeyWord}" 
+                                     onkeyup="{!c.keyPressController}" 
+                                     placeholder="search.." 
+                                     variant="label-hidden"
+                                     required="true"
+                                     maxlength="20"
+                                     autocomplete="off"
+                                     messageWhenValueMissing ="Account cannot be blank"
+                                     />
+                    <lightning:icon class="slds-input__icon slds-show" 
+                                    iconName="utility:search" 
+                                    size="x-small" 
+                                    alternativeText="search"/>
+                    <span class="slds-icon_container  slds-combobox__input-entity-icon" title="record">
+                        <lightning:icon class="slds-icon slds-icon slds-icon_small slds-icon-text-default" 
+                                        iconName="{!v.iconname}" 
+                                        size="x-small" 
+                                        alternativeText="icon"/>
+                    </span>
+                </div>   
+            </div>
+        </div>
+        
+        <div class="slds-lookup__menu slds" id="lookup-348">
+            <div class="slds-lookup__item--label slds-text-body--small">{!v.Message}</div>
+            <center> <ui:spinner aura:id="spinner"/> </center>
+            <ul class="slds-lookup__list" role="listbox">
+                <aura:iteration items="{!v.listOfSearchRecords}" 
+                                var="singleRec">
+                    <c:APC_Lookupresult oAccount="{!singleRec}" />
+                </aura:iteration>
+            </ul>
+        </div>
+    </div>
+    
+</aura:component>

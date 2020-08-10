@@ -1,0 +1,35 @@
+<aura:component access="global">
+    <aura:attribute name="openpopup" type="boolean" default="true"/>
+    <aura:attribute name="closeform" type="boolean" default="false"/>
+    <aura:attribute name="qq_submitted" type="boolean" default="false"/>
+    <aura:attribute name="newquotenum" type="String" default=""/>
+    <div class="slds-box">
+        <div class="demo-only" style="height: 20rem;">
+            <section role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" class="slds-modal slds-fade-in-open slds-modal_prompt" aria-modal="true">
+                <div class="slds-modal__container abc">
+                    <header class="slds-modal__header slds-theme_error slds-theme_alert-texture modalheader ">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 class="slds-text-heading_medium" id="prompt-heading-id">Quote Request</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="prompt-message-wrapper">
+                        <p>
+                            <aura:if isTrue="{!v.qq_submitted}">
+                             	Quote No: {!v.newquotenum}  has been generated.Do you really want to exit? 
+                                <aura:set attribute="else">
+                            	Are you sure you wish to cancel the quote? You have unsaved changes.
+                                    </aura:set>
+                                </aura:if>
+                        </p> </div>
+                    <footer class="slds-modal__footer slds-theme_default">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.Yes}" >Yes</button>
+                        <button class="slds-button slds-button_neutral" onclick="{!c.No}">No</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,186 @@
+<!--
+  @Component Name     : APC_OrderComponent_Existing.cmp
+  @Description        : For existing order.
+  @Author             : Akhila Putta.
+-->
+
+<aura:component controller="APC_MasterController" implements="lightning:isUrlAddressable,flexipage:availableForAllPageTypes,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    
+    <aura:attribute name="caseobj" type="Case" access="global" 
+                    default="{'sobjectType': 'Case',
+                             'Planner_Code__c':'',
+                             'Vendor__c':'',
+                             'Part_No__c':'',
+                             'VIN__c':'',
+                             'Vendor__c':'',
+                             'Reason__c':'',
+                             'RecordTypeId':'',
+                             'Description':'',
+                             'Additional_Contacts__c':'',
+                             'Request_Type__c':'',
+                             'Origin':'Web',
+                             'Status':'New',
+                             'Priority':'Medium',
+                             'ContactId':'',
+                             'AccountId':'',
+                             'APC_Source__c':'',
+                             'NSN_Number__c':'',
+                             'Quantity__c':'',
+                             'Lead_Time_Reason__c':'',
+                             'PDC_Location__c':'',
+                             'Supplier__c':'',
+                             'Model_Year__c':'',
+                             'TBB_Part_Inquiry__c':'',
+                             'Part_Description__c':'',                                                                        
+                             'Return_Status__c':'',
+                             'Action__c':'',
+                             'Order_Status__c':'',
+                             'Part_Received_date__c':'',
+                             'SAP_Order_Number__c':'',
+                             'APC_Delivery__c':'',
+                             'APC_Original_Delivery__c':'',
+                             'APC_PO_Number__c':'',
+                             'APC_Shipping_Condition__c':'',
+                             'APC_DTNA_PO':'',
+                             'APC_Tracking_Number__c':'',
+                             'APC_Invoice_Number__c':'',
+                             'APC_Line_Number__c':''
+                             }"/>
+
+    <aura:attribute name="cases" type="List"                                                         description="To store records received from paragon"/>
+    <aura:attribute name="files" type="ContentDocument[]"                                            description ="To hold uploaded files"/>
+    <aura:attribute name="pillsoffiles" type="List" default="[]"                                     description ="To hold pills of uploaded files"/>
+    <aura:attribute name="issubmitactive" type="Boolean" default="false" access="global"             description ="To maintain the submit button state"/>
+    <aura:attribute name="additionaldealercontactslist" type="list"                                  description="To store additional contacts picklist value"/>
+    <aura:attribute name="additionaldealercontactslistvisible" type="list"                           description="To store additional dealer contact list"/>
+    <aura:attribute name="additionaldealercontactsselected" type="String"                            description="To store selected additional contacts picklist value"/>
+    <aura:attribute name="additionalRecipientList2" type="list" access="global"                      description="To store additional recipient values"/>     
+    <aura:attribute name="actionsMap" type="Map" default="{}"                                        description="To store Action requested picklist based on the order status"/>
+    <aura:attribute name="selectedDealerCode" type="object" access="global"                          description="To store selected Dealer code"
+                    default="{'Id':'','name':'','DealerCode':''}"/>
+    <aura:attribute name="dealerCodePickListValues" type="Object"                                    description="To store dealer code picklist values"/>   
+    <aura:attribute name="requestType" type="string" default=""                                      description="TO store what is the type of request"/>
+    <aura:attribute name="requestNumber" type="string"                                               description="To store what is the request number"/>   
+    <aura:attribute name="issubmitrequestclicked" type="Boolean" default="false"                     description="To maintain the submit request state"/>    
+    <aura:attribute name="requestTypeList" type="List" default="[]"                                  description="To store list of request type"/>      
+    <aura:attribute name="recordsfound" type="Boolean" default="false"                               description="To maintain state of records found"/>
+    <aura:attribute name="IsSpinner" type="Boolean"                                                  description="To maintain state of Spinner"/>
+    <aura:attribute name="ispartnumbersearchdisabled" type="boolean" access="global" default="true"  description="To maintain state of part number search button" />
+    <aura:attribute name="isdealercodeselected" type="boolean" access="global" default="false"       description="To maintain the state of Dealer Code selected "/>
+
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" access="global"/>
+    <aura:registerEvent name="submitRenderEvent" type="c:APC_SubmitRenderEvt" />
+    
+    <div onkeyup="{!c.handleKeyup}">
+        <lightning:card title='' class="slds-p-left_x-large">   
+            <aura:if isTrue="{!v.IsSpinner}">
+            <lightning:spinner aura:id="spinner4" variant="brand"  class="spins" />
+        </aura:if>
+            <lightning:layout multipleRows="true" >
+                <lightning:layoutItem size="4" class="slds-p-bottom_medium">
+                    <lightning:select aura:id="dealerCode"
+                                      name="dealerCode" 
+                                      label="Dealer Code" 
+                                      onchange="{!c.setDealerCode}" 
+                                      value="{!v.selectedDealerCode}">                         
+                        <aura:iteration items="{!v.dealerCodePickListValues}" var="item">
+                            <option value="{!item.Id}">{!item.DealerCode}</option>
+                        </aura:iteration>
+                    </lightning:select>                      
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4"></lightning:layoutItem>
+                <lightning:layoutItem size="4"></lightning:layoutItem>
+                
+            </lightning:layout>
+             <Aura:if isTrue="{!v.isdealercodeselected}">
+                <lightning:layout multipleRows="true" >                    
+                    <lightning:layoutItem size="6">
+                        <div class="slds-p-top_small">
+                            <lightning:radioGroup name="radioButtonGroupRequired"                                                                                   
+                                                  options="{! v.requestTypeList }"
+                                                  value="{! v.requestType }"
+                                                  type="button"
+                                                  onchange="{!c.requesttypechange}"/>                    
+                        </div>
+                    </lightning:layoutItem>   
+                    <lightning:layoutitem size="2"></lightning:layoutitem>
+                    <lightning:layoutItem size="4"></lightning:layoutItem>
+                    
+                </lightning:layout>    
+            </Aura:if>  
+            <aura:if isTrue="{! v.requestType != ''  }">
+                <lightning:layout multipleRows="true">    
+                    <lightning:layoutItem size="4" class="slds-p-top_large">  
+                        <span onkeypress="{!c.keyPressLogic}" > 
+                            <aura:renderIf isTrue="{!v.requestType == 'orderNumber'}">
+                                <lightning:input aura:id="requestNumberId"                                 
+                                                 class="field" 
+                                                 value="{!v.requestNumber}" 
+                                                 required="true"
+                                                 placeholder = "Enter SAP Order Number"                              
+                                                 variant= "label-hidden"
+                                                 onchange= "{!c.resetData}"
+                                                 messageWhenValueMissing= "SAP Order Number cannot be blank"
+                                                 />
+                            </aura:renderIf>
+                            <aura:renderIf isTrue="{!v.requestType == 'customerPoNo'}">
+                                <lightning:input aura:id="requestNumberId"                                 
+                                                 class="field" 
+                                                 value="{!v.requestNumber}" 
+                                                 required="true"
+                                                 placeholder = "Enter Customer PO Number"
+                                                 variant= "label-hidden"
+                                                 onchange= "{!c.resetData}"
+                                                 messageWhenValueMissing="Customer PO Number cannot be blank"
+                                                 />
+                            </aura:renderIf>                              
+                        </span>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="4" class="slds-p-left_large slds-p-top_large">
+                        <lightning:buttonIcon iconName="utility:send" 
+                                              type="submit" 
+                                              variant="brand" 
+                                              disabled="{!v.ispartnumbersearchdisabled}"
+                                              onclick="{!c.getOrderRecords}" /> 
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="4"></lightning:layoutItem>
+                    
+                    <aura:if isTrue="{!v.IsSpinner}">
+                        <lightning:spinner aura:id="spinner4" variant="brand"  class="spins" />
+                    </aura:if>
+                </lightning:layout>
+                <aura:if isTrue="{! v.issubmitrequestclicked}" >
+                    <div class="slds-p-top_medium">
+                        <lightning:layout multipleRows="true" >                                
+                            <c:APC_List aura:id="apclist" 
+                                        Static_resource_list="APC_List_ExistingOrder" 
+                                        methodname="getAllValues" 
+                                        soldToParty="{!v.selectedDealerCode}" 
+                                        requestType="{#v.requestType}" 
+                                        requestNumber="{#v.requestNumber}" 
+                                        recordsfound="{!v.recordsfound}" 
+                                        issubmitactive="{!v.issubmitactive}" 
+                                        caseobj="{!v.caseobj}"  
+                                        IsSpinner="{!v.IsSpinner}"
+                                        cases="{!v.cases}"/>
+                        </lightning:layout>
+                    </div>
+                    <aura:if isTrue="{!v.recordsfound}">
+                        <c:APC_Forms caseobj="{!v.caseobj}" 
+                                     recordId = "{!v.recId}" 
+                                     dealerCode="{!v.selectedDealerCode}" 
+                                     isbucket2="true"  
+                                     isARC="true" 
+                                     aura:id="partInParagonComp"
+                                     additionaldealercontactslist="{!v.additionaldealercontactslist}"  
+                                     cases="{!v.cases}"
+                                     additionaldealercontactsselected="{!v.additionaldealercontactsselected}"
+                                     additionalRecipientList2="{!v.additionalRecipientList2}"
+                                     additionaldealercontactslistvisible = "{!v.additionaldealercontactslistvisible}"/>  
+                    </aura:if>                        
+                </aura:if>
+            </aura:if>             
+        </lightning:card>
+    </div> 
+</aura:component>

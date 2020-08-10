@@ -1,0 +1,16 @@
+<apex:page showHeader="true" sidebar="true" controller="ManageAllController" >
+
+    <apex:form style="margin-left: -10px;" >
+        <apex:pageBlock title="Items To Approve">
+            <apex:pageBlockButtons location="top" rendered="{!IF(Or($Profile.Name =='DTNA - FTL Sales',$Profile.Name =='System Administrator', $Profile.Name == 'DTNA - WST Sales'), true , false)}" >
+                <apex:commandLink value="Approve"  action="{!massApprove}" styleClass="btn" target="_top"  />
+                <apex:commandLink value="Reject" action="{!massReject}" styleClass="btn" target="_top"  />
+                <apex:commandLink value="Cancel" action="{!goBack}" immediate="true" styleClass="btn" target="_top"  />
+        </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="1" showHeader="FALSE"> 
+                <apex:inputTextarea label="Comments" value="{!inputtedComment}" id="ReassignComment"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

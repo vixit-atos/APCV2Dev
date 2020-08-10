@@ -1,0 +1,87 @@
+<aura:component >
+    
+    <c:QQ_Username_Service aura:id="userservice" />
+    
+    <aura:attribute name="noteslist" 
+                    type="Note[]"/>
+    
+    
+    
+    
+    <aura:attribute name="noteitem" 
+                    type="note" 
+                    default="{'sobjectType': 'Note'}"/>
+    
+    
+    <aura:attribute name="notetext" 
+                    type="String" />
+    
+    <aura:attribute name="notesplaceholder" 
+                    type="String"/>
+    <aura:attribute name="Name" 
+                    type="String"/>
+    <aura:attribute name="addnotesclicked" 
+                    type="boolean" 
+                    default="false"/>
+    <aura:attribute name="today" 
+                    type="Date" />
+    
+    <aura:attribute name="haseditaccess" 
+                    type="boolean" 
+                    default="false"/>
+    
+    <aura:attribute name="editmode" 
+                    type="boolean" 
+                    default="false"/>
+    
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />
+    
+    
+    <form class="slds-form--stacked slds-box">
+        <div class="slds-text-heading_small slds-float_left labelbold">Notes</div><br></br>
+        <br></br>
+        <div class="slds-float_right">
+            
+            <lightning:buttonIcon iconName="{! v.addnotesclicked ? 'utility:save' : 'utility:add'}"
+                                  variant ="{! v.addnotesclicked ? 'bare' : 'brand'}"
+                                  size="large"
+                                  iconClass="dark"
+                                  onclick="{! v.addnotesclicked ? c.saveNotes : c.addNotes}"/>
+            &nbsp;&nbsp;
+        </div>
+        <br></br>
+        <br></br>
+        
+        
+        <aura:iteration items="{!v.noteslist}" var="item">
+            
+            
+            <lightning:layout>
+                <lightning:layoutItem>
+                    <span class="slds-text-title_bold"> {!item.CreatedBy.Name } on <lightning:formattedDateTime value="{!item.CreatedDate}" year="numeric" month="2-digit" day="2-digit"/> </span>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout>
+                <lightning:layoutItem>
+                    {!item.Body} 
+                </lightning:layoutItem> 
+            </lightning:layout>
+            <br></br>
+        </aura:iteration>
+        
+        <aura:if isTrue="{!v.addnotesclicked}">
+            <lightning:layout>
+                
+                <lightning:layoutItem size="12" padding="around-small">
+                    <lightning:textarea 
+                                        name="input5" 
+                                        disabled="false"
+                                        placeholder="{!v.notesplaceholder}"
+                                        value="{!v.noteitem.Body}" 
+                                        label="Notes" /> 
+                </lightning:layoutItem>
+            </lightning:layout>
+        </aura:if>
+        
+    </form>
+</aura:component>

@@ -1,0 +1,84 @@
+<!-- 
+$Author:         $  Hareesh Goud Nellykonda
+$Description:    $ This Page is created for (Iteams to Approve )Custom approval process 
+$DateMM-DD-YYYY: $ 01-09-2017
+$Revision:       $ 1.0
+
+$Author:         $ Christopher Mcdonald
+$Description:    $ Added Customer Name, Vehicle Model, Contribution Margin fields for WST users. ManageAll now redirects WST Sales to WST_ItemsToApprove.
+$DateMM-DD-YYYY: $ 02-28-2018
+$Revision:       $ 1.1
+
+$Author:         $ Gilbert Tang
+$Description:    $ Added TC Meeting Notes fields for TWS Partner users.
+$DateMM-DD-YYYY: $ 04-25-2018
+$Revision:       $ 1.2
+
+$Author:         $ Rahul Aggarwal
+$Description:    $ Passed one more parameter - Opportunity Id on action:ApproveRejectnavigation.
+$DateMM-DD-YYYY: $ 06-25-2018
+$Revision:       $ 1.3
+ -->
+<apex:page controller="TWS_ItemstoApprovvecontroller" >
+
+    <apex:form style="margin-left: -10px;" >
+        <apex:pageBlock title="Items To Approve"   >
+        <apex:pageBlockButtons location="top" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}" >
+        <apex:commandLink value="Manage All"  styleClass="btn" action="{!Manageall}"   target="_top"  />
+
+        </apex:pageBlockButtons>
+            <apex:pageBlockTable value="{!items_to_approve}" var="item_to_approve"  >
+            
+                <apex:column headerValue="Action" width="160 px" >
+                                    <apex:commandLink target="_top" value="Reassign |" action="{!REASSIGNnavigation}" style="text-decoration:none;color: #015ba7;" styleClass="cactionLink">
+                                                       <apex:param name="myParam" value="{!item_to_approve.approvalid }" />
+                                                                                                
+                                                                    </apex:commandLink>
+
+                    <apex:commandLink target="_top" value=" Approve / Reject" action="{!ApproveRejectnavigation}" style="text-decoration:none;color: #015ba7;"  >
+
+                   <apex:param name="myParam" value="{!item_to_approve.approvalid }" />
+                        <apex:param name="Parmoptyid" value="{!item_to_approve.id }" />
+                </apex:commandLink>
+
+                </apex:column>
+               <apex:column headerValue="Type"  width="100 px">
+                    <apex:outputText >{!item_to_approve.objtype}
+                      </apex:outputText>
+                </apex:column>
+                
+                <apex:column headerValue="{!IF(or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), 'Related To', 'Deal')}" width="300 px"  >
+                    <apex:outputLink target="_top" value="/apex/DTNAConcessionLive?id={!item_to_approve.id}" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">{!item_to_approve.name}
+                      </apex:outputLink>
+                    <apex:outputLink target="_top" value="/{!item_to_approve.id}" rendered="{!IF(OR($Profile.Name == 'TWS - Read Only - Partners', $Profile.Name =='TWS/TC - Read Only',$Profile.Name =='TWS/TC - Sales',$Profile.Name =='TWS/TC - Super User',$Profile.Name =='TWS/TC - Super User',$Profile.Name =='System Administrator'), true , false)}">{!item_to_approve.name}
+                    </apex:outputLink>
+                </apex:column>
+                
+                <apex:column headerValue="TC Meeting Notes" rendered="{!IF(OR($Profile.Name == 'TWS - Read Only - Partners', $Profile.Name =='TWS/TC - Read Only',$Profile.Name =='TWS/TC - Sales',$Profile.Name =='TWS/TC - Super User',$Profile.Name =='TWS/TC - Super User',$Profile.Name =='System Administrator'), true , false)}" >
+                    <apex:outputtext >{!item_to_approve.tcmeetingcomments}
+                      </apex:outputtext>
+                </apex:column>
+                <apex:column headerValue="Date Submitted" width="150 px">
+                    <apex:outputtext >{!item_to_approve.DateSubmited }
+                      </apex:outputtext>
+                </apex:column>
+                <apex:column headerValue="Vehicle Model" width="150 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.vehicleModel }
+                      </apex:outputtext>
+                </apex:column>
+                <apex:column headerValue="Customer" width="150 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.CustomerName }
+                      </apex:outputtext>
+                </apex:column>
+                 <apex:column headerValue="Concession Status" width="100 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.ConcessionStatus }
+                      </apex:outputtext>
+                </apex:column>
+                <apex:column headerValue="Contribution Margin" width="150 px" rendered="{!IF(Or($Profile.Name =='DTNA - WST Sales', $Profile.Name =='DTNA - WST DOA', $Profile.Name =='DTNA - FTL Sales', $Profile.Name == 'DTNA - FTL DOA', $Profile.Name =='System Administrator'), true , false)}">
+                    <apex:outputtext >{!item_to_approve.Contribution }
+                      </apex:outputtext>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

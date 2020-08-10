@@ -8,7 +8,7 @@
 public With Sharing class APC_AdditionalInformationController {
     @AuraEnabled
     public static List<Contact> getContacts(string caseid)
-    {      
+    {    
         Case objCase = new Case();        
         List<Contact> contactList = new List<Contact>(); 
         if(String.isNotBlank(caseid) && String.isNotEmpty(caseid)){
@@ -89,9 +89,11 @@ public With Sharing class APC_AdditionalInformationController {
         }
         list<contentnote> contentnotetodelete = [select id from contentnote where id in :contentnoteids and title =: recipient.label]; 
         if(!contentnotetodelete.isEmpty()){            
-            try{                delete contentnotetodelete;            }Catch(DmlException e){            System.debug('The following DML exception has occurred: ' + e.getMessage());            
-                                                                                             }catch (exception ex){               system.debug('Error message: ' + ex.getMessage());                return false;
-                                                                                                                  }
+            try{ 
+                               delete contentnotetodelete;            
+            }Catch(DmlException e){
+                System.debug('The following DML exception has occurred: ' + e.getMessage());                                                                                 }catch (exception ex){               system.debug('Error message: ' + ex.getMessage());                return false;                                                                                                      
+            }
         }
         return true;
     }    
